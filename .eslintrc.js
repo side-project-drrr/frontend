@@ -1,24 +1,32 @@
 module.exports = {
-    root: true,
-    env: { browser: true, es2020: true },
+    env: {
+        browser: true,
+        es2021: true,
+    },
     extends: [
         'eslint:recommended',
+        'plugin:react/recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:react-hooks/recommended',
+        'plugin:prettier/recommended',
         'plugin:storybook/recommended',
-        'react-app',
         'react-app/jest',
     ],
-    ignorePatterns: ['dist', '.eslintrc.cjs'],
+    overrides: [],
     parser: '@typescript-eslint/parser',
-    plugins: ['react-refresh'],
+    parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        jsx: true,
+        useJSXTextNode: true,
+        ecmaFeatures: { jsx: true },
+    },
+    plugins: ['react', '@typescript-eslint'],
     rules: {
-        'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-        'no-var': 'error', // var 금지
-        'no-multiple-empty-lines': 'error', // 여러 줄 공백 금지
-        'no-console': ['error', { allow: ['warn', 'error', 'info'] }], // console.log() 금지
         eqeqeq: 'error', // 일치 연산자 사용 필수
         'dot-notation': 'error', // 가능하다면 dot notation 사용
         'no-unused-vars': 'error', // 사용하지 않는 변수 금지
+        'react/react-in-jsx-scope': 'off',
+        'react/jsx-uses-react': 'off',
     },
 };
