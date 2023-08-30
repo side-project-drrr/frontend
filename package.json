@@ -12,7 +12,10 @@
         "build": "tsc && vite build",
         "preview": "vite preview",
         "postinstall": "husky install",
-        "test": "jest"
+        "test": "jest",
+        "component": "yarn workspaces component",
+        "service": "yarn workspaces service",
+        "admin": "yarn workspaces admin"
     },
     "lint-staged": {
         "*.{ts,tsx}": [
