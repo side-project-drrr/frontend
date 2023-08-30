@@ -1,11 +1,8 @@
+import { Button } from '@nextui-org/react';
 import './App.css';
 
 function App() {
-    return (
-        <>
-            <button className="bg-yellow-200">123</button>
-        </>
-    );
+    return <Button color="primary">123</Button>;
 }
 
 export default App;
