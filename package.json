@@ -13,9 +13,9 @@
         "preview": "vite preview",
         "postinstall": "husky install",
         "test": "jest",
-        "component": "yarn workspaces component",
-        "service": "yarn workspaces service",
-        "admin": "yarn workspaces admin"
+        "@monorepo/component": "yarn workspace @monorepo/component",
+        "@monorepo/service": "yarn workspace @monorepo/service",
+        "@monorepo/admin": "yarn workspace @monorepo/admin"
     },
     "lint-staged": {
         "*.{ts,tsx}": [
