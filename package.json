@@ -1,9 +1,9 @@
 {
-    "name": "drrr-front",
+    "name": "@monorepo/drrr-front",
     "version": "1.0.0",
     "private": true,
     "workspaces": [
-        "service",
+        "sevice",
         "admin",
         "component"
     ],
