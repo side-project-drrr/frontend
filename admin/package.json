@@ -9,7 +9,6 @@
         "preview": "vite preview",
         "test": "jest",
         "@monorepo/component": "*",
-        "@monorepo/drrr-front": "*",
         "@types/react-router-dom": "^5.3.3",
         "react-router-dom": "^6.15.0"
     },

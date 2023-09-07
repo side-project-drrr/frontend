@@ -13,7 +13,8 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "react-jsx",
-
+        "composite": true,
+        "declaration": true,
         /* Linting */
         "strict": true,
         "noUnusedLocals": true,

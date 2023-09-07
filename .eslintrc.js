@@ -12,7 +12,67 @@ module.exports = {
 
         'react-app/jest',
     ],
-    overrides: [],
+    overrides: [
+        {
+            files: ['**/*.ts?(x)'],
+            parser: '@typescript-eslint/parser',
+            rules: {
+                'react/prop-types': 'off',
+                'react/require-default-props': 'off',
+                '@typescript-eslint/explicit-module-boundary-types': 'off',
+                'no-use-before-define': 'off',
+                '@typescript-eslint/no-use-before-define': ['error', { variables: false }],
+                'no-useless-constructor': 'off',
+                '@typescript-eslint/no-useless-constructor': 'error',
+                '@typescript-eslint/no-floating-promises': 'off',
+            },
+            parserOptions: {
+                project: [
+                    './tsconfig.json',
+                    './service/tsconfig.json',
+                    './admin/tsconfig.json',
+                    './component/tsconfig.json',
+                ],
+            },
+        },
+        {
+            files: ['**/*.spec.ts?(x)'],
+            rules: {
+                '@typescript-eslint/unbound-method': 'off',
+                'jest/unbound-method': 'error',
+            },
+        },
+        {
+            files: ['service/**/*.ts?(x)', 'service/**/*.js?(x)'],
+            settings: {
+                'import/resolver': {
+                    typescript: {
+                        project: path.resolve(`${__dirname}/service/tsconfig.json`),
+                    },
+                },
+            },
+        },
+        {
+            files: ['admin/**/*.ts?(x)', 'admin/**/*.js?(x)'],
+            settings: {
+                'import/resolver': {
+                    typescript: {
+                        project: path.resolve(`${__dirname}/admin/tsconfig.json`),
+                    },
+                },
+            },
+        },
+        {
+            files: ['component/**/*.ts?(x)', 'component/**/*.js?(x)'],
+            settings: {
+                'import/resolver': {
+                    typescript: {
+                        project: path.resolve(`${__dirname}/component/tsconfig.json`),
+                    },
+                },
+            },
+        },
+    ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
         ecmaVersion: 'latest',
