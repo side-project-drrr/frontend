@@ -24,5 +24,15 @@
         "noFallthroughCasesInSwitch": true
     },
     "include": ["src", "jest.setup.ts"],
-    "references": [{ "path": "./tsconfig.node.json" }]
+    "references": [
+        {
+            "path": "service"
+        },
+        {
+            "path": "component"
+        },
+        {
+            "path": "admin"
+        }
+    ]
 }
