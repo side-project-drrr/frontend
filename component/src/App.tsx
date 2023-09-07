@@ -2,7 +2,7 @@ import { Button } from '@nextui-org/react';
 import './App.css';
 
 function App() {
-    return <Button color="primary">123</Button>;
+    return <Button>123</Button>;
 }
 
 export default App;

@@ -27,6 +27,7 @@
         "@nextui-org/react": "^2.0.22",
         "@nextui-org/system": "^2.0.5",
         "@nextui-org/theme": "^2.0.5",
+        "@types/react-router-dom": "^5.3.3",
         "axios": "^1.4.0",
         "framer-motion": "^10.16.0",
         "react": "^18.2.0",
@@ -71,5 +72,6 @@
         "typescript": "^5.0.2",
         "vite": "^4.4.5",
         "vite-tsconfig-paths": "^4.2.0"
-    }
+    },
+    "packageManager": "yarn@3.6.3"
 }
