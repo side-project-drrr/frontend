@@ -11,6 +11,7 @@ module.exports = {
         'plugin:react-hooks/recommended',
         'plugin:prettier/recommended',
         'react-app',
+        'plugin:vitest-globals/recommended',
     ],
     //parser: '@typescript-eslint/parser',
     parserOptions: {
