@@ -9,14 +9,13 @@
         "esModuleInterop": true,
 
         /* Bundler mode */
-        "moduleResolution": "node",
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
-        "jsx": "react-jsx",
-        "types": ["node"],
-
+        "jsx": "react-jsx",        
+        "moduleResolution":"Node",
+        //"moduleResolution":"NodeNext",
         /* Linting */
         "strict": true,
         "noUnusedLocals": true,
