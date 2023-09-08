@@ -1,9 +1,10 @@
 import './App.css';
 
 function App() {
+    const str: string = '하이';
     return (
         <div className="App">
-            <div>123</div>
+            <div>{str}</div>
         </div>
     );
 }

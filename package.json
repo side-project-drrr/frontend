@@ -14,7 +14,14 @@
         "postinstall": "husky install",
         "@monorepo/component": "yarn workspace @monorepo/component",
         "@monorepo/service": "yarn workspace @monorepo/service",
-        "@monorepo/admin": "yarn workspace @monorepo/admin"
+        "@monorepo/admin": "yarn workspace @monorepo/admin",
+        "lint:fix": "eslint --fix './src/**/*.{ts,tsx}'",
+        "prettier:fix": "prettier --write './src/**/*.{ts,tsx}'"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
     },
     "lint-staged": {
         "*.{ts,tsx}": [

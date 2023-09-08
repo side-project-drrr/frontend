@@ -13,8 +13,8 @@ dist-ssr
 *.local
 
 
-# no zero-install
-.yarn/*
+#zero-install
+.yarn/**
 !.yarn/cache
 !.yarn/patches
 !.yarn/plugins

@@ -1,4 +1,5 @@
 module.exports = {
+    root: true,
     env: {
         browser: true,
         es2021: true,
@@ -6,74 +7,12 @@ module.exports = {
     extends: [
         'eslint:recommended',
         'plugin:react/recommended',
-        'plugin:@typescript-eslint/recommended',
+        // 'plugin:@typescript-eslint/recommended',
         'plugin:react-hooks/recommended',
         'plugin:prettier/recommended',
-
-        'react-app/jest',
+        'react-app',
     ],
-    overrides: [
-        {
-            files: ['**/*.ts?(x)'],
-            parser: '@typescript-eslint/parser',
-            rules: {
-                'react/prop-types': 'off',
-                'react/require-default-props': 'off',
-                '@typescript-eslint/explicit-module-boundary-types': 'off',
-                'no-use-before-define': 'off',
-                '@typescript-eslint/no-use-before-define': ['error', { variables: false }],
-                'no-useless-constructor': 'off',
-                '@typescript-eslint/no-useless-constructor': 'error',
-                '@typescript-eslint/no-floating-promises': 'off',
-            },
-            parserOptions: {
-                project: [
-                    './tsconfig.json',
-                    './service/tsconfig.json',
-                    './admin/tsconfig.json',
-                    './component/tsconfig.json',
-                ],
-            },
-        },
-        {
-            files: ['**/*.spec.ts?(x)'],
-            rules: {
-                '@typescript-eslint/unbound-method': 'off',
-                'jest/unbound-method': 'error',
-            },
-        },
-        {
-            files: ['service/**/*.ts?(x)', 'service/**/*.js?(x)'],
-            settings: {
-                'import/resolver': {
-                    typescript: {
-                        project: path.resolve(`${__dirname}/service/tsconfig.json`),
-                    },
-                },
-            },
-        },
-        {
-            files: ['admin/**/*.ts?(x)', 'admin/**/*.js?(x)'],
-            settings: {
-                'import/resolver': {
-                    typescript: {
-                        project: path.resolve(`${__dirname}/admin/tsconfig.json`),
-                    },
-                },
-            },
-        },
-        {
-            files: ['component/**/*.ts?(x)', 'component/**/*.js?(x)'],
-            settings: {
-                'import/resolver': {
-                    typescript: {
-                        project: path.resolve(`${__dirname}/component/tsconfig.json`),
-                    },
-                },
-            },
-        },
-    ],
-    parser: '@typescript-eslint/parser',
+    //parser: '@typescript-eslint/parser',
     parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
@@ -81,8 +20,9 @@ module.exports = {
         useJSXTextNode: true,
         ecmaFeatures: { jsx: true },
     },
-    plugins: ['react', '@typescript-eslint'],
+    plugins: ['react', 'eslint-plugin-prettier'],
     rules: {
+        'prettier/prettier': 'error',
         eqeqeq: 'error', // 일치 연산자 사용 필수
         'dot-notation': 'error', // 가능하다면 dot notation 사용
         'no-unused-vars': 'error', // 사용하지 않는 변수 금지
