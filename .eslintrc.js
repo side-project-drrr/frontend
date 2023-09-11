@@ -18,6 +18,7 @@ module.exports = {
         ecmaVersion: 'latest',
         sourceType: 'module',
         jsx: true,
+        tsconfigRootDir: __dirname,
         useJSXTextNode: true,
         ecmaFeatures: { jsx: true },
     },

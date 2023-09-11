@@ -17,7 +17,7 @@
         "@monorepo/admin": "yarn workspace @monorepo/admin",
         "lint:fix": "eslint --fix './src/**/*.{ts,tsx}'",
         "prettier:fix": "prettier --write './src/**/*.{ts,tsx}'",
-        "test": "vitest"
+        "test": "vitest --run --reporter verbose --globals"
     },
     "husky": {
         "hooks": {

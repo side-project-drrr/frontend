@@ -4347,6 +4347,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./service/",\
           "packageDependencies": [\
             ["@monorepo/service", "workspace:service"],\
+            ["@monorepo/drrr-front", "workspace:."],\
             ["@types/react", "npm:18.2.21"],\
             ["@types/react-dom", "npm:18.2.7"],\
             ["@typescript-eslint/eslint-plugin", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:6.5.0"],\
