@@ -64,6 +64,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-storybook", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:0.6.13"],\
             ["eslint-plugin-vitest-globals", "npm:1.4.0"],\
             ["framer-motion", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:10.16.1"],\
+            ["global", "npm:4.4.0"],\
             ["husky", "npm:8.0.3"],\
             ["identity-obj-proxy", "npm:3.0.0"],\
             ["jsdom", "virtual:551dd335841e41c7692cf0715ff21b125243880586153241db4d1d406ed13df01f603be81d33cbacce3bb45d826f05b3fe2cb2c9a10bb0f5b90ea289936d5b88#npm:22.1.0"],\
@@ -72,6 +73,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:18.2.0"],\
             ["react-router-dom", "virtual:551dd335841e41c7692cf0715ff21b125243880586153241db4d1d406ed13df01f603be81d33cbacce3bb45d826f05b3fe2cb2c9a10bb0f5b90ea289936d5b88#npm:6.15.0"],\
+            ["turbo", "npm:1.10.13"],\
             ["typescript", "patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"],\
             ["vite", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:4.4.9"],\
             ["vite-tsconfig-paths", "virtual:551dd335841e41c7692cf0715ff21b125243880586153241db4d1d406ed13df01f603be81d33cbacce3bb45d826f05b3fe2cb2c9a10bb0f5b90ea289936d5b88#npm:4.2.0"],\
@@ -4326,6 +4328,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-storybook", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:0.6.13"],\
             ["eslint-plugin-vitest-globals", "npm:1.4.0"],\
             ["framer-motion", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:10.16.1"],\
+            ["global", "npm:4.4.0"],\
             ["husky", "npm:8.0.3"],\
             ["identity-obj-proxy", "npm:3.0.0"],\
             ["jsdom", "virtual:551dd335841e41c7692cf0715ff21b125243880586153241db4d1d406ed13df01f603be81d33cbacce3bb45d826f05b3fe2cb2c9a10bb0f5b90ea289936d5b88#npm:22.1.0"],\
@@ -4334,6 +4337,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:18.2.0"],\
             ["react-router-dom", "virtual:551dd335841e41c7692cf0715ff21b125243880586153241db4d1d406ed13df01f603be81d33cbacce3bb45d826f05b3fe2cb2c9a10bb0f5b90ea289936d5b88#npm:6.15.0"],\
+            ["turbo", "npm:1.10.13"],\
             ["typescript", "patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"],\
             ["vite", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:4.4.9"],\
             ["vite-tsconfig-paths", "virtual:551dd335841e41c7692cf0715ff21b125243880586153241db4d1d406ed13df01f603be81d33cbacce3bb45d826f05b3fe2cb2c9a10bb0f5b90ea289936d5b88#npm:4.2.0"],\
@@ -15029,6 +15033,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["dom-walk", [\
+        ["npm:0.1.2", {\
+          "packageLocation": "./.yarn/cache/dom-walk-npm-0.1.2-7d20a1a8d8-19eb0ce9c6.zip/node_modules/dom-walk/",\
+          "packageDependencies": [\
+            ["dom-walk", "npm:0.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["domexception", [\
         ["npm:4.0.0", {\
           "packageLocation": "./.yarn/cache/domexception-npm-4.0.0-5093673f9b-ddbc1268ed.zip/node_modules/domexception/",\
@@ -16866,6 +16879,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/glob-to-regexp-npm-0.4.1-cd697e0fc7-e795f4e8f0.zip/node_modules/glob-to-regexp/",\
           "packageDependencies": [\
             ["glob-to-regexp", "npm:0.4.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["global", [\
+        ["npm:4.4.0", {\
+          "packageLocation": "./.yarn/cache/global-npm-4.4.0-888ee8033d-9c057557c8.zip/node_modules/global/",\
+          "packageDependencies": [\
+            ["global", "npm:4.4.0"],\
+            ["min-document", "npm:2.19.0"],\
+            ["process", "npm:0.11.10"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -18847,6 +18871,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/mimic-fn-npm-4.0.0-feaeda79f7-995dcece15.zip/node_modules/mimic-fn/",\
           "packageDependencies": [\
             ["mimic-fn", "npm:4.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["min-document", [\
+        ["npm:2.19.0", {\
+          "packageLocation": "./.yarn/cache/min-document-npm-2.19.0-458cdb3d84-da6437562e.zip/node_modules/min-document/",\
+          "packageDependencies": [\
+            ["min-document", "npm:2.19.0"],\
+            ["dom-walk", "npm:0.1.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -22574,6 +22608,75 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [\
             "@types/typescript",\
             "typescript"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["turbo", [\
+        ["npm:1.10.13", {\
+          "packageLocation": "./.yarn/cache/turbo-npm-1.10.13-b30518d7d0-0c000c6715.zip/node_modules/turbo/",\
+          "packageDependencies": [\
+            ["turbo", "npm:1.10.13"],\
+            ["turbo-darwin-64", "npm:1.10.13"],\
+            ["turbo-darwin-arm64", "npm:1.10.13"],\
+            ["turbo-linux-64", "npm:1.10.13"],\
+            ["turbo-linux-arm64", "npm:1.10.13"],\
+            ["turbo-windows-64", "npm:1.10.13"],\
+            ["turbo-windows-arm64", "npm:1.10.13"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["turbo-darwin-64", [\
+        ["npm:1.10.13", {\
+          "packageLocation": "./.yarn/unplugged/turbo-darwin-64-npm-1.10.13-18892dfcb7/node_modules/turbo-darwin-64/",\
+          "packageDependencies": [\
+            ["turbo-darwin-64", "npm:1.10.13"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["turbo-darwin-arm64", [\
+        ["npm:1.10.13", {\
+          "packageLocation": "./.yarn/unplugged/turbo-darwin-arm64-npm-1.10.13-a32d7dd50e/node_modules/turbo-darwin-arm64/",\
+          "packageDependencies": [\
+            ["turbo-darwin-arm64", "npm:1.10.13"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["turbo-linux-64", [\
+        ["npm:1.10.13", {\
+          "packageLocation": "./.yarn/unplugged/turbo-linux-64-npm-1.10.13-0379470c69/node_modules/turbo-linux-64/",\
+          "packageDependencies": [\
+            ["turbo-linux-64", "npm:1.10.13"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["turbo-linux-arm64", [\
+        ["npm:1.10.13", {\
+          "packageLocation": "./.yarn/unplugged/turbo-linux-arm64-npm-1.10.13-20efa222e9/node_modules/turbo-linux-arm64/",\
+          "packageDependencies": [\
+            ["turbo-linux-arm64", "npm:1.10.13"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["turbo-windows-64", [\
+        ["npm:1.10.13", {\
+          "packageLocation": "./.yarn/unplugged/turbo-windows-64-npm-1.10.13-60265c2056/node_modules/turbo-windows-64/",\
+          "packageDependencies": [\
+            ["turbo-windows-64", "npm:1.10.13"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["turbo-windows-arm64", [\
+        ["npm:1.10.13", {\
+          "packageLocation": "./.yarn/unplugged/turbo-windows-arm64-npm-1.10.13-cb06ff17df/node_modules/turbo-windows-arm64/",\
+          "packageDependencies": [\
+            ["turbo-windows-arm64", "npm:1.10.13"]\
           ],\
           "linkType": "HARD"\
         }]\
