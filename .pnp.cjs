@@ -4401,19 +4401,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@monorepo/service", "workspace:service"],\
             ["@monorepo/drrr-front", "workspace:."],\
+            ["@testing-library/jest-dom", "virtual:ec311ca01f0444e74f5b4243595a35c5b0a6561171a3f5860f693ed2c4dc82594332ac386ea98b4e6b46981d4bbf946980cf660a92931c33aa18c7ef9d5b9f19#npm:6.1.3"],\
+            ["@testing-library/react", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:14.0.0"],\
             ["@types/react", "npm:18.2.21"],\
             ["@types/react-dom", "npm:18.2.7"],\
             ["@typescript-eslint/eslint-plugin", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:6.5.0"],\
             ["@typescript-eslint/parser", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:6.5.0"],\
             ["@vitejs/plugin-react", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:4.0.4"],\
+            ["@vitest/ui", "virtual:ec311ca01f0444e74f5b4243595a35c5b0a6561171a3f5860f693ed2c4dc82594332ac386ea98b4e6b46981d4bbf946980cf660a92931c33aa18c7ef9d5b9f19#npm:0.34.4"],\
             ["cross-env", "npm:7.0.3"],\
             ["eslint", "npm:8.47.0"],\
             ["eslint-plugin-react-hooks", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:4.6.0"],\
             ["eslint-plugin-react-refresh", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:0.4.3"],\
+            ["jsdom", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:22.1.0"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:18.2.0"],\
             ["typescript", "patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"],\
-            ["vite", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:4.4.9"]\
+            ["vite", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:4.4.9"],\
+            ["vitest", "virtual:ec311ca01f0444e74f5b4243595a35c5b0a6561171a3f5860f693ed2c4dc82594332ac386ea98b4e6b46981d4bbf946980cf660a92931c33aa18c7ef9d5b9f19#npm:0.34.4"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -11554,6 +11559,35 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "vitest"\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["virtual:ec311ca01f0444e74f5b4243595a35c5b0a6561171a3f5860f693ed2c4dc82594332ac386ea98b4e6b46981d4bbf946980cf660a92931c33aa18c7ef9d5b9f19#npm:6.1.3", {\
+          "packageLocation": "./.yarn/__virtual__/@testing-library-jest-dom-virtual-9d9efed5b7/0/cache/@testing-library-jest-dom-npm-6.1.3-b27b065d9a-5bd14ba31f.zip/node_modules/@testing-library/jest-dom/",\
+          "packageDependencies": [\
+            ["@testing-library/jest-dom", "virtual:ec311ca01f0444e74f5b4243595a35c5b0a6561171a3f5860f693ed2c4dc82594332ac386ea98b4e6b46981d4bbf946980cf660a92931c33aa18c7ef9d5b9f19#npm:6.1.3"],\
+            ["@adobe/css-tools", "npm:4.3.1"],\
+            ["@babel/runtime", "npm:7.22.15"],\
+            ["@jest/globals", null],\
+            ["@types/jest", null],\
+            ["@types/jest__globals", null],\
+            ["@types/vitest", null],\
+            ["aria-query", "npm:5.3.0"],\
+            ["chalk", "npm:3.0.0"],\
+            ["css.escape", "npm:1.5.1"],\
+            ["dom-accessibility-api", "npm:0.5.16"],\
+            ["jest", null],\
+            ["lodash", "npm:4.17.21"],\
+            ["redent", "npm:3.0.0"],\
+            ["vitest", "virtual:ec311ca01f0444e74f5b4243595a35c5b0a6561171a3f5860f693ed2c4dc82594332ac386ea98b4e6b46981d4bbf946980cf660a92931c33aa18c7ef9d5b9f19#npm:0.34.4"]\
+          ],\
+          "packagePeers": [\
+            "@jest/globals",\
+            "@types/jest",\
+            "@types/jest__globals",\
+            "@types/vitest",\
+            "jest",\
+            "vitest"\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["@testing-library/react", [\
@@ -13000,6 +13034,26 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["picocolors", "npm:1.0.0"],\
             ["sirv", "npm:2.0.3"],\
             ["vitest", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:0.34.4"]\
+          ],\
+          "packagePeers": [\
+            "@types/vitest",\
+            "vitest"\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["virtual:ec311ca01f0444e74f5b4243595a35c5b0a6561171a3f5860f693ed2c4dc82594332ac386ea98b4e6b46981d4bbf946980cf660a92931c33aa18c7ef9d5b9f19#npm:0.34.4", {\
+          "packageLocation": "./.yarn/__virtual__/@vitest-ui-virtual-c33e713f07/0/cache/@vitest-ui-npm-0.34.4-8b97c766d3-64e8a67bd4.zip/node_modules/@vitest/ui/",\
+          "packageDependencies": [\
+            ["@vitest/ui", "virtual:ec311ca01f0444e74f5b4243595a35c5b0a6561171a3f5860f693ed2c4dc82594332ac386ea98b4e6b46981d4bbf946980cf660a92931c33aa18c7ef9d5b9f19#npm:0.34.4"],\
+            ["@types/vitest", null],\
+            ["@vitest/utils", "npm:0.34.4"],\
+            ["fast-glob", "npm:3.3.1"],\
+            ["fflate", "npm:0.8.0"],\
+            ["flatted", "npm:3.2.7"],\
+            ["pathe", "npm:1.1.1"],\
+            ["picocolors", "npm:1.0.0"],\
+            ["sirv", "npm:2.0.3"],\
+            ["vitest", "virtual:ec311ca01f0444e74f5b4243595a35c5b0a6561171a3f5860f693ed2c4dc82594332ac386ea98b4e6b46981d4bbf946980cf660a92931c33aa18c7ef9d5b9f19#npm:0.34.4"]\
           ],\
           "packagePeers": [\
             "@types/vitest",\
@@ -23753,6 +23807,71 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@vitest/snapshot", "npm:0.34.4"],\
             ["@vitest/spy", "npm:0.34.4"],\
             ["@vitest/ui", null],\
+            ["@vitest/utils", "npm:0.34.4"],\
+            ["acorn", "npm:8.10.0"],\
+            ["acorn-walk", "npm:8.2.0"],\
+            ["cac", "npm:6.7.14"],\
+            ["chai", "npm:4.3.8"],\
+            ["debug", "virtual:feb0771c9f8eadaf509cfed41e14a8bebbea5442233275c1c87085111077a08ef71eb773b899665b154d8203a55a489610a54117ae059fce5f5b8b844493b1b1#npm:4.3.4"],\
+            ["happy-dom", null],\
+            ["jsdom", "virtual:055136e5ae4b5dcd9900a6fe94d153937c1464cee370b24ee9bc0809a9f96739a50eb7905d2e50f688109aa959f6a7949bb79732dea347d8b9aa1719a3012320#npm:22.1.0"],\
+            ["local-pkg", "npm:0.4.3"],\
+            ["magic-string", "npm:0.30.3"],\
+            ["pathe", "npm:1.1.1"],\
+            ["picocolors", "npm:1.0.0"],\
+            ["playwright", null],\
+            ["safaridriver", null],\
+            ["std-env", "npm:3.4.3"],\
+            ["strip-literal", "npm:1.3.0"],\
+            ["tinybench", "npm:2.5.1"],\
+            ["tinypool", "npm:0.7.0"],\
+            ["vite", "virtual:1d7b9d5bc3405fb0ce2c7fbec25f6abf1f9b1dd357b8aa4a0454fa4add7fe6a3cf71401ada04c73209c3636e81702f3612ea06c43358b0ca10b18d0d2356a3e5#npm:5.0.0-beta.1"],\
+            ["vite-node", "npm:0.34.4"],\
+            ["webdriverio", null],\
+            ["why-is-node-running", "npm:2.2.2"]\
+          ],\
+          "packagePeers": [\
+            "@edge-runtime/vm",\
+            "@types/edge-runtime__vm",\
+            "@types/happy-dom",\
+            "@types/jsdom",\
+            "@types/playwright",\
+            "@types/safaridriver",\
+            "@types/vitest__browser",\
+            "@types/vitest__ui",\
+            "@types/webdriverio",\
+            "@vitest/browser",\
+            "@vitest/ui",\
+            "happy-dom",\
+            "jsdom",\
+            "playwright",\
+            "safaridriver",\
+            "webdriverio"\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["virtual:ec311ca01f0444e74f5b4243595a35c5b0a6561171a3f5860f693ed2c4dc82594332ac386ea98b4e6b46981d4bbf946980cf660a92931c33aa18c7ef9d5b9f19#npm:0.34.4", {\
+          "packageLocation": "./.yarn/__virtual__/vitest-virtual-e5cb49181c/0/cache/vitest-npm-0.34.4-59d4b8418b-7ac214cfeb.zip/node_modules/vitest/",\
+          "packageDependencies": [\
+            ["vitest", "virtual:ec311ca01f0444e74f5b4243595a35c5b0a6561171a3f5860f693ed2c4dc82594332ac386ea98b4e6b46981d4bbf946980cf660a92931c33aa18c7ef9d5b9f19#npm:0.34.4"],\
+            ["@edge-runtime/vm", null],\
+            ["@types/chai", "npm:4.3.6"],\
+            ["@types/chai-subset", "npm:1.3.3"],\
+            ["@types/edge-runtime__vm", null],\
+            ["@types/happy-dom", null],\
+            ["@types/jsdom", null],\
+            ["@types/node", "npm:20.5.3"],\
+            ["@types/playwright", null],\
+            ["@types/safaridriver", null],\
+            ["@types/vitest__browser", null],\
+            ["@types/vitest__ui", null],\
+            ["@types/webdriverio", null],\
+            ["@vitest/browser", null],\
+            ["@vitest/expect", "npm:0.34.4"],\
+            ["@vitest/runner", "npm:0.34.4"],\
+            ["@vitest/snapshot", "npm:0.34.4"],\
+            ["@vitest/spy", "npm:0.34.4"],\
+            ["@vitest/ui", "virtual:ec311ca01f0444e74f5b4243595a35c5b0a6561171a3f5860f693ed2c4dc82594332ac386ea98b4e6b46981d4bbf946980cf660a92931c33aa18c7ef9d5b9f19#npm:0.34.4"],\
             ["@vitest/utils", "npm:0.34.4"],\
             ["acorn", "npm:8.10.0"],\
             ["acorn-walk", "npm:8.2.0"],\
