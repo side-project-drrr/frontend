@@ -1,7 +1,5 @@
-import { Button } from '@nextui-org/react';
-
 function App() {
-    return <Button>123</Button>;
+    return <div>App</div>;
 }
 
 export default App;
