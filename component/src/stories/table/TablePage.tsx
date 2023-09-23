@@ -8,17 +8,23 @@ import {
     getKeyValue,
     Select,
     SelectItem,
-    Input,
+    Dropdown,
+    DropdownTrigger,
+    DropdownMenu,
+    Button,
+    DropdownItem,
 } from '@nextui-org/react';
 
 import { columns, users } from './data';
 import { useMemo } from 'react';
 import { selectData } from './selectData';
+import Calendar from '../datePicker/Calendar';
+import SearchInput from '../Input/SearchInput';
 
 export default function TablePage() {
-    const SearchInput = useMemo(() => {
+    const Search = useMemo(() => {
         return (
-            <div className="flex">
+            <div className="flex justify-around">
                 <div>
                     <Select
                         items={selectData}
@@ -30,10 +36,28 @@ export default function TablePage() {
                     </Select>
                 </div>
                 <div>
-                    <input type="date" />
+                    <Calendar />
                 </div>
                 <div>
-                    <Input value={'블로그 기술 그룹'} />
+                    <SearchInput />
+                </div>
+                <div>
+                    <Dropdown>
+                        <DropdownTrigger>
+                            <Button variant="bordered" className="border-none outline-none">
+                                기술블로그 그룹
+                            </Button>
+                        </DropdownTrigger>
+                        <DropdownMenu
+                            aria-label="Example with disabled actions"
+                            disabledKeys={['edit', 'delete']}
+                        >
+                            <DropdownItem key="kakao">카카오</DropdownItem>
+                            <DropdownItem key="naver">네이버</DropdownItem>
+                            <DropdownItem key="minjoc">배달의 민족</DropdownItem>
+                            <DropdownItem key="toss">Toss</DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
                 </div>
             </div>
         );
@@ -45,7 +69,7 @@ export default function TablePage() {
             <Table
                 aria-label="Example static collection table"
                 className="text-center"
-                topContent={SearchInput}
+                topContent={Search}
             >
                 <TableHeader>
                     {columns.map(column => (
