@@ -36,9 +36,11 @@
         "@monorepo/admin": "workspace:^",
         "@monorepo/component": "workspace:^",
         "@monorepo/service": "workspace:^",
+        "@types/react-datepicker": "^4.15.0",
         "framer-motion": "^10.16.0",
         "global": "^4.4.0",
         "react": "^18.2.0",
+        "react-datepicker": "^4.18.0",
         "react-dom": "^18.2.0",
         "react-icons": "^4.11.0",
         "react-router-dom": "^6.15.0"
