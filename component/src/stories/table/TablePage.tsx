@@ -24,13 +24,12 @@ export default function TablePage() {
     const Search = () => {
         return (
             <>
-                <div className="flex justify-around items-center">
-                    <div>
+                <div className="flex text-center items-center justify-between">
+                    <div className="w-96">
                         <Select
                             items={selectData}
-                            label="검색어를 선택해주세요."
                             placeholder="검색어를 선택해주세요."
-                            className="max-w-xs w-96 h-10"
+                            className="max-w-xs w-96"
                         >
                             {data => <SelectItem key={data.value}>{data.label}</SelectItem>}
                         </Select>
@@ -44,7 +43,10 @@ export default function TablePage() {
                     <div>
                         <Dropdown>
                             <DropdownTrigger>
-                                <Button variant="bordered" className="border-none outline-none">
+                                <Button
+                                    variant="bordered"
+                                    className="border-none outline-none w-96"
+                                >
                                     기술블로그 그룹
                                 </Button>
                             </DropdownTrigger>
@@ -61,11 +63,10 @@ export default function TablePage() {
                     </div>
                     <div>
                         <Dropdown>
-                            <DropdownTrigger>50개</DropdownTrigger>
-                            <DropdownMenu
-                                aria-label="Example with disabled actions"
-                                disabledKeys={['edit', 'delete']}
-                            >
+                            <DropdownTrigger style={{ width: '200px' }}>
+                                <p>50개</p>
+                            </DropdownTrigger>
+                            <DropdownMenu aria-label="Example with disabled actions">
                                 <DropdownItem key="10">10개</DropdownItem>
                                 <DropdownItem key="20">20개</DropdownItem>
                                 <DropdownItem key="30">30개</DropdownItem>
@@ -86,27 +87,24 @@ export default function TablePage() {
 
     return (
         <>
-            <section className="text-center flex items-center">
-                <div></div>
-                <Table
-                    aria-label="Example static collection table"
-                    className="text-center"
-                    topContent={<Search />}
-                >
-                    <TableHeader>
-                        {columns.map(column => (
-                            <TableColumn key={column.uid}>{column.name}</TableColumn>
-                        ))}
-                    </TableHeader>
-                    <TableBody className="text-center">
-                        {users.map(user => (
-                            <TableRow key={user.id}>
-                                {columnKey => <TableCell>{getKeyValue(user, columnKey)}</TableCell>}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </section>
+            <Table
+                aria-label="Example static collection table"
+                className="text-center dark items-center justify-around"
+                topContent={<Search />}
+            >
+                <TableHeader>
+                    {columns.map(column => (
+                        <TableColumn key={column.uid}>{column.name}</TableColumn>
+                    ))}
+                </TableHeader>
+                <TableBody className="text-center">
+                    {users.map(user => (
+                        <TableRow key={user.id}>
+                            {columnKey => <TableCell>{getKeyValue(user, columnKey)}</TableCell>}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
         </>
     );
 }
