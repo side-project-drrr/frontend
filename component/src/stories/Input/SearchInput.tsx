@@ -7,7 +7,6 @@ export default function SearchInput() {
             <Input
                 isClearable
                 radius="lg"
-                value={'123'}
                 classNames={{
                     label: 'text-black/50 dark:text-white/90',
                     input: [
