@@ -24,15 +24,19 @@ export default function TablePage() {
     const Search = () => {
         return (
             <>
-                <div className="flex justify-around items-center">
+                <div className="flex text-center items-center justify-between">
                     <div>
                         <Select
                             items={selectData}
-                            label="검색어를 선택해주세요."
-                            placeholder="검색어를 선택해주세요."
-                            className="max-w-xs w-96 h-10"
+                            placeholder="검색 조건을 선택해주세요."
+                            className="max-w-xs"
+                            style={{ width: '200px' }}
                         >
-                            {data => <SelectItem key={data.value}>{data.label}</SelectItem>}
+                            {data => (
+                                <SelectItem key={data.id} className="dark">
+                                    {data.label}
+                                </SelectItem>
+                            )}
                         </Select>
                     </div>
                     <div>
@@ -42,15 +46,18 @@ export default function TablePage() {
                         <SearchInput />
                     </div>
                     <div>
-                        <Dropdown>
+                        <Dropdown className="dark">
                             <DropdownTrigger>
-                                <Button variant="bordered" className="border-none outline-none">
+                                <Button
+                                    variant="bordered"
+                                    className="border-none outline-none w-96"
+                                >
                                     기술블로그 그룹
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu
                                 aria-label="Example with disabled actions"
-                                disabledKeys={['edit', 'delete']}
+                                className="dark"
                             >
                                 <DropdownItem key="kakao">카카오</DropdownItem>
                                 <DropdownItem key="naver">네이버</DropdownItem>
@@ -60,11 +67,13 @@ export default function TablePage() {
                         </Dropdown>
                     </div>
                     <div>
-                        <Dropdown>
-                            <DropdownTrigger>50개</DropdownTrigger>
+                        <Dropdown className="dark flex text-center items-center">
+                            <DropdownTrigger style={{ width: '200px' }}>
+                                <p>50개</p>
+                            </DropdownTrigger>
                             <DropdownMenu
                                 aria-label="Example with disabled actions"
-                                disabledKeys={['edit', 'delete']}
+                                className="dark"
                             >
                                 <DropdownItem key="10">10개</DropdownItem>
                                 <DropdownItem key="20">20개</DropdownItem>
@@ -86,27 +95,24 @@ export default function TablePage() {
 
     return (
         <>
-            <section className="text-center flex items-center">
-                <div></div>
-                <Table
-                    aria-label="Example static collection table"
-                    className="text-center"
-                    topContent={<Search />}
-                >
-                    <TableHeader>
-                        {columns.map(column => (
-                            <TableColumn key={column.uid}>{column.name}</TableColumn>
-                        ))}
-                    </TableHeader>
-                    <TableBody className="text-center">
-                        {users.map(user => (
-                            <TableRow key={user.id}>
-                                {columnKey => <TableCell>{getKeyValue(user, columnKey)}</TableCell>}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </section>
+            <Table
+                aria-label="Example static collection table"
+                className="text-center dark items-center justify-around"
+                topContent={<Search />}
+            >
+                <TableHeader>
+                    {columns.map(column => (
+                        <TableColumn key={column.uid}>{column.name}</TableColumn>
+                    ))}
+                </TableHeader>
+                <TableBody className="text-center">
+                    {users.map(user => (
+                        <TableRow key={user.id}>
+                            {columnKey => <TableCell>{getKeyValue(user, columnKey)}</TableCell>}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
         </>
     );
 }
