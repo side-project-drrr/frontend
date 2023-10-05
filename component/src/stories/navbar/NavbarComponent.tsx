@@ -7,9 +7,9 @@ interface Props {
 
 export default function NavbarComponent({ handleCategoryMove, handleMainMove }: Props) {
     return (
-        <aside className="flex justify-center h-screen">
+        <aside className="flex justify-center h-screen bg-white">
             <div className="flex flex-col h-screen p-3  shadow w-full">
-                <div className="w-full flex justify-center text-center mb-20">
+                <div className="w-full flex justify-center text-center mb-20 text-black">
                     <h4 onClick={handleMainMove}>Logo(여기 클릭 시 Main이동)</h4>
                 </div>
                 <Button

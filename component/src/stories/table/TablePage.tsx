@@ -25,13 +25,18 @@ export default function TablePage() {
         return (
             <>
                 <div className="flex text-center items-center justify-between">
-                    <div className="w-96">
+                    <div>
                         <Select
                             items={selectData}
-                            placeholder="검색어를 선택해주세요."
-                            className="max-w-xs w-96"
+                            placeholder="검색 조건을 선택해주세요."
+                            className="max-w-xs"
+                            style={{ width: '200px' }}
                         >
-                            {data => <SelectItem key={data.value}>{data.label}</SelectItem>}
+                            {data => (
+                                <SelectItem key={data.id} className="dark">
+                                    {data.label}
+                                </SelectItem>
+                            )}
                         </Select>
                     </div>
                     <div>
@@ -41,7 +46,7 @@ export default function TablePage() {
                         <SearchInput />
                     </div>
                     <div>
-                        <Dropdown>
+                        <Dropdown className="dark">
                             <DropdownTrigger>
                                 <Button
                                     variant="bordered"
@@ -52,7 +57,7 @@ export default function TablePage() {
                             </DropdownTrigger>
                             <DropdownMenu
                                 aria-label="Example with disabled actions"
-                                disabledKeys={['edit', 'delete']}
+                                className="dark"
                             >
                                 <DropdownItem key="kakao">카카오</DropdownItem>
                                 <DropdownItem key="naver">네이버</DropdownItem>
@@ -62,11 +67,14 @@ export default function TablePage() {
                         </Dropdown>
                     </div>
                     <div>
-                        <Dropdown>
+                        <Dropdown className="dark flex text-center items-center">
                             <DropdownTrigger style={{ width: '200px' }}>
                                 <p>50개</p>
                             </DropdownTrigger>
-                            <DropdownMenu aria-label="Example with disabled actions">
+                            <DropdownMenu
+                                aria-label="Example with disabled actions"
+                                className="dark"
+                            >
                                 <DropdownItem key="10">10개</DropdownItem>
                                 <DropdownItem key="20">20개</DropdownItem>
                                 <DropdownItem key="30">30개</DropdownItem>

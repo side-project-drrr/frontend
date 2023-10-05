@@ -57,7 +57,7 @@ const users = [
         uniqueName: 'tony.reichert@example.com',
     },
     {
-        id: 2,
+        id: 4,
         author: 'Park',
         thumbnailUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
         title: 'title',
@@ -71,22 +71,7 @@ const users = [
         uniqueName: '하이',
     },
     {
-        id: 2,
-        author: 'Park',
-        thumbnailUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
-        title: 'title',
-        summary: '이건 기술 블로그다.',
-        urlSuffix: 'url',
-        url: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
-        techBlogCode: '1',
-        crawledDate: '2022-08-08',
-        registrationCompleted: false,
-        displayName: '하이',
-        uniqueName: '하이',
-    },
-
-    {
-        id: 2,
+        id: 5,
         author: 'Park',
         thumbnailUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
         title: 'title',
@@ -101,7 +86,7 @@ const users = [
     },
 
     {
-        id: 2,
+        id: 6,
         author: 'Park',
         thumbnailUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
         title: 'title',
