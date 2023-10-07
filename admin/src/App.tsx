@@ -6,14 +6,12 @@ import Category from './components/category/Category';
 
 function App() {
     return (
-        <div className="App">
-            <Routes>
-                <Route element={<Layout />}>
-                    <Route path="/" element={<Main />} />
-                    <Route path="/category" element={<Category />} />
-                </Route>
-            </Routes>
-        </div>
+        <Routes>
+            <Route element={<Layout />}>
+                <Route path="/" element={<Main />} />
+                <Route path="/category" element={<Category />} />
+            </Route>
+        </Routes>
     );
 }
 
