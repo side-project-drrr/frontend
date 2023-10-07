@@ -13,14 +13,43 @@ import {
     DropdownMenu,
     Button,
     DropdownItem,
+    Pagination,
 } from '@nextui-org/react';
 
 import { columns, users } from './data';
 import { selectData } from './selectData';
 import Calendar from '../datePicker/Calendar';
 import SearchInput from '../Input/SearchInput';
+import { useCallback, useMemo, useState } from 'react';
 
 export default function TablePage() {
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [page, setPage] = useState(1);
+
+    const onRowsPerPageChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+        setRowsPerPage(Number(e.target.value));
+        setPage(1);
+    }, []);
+
+    const filteredItems = [...users];
+    const pages = Math.ceil(filteredItems.length / rowsPerPage);
+    const items = useMemo(() => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        return filteredItems.slice(start, end);
+    }, [page, filteredItems, rowsPerPage]);
+    const onNextPage = useCallback(() => {
+        if (page < pages) {
+            setPage(page + 1);
+        }
+    }, [page, pages]);
+
+    const onPreviousPage = useCallback(() => {
+        if (page > 1) {
+            setPage(page - 1);
+        }
+    }, [page]);
+
     const Search = () => {
         return (
             <>
@@ -31,6 +60,7 @@ export default function TablePage() {
                             placeholder="검색 조건을 선택해주세요."
                             className="max-w-xs"
                             style={{ width: '200px' }}
+                            aria-label="Example with disabled actions"
                         >
                             {data => (
                                 <SelectItem key={data.id} className="dark">
@@ -67,52 +97,77 @@ export default function TablePage() {
                         </Dropdown>
                     </div>
                     <div>
-                        <Dropdown className="dark flex text-center items-center">
-                            <DropdownTrigger style={{ width: '200px' }}>
-                                <p>50개</p>
-                            </DropdownTrigger>
-                            <DropdownMenu
-                                aria-label="Example with disabled actions"
-                                className="dark"
-                            >
-                                <DropdownItem key="10">10개</DropdownItem>
-                                <DropdownItem key="20">20개</DropdownItem>
-                                <DropdownItem key="30">30개</DropdownItem>
-                                <DropdownItem key="40">40개</DropdownItem>
-                                <DropdownItem key="50">50개</DropdownItem>
-                                <DropdownItem key="60">60개</DropdownItem>
-                                <DropdownItem key="70">70개</DropdownItem>
-                                <DropdownItem key="80">80개</DropdownItem>
-                                <DropdownItem key="90">90개</DropdownItem>
-                                <DropdownItem key="100">100개</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
+                        <select
+                            className="dark flex text-center items-center"
+                            aria-label="Example with disabled actions"
+                            onChange={onRowsPerPageChange}
+                            value={rowsPerPage}
+                        >
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
                     </div>
                 </div>
             </>
         );
     };
-
+    const BottomContent = () => {
+        return (
+            <div className="py-2 px-2 flex items-center justify-between">
+                <Pagination
+                    isCompact
+                    showControls
+                    showShadow
+                    color="primary"
+                    page={page}
+                    total={pages}
+                    onChange={setPage}
+                />
+                <div className=" sm:flex w-[30%] justify-end gap-2">
+                    <Button
+                        isDisabled={pages === 1}
+                        size="sm"
+                        variant="flat"
+                        onPress={onPreviousPage}
+                    >
+                        Previous
+                    </Button>
+                    <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onNextPage}>
+                        Next
+                    </Button>
+                </div>
+            </div>
+        );
+    };
     return (
-        <>
-            <Table
-                aria-label="Example static collection table"
-                className="text-center dark items-center justify-around"
-                topContent={<Search />}
-            >
-                <TableHeader>
-                    {columns.map(column => (
-                        <TableColumn key={column.uid}>{column.name}</TableColumn>
-                    ))}
-                </TableHeader>
-                <TableBody className="text-center">
-                    {users.map(user => (
-                        <TableRow key={user.id}>
-                            {columnKey => <TableCell>{getKeyValue(user, columnKey)}</TableCell>}
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </>
+        <Table
+            aria-label="Example static collection table"
+            className="text-center dark items-center"
+            topContent={<Search />}
+            bottomContent={<BottomContent />}
+        >
+            <TableHeader>
+                {columns.map(column => (
+                    <TableColumn className="bg-white" key={column.uid}>
+                        {column.name}
+                    </TableColumn>
+                ))}
+            </TableHeader>
+            <TableBody className="text-center " items={items} style={{ height: '100px' }}>
+                {items.map(user => (
+                    <TableRow key={user.id}>
+                        {columnKey => <TableCell>{getKeyValue(user, columnKey)}</TableCell>}
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
     );
 }
