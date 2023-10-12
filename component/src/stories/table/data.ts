@@ -11,6 +11,7 @@ const columns = [
     { name: 'registrationCompleted', uid: 'registrationCompleted' },
     { name: 'displayName', uid: 'displayName' },
     { name: 'uniqueName', uid: 'uniqueName' },
+    { name: 'Writer', uid: 'Writer' },
 ];
 
 const users = [
@@ -27,6 +28,7 @@ const users = [
         registrationCompleted: 'tony.reichert@example.com',
         displayName: 'tony.reichert@example.com',
         uniqueName: 'tony.reichert@example.com',
+        Writer: '블로그 작성자',
     },
     {
         id: 2,
@@ -41,6 +43,7 @@ const users = [
         registrationCompleted: false,
         displayName: '하이',
         uniqueName: '하이',
+        Writer: '블로그 작성자',
     },
     {
         id: 3,
@@ -55,6 +58,7 @@ const users = [
         registrationCompleted: 'tony.reichert@example.com',
         displayName: 'tony.reichert@example.com',
         uniqueName: 'tony.reichert@example.com',
+        Writer: '블로그 작성자',
     },
     {
         id: 4,
@@ -69,6 +73,7 @@ const users = [
         registrationCompleted: false,
         displayName: '하이',
         uniqueName: '하이',
+        Writer: '블로그 작성자',
     },
     {
         id: 5,

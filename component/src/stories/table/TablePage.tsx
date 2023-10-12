@@ -23,21 +23,36 @@ import SearchInput from '../Input/SearchInput';
 import { useCallback, useMemo, useState } from 'react';
 
 export default function TablePage() {
+    const [filterValue, setFilterValue] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [page, setPage] = useState(1);
+
+    let hasSearchFilter = Boolean(filterValue);
 
     const onRowsPerPageChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
         setRowsPerPage(Number(e.target.value));
         setPage(1);
     }, []);
 
-    const filteredItems = [...users];
+    const filteredItems = useMemo(() => {
+        let filteredUsers = [...users];
+        if (hasSearchFilter) {
+            filteredUsers = filteredUsers.filter(
+                user => user.Writer?.toLowerCase().includes(filterValue.toLowerCase()),
+            );
+        }
+        return filteredUsers;
+    }, [users, filterValue]);
+
     const pages = Math.ceil(filteredItems.length / rowsPerPage);
+
     const items = useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
+
         return filteredItems.slice(start, end);
     }, [page, filteredItems, rowsPerPage]);
+
     const onNextPage = useCallback(() => {
         if (page < pages) {
             setPage(page + 1);
@@ -50,23 +65,38 @@ export default function TablePage() {
         }
     }, [page]);
 
+    const onSearchChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        console.log(value);
+        if (value === '전체') {
+            setFilterValue('');
+        } else {
+            if (value) {
+                setFilterValue(value);
+                setPage(1);
+            } else {
+                setFilterValue('');
+            }
+        }
+    };
+
     const Search = () => {
         return (
             <>
                 <div className="flex text-center items-center justify-between">
                     <div>
                         <Select
-                            items={selectData}
-                            placeholder="검색 조건을 선택해주세요."
+                            placeholder="Select an animal"
+                            defaultSelectedKeys={['전체']}
                             className="max-w-xs"
                             style={{ width: '200px' }}
-                            aria-label="Example with disabled actions"
+                            onChange={onSearchChange}
                         >
-                            {data => (
-                                <SelectItem key={data.id} className="dark">
+                            {selectData.map(data => (
+                                <SelectItem key={data.value} value={data.value}>
                                     {data.label}
                                 </SelectItem>
-                            )}
+                            ))}
                         </Select>
                     </div>
                     <div>
