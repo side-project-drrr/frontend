@@ -12,6 +12,7 @@ const columns = [
     { name: 'displayName', uid: 'displayName' },
     { name: 'uniqueName', uid: 'uniqueName' },
     { name: 'Writer', uid: 'Writer' },
+    { name: 'Stack', uid: 'Stack' },
 ];
 
 const users = [
@@ -29,6 +30,7 @@ const users = [
         displayName: 'tony.reichert@example.com',
         uniqueName: 'tony.reichert@example.com',
         Writer: '블로그 작성자',
+        Stack: '네이버',
     },
     {
         id: 2,
@@ -44,6 +46,7 @@ const users = [
         displayName: '하이',
         uniqueName: '하이',
         Writer: '블로그 작성자',
+        Stack: '네이버',
     },
     {
         id: 3,
@@ -59,6 +62,7 @@ const users = [
         displayName: 'tony.reichert@example.com',
         uniqueName: 'tony.reichert@example.com',
         Writer: '블로그 작성자',
+        Stack: '네이버',
     },
     {
         id: 4,
@@ -74,6 +78,7 @@ const users = [
         displayName: '하이',
         uniqueName: '하이',
         Writer: '블로그 작성자',
+        Stack: '배달의 민족',
     },
     {
         id: 5,
@@ -88,6 +93,7 @@ const users = [
         registrationCompleted: false,
         displayName: '하이',
         uniqueName: '하이',
+        Stack: '카카오',
     },
 
     {

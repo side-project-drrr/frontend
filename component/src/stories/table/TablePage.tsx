@@ -8,26 +8,25 @@ import {
     getKeyValue,
     Select,
     SelectItem,
-    Dropdown,
-    DropdownTrigger,
-    DropdownMenu,
     Button,
-    DropdownItem,
     Pagination,
 } from '@nextui-org/react';
 
 import { columns, users } from './data';
 import { selectData } from './selectData';
+import { Stack } from './Stack';
 import Calendar from '../datePicker/Calendar';
 import SearchInput from '../Input/SearchInput';
 import { useCallback, useMemo, useState } from 'react';
 
 export default function TablePage() {
     const [filterValue, setFilterValue] = useState('');
+    const [stackValue, setStackValue] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [page, setPage] = useState(1);
 
-    let hasSearchFilter = Boolean(filterValue);
+    const hasSearchFilter = Boolean(filterValue);
+    const stackSerchFilter = Boolean(stackValue);
 
     const onRowsPerPageChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
         setRowsPerPage(Number(e.target.value));
@@ -41,8 +40,13 @@ export default function TablePage() {
                 user => user.Writer?.toLowerCase().includes(filterValue.toLowerCase()),
             );
         }
+        if (stackSerchFilter) {
+            filteredUsers = filteredUsers.filter(
+                user => user.Stack?.toLowerCase().includes(stackValue.toLowerCase()),
+            );
+        }
         return filteredUsers;
-    }, [users, filterValue]);
+    }, [users, filterValue, stackValue]);
 
     const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -67,7 +71,6 @@ export default function TablePage() {
 
     const onSearchChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
-        console.log(value);
         if (value === '전체') {
             setFilterValue('');
         } else {
@@ -79,6 +82,19 @@ export default function TablePage() {
             }
         }
     };
+    const onStackSearchChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        if (value === '전체') {
+            setStackValue('');
+        } else {
+            if (value) {
+                setStackValue(value);
+                setPage(1);
+            } else {
+                setStackValue('');
+            }
+        }
+    };
 
     const Search = () => {
         return (
@@ -86,7 +102,7 @@ export default function TablePage() {
                 <div className="flex text-center items-center justify-between">
                     <div>
                         <Select
-                            placeholder="Select an animal"
+                            placeholder="Select an tagName"
                             defaultSelectedKeys={['전체']}
                             className="max-w-xs"
                             style={{ width: '200px' }}
@@ -106,25 +122,19 @@ export default function TablePage() {
                         <SearchInput />
                     </div>
                     <div>
-                        <Dropdown className="dark">
-                            <DropdownTrigger>
-                                <Button
-                                    variant="bordered"
-                                    className="border-none outline-none w-96"
-                                >
-                                    기술블로그 그룹
-                                </Button>
-                            </DropdownTrigger>
-                            <DropdownMenu
-                                aria-label="Example with disabled actions"
-                                className="dark"
-                            >
-                                <DropdownItem key="kakao">카카오</DropdownItem>
-                                <DropdownItem key="naver">네이버</DropdownItem>
-                                <DropdownItem key="minjoc">배달의 민족</DropdownItem>
-                                <DropdownItem key="toss">Toss</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
+                        <Select
+                            placeholder="Select an stack"
+                            defaultSelectedKeys={['전체']}
+                            className="max-w-xs"
+                            style={{ width: '200px' }}
+                            onChange={onStackSearchChange}
+                        >
+                            {Stack.map(data => (
+                                <SelectItem key={data.value} value={data.value}>
+                                    {data.label}
+                                </SelectItem>
+                            ))}
+                        </Select>
                     </div>
                     <div>
                         <select
