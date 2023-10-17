@@ -35,9 +35,9 @@ export default function TablePage() {
         setRowsPerPage(Number(e.target.value));
         setPage(1);
     }, []);
-
+    const abc = users.filter(user => user.Writer?.includes(''));
+    console.log(abc);
     const data = format(filterDate, 'yyyy-MM-dd');
-
     const filteredItems = useMemo(() => {
         let filteredUsers = [...users];
         if (hasSearchFilter) {
@@ -55,7 +55,6 @@ export default function TablePage() {
                 return user?.crawledDate.includes(data);
             });
         }
-
         return filteredUsers;
     }, [users, filterValue, stackValue, filterDate]);
 

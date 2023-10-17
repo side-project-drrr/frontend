@@ -93,6 +93,7 @@ const users = [
         registrationCompleted: false,
         displayName: '하이',
         uniqueName: '하이',
+        Writer: '제목',
         Stack: '카카오',
     },
 
@@ -108,6 +109,7 @@ const users = [
         crawledDate: '2023-10-17',
         registrationCompleted: false,
         displayName: '하이',
+        Writer: '제목',
         uniqueName: '하이',
     },
     {
@@ -123,6 +125,7 @@ const users = [
         registrationCompleted: 'tony.reichert@example.com',
         displayName: 'tony.reichert@example.com',
         uniqueName: 'tony.reichert@example.com',
+        Writer: '제목',
     },
     {
         id: 8,
@@ -137,6 +140,7 @@ const users = [
         registrationCompleted: 'tony.reichert@example.com',
         displayName: 'tony.reichert@example.com',
         uniqueName: 'tony.reichert@example.com',
+        Writer: '제목',
     },
     {
         id: 9,
@@ -150,7 +154,7 @@ const users = [
         crawledDate: '2023-10-17',
         registrationCompleted: 'tony.reichert@example.com',
         displayName: 'tony.reichert@example.com',
-        uniqueName: 'tony.reichert@example.com',
+        Writer: '테스트',
     },
     {
         id: 10,
@@ -165,6 +169,7 @@ const users = [
         registrationCompleted: 'tony.reichert@example.com',
         displayName: 'tony.reichert@example.com',
         uniqueName: 'tony.reichert@example.com',
+        Writer: '테스트',
     },
 ];
 
