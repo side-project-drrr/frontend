@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-export default function Calendar() {
-    const [startDate, setStartDate] = useState<Date | null>(new Date());
+interface Props {
+    filterDate: Date;
+    setFilterDate: Dispatch<SetStateAction<Date>>;
+}
 
+export default function Calendar({ setFilterDate, filterDate }: Props) {
     return (
         <DatePicker
-            selected={startDate}
-            onChange={date => setStartDate(date)}
+            selected={filterDate}
+            onChange={date => date && setFilterDate(date)}
             dateFormat="yyyy-MM-dd"
             className="h-11 rounded-xl text-center"
         />

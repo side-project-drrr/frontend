@@ -11,6 +11,7 @@ import {
     Button,
     Pagination,
 } from '@nextui-org/react';
+import { format } from 'date-fns';
 
 import { columns, users } from './data';
 import { selectData } from './selectData';
@@ -23,15 +24,19 @@ export default function TablePage() {
     const [filterValue, setFilterValue] = useState('');
     const [stackValue, setStackValue] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [filterDate, setFilterDate] = useState<Date>(new Date());
     const [page, setPage] = useState(1);
 
     const hasSearchFilter = Boolean(filterValue);
     const stackSerchFilter = Boolean(stackValue);
+    const dateDateFilter = Boolean(filterDate);
 
     const onRowsPerPageChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
         setRowsPerPage(Number(e.target.value));
         setPage(1);
     }, []);
+
+    const data = format(filterDate, 'yyyy-MM-dd');
 
     const filteredItems = useMemo(() => {
         let filteredUsers = [...users];
@@ -45,8 +50,14 @@ export default function TablePage() {
                 user => user.Stack?.toLowerCase().includes(stackValue.toLowerCase()),
             );
         }
+        if (dateDateFilter) {
+            filteredUsers = filteredUsers.filter(user => {
+                return user?.crawledDate.includes(data);
+            });
+        }
+
         return filteredUsers;
-    }, [users, filterValue, stackValue]);
+    }, [users, filterValue, stackValue, filterDate]);
 
     const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -116,7 +127,7 @@ export default function TablePage() {
                         </Select>
                     </div>
                     <div>
-                        <Calendar />
+                        <Calendar setFilterDate={setFilterDate} filterDate={filterDate} />
                     </div>
                     <div>
                         <SearchInput />
