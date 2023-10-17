@@ -2451,6 +2451,7 @@ __metadata:
     "@vitest/ui": ^0.34.4
     autoprefixer: ^10.4.15
     cross-env: ^7.0.3
+    date-fns: ^2.30.0
     eslint: ^8.45.0
     eslint-plugin-react: ^7.33.2
     eslint-plugin-react-hooks: ^4.6.0
