@@ -111,6 +111,7 @@ const users = [
         displayName: '하이',
         Writer: '제목',
         uniqueName: '하이',
+        Stack: '배달의 민족',
     },
     {
         id: 7,
@@ -126,6 +127,7 @@ const users = [
         displayName: 'tony.reichert@example.com',
         uniqueName: 'tony.reichert@example.com',
         Writer: '제목',
+        Stack: 'TOSS',
     },
     {
         id: 8,
@@ -141,6 +143,7 @@ const users = [
         displayName: 'tony.reichert@example.com',
         uniqueName: 'tony.reichert@example.com',
         Writer: '제목',
+        Stack: '배달의 민족',
     },
     {
         id: 9,
@@ -155,6 +158,7 @@ const users = [
         registrationCompleted: 'tony.reichert@example.com',
         displayName: 'tony.reichert@example.com',
         Writer: '테스트',
+        Stack: 'TOSS',
     },
     {
         id: 10,
@@ -170,6 +174,7 @@ const users = [
         displayName: 'tony.reichert@example.com',
         uniqueName: 'tony.reichert@example.com',
         Writer: '테스트',
+        Stack: 'TOSS',
     },
 ];
 
