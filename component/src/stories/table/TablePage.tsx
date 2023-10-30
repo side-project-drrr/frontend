@@ -109,7 +109,7 @@ export default function TablePage() {
     const Search = () => {
         return (
             <>
-                <div className="flex text-center items-center justify-between">
+                <div className="flex text-center items-center justify-between bg-red-500">
                     <div>
                         <Select
                             placeholder="Select an tagName"

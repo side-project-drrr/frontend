@@ -1,36 +1,28 @@
 import { BiLogoGit } from 'react-icons/bi';
 import { Input } from '@nextui-org/react';
 import { FiMail } from 'react-icons/fi';
-import { AiOutlineUserAdd } from 'react-icons/ai';
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
+
+// import { AiOutlineUserAdd } from 'react-icons/ai';
+// import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 
 export default function Header() {
     return (
-        <header>
-            <div className="flex w-96  items-center justify-around	">
-                <div>
-                    <BiLogoGit size="30" />
+        <header className="flex items-center w-screen h-[57px] border-b-1 border-solid border-zinc-500">
+            <div className="flex flex-1">
+                <div className="none mr-2 ml-2">
+                    <BiLogoGit size="40" />
                 </div>
-                <div>
-                    <Input
-                        isClearable
-                        radius="lg"
-                        classNames={{
-                            label: 'text-black/50 dark:text-white/90',
-                            input: ['bg-transparent', 'text-black/90 dark:text-black/90'],
-                            innerWrapper: 'bg-transparent',
-                            inputWrapper: ['shadow-xl', 'bg-default-200/50', 'dark:bg-default/60'],
-                        }}
-                        placeholder="검색어 입력"
-                    />
+                <div className="grow">
+                    <Input radius="lg" className="max-w-xs w-[400px]" placeholder="검색어 입력" />
                 </div>
-                <div>
-                    <FiMail size="30" />
+                <div className="flex justify-around w-28">
+                    <FiMail size="40" />
+                    <FiMail size="40" />
                 </div>
-                <div>
-                    <Dropdown>
+
+                {/* <Dropdown>
                         <DropdownTrigger>
-                            <AiOutlineUserAdd size="30" />
+                            <AiOutlineUserAdd size="40" />
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Static Actions">
                             <DropdownItem key="new" color="secondary">
@@ -43,8 +35,7 @@ export default function Header() {
                                 로그아웃
                             </DropdownItem>
                         </DropdownMenu>
-                    </Dropdown>
-                </div>
+                    </Dropdown> */}
             </div>
         </header>
     );
