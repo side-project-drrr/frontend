@@ -6,7 +6,7 @@ export default function NoAuthHeader() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     return (
         <header>
-            <div className="flex w-96  items-center justify-around	">
+            <div className="flex w-96  items-center justify-around	bg-yellow-500">
                 <div>
                     <BiLogoGit size="30" />
                 </div>
