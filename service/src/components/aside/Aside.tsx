@@ -1,3 +1,51 @@
 export default function Aside() {
-    return <div className="bg-red-500">Aside</div>;
+    return (
+        <div className="flex flex-col">
+            <div>
+                <p>12333333333333333</p>
+            </div>
+            <div>
+                <p>123</p>
+            </div>
+            <div>
+                <p>123</p>
+            </div>
+            <div>
+                <p>123</p>
+            </div>
+            <div>
+                <p>123</p>
+            </div>
+            <div>
+                <p>123</p>
+            </div>
+            <div>
+                <p>123</p>
+            </div>
+            <div>
+                <p>123</p>
+            </div>
+            <div>
+                <p>123</p>
+            </div>
+            <div>
+                <p>45</p>
+            </div>
+            <div>
+                <p>45</p>
+            </div>
+            <div>
+                <p>45</p>
+            </div>
+            <div>
+                <p>45</p>
+            </div>
+            <div>
+                <p>45</p>
+            </div>
+            <div>
+                <p>45</p>
+            </div>
+        </div>
+    );
 }
