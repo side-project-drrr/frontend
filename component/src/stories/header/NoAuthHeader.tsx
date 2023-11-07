@@ -1,32 +1,22 @@
 import { BiLogoGit } from 'react-icons/bi';
-import { Input, Button, useDisclosure } from '@nextui-org/react';
+import { Input, useDisclosure } from '@nextui-org/react';
+
 import { LoginPage } from '../login/LoginPage';
+import SocialKaKao from '@monorepo/service/src/components/social/kakao/SocialKaKao';
 
 export default function NoAuthHeader() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     return (
-        <header>
-            <div className="flex w-96  items-center justify-around	bg-yellow-500">
-                <div>
-                    <BiLogoGit size="30" />
+        <header className="flex items-center w-screen h-[57px] border-b-1 border-solid border-zinc-500">
+            <div className="flex flex-1">
+                <div className="none mr-2 ml-2">
+                    <BiLogoGit size="40" />
+                </div>
+                <div className="grow">
+                    <Input radius="lg" className="max-w-xs w-[400px]" placeholder="검색어 입력" />
                 </div>
                 <div>
-                    <Input
-                        isClearable
-                        radius="lg"
-                        classNames={{
-                            label: 'text-black/50 dark:text-white/90',
-                            input: ['bg-transparent', 'text-black/90 dark:text-black/90'],
-                            innerWrapper: 'bg-transparent',
-                            inputWrapper: ['shadow-xl', 'bg-default-200/50', 'dark:bg-default/60'],
-                        }}
-                        placeholder="검색어 입력"
-                    />
-                </div>
-                <div>
-                    <Button size="md" onPress={onOpen}>
-                        Login
-                    </Button>
+                    <SocialKaKao />
                 </div>
             </div>
             <LoginPage onOpen={onOpen} isOpen={isOpen} onOpenChange={onOpenChange} />
