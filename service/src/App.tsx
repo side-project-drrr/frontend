@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import MainPage from './pages/MainPage';
 import ItemDetailPage from './pages/ItemDetailPage';
-import KaKaoCallback from './components/social/kakao/KaKaoCallback';
+import SignUpPrivacyPage from './pages/SignUpPrivacyPage';
 
 function App() {
     return (
@@ -10,8 +10,8 @@ function App() {
             <Route element={<Layout />}>
                 <Route path="/" element={<MainPage />} />
                 <Route path="/detail/:id" element={<ItemDetailPage />} />
+                <Route path="/signup/privacy" element={<SignUpPrivacyPage />} />
             </Route>
-            <Route path="/auth" element={<KaKaoCallback />} />
         </Routes>
     );
 }

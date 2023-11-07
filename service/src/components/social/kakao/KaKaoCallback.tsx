@@ -20,6 +20,7 @@ export default function KaKaoCallback() {
             )
             .then(res => {
                 const { access_token } = res.data;
+                //개인정보
                 if (access_token) {
                     axios
                         .post(
