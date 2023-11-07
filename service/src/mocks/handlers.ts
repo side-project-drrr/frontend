@@ -1,11 +1,12 @@
 import { http, HttpResponse } from 'msw';
 
+const user = [];
+
 export const handlers = [
     // 할일 목록
-    http.get('/posts', () => {
-        // Response resolver allows you to react to captured requests,
-        // respond with mock responses or passthrough requests entirely.
-        // For now, let's just print a message to the console.
-        return HttpResponse.json({ id: 1 });
+    http.get('/signup', async ({ request }) => {
+        const newUser = await request.json();
+        user.push(newUser);
+        return HttpResponse.json(newUser, { status: 200 });
     }),
 ];

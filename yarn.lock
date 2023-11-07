@@ -2626,6 +2626,7 @@ __metadata:
     postcss: ^8.4.31
     react: ^18.2.0
     react-dom: ^18.2.0
+    react-kakao-login: ^2.1.1
     react-router-dom: ^6.17.0
     tailwindcss: ^3.3.4
     typescript: ^5.0.2
@@ -17249,6 +17250,15 @@ __metadata:
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
   checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
+  languageName: node
+  linkType: hard
+
+"react-kakao-login@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "react-kakao-login@npm:2.1.1"
+  peerDependencies:
+    react: ">= 15.3.0"
+  checksum: 45eb33bb22cc4fa19d04ec5eab94cceefa2c5b76c7d5c185283e0206f1d26c9e451b7ff9162b9402735c09e6ee817a3d9c148deec2be75981d734c836c51bf7a
   languageName: node
   linkType: hard
 
