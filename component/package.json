@@ -5,6 +5,7 @@
     "dependencies": {
         "@monorepo/admin": "*",
         "@monorepo/drrr-front": "*",
+        "@monorepo/service": "*",
         "@nextui-org/react": "^2.1.7",
         "cross-env": "5.0.5",
         "framer-motion": "^10.16.1",
