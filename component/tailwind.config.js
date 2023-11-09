@@ -5,8 +5,6 @@ module.exports = {
     content: [
         './src/**/*.{js,jsx,ts,tsx}',
         './src/**/**/*.{js,jsx,ts,tsx}',
-        './stories/header/header.tsx',
-
         './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
     ],
     theme: {
