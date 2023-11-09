@@ -18,7 +18,7 @@ interface ValueProps {
     phone: string;
     nickname: string;
 }
-export default function SignupPage() {
+export default function SignUpPage() {
     const [errorMsg, setErrorMsg] = useState({
         gender: '',
         name: '',
@@ -104,7 +104,7 @@ export default function SignupPage() {
                     label="이름"
                     className="max-w-md dark"
                     size="lg"
-                    onChange={e => handleInputChange(e)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
                     name="name"
                 />
                 <p className="text-red-500">{errorMsg.name && errorMsg.name} </p>
@@ -114,7 +114,7 @@ export default function SignupPage() {
                     label="닉네임"
                     size="lg"
                     className="max-w-md dark"
-                    onChange={e => handleInputChange(e)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
                     name="nickname"
                 />
                 <p className="text-red-500">{errorMsg.nickname && errorMsg.nickname}</p>
@@ -124,7 +124,7 @@ export default function SignupPage() {
                     label="휴대전화번호"
                     size="lg"
                     className="max-w-md dark"
-                    onChange={e => handleInputChange(e)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
                     name="phone"
                 />
                 <p className="text-red-500">{errorMsg.phone && errorMsg.phone} </p>
@@ -134,7 +134,7 @@ export default function SignupPage() {
                     label="이메일"
                     size="lg"
                     className="max-w-md dark"
-                    onChange={e => handleInputChange(e)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
                     name="email"
                 />
                 <p className="text-red-500">{errorMsg.email && errorMsg.email}</p>
@@ -144,7 +144,7 @@ export default function SignupPage() {
                     label="생년월일"
                     size="lg"
                     className="max-w-md dark"
-                    onChange={e => handleInputChange(e)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
                     name="birthday"
                 />
                 <p className="text-red-500 mt-5">{errorMsg.birthday && errorMsg.birthday}</p>

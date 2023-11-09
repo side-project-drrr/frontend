@@ -12,7 +12,7 @@
         "build": "tsc && vite build",
         "preview": "vite preview",
         "postinstall": "husky install",
-        "component": "yarn workspace @monorepo/component",
+        "component": "yarn workspace @monorepo/component storybook",
         "service": "yarn workspace @monorepo/service dev",
         "admin": "yarn workspace @monorepo/admin dev",
         "lint:fix": "eslint --fix './src/**/*.{ts,tsx}'",
