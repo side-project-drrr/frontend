@@ -3,6 +3,8 @@ import Layout from './components/layout/Layout';
 import MainPage from './pages/MainPage';
 import ItemDetailPage from './pages/ItemDetailPage';
 import SignUpPage from './pages/SignUpPage';
+import CategoryPage from './pages/CategoryPage';
+import KaKaoCallback from './components/social/kakao/KaKaoCallback';
 
 function App() {
     return (
@@ -11,7 +13,9 @@ function App() {
                 <Route path="/" element={<MainPage />} />
                 <Route path="/detail/:id" element={<ItemDetailPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
+                <Route path="/signup/category" element={<CategoryPage />} />
             </Route>
+            <Route path="/auth" element={<KaKaoCallback />} />
         </Routes>
     );
 }

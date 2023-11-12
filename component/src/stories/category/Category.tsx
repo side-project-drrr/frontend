@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 const categorys = [
     {
         id: '1',
@@ -112,23 +114,46 @@ const categorys = [
         uqnique_name: 'FLUTTER',
     },
 ];
+
 export default function Category() {
+    const [categoryList, setCategoryList] = useState<string[]>([]);
+
+    const handleCategory = (e: React.MouseEvent<HTMLLIElement>) => {
+        const id = e.currentTarget.id;
+        setCategoryList(prevData => [...prevData, id]);
+    };
+    const categoryDeduplication = (value: string[]) => {
+        const deduplicationItem = new Set(value);
+        return Array.from(deduplicationItem);
+    };
+    const handleCategoryPost = () => {
+        const categoryItem = categoryDeduplication(categoryList);
+        console.log(categoryItem);
+        console.log('api 호출');
+    };
     return (
         <>
-            <div className="flex flex-wrap max-w-3xl bg-white rounded p-2 justify-center border z-20 items-center text-center">
+            <div className="flex flex-wrap max-w-3xl bg-white rounded p-2 justify-center border z-20 items-center text-center ">
                 <ul className="w-11/12 flex border-b-2 border-solid">
                     <li className=" text-black pb-2.5">카테고리</li>
                 </ul>
                 <ul className="flex flex-wrap p-8 gap-4 w-11/12">
                     {categorys.map(category => (
                         <li
-                            className=" text-black border border-solid  p-4 rounded-3xl gap-2"
+                            className={`text-black border border-solid p-4 rounded-3xl gap-2 cursor-pointer ${
+                                categoryList.includes(category.id) ? 'bg-blue-500 text-white' : ''
+                            }`}
                             key={category.id}
+                            id={category.id}
+                            onClick={handleCategory}
                         >
                             {category.display_name}
                         </li>
                     ))}
                 </ul>
+                <div className="flex justify-end w-full">
+                    <button onClick={handleCategoryPost}>선택 완료</button>
+                </div>
             </div>
         </>
     );

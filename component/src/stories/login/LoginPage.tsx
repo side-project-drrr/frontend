@@ -1,6 +1,6 @@
 import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 import { BiLogoGit } from 'react-icons/bi';
-import SocialKaKao from '@monorepo/service/src/components/social/kakao/SocialKaKao';
+import SocialKakao from '@monorepo/service/src/components/social/kakao/SocialKaKao';
 interface LoginProps {
     onOpen: () => void;
     isOpen: boolean;
@@ -34,11 +34,10 @@ export const LoginPage = ({ isOpen, onOpenChange }: LoginProps) => {
                                     </div>
                                     <div className="w-full flex items-center justify-around grow gap-4">
                                         <div>
-                                            <SocialKaKao />
+                                            <SocialKakao />
                                             <label>카카오 로그인</label>
                                         </div>
                                         <div>
-                                            <SocialKaKao />
                                             <label>Github 로그인</label>
                                         </div>
                                     </div>

@@ -1,52 +1,29 @@
-import { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 export default function KaKaoCallback() {
-    const [searchParams] = useSearchParams();
-    const params = searchParams.get('code');
-    const grantType = 'authorization_code';
-    const REST_API_KEY = import.meta.env.VITE_APP_KAKAO_REST_API_KEY; //REST API KEY
-    const REDIRECT_URL = import.meta.env.VITE_APP_REDIRECT_URL; //Redirect URI
-    async function profileFetching() {
-        axios
-            .post(
-                `https://kauth.kakao.com/oauth/token?grant_type=${grantType}&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&code=${params}`,
-                {},
-                {
-                    headers: {
-                        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                    },
-                },
-            )
-            .then(res => {
-                const { access_token } = res.data;
-                //개인정보
-                if (access_token) {
-                    axios
-                        .post(
-                            `https://kapi.kakao.com/v2/user/me`,
-                            {},
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${access_token}`,
-                                    'Content-type':
-                                        'application/x-www-form-urlencoded;charset=utf-8',
-                                },
-                            },
-                        )
-                        .then(res => {
-                            console.log(res);
-                            console.log(res.data.kakao_account.profile.nickname);
-                        });
-                } else {
-                    console.log('토큰이 존재 하지 않음');
-                }
-            });
-    }
+    const [didMount, setDidMount] = useState(false);
+
+    const code = new URL(document.location.toString()).searchParams.get('code');
+    const state = new URL(document.location.toString()).searchParams.get('state');
+    const navigate = useNavigate();
+    useEffect(() => {
+        setDidMount(true);
+    }, []);
 
     useEffect(() => {
-        profileFetching();
-    }, [searchParams]);
+        if (didMount) {
+            axios.get(`/auth/oauth2/profile?code=${code}&state=${state}`).then(res => {
+                const data = res.data;
+                if (data[0].isRegistred) {
+                    navigate('/', { state: data[0].providerId });
+                } else {
+                    navigate('/signup');
+                }
+            });
+        }
+    }, [didMount]);
 
-    return <div></div>;
+    return <div>로그인 중...</div>;
 }
