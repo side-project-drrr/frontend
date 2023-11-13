@@ -1,6 +1,7 @@
 import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 import { BiLogoGit } from 'react-icons/bi';
 import SocialKakao from '@monorepo/service/src/components/social/kakao/SocialKaKao';
+import SocialGithub from '@monorepo/service/src/components/social/github/SocialGithub';
 interface LoginProps {
     onOpen: () => void;
     isOpen: boolean;
@@ -38,6 +39,7 @@ export const LoginPage = ({ isOpen, onOpenChange }: LoginProps) => {
                                             <label>카카오 로그인</label>
                                         </div>
                                         <div>
+                                            <SocialGithub />
                                             <label>Github 로그인</label>
                                         </div>
                                     </div>
