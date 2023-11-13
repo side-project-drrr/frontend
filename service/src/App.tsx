@@ -4,7 +4,8 @@ import MainPage from './pages/MainPage';
 import ItemDetailPage from './pages/ItemDetailPage';
 import SignUpPage from './pages/SignUpPage';
 import CategoryPage from './pages/CategoryPage';
-import KaKaoCallback from './components/social/kakao/KaKaoCallback';
+//import KaKaoCallback from './components/social/kakao/KaKaoCallback';
+import GithubCallback from './components/social/github/GithubCallback';
 
 function App() {
     return (
@@ -15,7 +16,8 @@ function App() {
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/signup/category" element={<CategoryPage />} />
             </Route>
-            <Route path="/auth" element={<KaKaoCallback />} />
+            {/* <Route path="/auth" element={<KaKaoCallback />} /> */}
+            <Route path="/auth" element={<GithubCallback />} />
         </Routes>
     );
 }
