@@ -1,14 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
+import { SocialServcie } from '../../service/SocialService';
 
 export default function GithubCallback() {
     const [didMount, setDidMount] = useState(false);
 
     const code = new URL(document.location.toString()).searchParams.get('code');
 
-    const STATE = 'github';
+    const state = 'github';
     const navigate = useNavigate();
+
+    const hadleGithubLogin = async () => {
+        const data = await SocialServcie(code, state);
+        if (data[0].isRegistred) {
+            navigate('/', { state: data[0].providerId });
+        } else {
+            navigate('/signup', { state: data[0].providerId });
+        }
+    };
 
     useEffect(() => {
         setDidMount(true);
@@ -16,14 +26,7 @@ export default function GithubCallback() {
 
     useEffect(() => {
         if (didMount) {
-            axios.get(`/auth/oauth2/profile?code=${code}&state=${STATE}`).then(res => {
-                const data = res.data;
-                if (data[0].isRegistred) {
-                    navigate('/', { state: data[0].providerId });
-                } else {
-                    navigate('/signup');
-                }
-            });
+            hadleGithubLogin();
         }
     }, [didMount]);
 
