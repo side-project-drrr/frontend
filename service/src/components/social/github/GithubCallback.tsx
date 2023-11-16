@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { SocialServcie } from '../../service/SocialService';
+import { SocialServcie } from '../../../service/SocialService';
 
 export default function GithubCallback() {
     const [didMount, setDidMount] = useState(false);
@@ -13,10 +13,10 @@ export default function GithubCallback() {
 
     const hadleGithubLogin = async () => {
         const data = await SocialServcie(code, state);
-        if (data[0].isRegistred) {
-            navigate('/', { state: data[0].providerId });
+        if (data.isRegistered) {
+            navigate('/', { state: data.providerId });
         } else {
-            navigate('/signup', { state: data[0].providerId });
+            navigate('/signup', { state: data.providerId });
         }
     };
 
