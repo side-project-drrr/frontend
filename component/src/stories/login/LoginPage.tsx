@@ -20,7 +20,7 @@ export const LoginPage = ({ isOpen, onOpenChange }: LoginProps) => {
                 <ModalContent>
                     {onClose => (
                         <>
-                            <div className="flex flex-col items-center text-center justify-between flex-1">
+                            <div className="flex flex-col items-center justify-between flex-1 text-center">
                                 <ModalHeader className="text-black">
                                     <div aria-label="logo">
                                         <BiLogoGit size="30" />
@@ -33,7 +33,7 @@ export const LoginPage = ({ isOpen, onOpenChange }: LoginProps) => {
                                     >
                                         <p>기타 설명</p>
                                     </div>
-                                    <div className="w-full flex items-center justify-around grow gap-4">
+                                    <div className="flex items-center justify-around w-full gap-4 grow">
                                         <div>
                                             <SocialKakao />
                                             <label>카카오 로그인</label>
