@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from 'react';
-import { Button, Input } from '@nextui-org/react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Input } from '@nextui-org/react';
+import axios from 'axios';
 
 const msg = {
     email: '올바른 이메일 형식이 아닙니다.',
@@ -50,23 +51,33 @@ export default function SignUpPage() {
         const emailValidationState = validationEmailChecked(profileValue.email);
         if (emailValidationState === undefined) {
             setEmailElement(true);
+            //백엔드 api로 이메일 보내기
+            axios.post('/auth/email', {
+                providerId: '1234',
+                email: `${profileValue.email}`,
+            });
+        } else {
             setErrorMsg(prevErrorMsg => ({
                 ...prevErrorMsg,
-                email: '',
+                email: errorMsg.email,
             }));
-        } else {
-            setEmailElement(false);
-            //백엔드 api로 이메일 보내기
-            console.log(profileValue.email + '49번쨰 라인');
         }
     };
     const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setEmailCode(value);
     };
+
     const handleEmailAuthentication = () => {
         //백엔드로 코드 보내기
-        console.log(emailCode);
+        axios
+            .post('/auth/email/check', {
+                providerId: '1234',
+                verificationCode: `${emailCode}`,
+            })
+            .then(res => {
+                if (res.data.isVerified) navigate('/');
+            });
     };
 
     const handleSignup = (profileValue: ValueProps) => {
@@ -89,8 +100,8 @@ export default function SignUpPage() {
         }
     };
     return (
-        <div className="flex items-center justify-center flex-col gap-8 w-full">
-            <div className="w-full flex items-center justify-center flex-col gap-2">
+        <div className="flex flex-col items-center justify-center w-full gap-8">
+            <div className="flex flex-col items-center justify-center w-full gap-2">
                 <Input
                     label="이름"
                     className="max-w-md dark"
@@ -100,7 +111,7 @@ export default function SignUpPage() {
                 />
                 <p className="text-red-500">{errorMsg.name && errorMsg.name} </p>
             </div>
-            <div className="w-full flex items-center justify-center flex-col gap-2">
+            <div className="flex flex-col items-center justify-center w-full gap-2">
                 <Input
                     label="닉네임"
                     size="lg"
@@ -111,8 +122,8 @@ export default function SignUpPage() {
                 <p className="text-red-500">{errorMsg.nickname && errorMsg.nickname}</p>
             </div>
 
-            <div className="w-full flex items-center justify-center flex-col gap-2 ">
-                <div className="w-full flex items-center justify-center gap-2 ">
+            <div className="flex flex-col items-center justify-center w-full gap-2 ">
+                <div className="flex items-center justify-center w-full gap-2 ">
                     <Input
                         label="이메일"
                         size="lg"
@@ -125,7 +136,7 @@ export default function SignUpPage() {
                     </Button>
                 </div>
                 {emailElement && (
-                    <div className="w-full flex items-center justify-center gap-2 ">
+                    <div className="flex items-center justify-center w-full gap-2 ">
                         <Input
                             size="lg"
                             className="max-w-md dark"
@@ -144,9 +155,9 @@ export default function SignUpPage() {
 
                 <p className="text-red-500">{errorMsg.email && errorMsg.email}</p>
             </div>
-            <div className="w-full flex items-center justify-center">
+            <div className="flex items-center justify-center w-full">
                 <Button
-                    className="max-w-md dark w-full"
+                    className="w-full max-w-md dark"
                     size="lg"
                     onClick={() => handleSignup(profileValue)}
                 >
