@@ -16,9 +16,9 @@ export default function SocialCallback() {
     const handleKakaoLogin = async () => {
         const data = await SocialServcie(code, state);
         if (data.isRegistered) {
-            navigate('/', { state: data.providerId });
+            navigate('/');
         } else {
-            navigate('/signup', { state: data.providerId });
+            navigate('/signup', { state: { providerId: data.providerId, state } });
         }
     };
 
