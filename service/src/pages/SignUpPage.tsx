@@ -1,34 +1,33 @@
 import { ChangeEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Input } from '@nextui-org/react';
 import axios from 'axios';
 
 const msg = {
     email: '올바른 이메일 형식이 아닙니다.',
-    name: '이름을 입력주세요.',
     nickname: '닉네임을 입력해주세요',
+    emailsuccess: '이메일 인증이 완료되었습니다.',
+    emailfailed: '이메일 인증이 실패하였습니다.',
 };
 
 interface ValueProps {
     email: string;
-    name: string;
     nickname: string;
 }
 
 export default function SignUpPage() {
     const [errorMsg, setErrorMsg] = useState({
-        name: '',
         nickname: '',
         email: '',
     });
     const [profileValue, setProfileValue] = useState<ValueProps>({
-        name: '',
         nickname: '',
         email: '',
     });
     const [emailElement, setEmailElement] = useState(false);
     const [emailCode, setEmailCode] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -50,6 +49,10 @@ export default function SignUpPage() {
     const handleEmailTextValue = () => {
         const emailValidationState = validationEmailChecked(profileValue.email);
         if (emailValidationState === undefined) {
+            setErrorMsg({
+                nickname: '',
+                email: '',
+            });
             setEmailElement(true);
             //백엔드 api로 이메일 보내기
             axios.post('/auth/email', {
@@ -59,7 +62,7 @@ export default function SignUpPage() {
         } else {
             setErrorMsg(prevErrorMsg => ({
                 ...prevErrorMsg,
-                email: errorMsg.email,
+                email: msg.email,
             }));
         }
     };
@@ -76,16 +79,27 @@ export default function SignUpPage() {
                 verificationCode: `${emailCode}`,
             })
             .then(res => {
-                if (res.data.isVerified) navigate('/');
+                if (res.data.isVerified) {
+                    setErrorMsg(prevErrorMsg => ({
+                        ...prevErrorMsg,
+                        email: msg.emailsuccess,
+                    }));
+                } else {
+                    setErrorMsg(prevErrorMsg => ({
+                        ...prevErrorMsg,
+                        email: msg.emailfailed,
+                    }));
+                }
             });
     };
 
     const handleSignup = (profileValue: ValueProps) => {
-        if (profileValue.name === '') {
+        if (errorMsg.email === msg.emailfailed || profileValue.email === '') {
             setErrorMsg(prevErrorMsg => ({
                 ...prevErrorMsg,
-                name: msg.name,
+                email: msg.email,
             }));
+            return;
         }
         if (profileValue.nickname === '') {
             setErrorMsg(prevErrorMsg => ({
@@ -95,22 +109,23 @@ export default function SignUpPage() {
             return;
         } else {
             //그렇지 않다면 api 호출
-            console.log('api 호출');
-            navigate('/signup/category');
+            axios
+                .post('/auth/signup', {
+                    email: `${profileValue.email}`,
+                    categoryIds: [1],
+                    nickname: `${profileValue.nickname}`,
+                    provider: `${location.state.state}`,
+                    providerId: `${location.state.providerId}`,
+                })
+                .then(res => {
+                    localStorage.setItem('accessToken', res.data.accessToken);
+                    localStorage.setItem('refreshToken', res.data.refreshToken);
+                    navigate('/');
+                });
         }
     };
     return (
         <div className="flex flex-col items-center justify-center w-full gap-8">
-            <div className="flex flex-col items-center justify-center w-full gap-2">
-                <Input
-                    label="이름"
-                    className="max-w-md dark"
-                    size="lg"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
-                    name="name"
-                />
-                <p className="text-red-500">{errorMsg.name && errorMsg.name} </p>
-            </div>
             <div className="flex flex-col items-center justify-center w-full gap-2">
                 <Input
                     label="닉네임"

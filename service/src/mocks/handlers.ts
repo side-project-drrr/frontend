@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw';
 export const handlers = [
     // 할일 목록
     http.get(`/auth/oauth2/profile`, async ({ request }) => {
-        const data = [{ isRegistred: false, providerId: '1241231332112' }];
+        const data = { isRegistred: false, providerId: '1241231332112' };
 
         if (request.url) {
             return HttpResponse.json(data, { status: 200 });
@@ -28,6 +28,20 @@ export const handlers = [
             return HttpResponse.json({ isVerified: true, status: 200 });
         } else {
             return HttpResponse.json({ isVerified: false, status: 404 });
+        }
+    }),
+
+    // 회원가입
+    http.post(`/auth/signup`, async ({ request }) => {
+        const users = await request.json();
+        if (users) {
+            return HttpResponse.json({
+                accessToken: '123445686123',
+                refreshToken: '123448576y7hn7',
+                status: 200,
+            });
+        } else {
+            throw new Error();
         }
     }),
 ];
