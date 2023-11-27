@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-import { SocialServcie } from '../../../service/SocialService';
+import { SocialServcie } from '../../service/SocialService';
 
-export default function GithubCallback() {
+export default function SocialCallback() {
     const [didMount, setDidMount] = useState(false);
 
     const code = new URL(document.location.toString()).searchParams.get('code');
 
-    const state = 'github';
+    const location = useLocation();
+    const state = location.pathname.split('/')[1];
+
     const navigate = useNavigate();
 
-    const hadleGithubLogin = async () => {
+    const handleKakaoLogin = async () => {
         const data = await SocialServcie(code, state);
         if (data.isRegistered) {
             navigate('/', { state: data.providerId });
@@ -26,7 +28,7 @@ export default function GithubCallback() {
 
     useEffect(() => {
         if (didMount) {
-            hadleGithubLogin();
+            handleKakaoLogin();
         }
     }, [didMount]);
 

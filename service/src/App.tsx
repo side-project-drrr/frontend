@@ -1,11 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
+
 import Layout from './components/layout/Layout';
 import MainPage from './pages/MainPage';
 import ItemDetailPage from './pages/ItemDetailPage';
 import SignUpPage from './pages/SignUpPage';
 import CategoryPage from './pages/CategoryPage';
-import KaKaoCallback from './components/social/kakao/KaKaoCallback';
-import GithubCallback from './components/social/github/GithubCallback';
+import SocialCallback from './components/social/SocialCallback';
 
 function App() {
     return (
@@ -16,8 +16,8 @@ function App() {
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/signup/category" element={<CategoryPage />} />
             </Route>
-            <Route path="/kakao/auth" element={<KaKaoCallback />} />
-            <Route path="/github/auth" element={<GithubCallback />} />
+            <Route path="/kakao/auth" element={<SocialCallback />} />
+            <Route path="/github/auth" element={<SocialCallback />} />
         </Routes>
     );
 }
