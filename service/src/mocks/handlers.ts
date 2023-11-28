@@ -20,14 +20,15 @@ export const handlers = [
             throw new Error();
         }
     }),
+
     // 이메일 인증 번호 검증
-    http.post(`/auth/email/check`, async ({ request }) => {
+    http.post(`/auth/email/verification`, async ({ request }) => {
         const emailData: any = await request.json();
         const code = '4567';
         if (emailData.verificationCode === code) {
-            return HttpResponse.json({ isVerified: true, status: 200 });
+            return HttpResponse.json({ isVerified: true });
         } else {
-            return HttpResponse.json({ isVerified: false, status: 404 });
+            return HttpResponse.json({ isVerified: false });
         }
     }),
 

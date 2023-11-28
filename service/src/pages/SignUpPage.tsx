@@ -74,7 +74,7 @@ export default function SignUpPage() {
     const handleEmailAuthentication = () => {
         //백엔드로 코드 보내기
         axios
-            .post('/auth/email/check', {
+            .post('/auth/email/verification', {
                 providerId: '1234',
                 verificationCode: `${emailCode}`,
             })
