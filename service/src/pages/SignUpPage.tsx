@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Input } from '@nextui-org/react';
 import axios from 'axios';
@@ -26,6 +26,7 @@ export default function SignUpPage() {
     });
     const [emailElement, setEmailElement] = useState(false);
     const [emailCode, setEmailCode] = useState('');
+    const [count, setCount] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -54,6 +55,7 @@ export default function SignUpPage() {
                 email: '',
             });
             setEmailElement(true);
+            setCount(180);
             //백엔드 api로 이메일 보내기
             axios.post('/auth/email', {
                 providerId: '1234',
@@ -124,6 +126,24 @@ export default function SignUpPage() {
                 });
         }
     };
+
+    const formatTime = (time: number) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    };
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            setCount(count => count - 1);
+        }, 1000);
+
+        if (count === 0) {
+            clearInterval(id);
+        }
+        return () => clearInterval(id);
+    }, [count]);
+
     return (
         <div className="flex flex-col items-center justify-center w-full gap-8">
             <div className="flex flex-col items-center justify-center w-full gap-2">
@@ -165,6 +185,7 @@ export default function SignUpPage() {
                         >
                             인증완료
                         </Button>
+                        {formatTime(count)}
                     </div>
                 )}
 
