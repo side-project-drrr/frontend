@@ -1,51 +1,15 @@
 export default function Aside() {
     return (
         <div className="flex flex-col">
-            <div>
-                <p>12333333333333333</p>
-            </div>
-            <div>
-                <p>123</p>
-            </div>
-            <div>
-                <p>123</p>
-            </div>
-            <div>
-                <p>123</p>
-            </div>
-            <div>
-                <p>123</p>
-            </div>
-            <div>
-                <p>123</p>
-            </div>
-            <div>
-                <p>123</p>
-            </div>
-            <div>
-                <p>123</p>
-            </div>
-            <div>
-                <p>123</p>
-            </div>
-            <div>
-                <p>45</p>
-            </div>
-            <div>
-                <p>45</p>
-            </div>
-            <div>
-                <p>45</p>
-            </div>
-            <div>
-                <p>45</p>
-            </div>
-            <div>
-                <p>45</p>
-            </div>
-            <div>
-                <p>45</p>
-            </div>
+            <h3>추천 게시글</h3>
+            <div>123</div>
+            <div>123</div>
+            <div>123</div>
+            <div>123</div>
+            <div>123</div>
+            <div>123</div>
+            <div>123</div>
+            <div>123</div>
         </div>
     );
 }
