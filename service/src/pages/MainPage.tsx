@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import Aside from '../components/aside/Aside';
+import CategoryList from '../components/category/categoryList';
 
 export default function MainPage() {
     // 백엔드에서 받아온 providerId 받아온 값
@@ -7,11 +8,16 @@ export default function MainPage() {
     console.log(state);
 
     return (
-        <div className="flex justify-evenly box-border">
-            <div className="max-w-screen-md  block flex-auto ">
-                <div>mainpage</div>
+        <div className="box-border flex justify-between">
+            <div className="flex flex-col justify-around">
+                <div>
+                    <CategoryList />
+                </div>
+                <div className="flex-auto block max-w-screen-md mt-8">
+                    <div>mainpage</div>
+                </div>
             </div>
-            <aside className="max-w-sm block">
+            <aside className="block max-w-sm">
                 <Aside />
             </aside>
         </div>
