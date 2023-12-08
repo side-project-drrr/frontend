@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import Aside from '../components/aside/Aside';
-import CategoryList from '../components/category/categoryList';
+import CategoryList from '../components/category/CategoryList';
 
 export default function MainPage() {
     // 백엔드에서 받아온 providerId 받아온 값
