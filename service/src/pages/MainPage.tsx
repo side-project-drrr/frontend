@@ -8,8 +8,8 @@ export default function MainPage() {
     console.log(state);
 
     return (
-        <div className="box-border flex justify-between">
-            <div className="flex flex-col justify-around">
+        <div className="flex justify-between">
+            <div className="flex flex-col justify-around bg-red-500">
                 <div>
                     <CategoryList />
                 </div>
@@ -17,8 +17,10 @@ export default function MainPage() {
                     <div>mainpage</div>
                 </div>
             </div>
-            <aside className="block max-w-sm">
-                <Aside />
+            <aside className="block max-w-md ">
+                <div className="w-[80%]">
+                    <Aside />
+                </div>
             </aside>
         </div>
     );

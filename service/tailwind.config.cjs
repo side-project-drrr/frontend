@@ -8,7 +8,12 @@ module.exports = {
         './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
     ],
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                'dark-box-bg': '#363D4B',
+                'dark-bg': '#1C1D21',
+            },
+        },
     },
     darkMode: 'class',
     plugins: [
