@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ListBox from './ListBox';
-
-const itmes = [
+import ListBox from './Listbox';
+const items = [
     {
         id: 1,
         title: '우아한형제들 PM의 이야기- “배민 기획자의 일”',
@@ -31,6 +30,6 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const List: Story = {
     args: {
-        items: itmes,
+        items: items,
     },
 };
