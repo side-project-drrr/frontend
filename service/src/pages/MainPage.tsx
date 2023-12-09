@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import Aside from '../components/aside/Aside';
-import CategoryList from '../components/category/categoryList';
+import CategoryList from '../components/category/CategoryList';
 
 export default function MainPage() {
     // 백엔드에서 받아온 providerId 받아온 값
@@ -13,9 +13,7 @@ export default function MainPage() {
                 <div>
                     <CategoryList />
                 </div>
-                <div className="flex-auto block max-w-screen-md mt-8">
-                    <div>mainpage</div>
-                </div>
+                <div className="flex-auto block max-w-screen-md mt-8"></div>
             </div>
             <aside className="block max-w-sm">
                 <Aside />
