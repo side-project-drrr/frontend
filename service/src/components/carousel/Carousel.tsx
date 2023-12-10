@@ -1,39 +1,83 @@
-/* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useState, useRef, MouseEvent, useCallback } from 'react';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'react-icons/ri';
 
-type CarouselProps = {
-    data: {
-        id: number;
-        url: string;
-        title: string;
-        content: string;
-        bookmark: number;
-        views: number;
-    }[];
-};
+import { CarouselProps } from './type';
 
 export default function Carousel({ data }: CarouselProps) {
     const [current, setCurrent] = useState(0);
+    const [isDrag, setIsDrag] = useState(false);
+    const [startX, setStartX] = useState<number>(0);
+    const scrollRef = useRef<HTMLDivElement | null>(null);
 
     const prevSlider = () => {
-        if (current === 0) setCurrent(data.length - 1);
-        else setCurrent(current - 1);
+        setCurrent(current === 0 ? data.length - 1 : current - 1);
     };
     const nextSlider = () => {
-        if (current === data.length - 1) setCurrent(0);
-        else setCurrent(current + 1);
+        setCurrent(current === data.length - 1 ? 0 : current + 1);
     };
-    console.log(current);
-    console.log(data);
+
+    const onDragStart = (e: MouseEvent<HTMLElement>) => {
+        e.preventDefault();
+        setIsDrag(true);
+        if (scrollRef.current) {
+            setStartX(e.pageX + scrollRef.current.scrollLeft);
+        }
+    };
+    const onDragEnd = () => {
+        setIsDrag(false);
+    };
+
+    const onDragMove = useCallback(
+        (e: MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault();
+            if (isDrag) {
+                const { scrollWidth, clientWidth, scrollLeft }: any = scrollRef.current;
+                if (scrollRef.current) {
+                    scrollRef.current.scrollLeft = startX - e.pageX;
+                }
+
+                if (scrollLeft === 0) {
+                    setStartX(e.pageX); //가장 왼쪽일 때, 움직이고 있는 마우스의 x좌표가 곧 startX로 설정.
+                } else if (scrollWidth <= clientWidth + scrollLeft) {
+                    setStartX(e.pageX + scrollLeft); //가장 오른쪽일 때, 움직이고 있는 마우스의 x좌표에 현재 스크롤된 길이 scrollLeft의 합으로 설정
+                }
+            }
+        },
+        [isDrag, startX],
+    );
+
+    // 쓰로틀 구현
+    const throttle = (func: any, ms: number) => {
+        let throttled = false;
+        return (...args: any) => {
+            if (!throttled) {
+                throttled = true;
+                setTimeout(() => {
+                    func(...args);
+                    throttled = false;
+                }, ms);
+            }
+        };
+    };
+
+    const delay = 50;
+    const onThrottleDragMove = throttle(onDragMove, delay);
+
     return (
-        <div className="relative flex overflow-hidden rounded-md">
-            <div className={`transition ease-out duration-400 flex `}>
+        <div
+            className="relative flex overflow-hidden rounded-md w-[100%] will-change-transform"
+            ref={scrollRef}
+            onMouseDown={onDragStart}
+            onMouseMove={isDrag ? onThrottleDragMove : undefined}
+            onMouseUp={onDragEnd}
+            onMouseLeave={onDragEnd}
+        >
+            <div className={`transition ease-out duration-400 flex`}>
                 {data.map(item => (
                     <div
                         key={item.id}
                         style={{ transform: `translateX(-${current * 100}%)` }}
-                        className="w-[370px] h-[170px] relative flex flex-col dark-box-bg bg-white pl-2 pr-2 justify-around text-center"
+                        className="w-[23vw] h-[200px] relative flex flex-col dark-box-bg bg-white pl-2 pr-2 justify-around text-center overflow-x-scroll"
                     >
                         <h3 aria-label="추천 게시글 제목" className="w-full text-sm text-black ">
                             {item.title}
@@ -71,7 +115,7 @@ export default function Carousel({ data }: CarouselProps) {
                 {data.map((data, index) => (
                     <div
                         className={`w-2 h-2 cursor-pointer rounded-full ${
-                            index === current ? 'bg-white' : 'bg-gray-500'
+                            index === current ? 'bg-black' : 'bg-gray-500'
                         }`}
                         key={data.id}
                         onClick={() => {

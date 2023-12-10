@@ -8,17 +8,17 @@ export default function MainPage() {
     console.log(state);
 
     return (
-        <div className="flex justify-between">
+        <div className="flex justify-between bg-[#1C1D21]">
             <div className="flex flex-col justify-around bg-red-500">
                 <div>
                     <CategoryList />
                 </div>
-                <div className="flex-auto block max-w-screen-md mt-8">
+                <div className="flex-auto block max-w-screen-md mt-8 w-full ">
                     <div>mainpage</div>
                 </div>
             </div>
-            <aside className="block max-w-md ">
-                <div className="w-[80%]">
+            <aside className="block max-w-md bg-red-500">
+                <div className="w-[100%]">
                     <Aside />
                 </div>
             </aside>

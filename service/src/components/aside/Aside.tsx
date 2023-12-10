@@ -45,7 +45,7 @@ const mocks = [
 
 export default function Aside() {
     return (
-        <div className="flex flex-col justify-around">
+        <div className="flex flex-col justify-around w-full ">
             <div>
                 <h3 aria-label="추천 게시글">추천 게시글</h3>
                 <Carousel data={mocks} />
