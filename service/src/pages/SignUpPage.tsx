@@ -1,6 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, Input } from '@nextui-org/react';
 import axios from 'axios';
 
 const msg = {
@@ -147,9 +146,7 @@ export default function SignUpPage() {
     return (
         <div className="flex flex-col items-center justify-center w-full gap-8">
             <div className="flex flex-col items-center justify-center w-full gap-2">
-                <Input
-                    label="닉네임"
-                    size="lg"
+                <input
                     className="max-w-md dark"
                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
                     name="nickname"
@@ -159,32 +156,24 @@ export default function SignUpPage() {
 
             <div className="flex flex-col items-center justify-center w-full gap-2 ">
                 <div className="flex items-center justify-center w-full gap-2 ">
-                    <Input
-                        label="이메일"
-                        size="lg"
+                    <input
                         className="max-w-md dark"
                         onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
                         name="email"
                     />
-                    <Button className="max-w-md dark" size="lg" onClick={handleEmailTextValue}>
+                    <button className="max-w-md dark" onClick={handleEmailTextValue}>
                         인증요청
-                    </Button>
+                    </button>
                 </div>
                 {emailElement && (
                     <div className="flex items-center justify-center w-full gap-2 ">
-                        <Input
-                            size="lg"
+                        <input
                             className="max-w-md dark"
-                            label="인증번호"
                             onChange={(e: ChangeEvent<HTMLInputElement>) => handleEmailChange(e)}
                         />
-                        <Button
-                            size="lg"
-                            className="max-w-md dark"
-                            onClick={handleEmailAuthentication}
-                        >
+                        <button className="max-w-md dark" onClick={handleEmailAuthentication}>
                             인증완료
-                        </Button>
+                        </button>
                         {formatTime(count)}
                     </div>
                 )}
@@ -192,13 +181,9 @@ export default function SignUpPage() {
                 <p className="text-red-500">{errorMsg.email && errorMsg.email}</p>
             </div>
             <div className="flex items-center justify-center w-full">
-                <Button
-                    className="w-full max-w-md dark"
-                    size="lg"
-                    onClick={() => handleSignup(profileValue)}
-                >
+                <button className="w-full max-w-md dark" onClick={() => handleSignup(profileValue)}>
                     회원가입 완료
-                </Button>
+                </button>
             </div>
         </div>
     );

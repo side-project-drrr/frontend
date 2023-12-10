@@ -1,10 +1,8 @@
 import { BiLogoGit } from 'react-icons/bi';
-import { Button, Input, useDisclosure } from '@nextui-org/react';
-import { LoginPage } from '../login/LoginPage';
 import { BsPersonCircle } from 'react-icons/bs';
 
 export default function NoAuthHeader() {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    //const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     return (
         <header className="flex items-center w-screen h-[57px] border-b-1 border-solid border-zinc-500 ">
@@ -13,18 +11,14 @@ export default function NoAuthHeader() {
                     <BiLogoGit size="40" />
                 </div>
                 <div className="grow">
-                    <Input radius="lg" className="max-w-xs w-[400px]" placeholder="검색어 입력" />
+                    <input type="text" className="max-w-xs w-[400px]" placeholder="검색어 입력" />
                 </div>
                 <div className="mr-2 bg-transparent border-transparent dark">
-                    <Button
-                        onPress={onOpen}
-                        className="mr-2 bg-transparent border-transparent dark hover:border-transparent"
-                    >
+                    <button className="mr-2 bg-transparent border-transparent dark hover:border-transparent">
                         <BsPersonCircle />
-                    </Button>
+                    </button>
                 </div>
             </div>
-            <LoginPage onOpen={onOpen} isOpen={isOpen} onOpenChange={onOpenChange} />
         </header>
     );
 }
