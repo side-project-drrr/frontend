@@ -1,4 +1,4 @@
-import TopPost from './TopPost';
+import TopPost from '../layout/TopPost';
 
 export default function Aside() {
     return (
