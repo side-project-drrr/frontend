@@ -20,7 +20,7 @@ export default function MainPage() {
                     </Button>
                 </div>
             </div>
-            <aside className="block max-w-sm  w-[30%]">
+            <aside className="block max-w-sm w-[30%]">
                 <Aside />
             </aside>
         </div>
