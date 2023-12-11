@@ -7,7 +7,7 @@ export default function Aside() {
                 <h2 className="font-bold text-lg">추천 게시글</h2>
             </div>
             <hr></hr>
-            <TopPost/>
+            <TopPost />
             <hr></hr>
             <div className="mt-4">
                 <h2 className="font-bold text-lg">Top Keywords</h2>
