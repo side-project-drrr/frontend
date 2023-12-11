@@ -10,7 +10,7 @@ export default function MainPage() {
 
     return (
         <div className="box-border flex justify-between">
-            <div className="flex flex-col justify-around">
+            <div className="flex flex-col justify-around w-[70%]">
                 <div>
                     <CategoryList />
                 </div>
@@ -20,7 +20,7 @@ export default function MainPage() {
                     </Button>
                 </div>
             </div>
-            <aside className="block max-w-sm">
+            <aside className="block max-w-sm  w-[30%]">
                 <Aside />
             </aside>
         </div>
