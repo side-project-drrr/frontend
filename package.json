@@ -14,7 +14,6 @@
         "postinstall": "husky install",
         "component": "yarn workspace @monorepo/component storybook",
         "service": "yarn workspace @monorepo/service dev",
-        "admin": "yarn workspace @monorepo/admin dev",
         "lint:fix": "eslint --fix './src/**/*.{ts,tsx}'",
         "prettier:fix": "prettier --write './src/**/*.{ts,tsx}'",
         "test": "vitest --run --reporter verbose --globals",
@@ -33,7 +32,6 @@
         ]
     },
     "dependencies": {
-        "@monorepo/admin": "workspace:^",
         "@monorepo/component": "workspace:^",
         "@monorepo/service": "workspace:^",
         "@types/react-datepicker": "^4.15.0",

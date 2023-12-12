@@ -13,8 +13,8 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
-        "jsx": "react-jsx",        
-        "moduleResolution":"Node",
+        "jsx": "react-jsx",
+        "moduleResolution": "Node",
         //"moduleResolution":"NodeNext",
         /* Linting */
         "strict": true,

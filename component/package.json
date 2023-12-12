@@ -3,9 +3,13 @@
     "private": true,
     "version": "1.0.0",
     "dependencies": {
+        "@emotion/react": "^11.11.1",
+        "@emotion/styled": "^11.11.0",
         "@monorepo/admin": "*",
         "@monorepo/drrr-front": "*",
         "@monorepo/service": "*",
+        "@mui/base": "^5.0.0-beta.26",
+        "@mui/material": "^5.14.20",
         "@nextui-org/react": "^2.1.7",
         "cross-env": "5.0.5",
         "framer-motion": "^10.16.1",
