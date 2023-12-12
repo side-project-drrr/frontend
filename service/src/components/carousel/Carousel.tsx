@@ -8,6 +8,7 @@ export default function Carousel({ data }: CarouselProps) {
     const [isDrag, setIsDrag] = useState(false);
     const [startX, setStartX] = useState<number>(0);
     const scrollRef = useRef<HTMLDivElement | null>(null);
+    const delay = 50;
 
     const prevSlider = () => {
         setCurrent(current === 0 ? data.length - 1 : current - 1);
@@ -46,10 +47,13 @@ export default function Carousel({ data }: CarouselProps) {
         [isDrag, startX],
     );
 
+    const handleOnMouseMove = () => {
+        return isDrag ? onThrottleDragMove : undefined;
+    };
     // 쓰로틀 구현
     const throttle = (func: any, ms: number) => {
         let throttled = false;
-        return (...args: any) => {
+        return (...args: any[]) => {
             if (!throttled) {
                 throttled = true;
                 setTimeout(() => {
@@ -60,7 +64,6 @@ export default function Carousel({ data }: CarouselProps) {
         };
     };
 
-    const delay = 50;
     const onThrottleDragMove = throttle(onDragMove, delay);
 
     return (
@@ -68,9 +71,10 @@ export default function Carousel({ data }: CarouselProps) {
             className="relative flex overflow-hidden rounded-md w-[100%] will-change-transform"
             ref={scrollRef}
             onMouseDown={onDragStart}
-            onMouseMove={isDrag ? onThrottleDragMove : undefined}
+            onMouseMove={handleOnMouseMove}
             onMouseUp={onDragEnd}
             onMouseLeave={onDragEnd}
+            aria-label="추천 게시글"
         >
             <div className={`transition ease-out duration-400 flex`}>
                 {data.map(item => (
@@ -101,8 +105,12 @@ export default function Carousel({ data }: CarouselProps) {
                         </div>
 
                         <div className="flex gap-4">
-                            <p className="text-xs text-black">좋아요: {item.bookmark}</p>
-                            <p className="text-xs text-black">조회 수: {item.views}</p>
+                            <p className="text-xs text-black" aria-label="좋아요">
+                                좋아요: {item.bookmark}
+                            </p>
+                            <p className="text-xs text-black" aria-label="조회수">
+                                조회 수: {item.views}
+                            </p>
                         </div>
                     </div>
                 ))}
