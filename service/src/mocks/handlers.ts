@@ -1,5 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
+import { CategoryData } from './CategoryData';
+
 export const handlers = [
     // 할일 목록
     http.get(`/auth/oauth2/profile`, async ({ request }) => {
@@ -44,5 +46,13 @@ export const handlers = [
         } else {
             throw new Error();
         }
+    }),
+    // 카테고리 불러오기
+    http.get(`/categoryList`, () => {
+        return HttpResponse.json(CategoryData);
+    }),
+    // 카테고리 등록
+    http.post(`/category/create`, async ({ request }) => {
+        //id만 넘겨주면 댄다
     }),
 ];
