@@ -1,10 +1,11 @@
-import React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import CategoryItem from '../category/CategoryItem';
+import { CategoryProps } from './type';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -19,25 +20,21 @@ const style = {
     borderRadius: '10px',
 };
 
-interface Props {
-    handleClose: () => void;
-    onModalOpen: boolean;
-}
-
-export default function CategoryModal({ handleClose, onModalOpen }: Props) {
+export default function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
     const [didMount, setDidmount] = useState(false);
     const [categoryItems, setCategoryItems] = useState<any[]>([]);
-    const [addCategories, setAddCategories] = useState<string[]>([]);
+    const [activeCategoriesData, setActiveCategoriesData] = useState<string[]>([]);
+
     async function getCategoryList() {
-        const responese = axios.get('/categoryList');
-        const categoryListData = (await responese).data;
+        const response = axios.get('/categoryList');
+        const categoryListData = (await response).data;
         setCategoryItems(categoryListData);
     }
-    const handleAddCategory = (e: React.MouseEvent<HTMLElement>) => {
-        const { id } = e.target as HTMLButtonElement;
-
-        setAddCategories(prev => [...prev, id]);
-    };
+    async function handleCategory() {
+        const response = axios.post('/category/create', { activeCategoriesData });
+        const data = (await response).data;
+        console.log(data);
+    }
 
     useEffect(() => {
         setDidmount(true);
@@ -49,6 +46,7 @@ export default function CategoryModal({ handleClose, onModalOpen }: Props) {
             getCategoryList();
         }
     }, [didMount]);
+
     return (
         <>
             <Modal onClose={handleClose} open={onModalOpen}>
@@ -66,18 +64,17 @@ export default function CategoryModal({ handleClose, onModalOpen }: Props) {
                     </div>
                     <ul className="flex flex-wrap justify-around w-full h-[25vh] gap-4 overflow-y-scroll ">
                         {categoryItems.map(categoryitem => (
-                            <li
+                            <CategoryItem
                                 key={categoryitem.id}
                                 id={categoryitem.id}
-                                className="bg-[#E6F1FE] h-10 p-5 text-[#006FEE] text-center flex justify-center items-center rounded-lg "
-                                onClick={handleAddCategory}
-                            >
-                                {categoryitem.title}
-                            </li>
+                                title={categoryitem.title}
+                                setActiveCategoriesData={setActiveCategoriesData}
+                                activeCategoriesData={activeCategoriesData}
+                            />
                         ))}
                     </ul>
-                    <Button className="w-10/12" color="primary">
-                        선택({addCategories.length}/10)
+                    <Button className="w-10/12" color="primary" onClick={handleCategory}>
+                        선택({activeCategoriesData.length}/10)
                     </Button>
                 </Box>
             </Modal>

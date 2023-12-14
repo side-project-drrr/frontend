@@ -53,6 +53,9 @@ export const handlers = [
     }),
     // 카테고리 등록
     http.post(`/category/create`, async ({ request }) => {
-        //id만 넘겨주면 댄다
+        const ids = await request.json();
+        if (ids) {
+            return HttpResponse.json({ status: 200 });
+        }
     }),
 ];
