@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import { useEffect, useState, memo, useCallback } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -23,14 +23,9 @@ const style = {
 function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
     const [didMount, setDidmount] = useState(false);
     const [categoryItems, setCategoryItems] = useState<any[]>([]); //전체 카테고리 리스트
-    //const [copyCategoryItems, setCopyCategoryItems] = useState<any[]>([]); //copy 전체 카테고리 리스트
     const [activeCategoriesData, setActiveCategoriesData] = useState<string[]>([]); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
-    //원본
-    //핸들링 할 카테고리 리스트
-    //검색했을때 안했을때 상태를 가지고 있어야 한다.
-    //검색하고 나서 다시 다른걸 검색할때에 대한 처리가 필요
-    //전체 카테고리 리스트 다시 보여 줄 수있다.
+
     async function getCategoryList() {
         const response = axios.get('/categoryList');
         const categoryListData = (await response).data;
@@ -46,25 +41,16 @@ function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
     const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setCategorySearchValue(value);
-        // setCopyCategoryItems(
-        //     categoryItems.filter(item =>
-        //         item.title.toLocaleUpperCase().startsWith(value.toLocaleUpperCase()),
-        //     ),
-        // );
     };
-    const categorySearchItemList = useCallback(
-        (value?: string) => {
-            console.log(456);
-            if (value) {
-                return categoryItems.filter(item =>
-                    item.title.toLocaleUpperCase().startsWith(value.toLocaleUpperCase()),
-                );
-            } else {
-                return categoryItems;
-            }
-        },
-        [categoryItems],
-    );
+
+    const categorySearchItemList = useMemo(() => {
+        if (categorySearchValue) {
+            return categoryItems.filter(item =>
+                item.title.toLocaleUpperCase().startsWith(categorySearchValue.toLocaleUpperCase()),
+            );
+        }
+        return categoryItems;
+    }, [categoryItems, categorySearchValue]);
 
     useEffect(() => {
         setDidmount(true);
@@ -76,7 +62,6 @@ function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
             getCategoryList();
         }
     }, [didMount]);
-
     return (
         <>
             <Modal onClose={handleClose} open={onModalOpen}>
@@ -93,7 +78,7 @@ function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
                         />
                     </div>
                     <ul className="flex flex-wrap justify-around w-full h-[25vh] gap-4 overflow-y-scroll">
-                        {categorySearchItemList(categorySearchValue).map(categoryitem => (
+                        {categorySearchItemList.map(categoryitem => (
                             <CategoryItem
                                 key={categoryitem.id}
                                 id={categoryitem.id}
@@ -112,4 +97,4 @@ function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
     );
 }
 
-export default memo(CategoryModal);
+export default CategoryModal;
