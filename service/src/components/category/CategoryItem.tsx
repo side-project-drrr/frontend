@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { CategoryItemsProps } from './type';
 
-export default function CategoryItem({
+function CategoryItem({
     id,
     title,
     setActiveCategoriesData,
@@ -12,7 +12,9 @@ export default function CategoryItem({
         const { id } = e.target as HTMLButtonElement;
         const set = new Set(activeCategoriesData);
         if (set.has(id)) {
-            const filterActiveCateogiesData = activeCategoriesData.filter(data => data !== id);
+            const filterActiveCateogiesData = activeCategoriesData.filter(
+                categoryitem => categoryitem !== id,
+            );
             setActiveCategoriesData(filterActiveCateogiesData);
             setCategoriesItemClicked(false);
         } else {
@@ -20,17 +22,25 @@ export default function CategoryItem({
             setCategoriesItemClicked(true);
         }
     };
-
+    const abc = () => {
+        if (activeCategoriesData.length < 11) {
+            return categoriesItemClicked ? 'bg-black' : 'bg-[#E6F1FE]';
+        } else {
+            activeCategoriesData.pop();
+            setCategoriesItemClicked(false);
+            return 'bg-[#E6F1FE]';
+        }
+    };
     return (
         <li
             key={id}
             id={id}
-            className={`bg-[#E6F1FE] h-10 p-5 text-[#006FEE] text-center flex justify-center items-center rounded-lg ${
-                categoriesItemClicked ? 'bg-black' : 'bg-[#E6F1FE]'
-            }`}
+            className={`bg-[#E6F1FE] h-10 p-5 text-[#006FEE] text-center flex justify-center items-center rounded-lg ${abc()}`}
             onClick={handleActiveCategoryItem}
         >
             {title}
         </li>
     );
 }
+
+export default memo(CategoryItem);

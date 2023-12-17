@@ -13,6 +13,7 @@ export default function CategoryList() {
     const [open, setIsOpen] = useState(false);
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => setIsOpen(false);
+
     return (
         <>
             <ul className="flex justify-around ">
