@@ -48,12 +48,13 @@ export const handlers = [
         }
     }),
     // 카테고리 불러오기
-    http.get(`/categoryList`, () => {
+    http.get(`/api/v1/categories`, () => {
         return HttpResponse.json(CategoryData);
     }),
     // 카테고리 등록
     http.post(`/category/create`, async ({ request }) => {
         const ids = await request.json();
+        console.log(ids);
         if (ids) {
             return HttpResponse.json({ status: 200 });
         }

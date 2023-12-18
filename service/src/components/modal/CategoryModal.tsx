@@ -27,13 +27,13 @@ function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
 
     async function getCategoryList() {
-        const response = axios.get('/categoryList');
+        const response = axios.get('/api/v1/categories');
         const categoryListData = (await response).data;
         setCategoryItems(categoryListData);
     }
 
     async function handleCategory() {
-        const response = axios.post('/category/create', { activeCategoriesData });
+        const response = axios.post('/category/create', { categoryIds: activeCategoriesData });
         const data = (await response).data;
         console.log(data);
     }
