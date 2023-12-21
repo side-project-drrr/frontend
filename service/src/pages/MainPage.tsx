@@ -13,6 +13,9 @@ export default function MainPage() {
                 <div>
                     <CategoryList />
                 </div>
+                <div>
+                    <button>구독</button>
+                </div>
             </div>
             <aside className="block max-w-md ">
                 <div className="w-[100%]">
