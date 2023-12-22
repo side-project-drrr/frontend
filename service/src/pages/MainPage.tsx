@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import Aside from '../components/aside/Aside';
 import CategoryList from '../components/category/CategoryList';
+import { subscribe, unsubscribe } from '../webpush/main';
 
 export default function MainPage() {
     // 백엔드에서 받아온 providerId 받아온 값
@@ -14,7 +15,8 @@ export default function MainPage() {
                     <CategoryList />
                 </div>
                 <div>
-                    <button>구독</button>
+                    <button onClick={subscribe}>구독</button>
+                    <button onClick={unsubscribe}>구독 취소</button>
                 </div>
             </div>
             <aside className="block max-w-md ">

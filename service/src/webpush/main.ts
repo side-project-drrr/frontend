@@ -1,7 +1,6 @@
-import axios from 'axios';
-const token = 1;
+import { deleteSubscribePush, subscribePush } from '../service/PushService';
 
-const PUBLIC_KEY = import.meta.env.VITE_APP_KAKAO_REST_API_KEY;
+const PUBLIC_KEY = import.meta.env.VITE_APP_VAPID_PUBLIC_KEY;
 
 type Store = {
     pushSupport: boolean;
@@ -18,16 +17,18 @@ const store: Store = {
 async function registerServiceWorker() {
     if (!('serviceWorker' in navigator)) return;
 
+    //이미 등록되어 있는 정보 가져오기
     let registration = await navigator.serviceWorker.getRegistration();
     if (!registration) {
-        registration = await navigator.serviceWorker.register('/service-worker.js');
+        registration = await navigator.serviceWorker.register('/src/webpush/sw.js');
     }
-
+    console.log(registration);
     store.serviceWorkerRegistration = registration ?? null;
     store.pushSupport = !!registration?.pushManager;
     store.pushSubscription = await registration?.pushManager?.getSubscription();
 }
 
+//백엔드에 push에 대한 정보 보내기
 async function postSubscription(subscription?: PushSubscription) {
     console.log('postSubscription', { subscription });
 
@@ -35,51 +36,39 @@ async function postSubscription(subscription?: PushSubscription) {
         return;
     }
 
-    const response = await axios.post('/subscription', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token, subscription }),
-    });
+    const response = await subscribePush(subscription);
 
     console.log('postSubscription', { response });
 }
 
 async function deleteSubscription() {
-    const response = await fetch('/subscription', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token }),
-    });
-
+    const response = await deleteSubscribePush();
     console.log('deleteSubscription', { response });
 }
 
+// 여기서 sw에 VAPID_KEY를 보내서 endpoint 및 기타 사항 받아옴
 export async function subscribe() {
     if (store.pushSubscription) {
         return;
     }
 
     try {
-        const response = await axios.post('/vapid-public-key');
-
-        console.log(response);
         const registration = store.serviceWorkerRegistration;
 
         if (!registration) {
             return;
         }
 
-        const subscription = await registration.pushManager.subscribe({
-            applicationServerKey: PUBLIC_KEY,
-            userVisibleOnly: true,
-        });
-        console.log(subscription);
-        store.pushSubscription = subscription;
-        await postSubscription(subscription);
+        await registration.pushManager
+            .subscribe({
+                applicationServerKey: PUBLIC_KEY,
+                userVisibleOnly: true,
+            })
+            .then(subscription => {
+                console.log(subscription);
+                store.pushSubscription = subscription;
+                postSubscription(subscription);
+            });
     } catch (error) {
         console.error('subscribe', { error });
     }
