@@ -29,12 +29,12 @@ export default function TestLogin({ state }: Props) {
         <div>
             <button
                 onClick={handleLogin}
-                className="border-none hover:border-none focus:border-none focus:outline-none"
+                className="bg-transparent border-none hover:border-none focus:border-none focus:outline-none "
             >
                 {state === 'github' ? (
-                    <img src={github} alt="Github" className="w-14 h-14" />
+                    <img src={github} alt="Github" className="w-32 rounded-xl " />
                 ) : (
-                    <img src={kakao} alt="카카오 로그인" className="w-14 h-14" />
+                    <img src={kakao} alt="카카오 로그인" className="w-32 rounded-xl " />
                 )}
             </button>
         </div>
