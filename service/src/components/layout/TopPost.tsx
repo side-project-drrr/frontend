@@ -8,8 +8,8 @@ const topContentsMock = [
 
 const TopPost = () => {
     return (
-        <div className="my-4">
-            <h2 className="font-bold text-lg">Top 5</h2>
+        <div className="my-4" aria-label="탑 게시글">
+            <h2 className="font-bold text-lg">Top {topContentsMock.length}</h2>
             <ol>
                 {topContentsMock.map((data, index) => (
                     <li key={data.id} className="py-2">
