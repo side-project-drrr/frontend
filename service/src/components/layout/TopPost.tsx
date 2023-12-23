@@ -8,7 +8,7 @@ const topContentsMock = [
 
 const TopPost = () => {
     return (
-        <div className="my-4" aria-label="탑 게시글">
+        <div className="my-2" aria-label="탑 게시글">
             <h2 className="font-bold text-lg">Top {topContentsMock.length}</h2>
             <ol>
                 {topContentsMock.map((data, index) => (

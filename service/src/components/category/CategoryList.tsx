@@ -16,7 +16,7 @@ export default function CategoryList() {
 
     return (
         <>
-            <ul className="flex justify-around ">
+            <ul className="flex justify-around">
                 <Button
                     className="bg-[#E6F1FE] text-[#006FEE] w-28 h-7 text-center text-xs flex items-center justify-center"
                     onClick={handleOpen}

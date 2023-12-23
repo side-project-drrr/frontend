@@ -1,6 +1,5 @@
 import { useState, useRef, MouseEvent, useCallback } from 'react';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'react-icons/ri';
-
 import { CarouselProps } from './type';
 
 export default function Carousel({ data }: CarouselProps) {

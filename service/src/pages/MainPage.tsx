@@ -8,9 +8,8 @@ export default function MainPage() {
     console.log(state);
 
     return (
-
-        <div className="flex justify-between ">
-            <div className="flex flex-col justify-around ">
+        <div className="flex justify-between">
+            <div className="flex flex-col">
                 <div>
                     <CategoryList />
                 </div>
