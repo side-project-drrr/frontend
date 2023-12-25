@@ -1,4 +1,5 @@
 import Carousel from '../carousel/Carousel';
+import TopKeywords from './TopKeywords';
 
 const mocks = [
     {
@@ -52,6 +53,9 @@ export default function Aside() {
             </div>
             <div>
                 <h3>Top 5</h3>
+            </div>
+            <div>
+                <TopKeywords />
             </div>
         </div>
     );

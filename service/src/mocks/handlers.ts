@@ -54,9 +54,38 @@ export const handlers = [
     // 카테고리 등록
     http.post(`/category/create`, async ({ request }) => {
         const ids = await request.json();
-        console.log(ids);
+
         if (ids) {
             return HttpResponse.json({ status: 200 });
         }
+    }),
+    // 카테고리 등록
+    http.get(`/api/v1/top/categories/6`, async () => {
+        return HttpResponse.json([
+            {
+                id: 0,
+                categoryName: 'Java',
+            },
+            {
+                id: 1,
+                categoryName: 'Javascript',
+            },
+            {
+                id: 2,
+                categoryName: 'Typescript',
+            },
+            {
+                id: 3,
+                categoryName: 'Spring',
+            },
+            {
+                id: 4,
+                categoryName: 'React',
+            },
+            {
+                id: 5,
+                categoryName: 'Ruby',
+            },
+        ]);
     }),
 ];
