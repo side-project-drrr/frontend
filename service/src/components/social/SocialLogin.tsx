@@ -32,9 +32,17 @@ export default function TestLogin({ state }: Props) {
                 className="bg-transparent border-none hover:border-none focus:border-none focus:outline-none "
             >
                 {state === 'github' ? (
-                    <img src={github} alt="Github" className="w-32 rounded-xl " />
+                    <img
+                        src={github}
+                        alt="Github"
+                        className="w-32 shadow-md rounded-xl shadow-black "
+                    />
                 ) : (
-                    <img src={kakao} alt="카카오 로그인" className="w-32 rounded-xl " />
+                    <img
+                        src={kakao}
+                        alt="카카오 로그인"
+                        className="w-32 shadow-md rounded-xl shadow-black"
+                    />
                 )}
             </button>
         </div>

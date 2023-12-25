@@ -16,7 +16,7 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: '25%',
-    height: '50%',
+    height: '53%',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -35,12 +35,17 @@ export const Login = () => {
     return (
         <>
             <button onClick={handleOpen}>open Modal</button>
-            <Modal open={open} onClose={handleClose} aria-labelledby="Login">
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="Login"
+                className="flex items-center justify-center"
+            >
                 <Box sx={style}>
                     <div className="flex flex-col items-center justify-between text-center">
-                        <div className="border-b border-solid grow border-[#121212] w-full opacity-[10%]">
+                        <div className="border-b border-solid grow border-[#121212] w-full p-2 ">
                             <h1>
-                                <BiLogoGit size={30} />
+                                <BiLogoGit size={30} className="bg-red-500" />
                             </h1>
                         </div>
                         <div
@@ -54,11 +59,11 @@ export const Login = () => {
                         <div className="flex items-center justify-around w-full gap-4 grow">
                             <div>
                                 <SocialLogin state="kakao" />
-                                <label>카카오로 시작하기</label>
+                                <label className="text-black">카카오로 시작하기</label>
                             </div>
                             <div>
                                 <SocialLogin state="github" />
-                                <label>깃헙으로 시작하기</label>
+                                <label className="text-black">깃헙으로 시작하기</label>
                             </div>
                         </div>
                     </div>
