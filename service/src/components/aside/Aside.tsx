@@ -1,3 +1,4 @@
+import TopPost from '../layout/TopPost';
 import Carousel from '../carousel/Carousel';
 
 const mocks = [
@@ -45,13 +46,16 @@ const mocks = [
 
 export default function Aside() {
     return (
-        <div className="flex flex-col justify-around w-full ">
-            <div>
-                <h3 aria-label="추천 게시글">추천 게시글</h3>
+        <div className="flex flex-col justify-around w-full p-4 className">
+            <div className="mb-4">
+                <h2 className="font-bold text-lg my-2">추천 게시글</h2>
                 <Carousel data={mocks} />
             </div>
-            <div>
-                <h3>Top 5</h3>
+            <hr></hr>
+            <TopPost />
+            <hr></hr>
+            <div className="mt-2">
+                <h2 className="font-bold text-lg">Top Keywords</h2>
             </div>
         </div>
     );
