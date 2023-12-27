@@ -75,7 +75,7 @@ export default function Header() {
     return (
         <header className="flex w-screen h-[57px] border-b-1 border-solid border-zinc-500 items-center ">
             <div className="flex items-center flex-1 mx-10">
-                <div className="ml-2 mr-2 none">
+                <div className="mx-2 none">
                     <BiLogoGit size={40} aria-label="로고" />
                 </div>
                 <div className="grow">
@@ -96,11 +96,9 @@ export default function Header() {
                 <div>
                     <CiBellOn size={26} aria-label="알림" />
                 </div>
-                <div className="mr-2 bg-transparent border-transparent dark">
-                    <button className="mr-2 bg-transparent border-transparent dark hover:border-transparent">
-                        <BsPersonCircle aria-label="로그인" />
-                    </button>
-                </div>
+                <button className="mr-2 bg-transparent border-transparent dark hover:border-transparent">
+                    <BsPersonCircle aria-label="로그인" />
+                </button>
             </div>
         </header>
     );
