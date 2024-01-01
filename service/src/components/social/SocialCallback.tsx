@@ -5,6 +5,7 @@ import { SocialServcie } from '../../service/SocialService';
 
 export default function SocialCallback() {
     const [didMount, setDidMount] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const code = new URL(document.location.toString()).searchParams.get('code');
 
@@ -15,10 +16,13 @@ export default function SocialCallback() {
 
     const handleKakaoLogin = async () => {
         const data = await SocialServcie(code, state);
+        console.log(data);
         if (data.isRegistered) {
             navigate('/');
         } else {
-            navigate('/signup', { state: { providerId: data.providerId, state } });
+            navigate('/');
+            setOpen(true);
+            navigate('/signup', { state: { providerId: data.providerId, state, open, setOpen } });
         }
     };
 

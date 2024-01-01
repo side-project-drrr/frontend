@@ -3,7 +3,6 @@ import { http, HttpResponse } from 'msw';
 import { CategoryData } from './CategoryData';
 
 export const handlers = [
-    // 할일 목록
     http.get(`/auth/oauth2/profile`, async ({ request }) => {
         const data = { isRegistred: false, providerId: '1241231332112' };
 

@@ -2,10 +2,10 @@ import styled from '@emotion/styled';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { TextField } from '@mui/material';
 import { BiLogoGit } from 'react-icons/bi';
-import { BsPersonCircle } from 'react-icons/bs';
 import FormGroup from '@mui/material/FormGroup';
 import Switch from '@mui/material/Switch';
 import { CiBellOn } from 'react-icons/ci';
+import { Login } from '@monorepo/component/src/stories/login/Login';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -96,9 +96,9 @@ export default function Header() {
                 <div>
                     <CiBellOn size={26} aria-label="알림" />
                 </div>
-                <button className="mr-2 bg-transparent border-transparent dark hover:border-transparent">
-                    <BsPersonCircle aria-label="로그인" />
-                </button>
+                {/* <div className="mr-2 bg-transparent border-transparent dark hover:border-transparent"> */}
+                {/* </div> */}
+                <Login />
             </div>
         </header>
     );

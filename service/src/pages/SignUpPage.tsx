@@ -1,12 +1,31 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 
 const msg = {
     email: '올바른 이메일 형식이 아닙니다.',
     nickname: '닉네임을 입력해주세요',
     emailsuccess: '이메일 인증이 완료되었습니다.',
     emailfailed: '이메일 인증이 실패하였습니다.',
+};
+
+const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '25%',
+    height: '53%',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: '20px',
+    dispaly: 'flex',
+    justifyContent: 'space-around',
+    flexdirection: 'column',
 };
 
 interface ValueProps {
@@ -28,6 +47,11 @@ export default function SignUpPage() {
     const [count, setCount] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
+    console.log(location);
+    const modalOpen = location.state.open;
+    const handleClose = () => {
+        location.state.setOpen(false);
+    };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -144,47 +168,67 @@ export default function SignUpPage() {
     }, [count]);
 
     return (
-        <div className="flex flex-col items-center justify-center w-full gap-8">
-            <div className="flex flex-col items-center justify-center w-full gap-2">
-                <input
-                    className="max-w-md dark"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
-                    name="nickname"
-                />
-                <p className="text-red-500">{errorMsg.nickname && errorMsg.nickname}</p>
-            </div>
-
-            <div className="flex flex-col items-center justify-center w-full gap-2 ">
-                <div className="flex items-center justify-center w-full gap-2 ">
-                    <input
-                        className="max-w-md dark"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
-                        name="email"
-                    />
-                    <button className="max-w-md dark" onClick={handleEmailTextValue}>
-                        인증요청
-                    </button>
-                </div>
-                {emailElement && (
-                    <div className="flex items-center justify-center w-full gap-2 ">
+        <>
+            <Modal
+                open={modalOpen}
+                onClose={handleClose}
+                aria-labelledby="Login"
+                className="flex items-center justify-center"
+            >
+                {/* //className="flex flex-col items-center justify-center w-full gap-8" */}
+                <Box sx={style}>
+                    <div className="flex flex-col items-center justify-center w-full gap-2">
                         <input
                             className="max-w-md dark"
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => handleEmailChange(e)}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+                            name="nickname"
                         />
-                        <button className="max-w-md dark" onClick={handleEmailAuthentication}>
-                            인증완료
-                        </button>
-                        {formatTime(count)}
+                        <p className="text-red-500">{errorMsg.nickname && errorMsg.nickname}</p>
                     </div>
-                )}
 
-                <p className="text-red-500">{errorMsg.email && errorMsg.email}</p>
-            </div>
-            <div className="flex items-center justify-center w-full">
-                <button className="w-full max-w-md dark" onClick={() => handleSignup(profileValue)}>
-                    회원가입 완료
-                </button>
-            </div>
-        </div>
+                    <div className="flex flex-col items-center justify-center w-full gap-2 ">
+                        <div className="flex items-center justify-center w-full gap-2 ">
+                            <input
+                                className="max-w-md dark"
+                                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                    handleInputChange(e)
+                                }
+                                name="email"
+                            />
+                            <button className="max-w-md dark" onClick={handleEmailTextValue}>
+                                인증요청
+                            </button>
+                        </div>
+                        {emailElement && (
+                            <div className="flex items-center justify-center w-full gap-2 ">
+                                <input
+                                    className="max-w-md dark"
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                        handleEmailChange(e)
+                                    }
+                                />
+                                <button
+                                    className="max-w-md dark"
+                                    onClick={handleEmailAuthentication}
+                                >
+                                    인증완료
+                                </button>
+                                {formatTime(count)}
+                            </div>
+                        )}
+
+                        <p className="text-red-500">{errorMsg.email && errorMsg.email}</p>
+                    </div>
+                    <div className="flex items-center justify-center w-full">
+                        <button
+                            className="w-full max-w-md dark"
+                            onClick={() => handleSignup(profileValue)}
+                        >
+                            회원가입 완료
+                        </button>
+                    </div>
+                </Box>
+            </Modal>
+        </>
     );
 }
