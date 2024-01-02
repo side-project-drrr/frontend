@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { SocialServcie } from '../../service/SocialService';
+//import SignUpPage from '../../pages/SignUpPage';
 
 export default function SocialCallback() {
     const [didMount, setDidMount] = useState(false);
-    const [open, setOpen] = useState(false);
 
     const code = new URL(document.location.toString()).searchParams.get('code');
 
@@ -21,8 +21,8 @@ export default function SocialCallback() {
             navigate('/');
         } else {
             navigate('/');
-            setOpen(true);
-            navigate('/signup', { state: { providerId: data.providerId, state, open, setOpen } });
+
+            navigate('/signup', { state: { providerId: data.providerId, state } });
         }
     };
 

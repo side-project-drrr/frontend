@@ -3,6 +3,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import { Button } from '@mui/base/Button';
+import TextField from '@mui/material/TextField';
+import { ValueProps } from './type';
+import { style } from '../style/modalBox';
 
 const msg = {
     email: '올바른 이메일 형식이 아닙니다.',
@@ -10,28 +14,6 @@ const msg = {
     emailsuccess: '이메일 인증이 완료되었습니다.',
     emailfailed: '이메일 인증이 실패하였습니다.',
 };
-
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '25%',
-    height: '53%',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: '20px',
-    dispaly: 'flex',
-    justifyContent: 'space-around',
-    flexdirection: 'column',
-};
-
-interface ValueProps {
-    email: string;
-    nickname: string;
-}
 
 export default function SignUpPage() {
     const [errorMsg, setErrorMsg] = useState({
@@ -47,11 +29,11 @@ export default function SignUpPage() {
     const [count, setCount] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location);
-    const modalOpen = location.state.open;
-    const handleClose = () => {
-        location.state.setOpen(false);
-    };
+    //console.log(location);
+    //  const modalOpen = location.state.open;
+    // const handleClose = () => {
+    //     location.state.setOpen(false);
+    // };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -166,30 +148,33 @@ export default function SignUpPage() {
         }
         return () => clearInterval(id);
     }, [count]);
-
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     return (
         <>
+            <Button onClick={handleOpen}>open</Button>
             <Modal
-                open={modalOpen}
+                open={open}
                 onClose={handleClose}
                 aria-labelledby="Login"
-                className="flex items-center justify-center"
+                className="flex items-center justify-center "
             >
                 {/* //className="flex flex-col items-center justify-center w-full gap-8" */}
-                <Box sx={style}>
+                <Box sx={{ ...style, width: '25%', height: '53%' }}>
                     <div className="flex flex-col items-center justify-center w-full gap-2">
-                        <input
+                        <TextField
                             className="max-w-md dark"
                             onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
                             name="nickname"
                         />
                         <p className="text-red-500">{errorMsg.nickname && errorMsg.nickname}</p>
                     </div>
-
                     <div className="flex flex-col items-center justify-center w-full gap-2 ">
                         <div className="flex items-center justify-center w-full gap-2 ">
-                            <input
-                                className="max-w-md dark"
+                            <TextField
+                                className="max-w-md h-12 rounded-1xl w-96"
+                                variant="outlined"
                                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                     handleInputChange(e)
                                 }
@@ -201,18 +186,18 @@ export default function SignUpPage() {
                         </div>
                         {emailElement && (
                             <div className="flex items-center justify-center w-full gap-2 ">
-                                <input
+                                <TextField
                                     className="max-w-md dark"
                                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                         handleEmailChange(e)
                                     }
                                 />
-                                <button
+                                <Button
                                     className="max-w-md dark"
                                     onClick={handleEmailAuthentication}
                                 >
                                     인증완료
-                                </button>
+                                </Button>
                                 {formatTime(count)}
                             </div>
                         )}
@@ -220,12 +205,12 @@ export default function SignUpPage() {
                         <p className="text-red-500">{errorMsg.email && errorMsg.email}</p>
                     </div>
                     <div className="flex items-center justify-center w-full">
-                        <button
+                        <Button
                             className="w-full max-w-md dark"
                             onClick={() => handleSignup(profileValue)}
                         >
                             회원가입 완료
-                        </button>
+                        </Button>
                     </div>
                 </Box>
             </Modal>
