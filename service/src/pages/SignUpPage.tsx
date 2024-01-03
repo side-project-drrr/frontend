@@ -7,6 +7,7 @@ import { Button } from '@mui/base/Button';
 import TextField from '@mui/material/TextField';
 import { ValueProps } from './type';
 import { style } from '../style/modalBox';
+import send from '../assets/send-2.png';
 
 const msg = {
     email: '올바른 이메일 형식이 아닙니다.',
@@ -77,7 +78,7 @@ export default function SignUpPage() {
         const value = e.target.value;
         setEmailCode(value);
     };
-
+    console.log(handleEmailTextValue);
     const handleEmailAuthentication = () => {
         //백엔드로 코드 보내기
         axios
@@ -163,54 +164,83 @@ export default function SignUpPage() {
                 {/* //className="flex flex-col items-center justify-center w-full gap-8" */}
                 <Box sx={{ ...style, width: '25%', height: '53%' }}>
                     <div className="flex flex-col items-center justify-center w-full gap-2">
-                        <TextField
-                            className="max-w-md dark"
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
-                            name="nickname"
-                        />
-                        <p className="text-red-500">{errorMsg.nickname && errorMsg.nickname}</p>
-                    </div>
-                    <div className="flex flex-col items-center justify-center w-full gap-2 ">
-                        <div className="flex items-center justify-center w-full gap-2 ">
-                            <TextField
-                                className="max-w-md h-12 rounded-1xl w-96"
-                                variant="outlined"
-                                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                    handleInputChange(e)
-                                }
-                                name="email"
-                            />
-                            <button className="max-w-md dark" onClick={handleEmailTextValue}>
-                                인증요청
-                            </button>
+                        <div className="border-b border-solid grow border-[#121212] w-full text-black ">
+                            <h1 className="pb-3 text-base">시작하기</h1>
                         </div>
-                        {emailElement && (
-                            <div className="flex items-center justify-center w-full gap-2 ">
-                                <TextField
-                                    className="max-w-md dark"
-                                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                        handleEmailChange(e)
-                                    }
-                                />
-                                <Button
-                                    className="max-w-md dark"
-                                    onClick={handleEmailAuthentication}
-                                >
-                                    인증완료
-                                </Button>
-                                {formatTime(count)}
-                            </div>
-                        )}
-
-                        <p className="text-red-500">{errorMsg.email && errorMsg.email}</p>
-                    </div>
-                    <div className="flex items-center justify-center w-full">
-                        <Button
-                            className="w-full max-w-md dark"
-                            onClick={() => handleSignup(profileValue)}
+                        <div
+                            className="flex text-black border-b border-solid grow border-[#121212] flex-wrap w-full p-8"
+                            aria-label="이용 약관"
                         >
-                            회원가입 완료
-                        </Button>
+                            <p className="w-9/12">
+                                지금 로그인하고 매일 새로운 기술블로그 소식을 전달받아보세요
+                            </p>
+                        </div>
+                        <div className="flex flex-col items-center gap-4">
+                            <div>
+                                <TextField
+                                    className="h-12 bg-center bg-repeat bg-cover rounded-1xl w-96 bg-send bg-bg-send "
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                        handleInputChange(e)
+                                    }
+                                    aria-label="닉네임"
+                                    placeholder="닉네임"
+                                    name="nickname"
+                                />
+                                <p className="text-red-500">
+                                    {errorMsg.nickname && errorMsg.nickname}
+                                </p>
+                            </div>
+                            <div className="flex flex-col items-center justify-center w-full gap-2 ">
+                                <div className="flex items-center justify-center w-full gap-2 ">
+                                    <TextField
+                                        className="h-12 bg-center bg-repeat bg-cover rounded-1xl w-96 bg-send bg-bg-send "
+                                        variant="outlined"
+                                        aria-label="이메일"
+                                        placeholder="이메일"
+                                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                            handleInputChange(e)
+                                        }
+                                        name="email"
+                                    />
+                                </div>
+                                {emailElement && (
+                                    <div className="flex items-center justify-center w-full gap-2 ">
+                                        <TextField
+                                            className="max-w-md dark"
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <img
+                                                        src={send}
+                                                        alt="아이콘"
+                                                        style={{ height: '20px', width: '20px' }}
+                                                    />
+                                                ),
+                                            }}
+                                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                                handleEmailChange(e)
+                                            }
+                                        />
+                                        <Button
+                                            className="max-w-md dark"
+                                            onClick={handleEmailAuthentication}
+                                        >
+                                            인증완료
+                                        </Button>
+                                        {formatTime(count)}
+                                    </div>
+                                )}
+
+                                <p className="text-red-500">{errorMsg.email && errorMsg.email}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center justify-center w-full">
+                            <Button
+                                className="w-full max-w-md dark"
+                                onClick={() => handleSignup(profileValue)}
+                            >
+                                회원가입 완료
+                            </Button>
+                        </div>
                     </div>
                 </Box>
             </Modal>
