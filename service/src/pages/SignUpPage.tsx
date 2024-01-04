@@ -4,11 +4,9 @@ import axios from 'axios';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/base/Button';
-import TextField from '@mui/material/TextField';
 import { ValueProps } from './type';
 import { style } from '../style/modalBox';
-import send from '../assets/send-2.png';
-
+import { InputTextField } from '../style/inputText';
 const msg = {
     email: '올바른 이메일 형식이 아닙니다.',
     nickname: '닉네임을 입력해주세요',
@@ -26,7 +24,6 @@ export default function SignUpPage() {
         email: '',
     });
     const [emailElement, setEmailElement] = useState(false);
-    const [emailCode, setEmailCode] = useState('');
     const [count, setCount] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
@@ -53,7 +50,7 @@ export default function SignUpPage() {
             return false;
         }
     };
-    const handleEmailTextValue = () => {
+    const handleEmailCertificationButton = () => {
         const emailValidationState = validationEmailChecked(profileValue.email);
         if (emailValidationState === undefined) {
             setErrorMsg({
@@ -74,17 +71,13 @@ export default function SignUpPage() {
             }));
         }
     };
-    const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleEmailAuthenticationChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setEmailCode(value);
-    };
-    console.log(handleEmailTextValue);
-    const handleEmailAuthentication = () => {
         //백엔드로 코드 보내기
         axios
             .post('/auth/email/verification', {
                 providerId: '1234',
-                verificationCode: `${emailCode}`,
+                verificationCode: `${value}`,
             })
             .then(res => {
                 if (res.data.isVerified) {
@@ -163,7 +156,7 @@ export default function SignUpPage() {
             >
                 {/* //className="flex flex-col items-center justify-center w-full gap-8" */}
                 <Box sx={{ ...style, width: '25%', height: '53%' }}>
-                    <div className="flex flex-col items-center justify-center w-full gap-2">
+                    <div className="flex flex-col items-center justify-center w-full gap-2 ">
                         <div className="border-b border-solid grow border-[#121212] w-full text-black ">
                             <h1 className="pb-3 text-base">시작하기</h1>
                         </div>
@@ -175,10 +168,10 @@ export default function SignUpPage() {
                                 지금 로그인하고 매일 새로운 기술블로그 소식을 전달받아보세요
                             </p>
                         </div>
-                        <div className="flex flex-col items-center gap-4">
+                        <div className="flex flex-col items-center justify-around h-[25vh] ">
                             <div>
-                                <TextField
-                                    className="h-12 bg-center bg-repeat bg-cover rounded-1xl w-96 bg-send bg-bg-send "
+                                <InputTextField
+                                    className="h-12 rounded-1xl w-96"
                                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                         handleInputChange(e)
                                     }
@@ -190,10 +183,11 @@ export default function SignUpPage() {
                                     {errorMsg.nickname && errorMsg.nickname}
                                 </p>
                             </div>
-                            <div className="flex flex-col items-center justify-center w-full gap-2 ">
-                                <div className="flex items-center justify-center w-full gap-2 ">
-                                    <TextField
-                                        className="h-12 bg-center bg-repeat bg-cover rounded-1xl w-96 bg-send bg-bg-send "
+
+                            <div className="flex items-center justify-center w-full gap-2 ">
+                                <label className="border-none relative">
+                                    <InputTextField
+                                        className="h-12 rounded-1xl w-96"
                                         variant="outlined"
                                         aria-label="이메일"
                                         placeholder="이메일"
@@ -202,45 +196,42 @@ export default function SignUpPage() {
                                         }
                                         name="email"
                                     />
-                                </div>
+                                    <button
+                                        className="absolute top-2 right-2 bg-bg-blue bg-send bg-cover bg-center	w-4 h-10  border-none shadow-black shadow-md focus:border-none"
+                                        aria-label="이메일 인증 요청"
+                                        onClick={handleEmailCertificationButton}
+                                    />
+                                </label>
+                            </div>
+                            <div className="flex flex-col gap-4">
                                 {emailElement && (
                                     <div className="flex items-center justify-center w-full gap-2 ">
-                                        <TextField
-                                            className="max-w-md dark"
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <img
-                                                        src={send}
-                                                        alt="아이콘"
-                                                        style={{ height: '20px', width: '20px' }}
-                                                    />
-                                                ),
-                                            }}
-                                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                                handleEmailChange(e)
-                                            }
-                                        />
-                                        <Button
-                                            className="max-w-md dark"
-                                            onClick={handleEmailAuthentication}
-                                        >
-                                            인증완료
-                                        </Button>
-                                        {formatTime(count)}
+                                        <label className="border-none relative">
+                                            <InputTextField
+                                                className="h-12 rounded-1xl w-96 "
+                                                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                                    handleEmailAuthenticationChange(e)
+                                                }
+                                                placeholder="인증 코드"
+                                                aria-label="인증 코드"
+                                            />
+                                            <p className="absolute top-4 right-4 text-black">
+                                                {formatTime(count)}
+                                            </p>
+                                        </label>
                                     </div>
                                 )}
-
                                 <p className="text-red-500">{errorMsg.email && errorMsg.email}</p>
                             </div>
                         </div>
-                        <div className="flex items-center justify-center w-full">
-                            <Button
-                                className="w-full max-w-md dark"
-                                onClick={() => handleSignup(profileValue)}
-                            >
-                                회원가입 완료
-                            </Button>
-                        </div>
+
+                        <Button
+                            className="h-12 rounded-1xl w-96  bg-bg-blue text-white"
+                            onClick={() => handleSignup(profileValue)}
+                            aria-label="다음"
+                        >
+                            다음
+                        </Button>
                     </div>
                 </Box>
             </Modal>

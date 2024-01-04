@@ -8,7 +8,8 @@ module.exports = {
                 'dark-bg': '#1C1D21',
                 'bg-blue': '#006FEE',
             },
-            backgroundImage: { send: "url('./src/assets/send-2.png')" },
+            backgroundImage: { send: "url('./assets/send-2.png')" },
+
             fontSize: {
                 base: '1rem', // 16px
                 sm: '0.875rem', //14px
