@@ -23,15 +23,10 @@ export default function SignUpPage() {
         nickname: '',
         email: '',
     });
-    const [emailElement, setEmailElement] = useState(false);
     const [count, setCount] = useState(0);
+    const [buttonDisabled, setButtonDisabled] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    //console.log(location);
-    //  const modalOpen = location.state.open;
-    // const handleClose = () => {
-    //     location.state.setOpen(false);
-    // };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -57,7 +52,7 @@ export default function SignUpPage() {
                 nickname: '',
                 email: '',
             });
-            setEmailElement(true);
+
             setCount(180);
             //백엔드 api로 이메일 보내기
             axios.post('/auth/email', {
@@ -85,6 +80,7 @@ export default function SignUpPage() {
                         ...prevErrorMsg,
                         email: msg.emailsuccess,
                     }));
+                    setButtonDisabled(true);
                 } else {
                     setErrorMsg(prevErrorMsg => ({
                         ...prevErrorMsg,
@@ -142,6 +138,7 @@ export default function SignUpPage() {
         }
         return () => clearInterval(id);
     }, [count]);
+
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -154,8 +151,7 @@ export default function SignUpPage() {
                 aria-labelledby="Login"
                 className="flex items-center justify-center "
             >
-                {/* //className="flex flex-col items-center justify-center w-full gap-8" */}
-                <Box sx={{ ...style, width: '25%', height: '53%' }}>
+                <Box sx={{ ...style, width: '25%', height: '58%' }}>
                     <div className="flex flex-col items-center justify-center w-full gap-2 ">
                         <div className="border-b border-solid grow border-[#121212] w-full text-black ">
                             <h1 className="pb-3 text-base">시작하기</h1>
@@ -168,7 +164,7 @@ export default function SignUpPage() {
                                 지금 로그인하고 매일 새로운 기술블로그 소식을 전달받아보세요
                             </p>
                         </div>
-                        <div className="flex flex-col items-center justify-around h-[25vh] ">
+                        <div className="flex flex-col items-center justify-around h-[30vh] ">
                             <div>
                                 <InputTextField
                                     className="h-12 rounded-1xl w-96"
@@ -179,9 +175,6 @@ export default function SignUpPage() {
                                     placeholder="닉네임"
                                     name="nickname"
                                 />
-                                <p className="text-red-500">
-                                    {errorMsg.nickname && errorMsg.nickname}
-                                </p>
                             </div>
 
                             <div className="flex items-center justify-center w-full gap-2 ">
@@ -204,24 +197,28 @@ export default function SignUpPage() {
                                 </label>
                             </div>
                             <div className="flex flex-col gap-4">
-                                {emailElement && (
-                                    <div className="flex items-center justify-center w-full gap-2 ">
-                                        <label className="border-none relative">
-                                            <InputTextField
-                                                className="h-12 rounded-1xl w-96 "
-                                                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                                    handleEmailAuthenticationChange(e)
-                                                }
-                                                placeholder="인증 코드"
-                                                aria-label="인증 코드"
-                                            />
-                                            <p className="absolute top-4 right-4 text-black">
-                                                {formatTime(count)}
-                                            </p>
-                                        </label>
-                                    </div>
-                                )}
-                                <p className="text-red-500">{errorMsg.email && errorMsg.email}</p>
+                                <div className="flex items-center justify-center w-full gap-2 ">
+                                    <label className="border-none relative">
+                                        <InputTextField
+                                            className="h-12 rounded-1xl w-96 "
+                                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                                handleEmailAuthenticationChange(e)
+                                            }
+                                            placeholder="인증 코드"
+                                            aria-label="인증 코드"
+                                        />
+                                        <p className="absolute top-4 right-4 text-black">
+                                            {formatTime(count)}
+                                        </p>
+                                    </label>
+                                </div>
+
+                                <p className="text-red-500 text-sm">
+                                    {errorMsg.email && errorMsg.email}
+                                </p>
+                                <p className="text-red-500 text-sm">
+                                    {errorMsg.nickname && errorMsg.nickname}
+                                </p>
                             </div>
                         </div>
 
@@ -229,6 +226,7 @@ export default function SignUpPage() {
                             className="h-12 rounded-1xl w-96  bg-bg-blue text-white"
                             onClick={() => handleSignup(profileValue)}
                             aria-label="다음"
+                            disabled={!buttonDisabled}
                         >
                             다음
                         </Button>
