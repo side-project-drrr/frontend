@@ -54,9 +54,8 @@ export default function Aside() {
             <div>
                 <h3>Top 5</h3>
             </div>
-            <div>
-                <TopKeywords />
-            </div>
+
+            <TopKeywords />
         </div>
     );
 }

@@ -1,13 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-
-interface TopKeyword {
-    id: string; // Replace with the actual type of 'id'
-    categoryName: string;
-}
+import { TopKeywordProps } from './type';
 
 export default function TopKeywords() {
-    const [topkeywordsData, setTopkeywordsData] = useState<TopKeyword[]>([]);
+    const [topkeywordsData, setTopkeywordsData] = useState<TopKeywordProps[]>([]);
     const [didMount, setDidMount] = useState<boolean>(false);
     async function getTopkeyDatas() {
         const res = axios.get('/api/v1/top/categories/6');
@@ -33,7 +29,7 @@ export default function TopKeywords() {
                     {topkeywordsData.map(topkeyword => (
                         <li
                             key={topkeyword.id}
-                            className="gap-4 bg-[#E6F1FE] text-[#006FEE] px-4 py-1.5 rounded-2xl"
+                            className="gap-4 bg-[#E6F1FE] text-[#006FEE] px-4 py-1.5 rounded-2xl flex-1 text-center"
                             aria-label="top keyword item"
                         >
                             {topkeyword.categoryName}
