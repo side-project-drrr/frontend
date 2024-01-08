@@ -1,5 +1,6 @@
 import TopPost from '../layout/TopPost';
 import Carousel from '../carousel/Carousel';
+import TopKeywords from './TopKeywords';
 
 const mocks = [
     {
@@ -57,6 +58,8 @@ export default function Aside() {
             <div className="mt-2">
                 <h2 className="font-bold text-lg">Top Keywords</h2>
             </div>
+
+            <TopKeywords />
         </div>
     );
 }
