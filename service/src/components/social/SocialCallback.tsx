@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { SocialServcie } from '../../service/SocialService';
+//import SignUpPage from '../../pages/SignUpPage';
 
 export default function SocialCallback() {
     const [didMount, setDidMount] = useState(false);
@@ -15,9 +16,12 @@ export default function SocialCallback() {
 
     const handleKakaoLogin = async () => {
         const data = await SocialServcie(code, state);
+        console.log(data);
         if (data.isRegistered) {
             navigate('/');
         } else {
+            navigate('/');
+
             navigate('/signup', { state: { providerId: data.providerId, state } });
         }
     };
