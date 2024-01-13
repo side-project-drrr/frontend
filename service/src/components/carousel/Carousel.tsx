@@ -1,8 +1,11 @@
 import { useState, useRef, MouseEvent, useCallback } from 'react';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'react-icons/ri';
 import { CarouselProps } from './type';
+import { useDarkMode } from '../../ThemeContext/ThemeProvider';
 
 export default function Carousel({ data }: CarouselProps) {
+    const { darkMode } = useDarkMode();
+
     const [current, setCurrent] = useState(0);
     const [isDrag, setIsDrag] = useState(false);
     const [startX, setStartX] = useState<number>(0);
@@ -64,10 +67,11 @@ export default function Carousel({ data }: CarouselProps) {
     };
 
     const onThrottleDragMove = throttle(onDragMove, delay);
-
+    const backgroundColorClass =
+        darkMode === 'dark' ? 'bg-white text-black' : 'bg-[#363D4B] text-white';
     return (
         <div
-            className="relative flex overflow-hidden rounded-md w-[100%] will-change-transform"
+            className={`relative flex overflow-hidden rounded-md flex-1 will-change-transform ${backgroundColorClass}`}
             ref={scrollRef}
             onMouseDown={onDragStart}
             onMouseMove={handleOnMouseMove}
@@ -75,21 +79,21 @@ export default function Carousel({ data }: CarouselProps) {
             onMouseLeave={onDragEnd}
             aria-label="추천 게시글"
         >
-            <div className={`transition ease-out duration-400 flex`}>
+            <div className={`transition ease-out duration-400 flex ${backgroundColorClass}`}>
                 {data.map(item => (
                     <div
                         key={item.id}
                         style={{ transform: `translateX(-${current * 100}%)` }}
-                        className="w-[23vw] h-[200px] relative flex flex-col dark-box-bg bg-white pl-2 pr-2 justify-around text-center overflow-x-scroll"
+                        className={`w-[23vw] h-[200px] relative flex flex-col dark-box-bg pl-2 pr-2 justify-around text-center overflow-x-scroll ${backgroundColorClass}`}
                     >
-                        <h3 aria-label="추천 게시글 제목" className="w-full text-sm text-black ">
+                        <h3 aria-label="추천 게시글 제목" className="w-full text-sm ">
                             {item.title}
                         </h3>
-                        <div className="flex justify-between">
+                        <div className={`flex justify-between `}>
                             <div className="w-[50%]">
                                 <p
                                     aria-label="추천 게시글 메인 컨텐츠"
-                                    className="w-full text-xs text-left text-black"
+                                    className="w-full text-xs text-left "
                                 >
                                     {item.content}
                                 </p>
@@ -98,7 +102,7 @@ export default function Carousel({ data }: CarouselProps) {
                                 <img
                                     src={item.url}
                                     alt="추천 게시글"
-                                    className="w-full h-[100%] text-black"
+                                    className="w-full h-[100%] "
                                 />
                             </div>
                         </div>
@@ -114,16 +118,20 @@ export default function Carousel({ data }: CarouselProps) {
                     </div>
                 ))}
             </div>
-            <div className="absolute bottom-0 flex items-center justify-between w-full h-full text-black">
+            <div
+                className={`absolute bottom-0 flex items-center justify-between w-full h-full text-black `}
+            >
                 <RiArrowDropLeftLine onClick={prevSlider} />
                 <RiArrowDropRightLine onClick={nextSlider} />
             </div>
-            <div className="absolute bottom-0 flex justify-center w-full gap-4 py-1">
+            <div
+                className={`absolute bottom-0 flex justify-center w-full gap-4 py-1 ${backgroundColorClass} `}
+            >
                 {data.map((data, index) => (
                     <div
                         className={`w-2 h-2 cursor-pointer rounded-full ${
                             index === current ? 'bg-black' : 'bg-gray-500'
-                        }`}
+                        } `}
                         key={data.id}
                         onClick={() => {
                             setCurrent(index);

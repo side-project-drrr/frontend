@@ -62,6 +62,7 @@ function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
             getCategoryList();
         }
     }, [didMount]);
+
     return (
         <>
             <Modal onClose={handleClose} open={onModalOpen}>

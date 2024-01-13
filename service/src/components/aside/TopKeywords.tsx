@@ -22,7 +22,7 @@ export default function TopKeywords() {
     }, [didMount]);
 
     return (
-        <div>
+        <div className="flex flex-col justify-center mt-5">
             <h3 aria-label="top keyword">Top Keywords</h3>
             <div className="flex justify-center">
                 <ul className="flex flex-wrap justify-around w-4/5 gap-4 mt-3 ">

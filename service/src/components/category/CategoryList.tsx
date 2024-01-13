@@ -24,7 +24,10 @@ export default function CategoryList() {
                     추가
                 </Button>
                 {mock.map(data => (
-                    <li key={data.id} className="px-10 py-2 mx-5 text-xs bg-blue-900 rounded-3xl">
+                    <li
+                        key={data.id}
+                        className="px-10 py-2 mx-5 text-xs text-[#E6F1FE] bg-blue-900 rounded-3xl flex-1"
+                    >
                         {data.content}
                     </li>
                 ))}

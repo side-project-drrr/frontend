@@ -35,6 +35,7 @@
         "@monorepo/component": "workspace:^",
         "@monorepo/service": "workspace:^",
         "@types/react-datepicker": "^4.15.0",
+        "@vitejs/plugin-vue": "latest",
         "framer-motion": "^10.16.0",
         "global": "^4.4.0",
         "react": "^18.2.0",

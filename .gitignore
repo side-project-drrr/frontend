@@ -20,7 +20,7 @@ dist-ssr
 .env.local
 
 
-#zero-install
+.yarn/
 .pnp.*
 .yarn/*
 !.yarn/cache
@@ -29,6 +29,7 @@ dist-ssr
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.yarn/cache
 
 
 

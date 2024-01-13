@@ -4,6 +4,7 @@ import App from './App.tsx';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { worker } from './mocks/brower.ts';
+import { ThemeProvider } from './ThemeContext/ThemeProvider.tsx';
 
 if (import.meta.env.MODE === 'development') {
     worker.start();
@@ -12,7 +13,9 @@ if (import.meta.env.MODE === 'development') {
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <BrowserRouter>
-            <App />
+            <ThemeProvider>
+                <App />
+            </ThemeProvider>
         </BrowserRouter>
     </React.StrictMode>,
 );
