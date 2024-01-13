@@ -1,13 +1,13 @@
-import { useState } from 'react';
 import { BiLogoGit } from 'react-icons/bi';
 import Box from '@mui/material/Box';
 import SocialLogin from '@monorepo/service/src/components/social/SocialLogin';
-import { Modal } from '@mui/base';
+import Modal from '@mui/material/Modal';
+import { BsPersonCircle } from 'react-icons/bs';
+import { useState } from 'react';
 
 // interface LoginProps {
-//     onOpen: () => void;
 //     isOpen: boolean;
-//     onOpenChange: () => void;
+//     onHandleClose: () => void;
 // }
 
 const style = {
@@ -30,11 +30,12 @@ const style = {
 export const Login = () => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
+    const handleClose = () => {
+        setOpen(false);
+    };
     return (
         <>
-            <button onClick={handleOpen}>open Modal</button>
+            <BsPersonCircle aria-label="로그인" onClick={handleOpen} size={30} />
             <Modal
                 open={open}
                 onClose={handleClose}
