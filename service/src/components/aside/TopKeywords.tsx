@@ -1,15 +1,13 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { TopKeywordProps } from './type';
+import { getTopkeyword } from '../../service/TopKeyword';
 
 export default function TopKeywords() {
     const [topkeywordsData, setTopkeywordsData] = useState<TopKeywordProps[]>([]);
     const [didMount, setDidMount] = useState<boolean>(false);
     async function getTopkeyDatas() {
-        const res = axios.get('/api/v1/top/categories/6');
-        const data = (await res).data;
-        console.log(data);
-        setTopkeywordsData(data);
+        const topKeywordData = await getTopkeyword();
+        setTopkeywordsData(topKeywordData);
     }
 
     useEffect(() => {
