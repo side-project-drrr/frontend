@@ -20,7 +20,7 @@ dist-ssr
 .env.local
 
 
-#zero-install
+.yarn/
 .pnp.*
 .yarn/*
 !.yarn/cache
@@ -30,7 +30,6 @@ dist-ssr
 !.yarn/sdks
 !.yarn/versions
 .yarn/cache
-.yarn/
 
 
 # Editor directories and files

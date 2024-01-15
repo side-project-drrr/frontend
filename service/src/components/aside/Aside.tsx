@@ -49,16 +49,12 @@ export default function Aside() {
     return (
         <div className="flex flex-col justify-around w-full p-4 className">
             <div className="mb-4">
-                <h2 className="font-bold text-lg my-2">추천 게시글</h2>
+                <h2 className="my-2 text-lg font-bold">추천 게시글</h2>
                 <Carousel data={mocks} />
             </div>
-            <hr></hr>
+            <hr />
             <TopPost />
-            <hr></hr>
-            <div className="mt-2">
-                <h2 className="font-bold text-lg">Top Keywords</h2>
-            </div>
-
+            <hr />
             <TopKeywords />
         </div>
     );

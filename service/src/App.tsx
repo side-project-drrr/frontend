@@ -6,19 +6,22 @@ import ItemDetailPage from './pages/ItemDetailPage';
 import SignUpPage from './pages/SignUpPage';
 import CategoryPage from './pages/CategoryPage';
 import SocialCallback from './components/social/SocialCallback';
-
+import { ThemeProvider } from '@mui/material';
+import theme from './ThemeContext/theme';
 function App() {
     return (
-        <Routes>
-            <Route element={<Layout />}>
-                <Route path="/" element={<MainPage />} />
-                <Route path="/detail/:id" element={<ItemDetailPage />} />
-                <Route path="/signup" element={<SignUpPage />} />
-                <Route path="/signup/category" element={<CategoryPage />} />
-            </Route>
-            <Route path="/kakao/auth" element={<SocialCallback />} />
-            <Route path="/github/auth" element={<SocialCallback />} />
-        </Routes>
+        <ThemeProvider theme={theme}>
+            <Routes>
+                <Route element={<Layout />}>
+                    <Route path="/" element={<MainPage />} />
+                    <Route path="/detail/:id" element={<ItemDetailPage />} />
+                    <Route path="/signup" element={<SignUpPage />} />
+                    <Route path="/signup/category" element={<CategoryPage />} />
+                </Route>
+                <Route path="/kakao/auth" element={<SocialCallback />} />
+                <Route path="/github/auth" element={<SocialCallback />} />
+            </Routes>
+        </ThemeProvider>
     );
 }
 

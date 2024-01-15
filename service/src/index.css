@@ -4,7 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
 
-/* 자동 완성 시  배경색 없애기*/
+/* 자동 완성 시  배경색 없애기 */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -31,8 +31,7 @@ input:autofill:active {
     font-weight: 400;
 
     color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
+
     box-sizing: border-box;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -40,6 +39,10 @@ input:autofill:active {
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
 }
+
+/* .abc {
+    background-color: #000;
+} */
 
 a {
     font-weight: 500;
