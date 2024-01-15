@@ -1,11 +1,11 @@
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { useEffect, useState, useMemo } from 'react';
-import axios from 'axios';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import CategoryItem from '../category/CategoryItem';
 import { CategoryProps } from './type';
+import { createCategory, getCategoryItem } from '../../service/CategoryService';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -27,15 +27,13 @@ function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
 
     async function getCategoryList() {
-        const response = axios.get('/api/v1/categories');
-        const categoryListData = (await response).data;
-        setCategoryItems(categoryListData);
+        const res = await getCategoryItem();
+        setCategoryItems(res.data);
     }
 
     async function handleCategory() {
-        const response = axios.post('/category/create', { categoryIds: activeCategoriesData });
-        const data = (await response).data;
-        console.log(data);
+        const createCategoryData = await createCategory(activeCategoriesData);
+        console.log(createCategoryData);
     }
 
     const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
