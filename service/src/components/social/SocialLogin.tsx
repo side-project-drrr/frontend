@@ -1,5 +1,5 @@
-import github from '../../assets/github.png';
-import kakao from '../../assets/kakao.png';
+import github from '../../assets/github.webp';
+import kakao from '../../assets/kakao.webp';
 
 interface Props {
     state: string;
@@ -29,20 +29,34 @@ export default function TestLogin({ state }: Props) {
         <div>
             <button
                 onClick={handleLogin}
-                className="bg-transparent border-none hover:border-none focus:border-none focus:outline-none "
+                className="bg-transparent border-none hover:border-none focus:border-none focus:outline-none"
             >
                 {state === 'github' ? (
-                    <img
-                        src={github}
-                        alt="Github"
-                        className="w-32 shadow-md rounded-xl shadow-black "
-                    />
+                    <picture>
+                        <source
+                            srcSet={github}
+                            type="image/webp"
+                            className="w-32 shadow-md rounded-xl shadow-black"
+                        />
+                        <img
+                            src={github}
+                            alt="github login"
+                            className="w-32 shadow-md rounded-xl shadow-black "
+                        />
+                    </picture>
                 ) : (
-                    <img
-                        src={kakao}
-                        alt="카카오 로그인"
-                        className="w-32 shadow-md rounded-xl shadow-black"
-                    />
+                    <picture>
+                        <source
+                            srcSet={kakao}
+                            type="image/webp"
+                            className="w-32 shadow-md rounded-xl shadow-black "
+                        />
+                        <img
+                            src={kakao}
+                            alt="kakao login"
+                            className="w-32 shadow-md rounded-xl shadow-black"
+                        />
+                    </picture>
                 )}
             </button>
         </div>

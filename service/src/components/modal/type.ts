@@ -1,4 +1,5 @@
 export interface CategoryProps {
-    handleClose: () => void;
     onModalOpen: boolean;
+    onClose: () => void;
+    onHandleModalOpen: () => void;
 }

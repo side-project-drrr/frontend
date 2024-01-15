@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-import { SocialServcie } from '../../service/SocialService';
-//import SignUpPage from '../../pages/SignUpPage';
+import { SignInService, SocialService } from '../../service/auth/SocialService';
+import { modalOpenState } from '../../recoil/atom/modalOpenState';
+import { useSetRecoilState } from 'recoil';
 
 export default function SocialCallback() {
     const [didMount, setDidMount] = useState(false);
-
     const code = new URL(document.location.toString()).searchParams.get('code');
+    const setModalOpen = useSetRecoilState(modalOpenState);
 
     const location = useLocation();
     const state = location.pathname.split('/')[1];
@@ -15,15 +16,14 @@ export default function SocialCallback() {
     const navigate = useNavigate();
 
     const handleKakaoLogin = async () => {
-        const data = await SocialServcie(code, state);
-        console.log(data);
-        if (data.isRegistered) {
-            navigate('/');
-        } else {
-            navigate('/');
-
-            navigate('/signup', { state: { providerId: data.providerId, state } });
+        const data = await SocialService(code, state);
+        if (data.statusCode === 202) {
+            await SignInService(data.providerId);
         }
+        if (!data.isRegistered) {
+            setModalOpen(true);
+        }
+        navigate('/');
     };
 
     useEffect(() => {

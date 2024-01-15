@@ -6,6 +6,7 @@ export async function getCategoryItem() {
 }
 
 export async function createCategory(activeCategoriesData: string[]) {
+    console.log(activeCategoriesData);
     const res = await HttpClient.post('/category/create', { categoryIds: activeCategoriesData });
     return res.data;
 }

@@ -20,15 +20,14 @@ const style = {
     borderRadius: '10px',
 };
 
-function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
+function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [didMount, setDidmount] = useState(false);
     const [categoryItems, setCategoryItems] = useState<any[]>([]); //전체 카테고리 리스트
     const [activeCategoriesData, setActiveCategoriesData] = useState<string[]>([]); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
-
     async function getCategoryList() {
         const res = await getCategoryItem();
-        setCategoryItems(res.data);
+        setCategoryItems(res);
     }
 
     async function handleCategory() {
@@ -60,10 +59,9 @@ function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
             getCategoryList();
         }
     }, [didMount]);
-
     return (
         <>
-            <Modal onClose={handleClose} open={onModalOpen}>
+            <Modal onClose={onClose} open={onModalOpen}>
                 <Box sx={style} className="flex flex-col items-center justify-around">
                     <div className="flex justify-start w-full pb-2 text-black border-b-2 border-solid">
                         <h1 className="text-base">선호 카테고리 등록</h1>
@@ -77,7 +75,7 @@ function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
                         />
                     </div>
                     <ul className="flex flex-wrap justify-around w-full h-[25vh] gap-4 overflow-y-scroll">
-                        {categorySearchItemList.map(categoryitem => (
+                        {categorySearchItemList?.map(categoryitem => (
                             <CategoryItem
                                 key={categoryitem.id}
                                 id={categoryitem.id}
