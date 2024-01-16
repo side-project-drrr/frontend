@@ -5,7 +5,15 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import CategoryItem from '../category/CategoryItem';
 import { CategoryProps } from './type';
-import { createCategory, getCategoryItem } from '../../service/CategoryService';
+import { getCategoryItem } from '../../service/CategoryService';
+//import { getAuthStorage } from '../../repository/AuthRepository';
+import { useRecoilValue } from 'recoil';
+import { userInformationState } from '../../recoil/atom/userInformationState';
+
+import { providerState } from '../../recoil/atom/providerstate';
+import { providerIdState } from '../../recoil/atom/providerIdState';
+import { SignUpService } from '../../service/auth/SocialService';
+import { setAuthStorage } from '../../repository/AuthRepository';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -25,16 +33,31 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [categoryItems, setCategoryItems] = useState<any[]>([]); //전체 카테고리 리스트
     const [activeCategoriesData, setActiveCategoriesData] = useState<string[]>([]); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
+    const profileValue = useRecoilValue(userInformationState);
+    const provider = useRecoilValue(providerState);
+    const providerId = useRecoilValue(providerIdState);
+    const ACCESSTOKEN_KEY = 'accessToken';
+    const REFRESHTOKEN_KEY = 'refreshToken';
     async function getCategoryList() {
         const res = await getCategoryItem();
         setCategoryItems(res);
     }
 
     async function handleCategory() {
-        const createCategoryData = await createCategory(activeCategoriesData);
-        console.log(createCategoryData);
+        const tokenData = await SignUpService({
+            email: profileValue.email,
+            categoryIds: activeCategoriesData,
+            nickName: profileValue.nickname,
+            provider,
+            providerId,
+        });
+        setAuthStorage(
+            ACCESSTOKEN_KEY,
+            tokenData.accessToken,
+            REFRESHTOKEN_KEY,
+            tokenData.refreshToken,
+        );
     }
-
     const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setCategorySearchValue(value);

@@ -3,7 +3,7 @@ import axios from 'axios';
 //const INITIAL_TOKEN = 'accessToken';
 //const getToken = localStorage.getItem(INITIAL_TOKEN);
 
-const baseURL = import.meta.env.VITE_HTTP_API_URL;
+const baseURL = import.meta.env.VITE_APP_BACK_END_LOCAL;
 
 const HttpClient = axios.create({
     baseURL: baseURL,

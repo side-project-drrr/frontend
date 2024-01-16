@@ -1,18 +1,14 @@
-import { useLocation } from 'react-router-dom';
 import Aside from '../components/aside/Aside';
 import CategoryList from '../components/category/CategoryList';
 import { subscribe, unsubscribe } from '../webpush/main';
-import SignUp from '../components/signup/Signup';
+import SignUp from '../components/signup/SignUp';
 import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 
 export default function MainPage() {
-    // 백엔드에서 받아온 providerId 받아온 값
-    const { state } = useLocation();
-    console.log(state);
-
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
+
     const handleModalOpen = useSetRecoilState(modalOpenState);
     const handleSignupNext = () => {
         // 회원가입 모달에서 다음 버튼을 클릭했을 때 실행되는 로직

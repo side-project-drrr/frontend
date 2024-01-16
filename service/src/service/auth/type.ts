@@ -8,7 +8,10 @@ export interface IAuthProps {
 
 export interface IAuthEmailProps {
     providerId: string;
-    email: string;
+    email: {
+        email: string;
+        nickname?: string;
+    };
 }
 
 export interface IAuthEmailVaildationProps {

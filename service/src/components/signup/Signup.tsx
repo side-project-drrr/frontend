@@ -4,7 +4,7 @@ import axios from 'axios';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/base/Button';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { IParentProps, ValueProps } from './type';
 import { style } from '../../style/modalBox';
@@ -13,6 +13,9 @@ import { InputTextField } from '../../style/inputText';
 import { modalOpenState } from '../../recoil/atom/modalOpenState';
 import IconButton from '@mui/material/IconButton';
 import send from '../../assets/send.webp';
+import { userInformationState } from '../../recoil/atom/userInformationState';
+import { SignUpEmail } from '../../service/auth/SocialService';
+import { providerIdState } from '../../recoil/atom/providerIdState';
 //import { SignUpEmailValidation } from '../../service/auth/SocialService';
 
 const msg = {
@@ -27,19 +30,19 @@ export default function SignUp({ onSignupNext }: IParentProps) {
         nickname: '',
         email: '',
     });
-    const [profileValue, setProfileValue] = useState<ValueProps>({
-        nickname: '',
-        email: '',
-    });
+
     const [count, setCount] = useState(0);
     const [buttonDisabled, setButtonDisabled] = useState(false);
     // const navigate = useNavigate();
-    // const location = useLocation();
     const [modalOpen, setModalOepn] = useRecoilState(modalOpenState);
+    const [profileValue, setProfileValue] = useRecoilState(userInformationState);
+    const providerId = useRecoilValue(providerIdState);
+
     // async function handleEmailVaildationRender(value: string) {
     //const emailCodeData = SignUpEmailValidation(providerId, value);
     //     console.log(emailCodeData);
     // }
+
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setProfileValue(prevData => ({
@@ -47,6 +50,7 @@ export default function SignUp({ onSignupNext }: IParentProps) {
             [name]: value,
         }));
     };
+
     const validationEmailChecked = (value: string) => {
         let regex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
         if (!regex.test(value)) {
@@ -57,7 +61,7 @@ export default function SignUp({ onSignupNext }: IParentProps) {
             return false;
         }
     };
-    const handleEmailCertificationButton = () => {
+    const handleEmailCertificationButton = async () => {
         const emailValidationState = validationEmailChecked(profileValue.email);
         if (emailValidationState === undefined) {
             setErrorMsg({
@@ -66,11 +70,8 @@ export default function SignUp({ onSignupNext }: IParentProps) {
             });
 
             setCount(180);
-            //백엔드 api로 이메일 보내기
-            axios.post('/auth/email', {
-                providerId: '1234',
-                email: `${profileValue.email}`,
-            });
+            const data = await SignUpEmail({ providerId, email: { email: profileValue.email } });
+            console.log(data + '인증코드');
         } else {
             setErrorMsg(prevErrorMsg => ({
                 ...prevErrorMsg,
@@ -80,7 +81,6 @@ export default function SignUp({ onSignupNext }: IParentProps) {
     };
     const handleEmailAuthenticationChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        //const data = handleEmailVaildationRender(value);
         //백엔드로 코드 보내기
         axios
             .post('/auth/email/verification', {
@@ -117,21 +117,6 @@ export default function SignUp({ onSignupNext }: IParentProps) {
                 nickname: msg.nickname,
             }));
             return;
-        } else {
-            //그렇지 않다면 api 호출
-            // axios
-            //     .post('/auth/signup', {
-            //         email: `${profileValue.email}`,
-            //         categoryIds: [1],
-            //         nickname: `${profileValue.nickname}`,
-            //         provider: `${location.state.state}`,
-            //         providerId: `${location.state.providerId}`,
-            //     })
-            //     .then(res => {
-            //         localStorage.setItem('accessToken', res.data.accessToken);
-            //         localStorage.setItem('refreshToken', res.data.refreshToken);
-            //         navigate('/');
-            //     });
         }
     };
 
