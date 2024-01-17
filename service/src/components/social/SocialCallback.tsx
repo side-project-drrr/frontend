@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { SocialService, SignInService } from '../../service/auth/SocialService';
 import { modalOpenState } from '../../recoil/atom/modalOpenState';
-import { useSetRecoilState } from 'recoil';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { setAuthStorage } from '../../repository/AuthRepository';
 
 export default function SocialCallback() {
     const [didMount, setDidMount] = useState(false);
-    const setProviderState = useSetRecoilState(providerIdState);
+
+    //const setProviderState = useSetRecoilState(providerIdState);
+    const [provider, setProvider] = useRecoilState(providerIdState);
     const code = new URL(document.location.toString()).searchParams.get('code');
     const setModalOpen = useSetRecoilState(modalOpenState);
 
@@ -19,12 +21,10 @@ export default function SocialCallback() {
     const REFRESHTOKEN_KEY = 'refreshToken';
     const navigate = useNavigate();
 
-    const handleKakaoLogin = async () => {
-        const data = await SocialService(code, state);
-        setProviderState(data.providerId);
-        if (data.isRegistered) {
+    async function socialLoginRender(isRegistered: string) {
+        if (isRegistered) {
             navigate('/');
-            const authData = await SignInService(data.providerId);
+            const authData = await SignInService(provider);
             setAuthStorage(
                 ACCESSTOKEN_KEY,
                 authData.accessToken,
@@ -35,6 +35,12 @@ export default function SocialCallback() {
             navigate('/');
             setModalOpen(true);
         }
+    }
+
+    const handleKakaoLogin = async () => {
+        const data = await SocialService(code, state);
+        setProvider(data.providerId);
+        socialLoginRender(data.isRegistered);
     };
 
     useEffect(() => {

@@ -1,16 +1,16 @@
+import { useEffect, useState, useMemo } from 'react';
+import { useRecoilValue } from 'recoil';
+
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import { useEffect, useState, useMemo } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+
 import CategoryItem from '../category/CategoryItem';
 import { CategoryProps } from './type';
 import { getCategoryItem } from '../../service/CategoryService';
-//import { getAuthStorage } from '../../repository/AuthRepository';
-import { useRecoilValue } from 'recoil';
 import { userInformationState } from '../../recoil/atom/userInformationState';
-
-import { providerState } from '../../recoil/atom/providerstate';
+//import { providerState } from '../../recoil/atom/providerstate';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { SignUpService } from '../../service/auth/SocialService';
 import { setAuthStorage } from '../../repository/AuthRepository';
@@ -34,21 +34,23 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [activeCategoriesData, setActiveCategoriesData] = useState<string[]>([]); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
     const profileValue = useRecoilValue(userInformationState);
-    const provider = useRecoilValue(providerState);
+    //const provider = useRecoilValue(providerState);
     const providerId = useRecoilValue(providerIdState);
+    const provider = localStorage.getItem('provider');
     const ACCESSTOKEN_KEY = 'accessToken';
     const REFRESHTOKEN_KEY = 'refreshToken';
+    const stringConvert = provider?.toString();
+    console.log(activeCategoriesData);
     async function getCategoryList() {
-        const res = await getCategoryItem();
-        setCategoryItems(res);
+        const categoryData = await getCategoryItem();
+        setCategoryItems(categoryData);
     }
-
-    async function handleCategory() {
+    async function signupRender() {
         const tokenData = await SignUpService({
             email: profileValue.email,
             categoryIds: activeCategoriesData,
             nickName: profileValue.nickname,
-            provider,
+            provider: stringConvert,
             providerId,
         });
         setAuthStorage(
@@ -58,6 +60,11 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             tokenData.refreshToken,
         );
     }
+
+    async function handleCategory() {
+        signupRender();
+    }
+
     const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setCategorySearchValue(value);
@@ -66,7 +73,9 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const categorySearchItemList = useMemo(() => {
         if (categorySearchValue) {
             return categoryItems.filter(item =>
-                item.title.toLocaleUpperCase().startsWith(categorySearchValue.toLocaleUpperCase()),
+                item.categoryName
+                    .toLocaleUpperCase()
+                    .startsWith(categorySearchValue.toLocaleUpperCase()),
             );
         }
         return categoryItems;
@@ -102,7 +111,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                             <CategoryItem
                                 key={categoryitem.id}
                                 id={categoryitem.id}
-                                title={categoryitem.title}
+                                title={categoryitem.categoryName}
                                 setActiveCategoriesData={setActiveCategoriesData}
                                 activeCategoriesData={activeCategoriesData}
                             />

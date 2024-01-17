@@ -2,7 +2,7 @@ export interface IAuthProps {
     email: string;
     categoryIds: string[];
     nickName: string;
-    provider: string;
+    provider: string | undefined;
     providerId: string;
 }
 

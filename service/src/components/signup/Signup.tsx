@@ -1,22 +1,19 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-//import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/base/Button';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import IconButton from '@mui/material/IconButton';
 
 import { IParentProps, ValueProps } from './type';
 import { style } from '../../style/modalBox';
 import { InputTextField } from '../../style/inputText';
-
 import { modalOpenState } from '../../recoil/atom/modalOpenState';
-import IconButton from '@mui/material/IconButton';
 import send from '../../assets/send.webp';
 import { userInformationState } from '../../recoil/atom/userInformationState';
-import { SignUpEmail } from '../../service/auth/SocialService';
+import { SignUpEmail, SignUpEmailValidation } from '../../service/auth/SocialService';
 import { providerIdState } from '../../recoil/atom/providerIdState';
-//import { SignUpEmailValidation } from '../../service/auth/SocialService';
 
 const msg = {
     email: '올바른 이메일 형식이 아닙니다.',
@@ -33,15 +30,32 @@ export default function SignUp({ onSignupNext }: IParentProps) {
 
     const [count, setCount] = useState(0);
     const [buttonDisabled, setButtonDisabled] = useState(false);
-    // const navigate = useNavigate();
     const [modalOpen, setModalOepn] = useRecoilState(modalOpenState);
     const [profileValue, setProfileValue] = useRecoilState(userInformationState);
     const providerId = useRecoilValue(providerIdState);
 
-    // async function handleEmailVaildationRender(value: string) {
-    //const emailCodeData = SignUpEmailValidation(providerId, value);
-    //     console.log(emailCodeData);
-    // }
+    async function emailVaildationRender(value: string) {
+        const emailStatusData = await SignUpEmailValidation({
+            providerId,
+            verificationCode: value,
+        });
+        if (emailStatusData.isVerified) {
+            setErrorMsg(prevErrorMsg => ({
+                ...prevErrorMsg,
+                email: msg.emailsuccess,
+            }));
+            setButtonDisabled(true);
+        } else {
+            setErrorMsg(prevErrorMsg => ({
+                ...prevErrorMsg,
+                email: msg.emailfailed,
+            }));
+        }
+    }
+
+    async function emailCodeRender() {
+        await SignUpEmail({ providerId, email: { email: profileValue.email } });
+    }
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -68,10 +82,8 @@ export default function SignUp({ onSignupNext }: IParentProps) {
                 nickname: '',
                 email: '',
             });
-
             setCount(180);
-            const data = await SignUpEmail({ providerId, email: { email: profileValue.email } });
-            console.log(data + '인증코드');
+            emailCodeRender();
         } else {
             setErrorMsg(prevErrorMsg => ({
                 ...prevErrorMsg,
@@ -79,28 +91,9 @@ export default function SignUp({ onSignupNext }: IParentProps) {
             }));
         }
     };
-    const handleEmailAuthenticationChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleEmailAuthenticationChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        //백엔드로 코드 보내기
-        axios
-            .post('/auth/email/verification', {
-                providerId: '1234',
-                verificationCode: `${value}`,
-            })
-            .then(res => {
-                if (res.data.isVerified) {
-                    setErrorMsg(prevErrorMsg => ({
-                        ...prevErrorMsg,
-                        email: msg.emailsuccess,
-                    }));
-                    setButtonDisabled(true);
-                } else {
-                    setErrorMsg(prevErrorMsg => ({
-                        ...prevErrorMsg,
-                        email: msg.emailfailed,
-                    }));
-                }
-            });
+        emailVaildationRender(value);
     };
 
     const handleSignup = (profileValue: ValueProps) => {
