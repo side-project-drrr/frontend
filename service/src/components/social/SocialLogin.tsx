@@ -27,7 +27,7 @@ export default function SocialLogin({ state }: IProps) {
     const locationUrl = (url: string) => {
         window.location.assign(url);
     };
-
+    console.log(456);
     return (
         <div>
             <button

@@ -3,12 +3,16 @@ import CategoryList from '../components/category/CategoryList';
 import { subscribe, unsubscribe } from '../webpush/main';
 import SignUp from '../components/signup/SignUp';
 import { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
+import { providerIdState } from '../recoil/atom/providerIdState';
+//import { useLocation } from 'react-router-dom';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
-
+    //const data = useLocation();
+    const data1 = useRecoilValue(providerIdState);
+    console.log(data1);
     const handleModalOpen = useSetRecoilState(modalOpenState);
     const handleSignupNext = () => {
         // 회원가입 모달에서 다음 버튼을 클릭했을 때 실행되는 로직

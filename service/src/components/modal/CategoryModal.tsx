@@ -31,7 +31,7 @@ const style = {
 function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [didMount, setDidmount] = useState(false);
     const [categoryItems, setCategoryItems] = useState<any[]>([]); //전체 카테고리 리스트
-    const [activeCategoriesData, setActiveCategoriesData] = useState<string[]>([]); // 카테고리 선택
+    const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
     const profileValue = useRecoilValue(userInformationState);
     //const provider = useRecoilValue(providerState);
@@ -40,7 +40,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const ACCESSTOKEN_KEY = 'accessToken';
     const REFRESHTOKEN_KEY = 'refreshToken';
     const stringConvert = provider?.toString();
-    console.log(activeCategoriesData);
+    console.log(providerId);
     async function getCategoryList() {
         const categoryData = await getCategoryItem();
         setCategoryItems(categoryData);

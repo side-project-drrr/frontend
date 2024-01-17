@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 import { SocialService, SignInService } from '../../service/auth/SocialService';
 import { modalOpenState } from '../../recoil/atom/modalOpenState';
@@ -10,27 +10,28 @@ import { setAuthStorage } from '../../repository/AuthRepository';
 export default function SocialCallback() {
     const [didMount, setDidMount] = useState(false);
 
-    //const setProviderState = useSetRecoilState(providerIdState);
-    const [provider, setProvider] = useRecoilState(providerIdState);
+    const setProviderState = useSetRecoilState(providerIdState);
     const code = new URL(document.location.toString()).searchParams.get('code');
     const setModalOpen = useSetRecoilState(modalOpenState);
-
     const location = useLocation();
     const state = location.pathname.split('/')[1];
     const ACCESSTOKEN_KEY = 'accessToken';
     const REFRESHTOKEN_KEY = 'refreshToken';
     const navigate = useNavigate();
 
-    async function socialLoginRender(isRegistered: string) {
+    async function socialLoginRender(isRegistered: string, providerId: string) {
+        // 회원가입은 되거든
+        // 로그인이 안됨.
         if (isRegistered) {
-            navigate('/');
-            const authData = await SignInService(provider);
+            const authData = await SignInService(providerId);
             setAuthStorage(
                 ACCESSTOKEN_KEY,
                 authData.accessToken,
                 REFRESHTOKEN_KEY,
                 authData.refreshToken,
             );
+            setProviderState(providerId);
+            navigate('/');
         } else {
             navigate('/');
             setModalOpen(true);
@@ -39,8 +40,7 @@ export default function SocialCallback() {
 
     const handleKakaoLogin = async () => {
         const data = await SocialService(code, state);
-        setProvider(data.providerId);
-        socialLoginRender(data.isRegistered);
+        socialLoginRender(data.isRegistered, data.providerId);
     };
 
     useEffect(() => {

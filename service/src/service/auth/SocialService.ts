@@ -4,6 +4,7 @@ import { IAuthProps, IAuthEmailProps, IAuthEmailVaildationProps } from './type';
 export const SocialService = async (code: string | null, state: string) => {
     try {
         const res = await HttpClient.get(`/auth/oauth2/profile?code=${code}&state=${state}`);
+        console.log('api');
         return res.data;
     } catch (error) {
         console.error(error);
@@ -31,7 +32,7 @@ export async function SignUpService({
     try {
         const res = await HttpClient.post(`/auth/signup`, {
             email: `${email}`,
-            categoryIds: `${categoryIds}`,
+            categoryIds: categoryIds.map(Number),
             nickname: `${nickName}`,
             provider: `${provider}`,
             providerId: `${providerId}`,
