@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -10,10 +10,11 @@ import CategoryItem from '../category/CategoryItem';
 import { CategoryProps } from './type';
 import { getCategoryItem } from '../../service/CategoryService';
 import { userInformationState } from '../../recoil/atom/userInformationState';
-//import { providerState } from '../../recoil/atom/providerstate';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { SignUpService } from '../../service/auth/SocialService';
 import { setAuthStorage } from '../../repository/AuthRepository';
+import { getProvider } from '../../repository/ProviderRepository';
+import { modalOpenState } from '../../recoil/atom/modalOpenState';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -34,13 +35,12 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
     const profileValue = useRecoilValue(userInformationState);
-    //const provider = useRecoilValue(providerState);
+    const setModalOpen = useSetRecoilState(modalOpenState);
     const providerId = useRecoilValue(providerIdState);
-    const provider = localStorage.getItem('provider');
+    const provider = getProvider('provider');
     const ACCESSTOKEN_KEY = 'accessToken';
     const REFRESHTOKEN_KEY = 'refreshToken';
     const stringConvert = provider?.toString();
-    console.log(providerId);
     async function getCategoryList() {
         const categoryData = await getCategoryItem();
         setCategoryItems(categoryData);
@@ -59,6 +59,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             REFRESHTOKEN_KEY,
             tokenData.refreshToken,
         );
+        setModalOpen(false);
     }
 
     async function handleCategory() {

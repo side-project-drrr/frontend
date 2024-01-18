@@ -20,8 +20,6 @@ export default function SocialCallback() {
     const navigate = useNavigate();
 
     async function socialLoginRender(isRegistered: string, providerId: string) {
-        // 회원가입은 되거든
-        // 로그인이 안됨.
         if (isRegistered) {
             const authData = await SignInService(providerId);
             setAuthStorage(
@@ -34,6 +32,7 @@ export default function SocialCallback() {
             navigate('/');
         } else {
             navigate('/');
+            setProviderState(providerId);
             setModalOpen(true);
         }
     }

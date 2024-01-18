@@ -14,6 +14,7 @@ import send from '../../assets/send.webp';
 import { userInformationState } from '../../recoil/atom/userInformationState';
 import { SignUpEmail, SignUpEmailValidation } from '../../service/auth/SocialService';
 import { providerIdState } from '../../recoil/atom/providerIdState';
+import useDebounce from '../../hooks/useDebounce';
 
 const msg = {
     email: '올바른 이메일 형식이 아닙니다.',
@@ -32,24 +33,30 @@ export default function SignUp({ onSignupNext }: IParentProps) {
     const [buttonDisabled, setButtonDisabled] = useState(false);
     const [modalOpen, setModalOepn] = useRecoilState(modalOpenState);
     const [profileValue, setProfileValue] = useRecoilState(userInformationState);
+    const [emailCodeValue, setEmailCodeValue] = useState('');
     const providerId = useRecoilValue(providerIdState);
+    const debouncedInputValue = useDebounce(emailCodeValue, { delay: 500 });
 
-    async function emailVaildationRender(value: string) {
-        const emailStatusData = await SignUpEmailValidation({
-            providerId,
-            verificationCode: value,
-        });
-        if (emailStatusData.isVerified) {
-            setErrorMsg(prevErrorMsg => ({
-                ...prevErrorMsg,
-                email: msg.emailsuccess,
-            }));
-            setButtonDisabled(true);
-        } else {
-            setErrorMsg(prevErrorMsg => ({
-                ...prevErrorMsg,
-                email: msg.emailfailed,
-            }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    async function emailVaildationRender() {
+        if (emailCodeValue !== '') {
+            const emailStatusData = await SignUpEmailValidation({
+                providerId,
+                verificationCode: emailCodeValue,
+            });
+            if (emailStatusData.isVerified) {
+                setErrorMsg(prevErrorMsg => ({
+                    ...prevErrorMsg,
+                    email: msg.emailsuccess,
+                }));
+                setButtonDisabled(true);
+            } else {
+                setErrorMsg(prevErrorMsg => ({
+                    ...prevErrorMsg,
+                    email: msg.emailfailed,
+                }));
+                setButtonDisabled(false);
+            }
         }
     }
 
@@ -93,7 +100,7 @@ export default function SignUp({ onSignupNext }: IParentProps) {
     };
     const handleEmailAuthenticationChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        emailVaildationRender(value);
+        setEmailCodeValue(value);
     };
 
     const handleSignup = (profileValue: ValueProps) => {
@@ -120,19 +127,22 @@ export default function SignUp({ onSignupNext }: IParentProps) {
     };
 
     useEffect(() => {
-        const id = setInterval(() => {
-            setCount(count => count - 1);
+        const id = setTimeout(() => {
+            if (count > 0) {
+                setCount(prevCount => prevCount - 1);
+            }
         }, 1000);
 
-        if (count === 0) {
-            clearInterval(id);
-        }
-        return () => clearInterval(id);
+        return () => clearTimeout(id);
     }, [count]);
 
     const handleNextClick = () => {
         onSignupNext();
     };
+    useEffect(() => {
+        emailVaildationRender();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedInputValue]);
 
     const handleClose = () => setModalOepn(false);
     return (
@@ -209,6 +219,7 @@ export default function SignUp({ onSignupNext }: IParentProps) {
                                             }
                                             placeholder="인증 코드"
                                             aria-label="인증 코드"
+                                            inputProps={{ maxLength: 6 }}
                                         />
                                         <p className="absolute text-black top-4 right-4">
                                             {formatTime(count)}
