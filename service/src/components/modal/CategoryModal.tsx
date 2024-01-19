@@ -77,7 +77,7 @@ function CategoryModal({ handleClose, onModalOpen }: CategoryProps) {
                         />
                     </div>
                     <ul className="flex flex-wrap justify-around w-full h-[25vh] gap-4 overflow-y-scroll">
-                        {categorySearchItemList.map(categoryitem => (
+                        {categorySearchItemList?.map(categoryitem => (
                             <CategoryItem
                                 key={categoryitem.id}
                                 id={categoryitem.id}

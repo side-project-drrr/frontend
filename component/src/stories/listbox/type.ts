@@ -7,3 +7,11 @@ export interface Props {
         views: number;
     }[];
 }
+
+export interface ItemProps {
+    id: number;
+    title: string;
+    content: string;
+    bookmark: number;
+    views: number;
+}
