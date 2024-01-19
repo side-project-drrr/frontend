@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -14,7 +14,7 @@ import { providerIdState } from '../../recoil/atom/providerIdState';
 import { SignUpService } from '../../service/auth/SocialService';
 import { setAuthStorage } from '../../repository/AuthRepository';
 import { getProvider } from '../../repository/ProviderRepository';
-import { modalOpenState } from '../../recoil/atom/modalOpenState';
+import { profileImageUrlState } from '../../recoil/atom/profileImageUrlState';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -35,12 +35,13 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
     const profileValue = useRecoilValue(userInformationState);
-    const setModalOpen = useSetRecoilState(modalOpenState);
+    //const setModalOpen = useSetRecoilState(modalOpenState);
     const providerId = useRecoilValue(providerIdState);
     const provider = getProvider('provider');
     const ACCESSTOKEN_KEY = 'accessToken';
     const REFRESHTOKEN_KEY = 'refreshToken';
     const stringConvert = provider?.toString();
+    const profileImageUrl = useRecoilValue(profileImageUrlState);
     async function getCategoryList() {
         const categoryData = await getCategoryItem();
         setCategoryItems(categoryData);
@@ -52,6 +53,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             nickName: profileValue.nickname,
             provider: stringConvert,
             providerId,
+            profileImageUrl,
         });
         setAuthStorage(
             ACCESSTOKEN_KEY,
@@ -59,11 +61,12 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             REFRESHTOKEN_KEY,
             tokenData.refreshToken,
         );
-        setModalOpen(false);
     }
 
     async function handleCategory() {
         signupRender();
+        onClose();
+        alert('drrr에 오신것을 환영합니다.');
     }
 
     const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,6 +95,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             getCategoryList();
         }
     }, [didMount]);
+
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>

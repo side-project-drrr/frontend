@@ -27,6 +27,7 @@ export async function SignUpService({
     nickName,
     provider,
     providerId,
+    profileImageUrl,
 }: IAuthProps) {
     try {
         const res = await HttpClient.post(`/auth/signup`, {
@@ -35,6 +36,7 @@ export async function SignUpService({
             nickname: `${nickName}`,
             provider: `${provider}`,
             providerId: `${providerId}`,
+            profileImageUrl: `${profileImageUrl}`,
         });
         return res.data;
     } catch (error) {

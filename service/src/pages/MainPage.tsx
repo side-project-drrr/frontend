@@ -1,11 +1,10 @@
 import Aside from '../components/aside/Aside';
 import CategoryList from '../components/category/CategoryList';
 import { subscribe, unsubscribe } from '../webpush/main';
-import SignUp from '../components/signup/SignUpForm';
 import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
-//import { providerIdState } from '../recoil/atom/providerIdState';
+import SignUpModal from '../components/signup/SignUpModal';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -38,7 +37,7 @@ export default function MainPage() {
                 <div>
                     <button onClick={subscribe}>구독</button>
                     <button onClick={unsubscribe}>구독 취소</button>
-                    <SignUp onSignupNext={handleSignupNext} />
+                    <SignUpModal onSignupNext={handleSignupNext} />
                 </div>
             </div>
 
