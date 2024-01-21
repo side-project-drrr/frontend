@@ -1,29 +1,52 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 
-import { SocialServcie } from '../../service/SocialService';
-//import SignUpPage from '../../pages/SignUpPage';
+import { SocialService, SignInService } from '../../service/auth/SocialService';
+import { modalOpenState } from '../../recoil/atom/modalOpenState';
+import { providerIdState } from '../../recoil/atom/providerIdState';
+import { setAuthStorage } from '../../repository/AuthRepository';
+import { profileImageUrlState } from '../../recoil/atom/profileImageUrlState';
 
 export default function SocialCallback() {
     const [didMount, setDidMount] = useState(false);
 
+    const setProviderIdState = useSetRecoilState(providerIdState);
     const code = new URL(document.location.toString()).searchParams.get('code');
-
+    const setModalOpen = useSetRecoilState(modalOpenState);
+    const setImgUrl = useSetRecoilState(profileImageUrlState);
     const location = useLocation();
     const state = location.pathname.split('/')[1];
-
+    const ACCESSTOKEN_KEY = 'accessToken';
+    const REFRESHTOKEN_KEY = 'refreshToken';
     const navigate = useNavigate();
 
-    const handleKakaoLogin = async () => {
-        const data = await SocialServcie(code, state);
-        console.log(data);
-        if (data.isRegistered) {
+    async function socialLoginRender(
+        isRegistered: string,
+        providerId: string,
+        profileImageUrl: string,
+    ) {
+        if (isRegistered) {
+            const authData = await SignInService(providerId);
+            setAuthStorage(
+                ACCESSTOKEN_KEY,
+                authData.accessToken,
+                REFRESHTOKEN_KEY,
+                authData.refreshToken,
+            );
+            setProviderIdState(providerId);
             navigate('/');
         } else {
             navigate('/');
-
-            navigate('/signup', { state: { providerId: data.providerId, state } });
+            setProviderIdState(providerId);
+            setImgUrl(profileImageUrl);
+            setModalOpen(true);
         }
+    }
+
+    const handleKakaoLogin = async () => {
+        const data = await SocialService(code, state);
+        socialLoginRender(data.isRegistered, data.providerId, data.profileImageUrl);
     };
 
     useEffect(() => {

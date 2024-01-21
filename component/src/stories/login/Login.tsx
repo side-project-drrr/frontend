@@ -5,11 +5,6 @@ import Modal from '@mui/material/Modal';
 import { BsPersonCircle } from 'react-icons/bs';
 import { useState } from 'react';
 
-// interface LoginProps {
-//     isOpen: boolean;
-//     onHandleClose: () => void;
-// }
-
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',

@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { Button } from '@mui/base/Button';
-
+import { CategoryProps } from '../modal/type';
 import CategoryModal from '../modal/CategoryModal';
 
 const mock = [
@@ -9,17 +8,13 @@ const mock = [
     { id: 3, content: 'Javascript' },
 ];
 
-export default function CategoryList() {
-    const [open, setIsOpen] = useState(false);
-    const handleOpen = () => setIsOpen(true);
-    const handleClose = () => setIsOpen(false);
-
+export default function CategoryList({ onHandleModalOpen, onModalOpen, onClose }: CategoryProps) {
     return (
         <>
             <ul className="flex justify-around">
                 <Button
                     className="bg-[#E6F1FE] text-[#006FEE] w-28 h-7 text-center text-xs flex items-center justify-center"
-                    onClick={handleOpen}
+                    onClick={onHandleModalOpen}
                 >
                     추가
                 </Button>
@@ -32,7 +27,11 @@ export default function CategoryList() {
                     </li>
                 ))}
             </ul>
-            <CategoryModal handleClose={handleClose} onModalOpen={open} />
+            <CategoryModal
+                onClose={onClose}
+                onModalOpen={onModalOpen}
+                onHandleModalOpen={onHandleModalOpen}
+            />
         </>
     );
 }

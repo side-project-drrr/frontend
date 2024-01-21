@@ -1,0 +1,17 @@
+export function getAuthStorage(key: string) {
+    return localStorage.getItem(key);
+}
+
+export function setAuthStorage(
+    accessToken_key: string,
+    accessTokenValue: string,
+    refreshToken_key: string,
+    refreshValue: string,
+) {
+    localStorage.setItem(accessToken_key, accessTokenValue);
+    localStorage.setItem(refreshToken_key, refreshValue);
+}
+
+export function removeAuthStorage(key: string) {
+    localStorage.removeItem(key);
+}
