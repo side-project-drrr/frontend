@@ -148,6 +148,13 @@ Yarn Berry를 사용하면서 Node_modules의 문제점과 zero-install에 대�
 
 ---
 
+### 이메일 인증 시 onChange 입력 시 마다 api 호출 횟수 감소
+
+사용자 정보를 받는 과정에서 onChange evnet handler에서 입력시 마다 api가 호출되는 현상을 발견
+이를 해결하고자 debounce를 활용하여 API호출 감소를 통한 최적화
+
+---
+
 ### Category Modal
 
 CategoryModal에서 실시간으로 검색에 맞는 카테고리 표출
@@ -171,7 +178,7 @@ prop drilling을 해결하고자 Recoil 도입(동료와 회의를 통해 1deps 
 
 ### 적극적인 img -> Webp 사용
 
-png 파일을 Lighthouse 점수에 대비하여 Webp로 convert하여 사용
+png 파일을 Lighthouse 점수에 대비하여 Webp로 convert하여 사용함으로써 이미지 최적화
 
 ---
      
