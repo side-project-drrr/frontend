@@ -31,7 +31,7 @@
   ![React](https://img.shields.io/badge/React-18.2.0-1E90FF?logo=React)
   ![Vite](https://img.shields.io/badge/Vite-4.1.0-C8C8FF?logo=Vite)
   ![React-Router-Dom](https://img.shields.io/badge/react--router-6.14.1-CA4245?logo=reactRouter)
-  ![Tailwind-Css](https://img.shields.io/badge/Tailwind-Css%2Fcss-3.3.4-28A745?logo=Tailwind-Css)
+  ![tailwindcss](https://img.shields.io/badge/Tailwind-Css%2Fcss-3.3.4-06B6D4?logo=tailwindcss)
   ![Axios](https://img.shields.io/badge/axios-1.4.0-%23671DDF?logo=axios)
   ![Recoil](https://img.shields.io/badge/Recoil--0.7.7-1E90FF?logo=Recoil)
   ![Msw](https://img.shields.io/badge/Msw--2.0.3-FF8C8C?logo=Msw)
@@ -39,11 +39,11 @@
   ![Prettier](https://img.shields.io/badge/Prettier--2.8.8-483D8B?logo=Prettier)
   ![Typescript](https://img.shields.io/badge/Typescript--5.0.2-483D8B?logo=Typescript)
   ![Husky](https://img.shields.io/badgeHusky-8.0.3-483D8B?logo=Husky)
-  ![React-Testing-Library](https://img.shields.io/badge/React-Testing-Library--14.0.0-483D8B?logo=React-testing-library)
+  ![testinglibrary](https://img.shields.io/badge/testinglibrary--14.0.0-E33332?logo=testinglibrary)
   ![Yarn-Berry](https://img.shields.io/badge/Yarn-Berry--3.6.3-483D8B?logo=Yarn-Berry)
   ![Storybook](https://img.shields.io/badge/Storybook--7.4.0-483D8B?logo=Storybook)
-  ![Vitest](https://img.shields.io/badge/Vitest--0.34.4-483D8B?logo=Vitest)
-  ![Mui](https://img.shields.io/badge/Mui--5.14.20-483D8B?logo=Mui)
+  ![Vitest](https://img.shields.io/badge/Vitest--0.34.4-6E9F18?logo=Vitest)
+  ![Mui](https://img.shields.io/badge/Mui--5.14.20-007FFF?logo=Mui)
   
 
 ## 폴더 구조
