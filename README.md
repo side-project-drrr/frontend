@@ -31,21 +31,19 @@
   ![React](https://img.shields.io/badge/React-18.2.0-1E90FF?logo=React)
   ![Vite](https://img.shields.io/badge/Vite-4.1.0-C8C8FF?logo=Vite)
   ![React-Router-Dom](https://img.shields.io/badge/react--router-6.14.1-CA4245?logo=reactRouter)
-  ![Tailwind-Css](https://img.shields.io/badge/styled--components%2Fcss-1.12.0-28A745?logo=Tailwind-Css)
+  ![Tailwind-Css](https://img.shields.io/badge/Tailwind-Css%2Fcss-3.3.4-28A745?logo=Tailwind-Css)
   ![Axios](https://img.shields.io/badge/axios-1.4.0-%23671DDF?logo=axios)
   ![Recoil](https://img.shields.io/badge/Recoil--0.7.7-1E90FF?logo=Recoil)
-  ![Msw](https://img.shields.io/badge/Msw--1.1.0-FF8C8C?logo=Msw)
+  ![Msw](https://img.shields.io/badge/Msw--2.0.3-FF8C8C?logo=Msw)
   ![Eslint](https://img.shields.io/badge/Eslint--8.35.0-7B68EE?logo=Eslint)
   ![Prettier](https://img.shields.io/badge/Prettier--2.8.8-483D8B?logo=Prettier)
-  ![Typescript](https://img.shields.io/badge/Typescript--2.8.8-483D8B?logo=Typescript)
-  ![Husky](https://img.shields.io/badge/Typescript--2.8.8-483D8B?logo=Husky)
-  ![React-Testing-Library](https://img.shields.io/badge/Typescript--2.8.8-483D8B?logo=React-testing-library)
-  ![Yarn-Berry](https://img.shields.io/badge/Typescript--2.8.8-483D8B?logo=Yarn-Berry)
-  ![Storybook](https://img.shields.io/badge/Typescript--2.8.8-483D8B?logo=Storybook)
-  ![Vitest](https://img.shields.io/badge/Typescript--2.8.8-483D8B?logo=Vitest)
-  ![Mui](https://img.shields.io/badge/Typescript--2.8.8-483D8B?logo=Mui)
-  ![Git-Hook](https://img.shields.io/badge/Typescript--2.8.8-483D8B?logo=Git-Hook)
-  
+  ![Typescript](https://img.shields.io/badge/Typescript--5.0.2-483D8B?logo=Typescript)
+  ![Husky](https://img.shields.io/badgeHusky-8.0.3-483D8B?logo=Husky)
+  ![React-Testing-Library](https://img.shields.io/badge/React-Testing-Library--14.0.0-483D8B?logo=React-testing-library)
+  ![Yarn-Berry](https://img.shields.io/badge/Yarn-Berry--3.6.3-483D8B?logo=Yarn-Berry)
+  ![Storybook](https://img.shields.io/badge/Storybook--7.4.0-483D8B?logo=Storybook)
+  ![Vitest](https://img.shields.io/badge/Vitest--0.34.4-483D8B?logo=Vitest)
+  ![Mui](https://img.shields.io/badge/Mui--5.14.20-483D8B?logo=Mui)
   
 
 ## 폴더 구조
@@ -96,7 +94,7 @@ yarn run build
 <p><a href="https://www.figma.com/file/TqDxmThYhuWpAcLwf8aqrL/Untitled?type=design&node-id=0-1&mode=design&t=z2PJCoDWR593bNnL-0">Figma 링크 주소</a>
 </p>
 
-
+---
 
 <p><a href="https://shell-barnacle-687.notion.site/TEAM-A-67efc05b8c2244ad8e438f22da89423e">노션 회의록 링크</a></p>
 
