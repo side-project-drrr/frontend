@@ -38,7 +38,6 @@
   ![Eslint](https://img.shields.io/badge/Eslint--8.35.0-7B68EE?logo=Eslint)
   ![Prettier](https://img.shields.io/badge/Prettier--2.8.8-483D8B?logo=Prettier)
   ![Typescript](https://img.shields.io/badge/Typescript--5.0.2-3178C6?logo=Typescript)
-  ![Husky](https://img.shields.io/badgeHusky-8.0.3-483D8B?logo=Husky)
   ![testinglibrary](https://img.shields.io/badge/testinglibrary--14.0.0-E33332?logo=testinglibrary)
   ![Yarn-Berry](https://img.shields.io/badge/Yarn-Berry--3.6.3-483D8B?logo=Yarn-Berry)
   ![Storybook](https://img.shields.io/badge/Storybook--7.4.0-FF4785?logo=Storybook)
@@ -67,7 +66,8 @@
     ┣ 📂repository 
     ┣ 📂service
     ┣ 📂style    
-    ┣ 📂ThemeContext        
+    ┣ 📂ThemeContext
+    ┣ 📂webpush
     ┣ App.jsx
     ┣ Main.jsx
 📦test
@@ -118,7 +118,7 @@ yarn run build
 - 소셜 로그인
    - Github 로그인
    - KaKao 로그인
-   - 처음 서비스 이용시 선호 카테고릭 등록 및 간단한 이메일 인증
+   - 처음 서비스 이용시 선호 카테고리 등록 및 간단한 이메일 인증
 
 - Web Push 알림
    - 알림을 받은 기술 블로그 페이지
@@ -148,9 +148,28 @@ Yarn Berry를 사용하면서 Node_modules의 문제점과 zero-install에 대�
 
 ---
 
+### Api 호출은 어떤 컴포넌트에서 진행해야 하는가?
+
+해당 컴포넌트에서 API 호출 로직을 작성하게 좋은가? || 최상위 컴포넌트에서 API 호출 관련 로직을 작성하는게 좋은가?
+
+프론트엔드 관련 개발자 커뮤니티에 해당 내용 공유 후 토론 진행
+
+다양한 답변이 있었지만 대표적으로
+
+1. 이건 설계할 때 각 컴포넌트의 목적성 부여 여부에 따라 다를 것 같다.
+2. 분리
+3. 해당 컴포넌트
+4. Context Api 
+    - 불필요한 리렌더링 발생 및 Recoil을 활용하여 전역상태 관리
+
+- 해당 컴포넌트에서 관리 및 분리하여 사용
+
+---
+
+
 ### 이메일 인증 시 onChange 입력 시 마다 api 호출 횟수 감소
 
-사용자 정보를 받는 과정에서 onChange evnet handler에서 입력시 마다 api가 호출되는 현상을 발견
+사용자 정보를 받는 과정에서 onChange event handler에서 입력시 마다 api가 호출되는 현상을 발견
 이를 해결하고자 debounce를 활용하여 API호출 감소를 통한 최적화
 
 ---
@@ -159,13 +178,52 @@ Yarn Berry를 사용하면서 Node_modules의 문제점과 zero-install에 대�
 
 CategoryModal에서 실시간으로 검색에 맞는 카테고리 표출
 
-회의를 통해 카테고리 갯수가 많지 않아 프론트엔드에서 처리하기에 용이할 것으로 판정되어 프론트에서 처리
+회의를 통해 카테고리 갯수가 많지 않아 프론트엔드에서 처리하기에 용이할 것으로 판단되어 프론트에서 처리
 
 백엔드에서 데이터를 받아오는게 아닌 상황이라면 실시간으로 사용자에게 선호 카테고리 리스트를 보여주기에는 어렵다고 판단
 
 원본 배열에 대한 값이 검색을 하는 순간 없어지므로써 검색 한 후 다시 전체 카테고리 리스트를 보여주지 못했따 (filter를 사용함으로써 원본 배열을 훼손하기 때문에)
 
+
 함수를 사용하면서 리액트의 특성상 함수는 렌더링될때마다 재성생되기때문에 불필요한 렌더링이 일어나 메인이나 카테고리 모달에서 로딩 시간 지연(useMemo를 활용하여 해결)
+
+```
+const memoCategorySearchItemList = useMemo(() => {
+        if (categorySearchValue) {
+            return categoryItems.filter(item =>
+	                item.title.toLocaleUpperCase().startsWith(categorySearchValue.toLocaleUpperCase()),
+            );
+        }
+        return categoryItems;
+    }, [categorySearchValue, categoryItems]);
+```
+
+CategoryItem에서 사용자가 카테고리 선택 시 해당 카테고리 배경색 및 중복 카테고리 제거 하기
+
+```
+ const handleActiveCategoryItem = (e: React.MouseEvent<HTMLElement>) => {
+        const categoryItemId = e.currentTarget.id;
+        const set = new Set(activeCategoriesData);
+        if (set.has(categoryItemId)) {
+            const filterActiveCateogiesData = activeCategoriesData.filter(
+                categoryitem => categoryitem !== categoryItemId,
+            );
+            setActiveCategoriesData(filterActiveCateogiesData);
+            setCategoriesItemClicked(false);
+        } else {
+            if (activeCategoriesData.length < 10) {
+                setActiveCategoriesData(prev => [...prev, categoryItemId]);
+                setCategoriesItemClicked(true);
+            }
+        }
+    };
+    const getCategoryClickedItem = () => {
+        const set = new Set(activeCategoriesData);
+        if (set.has(id.toString())) {
+            setCategoriesItemClicked(true);
+        }
+    };
+```
 
 ---
 
@@ -179,6 +237,8 @@ prop drilling을 해결하고자 Recoil 도입(동료와 회의를 통해 1deps 
 ### 적극적인 img -> Webp 사용
 
 png 파일을 Lighthouse 점수에 대비하여 Webp로 convert하여 사용함으로써 이미지 최적화
+
+Google Ligthouse를 사용하기 전 Google에서 webp 사용을 권장하기 때문에 이미지 파일을 webp로 변환하여 사용
 
 ---
      
