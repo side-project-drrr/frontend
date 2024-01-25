@@ -6,19 +6,20 @@ import { unstable_useForkRef as useForkRef } from '@mui/utils';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClearIcon from '@mui/icons-material/Clear';
 import clsx from 'clsx';
-import axios from 'axios';
 import { topKeyword } from './type';
+import { getKeyword, getTopkeyword } from '../service/TopKeyword';
 
 const KeywordPage = forwardRef(function Autocomplete(
     props: UseAutocompleteProps<topKeyword, false, false, false>,
     ref: ForwardedRef<HTMLDivElement>,
 ) {
     const [keyword, setKeyword] = useState<topKeyword[] | null>(null);
-
+    async function getKeywordList() {
+        const res = await getKeyword();
+        setKeyword(res);
+    }
     useEffect(() => {
-        axios.get('http://localhost:8081/api/v1/categories').then(res => {
-            setKeyword(res.data);
-        });
+        getKeywordList();
     }, []);
     const {
         disableClearable = false,
@@ -147,10 +148,12 @@ const KeywordPage = forwardRef(function Autocomplete(
 
 export default function AutocompleteIntroduction() {
     const [topKeyword, setTopKeyword] = useState<topKeyword[]>([]);
+    async function getTopkeywords() {
+        const res = await getTopkeyword();
+        setTopKeyword(res);
+    }
     useEffect(() => {
-        axios.get('http://localhost:8081/api/v1/top/categories/10').then(res => {
-            setTopKeyword(res.data);
-        });
+        getTopkeywords();
     }, []);
     return (
         <KeywordPage
