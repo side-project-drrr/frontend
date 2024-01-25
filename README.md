@@ -96,14 +96,14 @@ yarn run build
 
 ---
 
-<p><a href="https://shell-barnacle-687.notion.site/TEAM-A-67efc05b8c2244ad8e438f22da89423e">노션 회의록 링크</a></p>
+<p><a href="https://artisan-jaehon.notion.site/dr-r-r-5bbfdb6fe24e474ca5ea802aeceabbc4?pvs=4">노션 회의록 링크</a></p>
 
 <br/>
 
 ## 서비스 소개
 
-다양한 기술 블로그를 사용자가 각자 선호하는 키워드들을 등록하여 한곳에서 모아서 볼 수 있도록 구현한 서비스
-매일 웹 푸시 알림을 통한 카테고리에 맞는 추천 게시글 push
+<p>다양한 기술 블로그를 사용자가 각자 선호하는 키워드들을 등록하여 한곳에서 모아서 볼 수 있도록 구현한 서비스</p>
+<p>매일 웹 푸시 알림을 통한 카테고리에 맞는 추천 게시글 push</p>
 
 ---
 
@@ -137,6 +137,8 @@ yarn run build
 ---
 
 ## 회고
+
+## Rondido
 
 ### Monorepo
 
@@ -241,6 +243,7 @@ png 파일을 Lighthouse 점수에 대비하여 Webp로 convert하여 사용함�
 Google Ligthouse를 사용하기 전 Google에서 webp 사용을 권장하기 때문에 이미지 파일을 webp로 변환하여 사용
 
 ---
-     
 
+
+---
 
