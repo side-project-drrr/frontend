@@ -20,8 +20,6 @@ export default function CategoryList({ onHandleModalOpen, onModalOpen, onClose }
             <ul className="flex items-center justify-around flex-1 w-10/12 mt-5">
                 <Button
                     className="bg-[#E6F1FE] text-[#006FEE] w-14 h-7 text-center text-xs flex items-center justify-center"
-                    onClick={handleOpen}
-                    className="bg-[#E6F1FE] text-[#006FEE] w-28 h-7 text-center text-xs flex items-center justify-center"
                     onClick={onHandleModalOpen}
                 >
                     <AddIcon />
@@ -35,11 +33,7 @@ export default function CategoryList({ onHandleModalOpen, onModalOpen, onClose }
                     </li>
                 ))}
             </ul>
-            <CategoryModal
-                onClose={onClose}
-                onModalOpen={onModalOpen}
-                onHandleModalOpen={onHandleModalOpen}
-            />
+            <CategoryModal onClose={onClose} onModalOpen={onModalOpen} />
         </>
     );
 }
