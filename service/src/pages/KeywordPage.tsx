@@ -9,6 +9,11 @@ import clsx from 'clsx';
 import { topKeyword } from './type';
 import { getKeyword, getTopkeyword } from '../service/TopKeyword';
 
+interface topKeyword {
+    id: number;
+    categoryName: string;
+}
+
 const KeywordPage = forwardRef(function Autocomplete(
     props: UseAutocompleteProps<topKeyword, false, false, false>,
     ref: ForwardedRef<HTMLDivElement>,
