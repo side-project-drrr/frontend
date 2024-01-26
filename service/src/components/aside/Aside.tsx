@@ -1,4 +1,4 @@
-import TopPost from '../layout/TopPost';
+import TopPost from './TopPost';
 import Carousel from '../carousel/Carousel';
 import TopKeywords from './TopKeywords';
 
