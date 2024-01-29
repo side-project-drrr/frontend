@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import FormGroup from '@mui/material/FormGroup';
 import Switch from '@mui/material/Switch';
-
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 import Aside from '../components/aside/Aside';
 import CategoryList from '../components/category/CategoryList';
@@ -10,6 +9,11 @@ import ListBox from '@monorepo/component/src/stories/listbox/Listbox';
 import SignUpModal from '../components/signup/SignUpModal';
 import { getAuthStorage } from '../repository/AuthRepository';
 import CardList from '../components/card/CardList';
+import { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { modalOpenState } from '../recoil/atom/modalOpenState';
+import SignUpModal from '../components/signup/SignUpModal';
+
 
 const items = [
     {
@@ -98,6 +102,8 @@ export default function MainPage() {
                         displayMode ? 'flex flex-col w-full gap-6' : 'flex w-full gap-6 flex-wrap'
                     }`}
                 >
+                <ListBox items={items} />
+                <div className="flex flex-col">
                     <div>
                         {isCategoryModalOpen && (
                             <CategoryList
@@ -118,11 +124,7 @@ export default function MainPage() {
                     </div>
                     {displayMode ? <ListBox items={items} /> : <CardList />}
                 </div>
-                <div className="flex ">
-                    <div>
-                        <SignUpModal onSignupNext={handleSignupNext} />
-                    </div>
-                </div>
+                    <SignUpModal onSignupNext={handleSignupNext} />
                 <aside className="block max-w-md pl-2 border-l-2 border-solid border-zinc-500">
                     <div className="w-[100%]">
                         <Aside />
