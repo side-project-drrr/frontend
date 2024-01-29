@@ -6,6 +6,11 @@ import { useSetRecoilState } from 'recoil';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
 
+import { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { modalOpenState } from '../recoil/atom/modalOpenState';
+import SignUpModal from '../components/signup/SignUpModal';
+
 const items = [
     {
         id: 1,
