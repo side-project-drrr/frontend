@@ -1,6 +1,10 @@
 import Aside from '../components/aside/Aside';
 import CategoryList from '../components/category/CategoryList';
 import ListBox from '@monorepo/component/src/stories/listbox/Listbox';
+import { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { modalOpenState } from '../recoil/atom/modalOpenState';
+import SignUpModal from '../components/signup/SignUpModal';
 
 const items = [
     {
@@ -52,11 +56,6 @@ const items = [
         views: 50000,
     },
 ];
-import { subscribe, unsubscribe } from '../webpush/main';
-import { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { modalOpenState } from '../recoil/atom/modalOpenState';
-import SignUpModal from '../components/signup/SignUpModal';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -76,30 +75,27 @@ export default function MainPage() {
 
     return (
         <div className="flex justify-between">
-            <div className="flex flex-col w-9/12 gap-6">
-                <CategoryList />
+            <div className="flex w-9/12 gap-6">
                 <ListBox items={items} />
-            <div className="flex flex-col">
-                <div>
-                    {isCategoryModalOpen && (
-                        <CategoryList
-                            onClose={handleCategoryModalClose}
-                            onModalOpen={isCategoryModalOpen}
-                            onHandleModalOpen={handleSignupNext}
-                        />
-                    )}
-                </div>
-                <div>
-                    <button onClick={subscribe}>구독</button>
-                    <button onClick={unsubscribe}>구독 취소</button>
+                <div className="flex flex-col">
+                    <div>
+                        {isCategoryModalOpen && (
+                            <CategoryList
+                                onClose={handleCategoryModalClose}
+                                onModalOpen={isCategoryModalOpen}
+                                onHandleModalOpen={handleSignupNext}
+                            />
+                        )}
+                    </div>
+
                     <SignUpModal onSignupNext={handleSignupNext} />
                 </div>
+                <aside className="block max-w-md pl-2 border-l-2 border-solid border-zinc-500">
+                    <div className="w-[100%]">
+                        <Aside />
+                    </div>
+                </aside>
             </div>
-            <aside className="block max-w-md pl-2 border-l-2 border-solid border-zinc-500">
-                <div className="w-[100%]">
-                    <Aside />
-                </div>
-            </aside>
         </div>
     );
 }
