@@ -1,6 +1,6 @@
 export interface TopKeywordProps {
     id: string;
-    categoryName: string;
+    name: string;
 }
 
 export interface ITopPostProps {

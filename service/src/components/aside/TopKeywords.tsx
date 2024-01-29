@@ -5,6 +5,7 @@ import { getTopkeyword } from '../../service/TopKeyword';
 export default function TopKeywords() {
     const [topkeywordsData, setTopkeywordsData] = useState<TopKeywordProps[]>([]);
     const [didMount, setDidMount] = useState<boolean>(false);
+
     async function getTopkeyDatas() {
         const topKeywordData = await getTopkeyword();
         setTopkeywordsData(topKeywordData);
@@ -18,7 +19,7 @@ export default function TopKeywords() {
             getTopkeyDatas();
         }
     }, [didMount]);
-
+    console.log(topkeywordsData);
     return (
         <div className="flex flex-col mt-5 ">
             <h3 aria-label="top keyword">Top Keywords</h3>
@@ -30,7 +31,7 @@ export default function TopKeywords() {
                             className="gap-4 bg-[#E6F1FE] text-[#006FEE] px-4 py-1.5 rounded-2xl flex-1 text-center text-base"
                             aria-label="top keyword item"
                         >
-                            {topkeyword.categoryName}
+                            {topkeyword.name}
                         </li>
                     ))}
                 </ul>
