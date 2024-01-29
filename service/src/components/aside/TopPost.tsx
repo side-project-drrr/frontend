@@ -1,29 +1,35 @@
-import { useEffect } from 'react';
-//import { getTopPostItemService } from '../../service/TopPostService';
-//import { ITopPostProps } from './type';
-
-const topContent = [{ id: 1, title: '123' }];
+import { useEffect, useState } from 'react';
+import { getTopPostItemService } from '../../service/TopPostService';
+import { ITopPostProps } from './type';
+import { Link } from 'react-router-dom';
 
 const TopPost = () => {
-    //const [topContent, setTopContent] = useState<ITopPostProps[]>([]);
+    const [topContent, setTopContent] = useState<ITopPostProps[]>([]);
     async function getTopContentRender() {
-        //const topContentData = await getTopPostItemService();
-        //      setTopContent();
+        const topContentData = await getTopPostItemService();
+        setTopContent(topContentData);
     }
     useEffect(() => {
         getTopContentRender();
     }, []);
+
     return (
-        <div className="my-2" aria-label="탑 게시글">
+        <div className="my-8" aria-label="탑 게시글">
             <h2 className="text-lg font-bold">Top {topContent.length}</h2>
-            <ol>
-                {topContent?.map(item => (
-                    <li key={item.id} className="py-2">
-                        <span className="mr-3">{Number(item) + 1}.</span>
-                        <p className="hover:cursor-pointer text-inherit hover:text-inherit hover:underline ">
-                            {item.title}
-                        </p>
-                    </li>
+            <ol className="flex flex-col">
+                {topContent?.map((content, index) => (
+                    <Link
+                        to={`/category/detail/${content.id}`}
+                        key={content.id}
+                        className="text-white"
+                    >
+                        <li className="flex py-2" id={String(content.id)}>
+                            <span className="mr-3">{index + 1}.</span>
+                            <p className="hover:cursor-pointer text-inherit hover:text-inherit hover:underline ">
+                                {content.title}
+                            </p>
+                        </li>
+                    </Link>
                 ))}
             </ol>
         </div>
