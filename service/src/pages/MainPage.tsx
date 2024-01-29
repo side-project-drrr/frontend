@@ -7,14 +7,7 @@ import Aside from '../components/aside/Aside';
 import CategoryList from '../components/category/CategoryList';
 import ListBox from '@monorepo/component/src/stories/listbox/Listbox';
 import SignUpModal from '../components/signup/SignUpModal';
-import { getAuthStorage } from '../repository/AuthRepository';
 import CardList from '../components/card/CardList';
-import { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { modalOpenState } from '../recoil/atom/modalOpenState';
-import SignUpModal from '../components/signup/SignUpModal';
-
-
 const items = [
     {
         id: 1,
@@ -76,11 +69,10 @@ export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
     const [displayMode, setDisplayMode] = useState(true);
     const handleModalOpen = useSetRecoilState(modalOpenState);
-    const TOKEN_KEY = 'accessToken';
-    const getToken = getAuthStorage(TOKEN_KEY);
+    //const TOKEN_KEY = 'accessToken';
+    //const getToken = getAuthStorage(TOKEN_KEY);
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
-    console.log(getToken);
     const handleSignupNext = () => {
         // 회원가입 모달에서 다음 버튼을 클릭했을 때 실행되는 로직
         // 여기서는 카테고리 모달을 열도록 함
@@ -93,17 +85,14 @@ export default function MainPage() {
         // 여기서는 카테고리 모달을 닫음
         setCategoryModalOpen(false);
     };
-    console.log(displayMode);
     return (
         <div className="flex justify-between">
-            <div className="flex w-9/12 gap-6">
+            <div className="flex w-10/12 gap-6">
                 <div
                     className={`${
-                        displayMode ? 'flex flex-col w-full gap-6' : 'flex w-full gap-6 flex-wrap'
+                        displayMode ? 'flex w-full gap-6 flex-col' : 'flex w-full gap-6 flex-wrap'
                     }`}
                 >
-                <ListBox items={items} />
-                <div className="flex flex-col">
                     <div>
                         {isCategoryModalOpen && (
                             <CategoryList
@@ -124,7 +113,7 @@ export default function MainPage() {
                     </div>
                     {displayMode ? <ListBox items={items} /> : <CardList />}
                 </div>
-                    <SignUpModal onSignupNext={handleSignupNext} />
+                <SignUpModal onSignupNext={handleSignupNext} />
                 <aside className="block max-w-md pl-2 border-l-2 border-solid border-zinc-500">
                     <div className="w-[100%]">
                         <Aside />
