@@ -1,6 +1,10 @@
 import Aside from '../components/aside/Aside';
 import CategoryList from '../components/category/CategoryList';
 import ListBox from '@monorepo/component/src/stories/listbox/Listbox';
+import { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { modalOpenState } from '../recoil/atom/modalOpenState';
+import SignUpModal from '../components/signup/SignUpModal';
 
 import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -76,7 +80,7 @@ export default function MainPage() {
 
     return (
         <div className="flex justify-between">
-            <div className="flex flex-col w-9/12 gap-6">
+            <div className="flex w-9/12 gap-6">
                 <ListBox items={items} />
                 <div className="flex flex-col">
                     <div>
