@@ -6,26 +6,28 @@ import { unstable_useForkRef as useForkRef } from '@mui/utils';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClearIcon from '@mui/icons-material/Clear';
 import clsx from 'clsx';
-import { topKeyword } from './type';
-import { getKeyword, getTopkeyword } from '../service/TopKeyword';
+import { getKeyword } from '../service/TopKeyword';
+import useDebounce from '../hooks/useDebounce';
 
 interface topKeyword {
     id: number;
     categoryName: string;
 }
-
+interface KeywordPageProps extends UseAutocompleteProps<topKeyword, false, false, false> {
+    getSearchText: (text: string) => void;
+}
 const KeywordPage = forwardRef(function Autocomplete(
-    props: UseAutocompleteProps<topKeyword, false, false, false>,
+    { getSearchText, ...props }: KeywordPageProps,
     ref: ForwardedRef<HTMLDivElement>,
 ) {
     const [keyword, setKeyword] = useState<topKeyword[] | null>(null);
+    const setSearchText = (text: string) => {
+        getSearchText(text);
+    };
     async function getKeywordList() {
         const res = await getKeyword();
         setKeyword(res);
     }
-    useEffect(() => {
-        getKeywordList();
-    }, []);
     const {
         disableClearable = false,
         disabled = false,
@@ -49,12 +51,19 @@ const KeywordPage = forwardRef(function Autocomplete(
         anchorEl,
         setAnchorEl,
         groupedOptions,
+        inputValue,
     } = useAutocomplete({
         ...props,
         componentName: 'BaseAutocompleteIntroduction',
         getOptionLabel: option => option?.categoryName ?? '',
     });
-
+    const debounceKeyword = useDebounce(inputValue, { delay: 200 });
+    useEffect(() => {
+        getKeywordList();
+    }, []);
+    useEffect(() => {
+        setSearchText(debounceKeyword);
+    }, [debounceKeyword]);
     const hasClearIcon = !disableClearable && !disabled && dirty && !readOnly;
 
     const rootRef = useForkRef(ref, setAnchorEl);
@@ -79,6 +88,7 @@ const KeywordPage = forwardRef(function Autocomplete(
                         disabled={disabled}
                         readOnly={readOnly}
                         {...getInputProps()}
+                        defaultValue={options?.[0]?.categoryName ?? ''}
                         className="text-sm leading-[1.5] text-gray-900 dark:text-gray-300 bg-inherit border-0 rounded-[inherit] px-3 py-2 outline-0 grow shrink-0 basis-auto"
                     />
                     {hasClearIcon && (
@@ -151,10 +161,16 @@ const KeywordPage = forwardRef(function Autocomplete(
     );
 });
 
-export default function AutocompleteIntroduction() {
+export default function KeywordMainPage() {
     const [topKeyword, setTopKeyword] = useState<topKeyword[]>([]);
+    const [searchText, setSearchText] = useState<String>('');
+
+    const getSearchText = (text: String) => {
+        setSearchText(text);
+    };
+
     async function getTopkeywords() {
-        const res = await getTopkeyword();
+        const res = await getKeyword();
         setTopKeyword(res);
     }
     useEffect(() => {
@@ -162,7 +178,8 @@ export default function AutocompleteIntroduction() {
     }, []);
     return (
         <KeywordPage
-            options={topKeyword}
+            getSearchText={getSearchText}
+            options={searchText.length > 0 ? topKeyword : []}
             isOptionEqualToValue={(option, value) => option.categoryName === value.categoryName}
         />
     );
