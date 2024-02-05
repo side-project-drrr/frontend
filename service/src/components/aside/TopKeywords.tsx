@@ -30,7 +30,7 @@ export default function TopKeywords() {
                             className="gap-4 bg-[#E6F1FE] text-[#006FEE] px-4 py-1.5 rounded-2xl flex-1 text-center text-base"
                             aria-label="top keyword item"
                         >
-                            {topkeyword.categoryName}
+                            {topkeyword.name}
                         </li>
                     ))}
                 </ul>
