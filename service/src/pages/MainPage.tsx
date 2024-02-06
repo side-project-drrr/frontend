@@ -8,6 +8,7 @@ import CategoryList from '../components/category/CategoryList';
 import ListBox from '@monorepo/component/src/stories/listbox/Listbox';
 import SignUpModal from '../components/signup/SignUpModal';
 import CardList from '../components/card/CardList';
+import { profileModalOpen } from '../recoil/atom/profileModalOpen';
 const items = [
     {
         id: 1,
@@ -69,8 +70,7 @@ export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
     const [displayMode, setDisplayMode] = useState(true);
     const handleModalOpen = useSetRecoilState(modalOpenState);
-    //const TOKEN_KEY = 'accessToken';
-    //const getToken = getAuthStorage(TOKEN_KEY);
+    const setProfileOpen = useSetRecoilState(profileModalOpen);
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
     const handleSignupNext = () => {
@@ -79,14 +79,16 @@ export default function MainPage() {
         setCategoryModalOpen(true);
         handleModalOpen(false);
     };
-
+    const handleProfileOpen = () => {
+        setProfileOpen(false);
+    };
     const handleCategoryModalClose = () => {
         // 카테고리 모달에서 닫기 버튼을 클릭했을 때 실행되는 로직
         // 여기서는 카테고리 모달을 닫음
         setCategoryModalOpen(false);
     };
     return (
-        <div className="flex justify-between">
+        <div className="flex justify-between" onClick={handleProfileOpen}>
             <div className="flex w-10/12 gap-6">
                 <div
                     className={`${

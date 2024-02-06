@@ -14,7 +14,7 @@ import { providerIdState } from '../../recoil/atom/providerIdState';
 import { SignUpService } from '../../service/auth/SocialService';
 import { setAuthStorage } from '../../repository/AuthRepository';
 import { getProvider } from '../../repository/ProviderRepository';
-import { profileImageUrlState } from '../../recoil/atom/profileImageUrlState';
+import { getProfileImgStorage } from '../../repository/ProfileimgRepository';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -35,13 +35,13 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
     const profileValue = useRecoilValue(userInformationState);
-    //const setModalOpen = useSetRecoilState(modalOpenState);
     const providerId = useRecoilValue(providerIdState);
     const provider = getProvider('provider');
     const ACCESSTOKEN_KEY = 'accessToken';
     const REFRESHTOKEN_KEY = 'refreshToken';
     const stringConvert = provider?.toString();
-    const profileImageUrl = useRecoilValue(profileImageUrlState);
+    const KEY = 'imgUrl';
+    const profileImageUrl = getProfileImgStorage(KEY);
     async function getCategoryList() {
         const categoryData = await getCategoryItem();
         setCategoryItems(categoryData);
