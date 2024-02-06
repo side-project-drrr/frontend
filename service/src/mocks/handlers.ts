@@ -1,6 +1,4 @@
-//import { http, HttpResponse } from 'msw';
-
-//import { CategoryData } from './CategoryData';
+// import { http, HttpResponse } from 'msw';
 
 export const handlers = [
     // http.get(`/auth/oauth2/profile`, async ({ request }) => {
@@ -83,4 +81,5 @@ export const handlers = [
     //         },
     //     ]);
     // }),
+    // 0,
 ];

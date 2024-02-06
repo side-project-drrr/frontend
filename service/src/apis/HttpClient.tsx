@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const INITIAL_TOKEN = 'accessToken';
-//const getToken = localStorage.getItem(INITIAL_TOKEN);
+const INITIAL_TOKEN = 'accessToken';
+const getToken = localStorage.getItem(INITIAL_TOKEN);
 
 const baseURL = import.meta.env.VITE_APP_BACK_END_LOCAL;
 
@@ -13,10 +13,10 @@ const HttpClient = axios.create({
 });
 HttpClient.interceptors.request.use(
     async config => {
-        // const token = getToken;
-        // if (token !== null) {
-        //     config.headers.Authorization = `Bearer ${token}`;
-        // }
+        const token = getToken;
+        if (token !== null) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
         return config;
     },
     async error => {
