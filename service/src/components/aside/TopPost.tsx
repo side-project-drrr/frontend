@@ -16,7 +16,7 @@ const TopPost = () => {
     return (
         <div className="my-8" aria-label="탑 게시글">
             <h2 className="text-lg font-bold">Top {topContent.length}</h2>
-            <ol className="flex flex-col">
+            <ol className="flex flex-col mt-4">
                 {topContent?.map((content, index) => (
                     <Link
                         to={`/category/detail/${content.id}`}

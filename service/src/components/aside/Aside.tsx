@@ -47,7 +47,7 @@ const mocks = [
 
 export default function Aside() {
     return (
-        <div className="flex flex-col justify-around w-full p-4 className">
+        <div className="flex flex-col justify-around w-full p-4 my-10">
             <div className="mb-4">
                 <h2 className="my-2 text-lg font-bold">추천 게시글</h2>
                 <Carousel data={mocks} />

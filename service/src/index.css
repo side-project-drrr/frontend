@@ -40,10 +40,6 @@ input:autofill:active {
     -webkit-text-size-adjust: 100%;
 }
 
-/* .abc {
-    background-color: #000;
-} */
-
 a {
     font-weight: 500;
     color: #646cff;
@@ -54,11 +50,11 @@ a:hover {
 }
 
 body {
-    /* margin: 0; */
     display: flex;
     place-items: center;
-    /* min-width: 320px;
-    min-height: 100vh; */
+    overflow-x: hidden;
+    -ms-overflow-style: none; /* IE, Edge */
+    scrollbar-width: none; /* Firefox */
 }
 
 h1 {
@@ -83,10 +79,6 @@ button:hover {
 button:focus,
 button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
-}
-
-::-webkit-scrollbar {
-    display: none;
 }
 
 @media (prefers-color-scheme: light) {

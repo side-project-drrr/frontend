@@ -1,17 +1,9 @@
-export interface Props {
-    items: {
-        id: number;
-        title: string;
-        content: string;
-        bookmark: number;
-        views: number;
-    }[];
+export interface IListBoxProps {
+    items: any;
+    onSetObservationTarget: any;
 }
 
 export interface ItemProps {
-    id: number;
-    title: string;
-    content: string;
-    bookmark: number;
-    views: number;
+    item: any;
+    onSetObservationTarget: any;
 }

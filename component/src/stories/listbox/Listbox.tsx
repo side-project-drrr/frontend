@@ -1,18 +1,15 @@
 import ListboxItem from './ListboxItem';
-import { Props } from './type';
+import { IListBoxProps } from './type';
 
-export default function ListBox({ items }: Props) {
+export default function ListBox({ items, onSetObservationTarget }: IListBoxProps) {
     return (
         <>
-            <div className="flex flex-col gap-6">
-                {items.map(item => (
+            <div className="flex flex-col w-full gap-6">
+                {items.map((item: any) => (
                     <ListboxItem
                         key={item.id}
-                        id={item.id}
-                        title={item.title}
-                        content={item.content}
-                        bookmark={item.bookmark}
-                        views={item.views}
+                        item={item}
+                        onSetObservationTarget={onSetObservationTarget}
                     />
                 ))}
             </div>

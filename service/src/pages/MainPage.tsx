@@ -1,86 +1,45 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import FormGroup from '@mui/material/FormGroup';
 import Switch from '@mui/material/Switch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
-import Aside from '../components/aside/Aside';
 import ListBox from '@monorepo/component/src/stories/listbox/Listbox';
 import SignUpModal from '../components/signup/SignUpModal';
 import CardList from '../components/card/CardList';
 import { getAuthStorage } from '../repository/AuthRepository';
-// import CategoryList from '../components/category/CategoryList';
+
 import CategorySlide from '../components/carousel/CategorySlide';
 import { userCategoryState } from '../recoil/atom/userCategoryState';
 import { useTokenDecode } from '../hooks/useTokenDecode';
 import { AuthCategoryService } from '../service/CategoryService';
-
-const items = [
-    {
-        id: 1,
-        title: '우아한형제들 PM의 이야기- “배민 기획자의 일”',
-        content:
-            '우아한형제들 PM(Product Manager)는 어떻게 일할까? 실제 이야기를 담은 책 "배민 기획자의 일"  PM들과 함께 나눈 이야기를 담았습니다.',
-        bookmark: 1000,
-        views: 50000,
-        thumbnailUrl: '',
-    },
-    {
-        id: 1,
-        title: '우아한형제들 PM의 이야기- “배민 기획자의 일”',
-        content:
-            '우아한형제들 PM(Product Manager)는 어떻게 일할까? 실제 이야기를 담은 책 "배민 기획자의 일"  PM들과 함께 나눈 이야기를 담았습니다.',
-        bookmark: 1000,
-        views: 50000,
-        thumbnailUrl: '',
-    },
-    {
-        id: 1,
-        title: '우아한형제들 PM의 이야기- “배민 기획자의 일”',
-        content:
-            '우아한형제들 PM(Product Manager)는 어떻게 일할까? 실제 이야기를 담은 책 "배민 기획자의 일"  PM들과 함께 나눈 이야기를 담았습니다.',
-        bookmark: 1000,
-        views: 50000,
-        thumbnailUrl: '',
-    },
-    {
-        id: 1,
-        title: '우아한형제들 PM의 이야기- “배민 기획자의 일”',
-        content:
-            '우아한형제들 PM(Product Manager)는 어떻게 일할까? 실제 이야기를 담은 책 "배민 기획자의 일"  PM들과 함께 나눈 이야기를 담았습니다.',
-        bookmark: 1000,
-        views: 50000,
-        thumbnailUrl: '',
-    },
-    {
-        id: 1,
-        title: '우아한형제들 PM의 이야기- “배민 기획자의 일”',
-        content:
-            '우아한형제들 PM(Product Manager)는 어떻게 일할까? 실제 이야기를 담은 책 "배민 기획자의 일"  PM들과 함께 나눈 이야기를 담았습니다.',
-        bookmark: 1000,
-        views: 50000,
-        thumbnailUrl: '',
-    },
-    {
-        id: 1,
-        title: '우아한형제들 PM의 이야기- “배민 기획자의 일”',
-        content:
-            '우아한형제들 PM(Product Manager)는 어떻게 일할까? 실제 이야기를 담은 책 "배민 기획자의 일"  PM들과 함께 나눈 이야기를 담았습니다.',
-        bookmark: 1000,
-        views: 50000,
-        thumbnailUrl: '',
-    },
-];
+import { getTechBlogService } from '../service/TechBlogService';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
+    const [techBlogData, setTechBlogData] = useState<any[]>([]);
     const [displayMode, setDisplayMode] = useState(true);
+    const [page, setPage] = useState(0);
+    const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
+    const [didMount, setDidmount] = useState(false);
+
+    const size = 3;
+
+    const sort = 'createdAt';
+
+    const direction = 'DESC';
+
     const handleModalOpen = useSetRecoilState(modalOpenState);
     const TOKEN_KEY = 'accessToken';
     const getToken = getAuthStorage(TOKEN_KEY);
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
-    const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
-    const [didMount, setDidmount] = useState(false);
-    const tokenDecode = useTokenDecode();
+
+    const tokenDecode = useTokenDecode(getToken);
+
+    async function userTechBlogRender() {
+        const userCategoryData = await getTechBlogService({ page, size, sort, direction });
+        setTechBlogData(prev => [...prev, ...userCategoryData.content]);
+    }
 
     async function userGetCategoryRender() {
         const userCategoryData = await AuthCategoryService(tokenDecode);
@@ -96,14 +55,22 @@ export default function MainPage() {
         setCategoryModalOpen(false);
     };
 
+    const fetchMoreIssue = useCallback(() => {
+        setPage(prev => prev + 1);
+    }, [techBlogData]);
+
+    useEffect(() => {
+        userTechBlogRender();
+    }, [page]);
+
     useEffect(() => {
         setDidmount(true);
     }, []);
 
     useEffect(() => {
         if (didMount) {
-            //카테고리리스트 api 호출
             userGetCategoryRender();
+            userTechBlogRender();
         }
     }, [didMount]);
 
@@ -111,10 +78,11 @@ export default function MainPage() {
         userGetCategoryRender();
     }, [isCategoryModalOpen]);
 
+    const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
     return (
         <div className="flex justify-between">
             <div className="flex flex-col w-10/12 gap-6">
-                <div className="flex items-center justify-around w-1/2 mt-5 ">
+                <div className="flex items-center justify-around w-3/4 mt-5 ">
                     {getToken && (
                         <CategorySlide
                             items={userCategoryItems}
@@ -140,15 +108,20 @@ export default function MainPage() {
                             />
                         </FormGroup>
                     </div>
-                    {displayMode ? <ListBox items={items} /> : <CardList />}
+                    {displayMode ? (
+                        <ListBox
+                            items={techBlogData}
+                            onSetObservationTarget={setObservationTarget}
+                        />
+                    ) : (
+                        <CardList
+                            items={techBlogData}
+                            onSetObservationTarget={setObservationTarget}
+                        />
+                    )}
                 </div>
             </div>
             <SignUpModal onSignupNext={handleSignupNext} />
-            <aside className="block max-w-md pl-2 border-l-2 border-solid border-zinc-500">
-                <div className="w-[100%]">
-                    <Aside />
-                </div>
-            </aside>
         </div>
     );
 }
