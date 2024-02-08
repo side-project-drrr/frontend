@@ -1,6 +1,6 @@
 import { ItemProps } from './type';
 
-export default function ListboxItem({ item, onSetObservationTarget }: ItemProps) {
+export default function ListboxItem({ item }: ItemProps) {
     return (
         <>
             <div
@@ -35,7 +35,7 @@ export default function ListboxItem({ item, onSetObservationTarget }: ItemProps)
                     </span>
                 </div>
             </div>
-            <div ref={onSetObservationTarget}></div>
+            {/* <div ref={onSetObservationTarget}></div> */}
         </>
     );
 }

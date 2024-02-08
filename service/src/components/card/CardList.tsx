@@ -1,7 +1,7 @@
 import CardComponent from './CardComponent';
 import { IListBoxProps } from '@monorepo/component/src/stories/listbox/type';
 
-export default function CardList({ items, onSetObservationTarget }: IListBoxProps) {
+export default function CardList({ items }: IListBoxProps) {
     return (
         <>
             <div className="flex flex-wrap justify-between gap-6">
@@ -9,7 +9,7 @@ export default function CardList({ items, onSetObservationTarget }: IListBoxProp
                     <CardComponent
                         key={item.id}
                         item={item}
-                        onSetObservationTarget={onSetObservationTarget}
+                        //onSetObservationTarget={onSetObservationTarget}
                     />
                 ))}
             </div>

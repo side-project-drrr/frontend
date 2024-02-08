@@ -12,7 +12,7 @@ import CategorySlide from '../components/carousel/CategorySlide';
 import { userCategoryState } from '../recoil/atom/userCategoryState';
 import { useTokenDecode } from '../hooks/useTokenDecode';
 import { AuthCategoryService } from '../service/CategoryService';
-import { getTechBlogService } from '../service/TechBlogService';
+import { getTechBlogService, getUserTechBlogService } from '../service/TechBlogService';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 export default function MainPage() {
@@ -20,10 +20,11 @@ export default function MainPage() {
     const [techBlogData, setTechBlogData] = useState<any[]>([]);
     const [displayMode, setDisplayMode] = useState(true);
     const [page, setPage] = useState(0);
+    //const [techCategoryClicked, setTechCategroyClicked] = useState(false);
+    const [categoryId, setCategoryId] = useState(0);
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
     const [didMount, setDidmount] = useState(false);
-
-    const size = 3;
+    const size = 6;
 
     const sort = 'createdAt';
 
@@ -37,8 +38,19 @@ export default function MainPage() {
     const tokenDecode = useTokenDecode(getToken);
 
     async function userTechBlogRender() {
-        const userCategoryData = await getTechBlogService({ page, size, sort, direction });
-        setTechBlogData(prev => [...prev, ...userCategoryData.content]);
+        const userTechBlogData = await getTechBlogService({ page, size, sort, direction });
+        setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
+    }
+
+    async function userFilterTechBlogRender(id: number) {
+        const userFilterTechBlogData = await getUserTechBlogService({
+            page,
+            size,
+            sort,
+            direction,
+            id,
+        });
+        setTechBlogData(userFilterTechBlogData.content);
     }
 
     async function userGetCategoryRender() {
@@ -60,7 +72,9 @@ export default function MainPage() {
     }, [techBlogData]);
 
     useEffect(() => {
-        userTechBlogRender();
+        if (categoryId === 0) {
+            userTechBlogRender();
+        }
     }, [page]);
 
     useEffect(() => {
@@ -70,7 +84,6 @@ export default function MainPage() {
     useEffect(() => {
         if (didMount) {
             userGetCategoryRender();
-            userTechBlogRender();
         }
     }, [didMount]);
 
@@ -79,6 +92,7 @@ export default function MainPage() {
     }, [isCategoryModalOpen]);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
+
     return (
         <div className="flex justify-between">
             <div className="flex flex-col w-10/12 gap-6">
@@ -90,6 +104,10 @@ export default function MainPage() {
                             onModalOpen={isCategoryModalOpen}
                             onHandleModalOpen={handleSignupNext}
                             userGetCategoryRender={userGetCategoryRender}
+                            onUserFilterTechBlogRender={userFilterTechBlogRender}
+                            onSetCategoryId={setCategoryId}
+                            onCategoryId={categoryId}
+                            onUserTechBlogRender={userTechBlogRender}
                         />
                     )}
                 </div>
@@ -109,17 +127,12 @@ export default function MainPage() {
                         </FormGroup>
                     </div>
                     {displayMode ? (
-                        <ListBox
-                            items={techBlogData}
-                            onSetObservationTarget={setObservationTarget}
-                        />
+                        <ListBox items={techBlogData} />
                     ) : (
-                        <CardList
-                            items={techBlogData}
-                            onSetObservationTarget={setObservationTarget}
-                        />
+                        <CardList items={techBlogData} />
                     )}
                 </div>
+                <div ref={setObservationTarget}></div>
             </div>
             <SignUpModal onSignupNext={handleSignupNext} />
         </div>

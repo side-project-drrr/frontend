@@ -5,6 +5,7 @@ interface ITechBlogCategory {
     size: number;
     sort: string;
     direction: string;
+    id?: number;
 }
 
 export async function getTechBlogService({ page, size, sort, direction }: ITechBlogCategory) {
@@ -12,7 +13,23 @@ export async function getTechBlogService({ page, size, sort, direction }: ITechB
         const res = await HttpClient.get(
             `/api/v1/posts?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
         );
-        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function getUserTechBlogService({
+    page,
+    size,
+    sort,
+    direction,
+    id,
+}: ITechBlogCategory) {
+    try {
+        const res = await HttpClient.get(
+            `/api/v1/posts/category/${id}?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
+        );
         return res.data;
     } catch (error) {
         console.error(error);

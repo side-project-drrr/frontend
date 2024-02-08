@@ -4,16 +4,16 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { ICardItemsProps } from './type';
+import kakao from '@monorepo/service/src/assets/kakao.webp';
 
-export default function CardComponent({ item, onSetObservationTarget }: ICardItemsProps) {
-    const data = '1231321313213213212132155555555555555555';
+export default function CardComponent({ item }: ICardItemsProps) {
     return (
         <>
             <Card
                 sx={{
-                    width: '35%',
+                    maxWidth: 350,
                     marginTop: '15px',
-                    height: '20rem',
+                    //height: '20rem',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-around',
@@ -23,10 +23,12 @@ export default function CardComponent({ item, onSetObservationTarget }: ICardIte
                 <CardActionArea>
                     <CardMedia
                         component="img"
-                        height="162"
                         width="286"
-                        image={item.techBlogPostBasicInfoDto.thumbnailUrl}
+                        //height="100"
+                        //item.techBlogPostBasicInfoDto.thumbnailUrl
+                        image={kakao}
                         alt="썸네일"
+                        style={{ height: '200px' }}
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
@@ -37,8 +39,7 @@ export default function CardComponent({ item, onSetObservationTarget }: ICardIte
                             color="text.secondary"
                             sx={{ width: '50%', display: 'flex', flexWrap: 'wrap' }}
                         >
-                            {/* {item.techBlogPostBasicInfoDto.summary} */}
-                            {data.length > 20 && <p>{data}...</p>}
+                            {item.techBlogPostBasicInfoDto.summary}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                             {item.categoryDto?.map((item: any, index: number) =>
@@ -61,7 +62,6 @@ export default function CardComponent({ item, onSetObservationTarget }: ICardIte
                     </CardContent>
                 </CardActionArea>
             </Card>
-            <div ref={onSetObservationTarget}></div>
         </>
     );
 }

@@ -1,4 +1,4 @@
 export interface ICardItemsProps {
     item: any;
-    onSetObservationTarget: any;
+    //onSetObservationTarget: any;
 }
