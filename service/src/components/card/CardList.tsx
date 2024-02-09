@@ -6,11 +6,7 @@ export default function CardList({ items }: IListBoxProps) {
         <>
             <div className="flex flex-wrap justify-between gap-6">
                 {items.map((item: any) => (
-                    <CardComponent
-                        key={item.id}
-                        item={item}
-                        //onSetObservationTarget={onSetObservationTarget}
-                    />
+                    <CardComponent key={item.id} item={item} />
                 ))}
             </div>
         </>

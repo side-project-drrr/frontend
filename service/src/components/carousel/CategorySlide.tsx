@@ -17,6 +17,9 @@ interface CarouselProps {
     onSetCategoryId: React.Dispatch<SetStateAction<number>>;
     onCategoryId: number;
     onUserTechBlogRender: () => void;
+    onSetPage: React.Dispatch<SetStateAction<number>>;
+    onSetObservationTarget: any;
+    onSetFilterTechBlogData: any;
 }
 
 export default function CategorySlide({
@@ -29,9 +32,11 @@ export default function CategorySlide({
     onSetCategoryId,
     onCategoryId,
     onUserTechBlogRender,
+    onSetPage,
+    onSetObservationTarget,
+    onSetFilterTechBlogData,
 }: CarouselProps) {
     const [current, setCurrent] = useState(0);
-
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const prevSlider = () => {
         setCurrent(current === 0 ? items.length - 1 : current - 1);
@@ -45,12 +50,18 @@ export default function CategorySlide({
         if (Number(numberId !== 0)) {
             onUserFilterTechBlogRender(id);
             onSetCategoryId(numberId);
+            onSetPage(0);
+            onSetFilterTechBlogData([]);
         } else {
             onUserTechBlogRender();
+            onSetCategoryId(numberId);
+            onSetPage(0);
+            onSetFilterTechBlogData([]);
         }
     };
 
     const ALLCATEGORYNUM = '0';
+
     return (
         <>
             <div>
@@ -58,38 +69,40 @@ export default function CategorySlide({
             </div>
 
             <div
-                className={`relative flex rounded-md will-change-transform flex-1 items-center text-center gap-4`}
+                className={`relative flex rounded-md will-change-transform flex-1 items-center text-center gap-4 w-full`}
                 ref={scrollRef}
                 aria-label="추천 게시글"
             >
                 <div
-                    className={` transition ease-out duration-400 absolute flex justify-center items-center overflow-hidden w-full`}
+                    className={` transition ease-out duration-400 absolute flex justify-center items-center overflow-hidden w-full  `}
                 >
                     <div
                         style={{ transform: `translateX(${current * 10}%)` }}
-                        className="flex items-center w-full overflow-hidden"
+                        className="flex items-center w-full"
                     >
                         <Button
-                            className="text-[#006FEE] w-14 h-7 text-center text-xs flex items-center justify-center"
+                            className="text-[#006FEE] w-14 h-7 text-center text-xs flex items-center justify-start"
                             onClick={onHandleModalOpen}
                             role="Button"
                             aria-label="카테고리추가 버튼"
                         >
                             <AddIcon />
                         </Button>
-                        <Button
-                            id={ALLCATEGORYNUM}
-                            className={`flex bg-[#E6F1FE] text-[#006FEE] p-1 rounded-lg text-center items-center flex-1 ${
-                                Number(ALLCATEGORYNUM) === onCategoryId
-                                    ? 'bg-red-500'
-                                    : 'bg-[#E6F1FE]'
-                            } `}
-                            role="Button"
-                            aria-label="카테고리추가 버튼"
-                            onClick={(e: any) => handleUserCategoryId(e.target.id)}
-                        >
-                            전체 게시글
-                        </Button>
+                        <div className={`relative flex dark-box-bg pl-2 pr-2 text-center `}>
+                            <Button
+                                id={ALLCATEGORYNUM}
+                                className={`flex bg-[#E6F1FE] text-[#006FEE] p-1 rounded-lg  items-center w-20 text-center ${
+                                    Number(ALLCATEGORYNUM) === onCategoryId
+                                        ? 'bg-[#006FEE] text-white'
+                                        : 'bg-[#E6F1FE]'
+                                } `}
+                                role="Button"
+                                aria-label="카테고리추가 버튼"
+                                onClick={(e: any) => handleUserCategoryId(e.target.id)}
+                            >
+                                For You
+                            </Button>
+                        </div>
                         {items?.map((item: any) => (
                             <div
                                 key={item.id}
@@ -98,7 +111,9 @@ export default function CategorySlide({
                             >
                                 <Button
                                     className={`flex bg-[#E6F1FE] text-[#006FEE] p-1 rounded-lg text-center items-center flex-1 ${
-                                        item.id === onCategoryId ? 'bg-red-500' : 'bg-[#E6F1FE]'
+                                        item.id === onCategoryId
+                                            ? 'bg-[#006FEE] text-white'
+                                            : 'bg-[#E6F1FE]'
                                     } `}
                                     id={item.id}
                                     role="Button"
@@ -111,8 +126,9 @@ export default function CategorySlide({
                         ))}
                     </div>
                 </div>
+                <div ref={onSetObservationTarget}></div>
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-end mr-10">
                 <RiArrowDropRightLine
                     onClick={nextSlider}
                     size={40}

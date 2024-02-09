@@ -18,9 +18,9 @@ import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
     const [techBlogData, setTechBlogData] = useState<any[]>([]);
+    const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
     const [displayMode, setDisplayMode] = useState(true);
     const [page, setPage] = useState(0);
-    //const [techCategoryClicked, setTechCategroyClicked] = useState(false);
     const [categoryId, setCategoryId] = useState(0);
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
     const [didMount, setDidmount] = useState(false);
@@ -50,7 +50,7 @@ export default function MainPage() {
             direction,
             id,
         });
-        setTechBlogData(userFilterTechBlogData.content);
+        setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
     }
 
     async function userGetCategoryRender() {
@@ -75,6 +75,7 @@ export default function MainPage() {
         if (categoryId === 0) {
             userTechBlogRender();
         }
+        userFilterTechBlogRender(categoryId);
     }, [page]);
 
     useEffect(() => {
@@ -92,11 +93,11 @@ export default function MainPage() {
     }, [isCategoryModalOpen]);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
-
+    console.log(userCategoryItems);
     return (
         <div className="flex justify-between">
             <div className="flex flex-col w-10/12 gap-6">
-                <div className="flex items-center justify-around w-3/4 mt-5 ">
+                <div className="flex items-center justify-around w-10/12 mt-8 ">
                     {getToken && (
                         <CategorySlide
                             items={userCategoryItems}
@@ -108,6 +109,9 @@ export default function MainPage() {
                             onSetCategoryId={setCategoryId}
                             onCategoryId={categoryId}
                             onUserTechBlogRender={userTechBlogRender}
+                            onSetPage={setPage}
+                            onSetObservationTarget={setObservationTarget}
+                            onSetFilterTechBlogData={setFilterTechBlogData}
                         />
                     )}
                 </div>
@@ -127,9 +131,17 @@ export default function MainPage() {
                         </FormGroup>
                     </div>
                     {displayMode ? (
-                        <ListBox items={techBlogData} />
+                        <ListBox
+                            items={techBlogData}
+                            onCategoryId={categoryId}
+                            onFilterItems={filterTechBlogData}
+                        />
                     ) : (
-                        <CardList items={techBlogData} />
+                        <CardList
+                            items={techBlogData}
+                            onCategoryId={categoryId}
+                            onFilterItems={filterTechBlogData}
+                        />
                     )}
                 </div>
                 <div ref={setObservationTarget}></div>

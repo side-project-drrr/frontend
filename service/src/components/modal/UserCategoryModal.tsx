@@ -54,7 +54,6 @@ const buttonStyle = {
 };
 
 function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: UserCategoryProps) {
-    const [didMount, setDidmount] = useState(false);
     const [categoryItems, setCategoryItems] = useState<any[]>([]); //전체 카테고리 리스트
     const userCategoryItems = useRecoilValue(userCategoryState); //선호 카테고리
     const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
@@ -108,14 +107,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     useEffect(() => {
         getCategoryList();
     }, [page]);
-
-    useEffect(() => {
-        setDidmount(true);
-    }, []);
-
-    useEffect(() => {
-        if (didMount) getCategoryList();
-    }, []);
 
     return (
         <>

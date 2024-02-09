@@ -35,7 +35,6 @@ export default function ListboxItem({ item }: ItemProps) {
                     </span>
                 </div>
             </div>
-            {/* <div ref={onSetObservationTarget}></div> */}
         </>
     );
 }
