@@ -24,7 +24,7 @@ export default function MainPage() {
     const [categoryId, setCategoryId] = useState(0);
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
     const [didMount, setDidmount] = useState(false);
-    const size = 6;
+    const size = 10;
 
     const sort = 'createdAt';
 
@@ -93,11 +93,10 @@ export default function MainPage() {
     }, [isCategoryModalOpen]);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
-    console.log(userCategoryItems);
     return (
         <div className="flex justify-between">
-            <div className="flex flex-col w-10/12 gap-6">
-                <div className="flex items-center justify-around w-10/12 mt-8 ">
+            <div className="flex flex-col w-full gap-6">
+                <div className="flex max-w-3xl mt-8">
                     {getToken && (
                         <CategorySlide
                             items={userCategoryItems}

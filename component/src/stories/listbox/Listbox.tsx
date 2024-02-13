@@ -2,7 +2,6 @@ import ListboxItem from './ListboxItem';
 import { IListBoxProps } from './type';
 
 export default function ListBox({ items, onCategoryId, onFilterItems }: IListBoxProps) {
-    console.log(onCategoryId);
     return (
         <>
             {onCategoryId === 0 ? (

@@ -1,4 +1,4 @@
-import { useState, useRef, SetStateAction } from 'react';
+import { useRef, useState, SetStateAction } from 'react';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'react-icons/ri';
 import { Button } from '@mui/base/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -61,25 +61,27 @@ export default function CategorySlide({
     };
 
     const ALLCATEGORYNUM = '0';
-
     return (
         <>
             <div>
-                <RiArrowDropLeftLine onClick={prevSlider} size={40} aria-label="왼쪽으로 넘기기" />
+                {current !== 0 && (
+                    <RiArrowDropLeftLine
+                        onClick={prevSlider}
+                        size={40}
+                        aria-label="왼쪽으로 넘기기"
+                    />
+                )}
             </div>
-
             <div
-                className={`relative flex rounded-md will-change-transform flex-1 items-center text-center gap-4 w-full`}
+                className={`relative flex w-full overflow-hidden justify-between items-center`}
                 ref={scrollRef}
-                aria-label="추천 게시글"
+                aria-label="선호 카테고리"
             >
                 <div
-                    className={` transition ease-out duration-400 absolute flex justify-center items-center overflow-hidden w-full  `}
+                    className={` transition ease-out duration-400 absolute flex justify-center items-center`}
+                    style={{ transform: `translate3d(-${current * 30}px,0px,0px)` }}
                 >
-                    <div
-                        style={{ transform: `translateX(${current * 10}%)` }}
-                        className="flex items-center w-full"
-                    >
+                    <div className="flex items-center w-full">
                         <Button
                             className="text-[#006FEE] w-14 h-7 text-center text-xs flex items-center justify-start"
                             onClick={onHandleModalOpen}
@@ -91,9 +93,9 @@ export default function CategorySlide({
                         <div className={`relative flex dark-box-bg pl-2 pr-2 text-center `}>
                             <Button
                                 id={ALLCATEGORYNUM}
-                                className={`flex bg-[#E6F1FE] text-[#006FEE] p-1 rounded-lg  items-center w-20 text-center ${
+                                className={`flex bg-[#E6F1FE] text-[#006FEE] p-1 rounded-lg  items-center w-20 text-center justify-center ${
                                     Number(ALLCATEGORYNUM) === onCategoryId
-                                        ? 'bg-[#006FEE] text-white'
+                                        ? 'bg-[#005FEE] text-white'
                                         : 'bg-[#E6F1FE]'
                                 } `}
                                 role="Button"
@@ -106,13 +108,13 @@ export default function CategorySlide({
                         {items?.map((item: any) => (
                             <div
                                 key={item.id}
-                                className={`relative flex dark-box-bg pl-2 pr-2 text-center`}
+                                className={`flex dark-box-bg pl-2 pr-2 text-center transition ease-out duration-400 justify-center items-center`}
                                 aria-label="선호 카테고리 영역"
                             >
                                 <Button
                                     className={`flex bg-[#E6F1FE] text-[#006FEE] p-1 rounded-lg text-center items-center flex-1 ${
                                         item.id === onCategoryId
-                                            ? 'bg-[#006FEE] text-white'
+                                            ? 'bg-[#005FEE] text-white'
                                             : 'bg-[#E6F1FE]'
                                     } `}
                                     id={item.id}
@@ -126,15 +128,14 @@ export default function CategorySlide({
                         ))}
                     </div>
                 </div>
-                <div ref={onSetObservationTarget}></div>
             </div>
-            <div className="flex justify-end mr-10">
-                <RiArrowDropRightLine
-                    onClick={nextSlider}
-                    size={40}
-                    aria-label="오른쪽으로 넘기기"
-                />
-            </div>
+            <RiArrowDropRightLine
+                onClick={nextSlider}
+                size={40}
+                aria-label="오른쪽으로 넘기기"
+                // className="absolute"
+            />
+            {/* <div ref={onSetObservationTarget}></div> */}
             <UserCategoryModal
                 onClose={onClose}
                 onModalOpen={onModalOpen}

@@ -11,24 +11,25 @@ export default function CardComponent({ item }: ICardItemsProps) {
         <>
             <Card
                 sx={{
-                    maxWidth: 350,
+                    maxWidth: 380,
+                    minWidth: 380,
                     marginTop: '15px',
-                    //height: '20rem',
                     display: 'flex',
                     flexDirection: 'column',
-                    justifyContent: 'space-around',
+                    justifyContent: 'space-between',
+                    minHeight: 350,
+                    maxHeight: 350,
                 }}
                 key={item.techBlogPostBasicInfoDto.id}
             >
                 <CardActionArea>
                     <CardMedia
                         component="img"
-                        width="286"
-                        //height="100"
+                        width="400"
                         //item.techBlogPostBasicInfoDto.thumbnailUrl
                         image={kakao}
                         alt="썸네일"
-                        style={{ height: '200px' }}
+                        style={{ height: '250px' }}
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">

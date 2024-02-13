@@ -107,7 +107,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     useEffect(() => {
         getCategoryList();
     }, [page]);
-
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
