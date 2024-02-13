@@ -6,7 +6,7 @@ export default function Layout() {
     return (
         <>
             <Header />
-            <div className="block m-auto mt-5 mx-28">
+            <div className="block m-auto mt-5 mx-36">
                 <main>
                     <section aria-label="메인 콘텐츠">
                         <Outlet />

@@ -6,7 +6,7 @@
 
 <div align='center'>
     <h2> drrr</h2>  
-    <p>기술 블로그 선호 카테고리별 추천 서비스 </p>
+    <p>회사마다 보여주는 개발 기술 블로그를 한곳에서 볼 수 있으며 web push 기능을 통해 매일 추천 기술 블로그 제공 </p>
     <br />    
 </div>
 
@@ -150,32 +150,6 @@ Yarn Berry를 사용하면서 Node_modules의 문제점과 zero-install에 대�
 
 ---
 
-### Api 호출은 어떤 컴포넌트에서 진행해야 하는가?
-
-해당 컴포넌트에서 API 호출 로직을 작성하게 좋은가? || 최상위 컴포넌트에서 API 호출 관련 로직을 작성하는게 좋은가?
-
-프론트엔드 관련 개발자 커뮤니티에 해당 내용 공유 후 토론 진행
-
-다양한 답변이 있었지만 대표적으로
-
-1. 이건 설계할 때 각 컴포넌트의 목적성 부여 여부에 따라 다를 것 같다.
-2. 분리
-3. 해당 컴포넌트
-4. Context Api 
-    - 불필요한 리렌더링 발생 및 Recoil을 활용하여 전역상태 관리
-
-- 해당 컴포넌트에서 관리 및 분리하여 사용
-
----
-
-
-### 이메일 인증 시 onChange 입력 시 마다 api 호출 횟수 감소
-
-사용자 정보를 받는 과정에서 onChange event handler에서 입력시 마다 api가 호출되는 현상을 발견
-이를 해결하고자 debounce를 활용하여 API호출 감소를 통한 최적화
-
----
-
 ### Category Modal
 
 CategoryModal에서 실시간으로 검색에 맞는 카테고리 표출
@@ -186,46 +160,9 @@ CategoryModal에서 실시간으로 검색에 맞는 카테고리 표출
 
 원본 배열에 대한 값이 검색을 하는 순간 없어지므로써 검색 한 후 다시 전체 카테고리 리스트를 보여주지 못했따 (filter를 사용함으로써 원본 배열을 훼손하기 때문에)
 
-
 함수를 사용하면서 리액트의 특성상 함수는 렌더링될때마다 재성생되기때문에 불필요한 렌더링이 일어나 메인이나 카테고리 모달에서 로딩 시간 지연(useMemo를 활용하여 해결)
 
-```
-const memoCategorySearchItemList = useMemo(() => {
-        if (categorySearchValue) {
-            return categoryItems.filter(item =>
-	                item.title.toLocaleUpperCase().startsWith(categorySearchValue.toLocaleUpperCase()),
-            );
-        }
-        return categoryItems;
-    }, [categorySearchValue, categoryItems]);
-```
-
 CategoryItem에서 사용자가 카테고리 선택 시 해당 카테고리 배경색 및 중복 카테고리 제거 하기
-
-```
- const handleActiveCategoryItem = (e: React.MouseEvent<HTMLElement>) => {
-        const categoryItemId = e.currentTarget.id;
-        const set = new Set(activeCategoriesData);
-        if (set.has(categoryItemId)) {
-            const filterActiveCateogiesData = activeCategoriesData.filter(
-                categoryitem => categoryitem !== categoryItemId,
-            );
-            setActiveCategoriesData(filterActiveCateogiesData);
-            setCategoriesItemClicked(false);
-        } else {
-            if (activeCategoriesData.length < 10) {
-                setActiveCategoriesData(prev => [...prev, categoryItemId]);
-                setCategoriesItemClicked(true);
-            }
-        }
-    };
-    const getCategoryClickedItem = () => {
-        const set = new Set(activeCategoriesData);
-        if (set.has(id.toString())) {
-            setCategoriesItemClicked(true);
-        }
-    };
-```
 
 ---
 

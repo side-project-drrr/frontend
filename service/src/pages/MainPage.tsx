@@ -1,14 +1,21 @@
-import { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useEffect, useState } from 'react';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import FormGroup from '@mui/material/FormGroup';
 import Switch from '@mui/material/Switch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 import Aside from '../components/aside/Aside';
-import CategoryList from '../components/category/CategoryList';
 import ListBox from '@monorepo/component/src/stories/listbox/Listbox';
 import SignUpModal from '../components/signup/SignUpModal';
 import CardList from '../components/card/CardList';
 import { profileModalOpen } from '../recoil/atom/profileModalOpen';
+
+import { getAuthStorage } from '../repository/AuthRepository';
+// import CategoryList from '../components/category/CategoryList';
+import CategorySlide from '../components/carousel/CategorySlide';
+import { userCategoryState } from '../recoil/atom/userCategoryState';
+import { useTokenDecode } from '../hooks/useTokenDecode';
+import { AuthCategoryService } from '../service/CategoryService';
+
 const items = [
     {
         id: 1,
@@ -71,11 +78,19 @@ export default function MainPage() {
     const [displayMode, setDisplayMode] = useState(true);
     const handleModalOpen = useSetRecoilState(modalOpenState);
     const setProfileOpen = useSetRecoilState(profileModalOpen);
+    const TOKEN_KEY = 'accessToken';
+    const getToken = getAuthStorage(TOKEN_KEY);
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
+    const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
+    const [didMount, setDidmount] = useState(false);
+    const tokenDecode = useTokenDecode();
+
+    async function userGetCategoryRender() {
+        const userCategoryData = await AuthCategoryService(tokenDecode);
+        setUserCategoryItems(userCategoryData);
+    }
 
     const handleSignupNext = () => {
-        // 회원가입 모달에서 다음 버튼을 클릭했을 때 실행되는 로직
-        // 여기서는 카테고리 모달을 열도록 함
         setCategoryModalOpen(true);
         handleModalOpen(false);
     };
@@ -83,45 +98,65 @@ export default function MainPage() {
         setProfileOpen(false);
     };
     const handleCategoryModalClose = () => {
-        // 카테고리 모달에서 닫기 버튼을 클릭했을 때 실행되는 로직
-        // 여기서는 카테고리 모달을 닫음
         setCategoryModalOpen(false);
     };
+
+    useEffect(() => {
+        setDidmount(true);
+    }, []);
+
+    useEffect(() => {
+        if (didMount) {
+            //카테고리리스트 api 호출
+            userGetCategoryRender();
+        }
+    }, [didMount]);
+
+    useEffect(() => {
+        userGetCategoryRender();
+    }, [isCategoryModalOpen]);
+
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
             <div className="flex w-10/12 gap-6">
+
+        <div className="flex justify-between">
+            <div className="flex flex-col w-10/12 gap-6">
+                <div className="flex items-center justify-around w-1/2 mt-5 ">
+                    {getToken && (
+                        <CategorySlide
+                            items={userCategoryItems}
+                            onClose={handleCategoryModalClose}
+                            onModalOpen={isCategoryModalOpen}
+                            onHandleModalOpen={handleSignupNext}
+                            userGetCategoryRender={userGetCategoryRender}
+                        />
+                    )}
+                </div>
                 <div
                     className={`${
                         displayMode ? 'flex w-full gap-6 flex-col' : 'flex w-full gap-6 flex-wrap'
                     }`}
                 >
-                    <div>
-                        {isCategoryModalOpen && (
-                            <CategoryList
-                                onClose={handleCategoryModalClose}
-                                onModalOpen={isCategoryModalOpen}
-                                onHandleModalOpen={handleSignupNext}
-                            />
-                        )}
-                    </div>
                     <div className="flex justify-end w-10/12">
                         <FormGroup>
                             <Switch
                                 {...label}
                                 defaultChecked
                                 onChange={e => setDisplayMode(e.target.checked)}
+                                aria-label="DisplayMode Switch"
                             />
                         </FormGroup>
                     </div>
                     {displayMode ? <ListBox items={items} /> : <CardList />}
                 </div>
-                <SignUpModal onSignupNext={handleSignupNext} />
-                <aside className="block max-w-md pl-2 border-l-2 border-solid border-zinc-500">
-                    <div className="w-[100%]">
-                        <Aside />
-                    </div>
-                </aside>
             </div>
+            <SignUpModal onSignupNext={handleSignupNext} />
+            <aside className="block max-w-md pl-2 border-l-2 border-solid border-zinc-500">
+                <div className="w-[100%]">
+                    <Aside />
+                </div>
+            </aside>
         </div>
     );
 }

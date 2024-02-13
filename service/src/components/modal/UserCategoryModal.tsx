@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import { useRecoilValue } from 'recoil';
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -7,17 +6,13 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import styled from '@emotion/styled';
 
-import CategoryItem from '../category/CategoryItem';
-import { CategoryProps } from './type';
-import { getCategoryItem } from '../../service/CategoryService';
-import { userInformationState } from '../../recoil/atom/userInformationState';
-import { providerIdState } from '../../recoil/atom/providerIdState';
-import { SignUpService } from '../../service/auth/SocialService';
-import { setAuthStorage } from '../../repository/AuthRepository';
-import { getProvider } from '../../repository/ProviderRepository';
-import { getProfileImgStorage } from '../../repository/ProfileimgRepository';
-import { profileImageUrlState } from '../../recoil/atom/profileImageUrlState';
+import { UserCategoryProps } from './type';
+import { getCategoryItem, putUserCategoryItem } from '../../service/CategoryService';
+
+import UserCategoryItem from '../category/UserCategoryItem';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { userCategoryState } from '../../recoil/atom/userCategoryState';
+import { useRecoilValue } from 'recoil';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -47,7 +42,6 @@ const InputTextField = styled(TextField)({
             height: '3rem',
             textAlign: 'center',
             marginTop: '0.5rem',
-            //maxWidth: '24rem',
             minWidth: '10rem',
         },
     },
@@ -59,22 +53,13 @@ const buttonStyle = {
     borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
 };
 
-function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
+function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: UserCategoryProps) {
     const [didMount, setDidmount] = useState(false);
     const [categoryItems, setCategoryItems] = useState<any[]>([]); //전체 카테고리 리스트
+    const userCategoryItems = useRecoilValue(userCategoryState); //선호 카테고리
     const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
     const [page, setPage] = useState(0);
-    const profileValue = useRecoilValue(userInformationState);
-    const providerId = useRecoilValue(providerIdState);
-    const provider = getProvider('provider');
-    const ACCESSTOKEN_KEY = 'accessToken';
-    const REFRESHTOKEN_KEY = 'refreshToken';
-    const stringConvert = provider?.toString();
-    const KEY = 'imgUrl';
-    const profileImageUrl = getProfileImgStorage(KEY);
-
-    const profileImageUrl = useRecoilValue(profileImageUrlState);
 
     const size = 20;
 
@@ -82,41 +67,31 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
     const direction = 'DESC';
 
-    async function getCategoryList() {
-        const categoryData = await getCategoryItem({ page, size, sort, direction });
-        setCategoryItems(categoryData);
-    }
-
-    async function signupRender() {
-        const tokenData = await SignUpService({
-            email: profileValue.email,
-            categoryIds: activeCategoriesData,
-            nickName: profileValue.nickname,
-            provider: stringConvert,
-            providerId,
-            profileImageUrl,
-        });
-        setAuthStorage(
-            ACCESSTOKEN_KEY,
-            tokenData.accessToken,
-            REFRESHTOKEN_KEY,
-            tokenData.refreshToken,
-        );
-    }
-
     const fetchMoreIssue = useCallback(() => {
         setPage(prev => prev + 1);
     }, [categoryItems]);
 
-    async function handleCategory() {
-        signupRender();
-        onClose();
-        alert('drrr에 오신것을 환영합니다.');
+    async function getCategoryList() {
+        const categoryData = await getCategoryItem({ page, size, sort, direction });
+        setCategoryItems(categoryData.content);
+    }
+
+    async function userUpdateCategoryRender(activeCategoriesData: string[]) {
+        const stringConvertNumberActiveData = activeCategoriesData.map(data => +data);
+        return await putUserCategoryItem(stringConvertNumberActiveData);
     }
 
     const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setCategorySearchValue(value);
+    };
+
+    const handleUserCreateCategory = async (activeCategoriesData: string[]) => {
+        const data = await userUpdateCategoryRender(activeCategoriesData);
+        if (data === undefined) {
+            await userGetCategoryRender();
+        }
+        onClose();
     };
 
     const categorySearchItemList = useMemo(() => {
@@ -139,18 +114,17 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     }, []);
 
     useEffect(() => {
-        if (didMount) {
-            //카테고리리스트 api 호출
-            getCategoryList();
-        }
-    }, [didMount]);
+        if (didMount) getCategoryList();
+    }, []);
 
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
                 <Box sx={style} className="flex flex-col items-center justify-around">
                     <div className="flex justify-start w-full pb-2 text-black border-b-2 border-solid">
-                        <h1 className="text-base">선호 카테고리 등록</h1>
+                        <h1 className="text-base" aria-label="제목">
+                            선호 카테고리 등록
+                        </h1>
                     </div>
                     <div className="flex items-center w-full ml-6">
                         <InputTextField
@@ -162,20 +136,21 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                     </div>
                     <ul className="flex flex-wrap justify-around w-full h-[25vh] gap-4 overflow-y-scroll">
                         {categorySearchItemList?.map(categoryitem => (
-                            <CategoryItem
+                            <UserCategoryItem
                                 key={categoryitem.id}
                                 id={categoryitem.id}
                                 title={categoryitem.name}
                                 setActiveCategoriesData={setActiveCategoriesData}
                                 activeCategoriesData={activeCategoriesData}
+                                onUserCategoryItems={userCategoryItems}
                                 onSetObservationTarget={setObservationTarget}
                             />
                         ))}
                     </ul>
                     <Button
                         className="w-10/12 "
-                        onClick={handleCategory}
                         style={buttonStyle}
+                        onClick={() => handleUserCreateCategory(activeCategoriesData)}
                         role="Button"
                         aria-label="카테고리 선택 완료"
                     >
@@ -187,4 +162,4 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     );
 }
 
-export default CategoryModal;
+export default UserCategoryModal;
