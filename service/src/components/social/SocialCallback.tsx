@@ -6,7 +6,7 @@ import { SocialService, SignInService } from '../../service/auth/SocialService';
 import { modalOpenState } from '../../recoil/atom/modalOpenState';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { setAuthStorage } from '../../repository/AuthRepository';
-import { profileImageUrlState } from '../../recoil/atom/profileImageUrlState';
+import { setProfileImgStorage } from '../../repository/ProfileimgRepository';
 
 export default function SocialCallback() {
     const [didMount, setDidMount] = useState(false);
@@ -14,7 +14,6 @@ export default function SocialCallback() {
     const setProviderIdState = useSetRecoilState(providerIdState);
     const code = new URL(document.location.toString()).searchParams.get('code');
     const setModalOpen = useSetRecoilState(modalOpenState);
-    const setImgUrl = useSetRecoilState(profileImageUrlState);
     const location = useLocation();
     const state = location.pathname.split('/')[1];
     const ACCESSTOKEN_KEY = 'accessToken';
@@ -35,11 +34,12 @@ export default function SocialCallback() {
                 authData.refreshToken,
             );
             setProviderIdState(providerId);
+            setProfileImgStorage(profileImageUrl);
             navigate('/');
         } else {
             navigate('/');
             setProviderIdState(providerId);
-            setImgUrl(profileImageUrl);
+            setProfileImgStorage(profileImageUrl);
             setModalOpen(true);
         }
     }

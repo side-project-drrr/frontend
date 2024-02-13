@@ -4,7 +4,7 @@ export interface IAuthProps {
     nickName: string;
     provider: string | undefined;
     providerId: string;
-    profileImageUrl: string;
+    profileImageUrl: string | null;
 }
 
 export interface IAuthEmailProps {

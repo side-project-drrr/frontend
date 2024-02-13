@@ -72,7 +72,7 @@ export default function SingUpForm({ onSignupNext }: IParentProps) {
             }));
         }
     };
-    const handleEmailAuthenticationChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const handleEmailAuthenticationChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setEmailCodeValue(value);
     };

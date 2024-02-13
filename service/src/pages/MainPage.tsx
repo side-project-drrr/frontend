@@ -7,6 +7,8 @@ import Aside from '../components/aside/Aside';
 import ListBox from '@monorepo/component/src/stories/listbox/Listbox';
 import SignUpModal from '../components/signup/SignUpModal';
 import CardList from '../components/card/CardList';
+import { profileModalOpen } from '../recoil/atom/profileModalOpen';
+
 import { getAuthStorage } from '../repository/AuthRepository';
 // import CategoryList from '../components/category/CategoryList';
 import CategorySlide from '../components/carousel/CategorySlide';
@@ -75,6 +77,7 @@ export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
     const [displayMode, setDisplayMode] = useState(true);
     const handleModalOpen = useSetRecoilState(modalOpenState);
+    const setProfileOpen = useSetRecoilState(profileModalOpen);
     const TOKEN_KEY = 'accessToken';
     const getToken = getAuthStorage(TOKEN_KEY);
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -91,7 +94,9 @@ export default function MainPage() {
         setCategoryModalOpen(true);
         handleModalOpen(false);
     };
-
+    const handleProfileOpen = () => {
+        setProfileOpen(false);
+    };
     const handleCategoryModalClose = () => {
         setCategoryModalOpen(false);
     };
@@ -112,6 +117,9 @@ export default function MainPage() {
     }, [isCategoryModalOpen]);
 
     return (
+        <div className="flex justify-between" onClick={handleProfileOpen}>
+            <div className="flex w-10/12 gap-6">
+
         <div className="flex justify-between">
             <div className="flex flex-col w-10/12 gap-6">
                 <div className="flex items-center justify-around w-1/2 mt-5 ">

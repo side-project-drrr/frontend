@@ -15,6 +15,7 @@ import { providerIdState } from '../../recoil/atom/providerIdState';
 import { SignUpService } from '../../service/auth/SocialService';
 import { setAuthStorage } from '../../repository/AuthRepository';
 import { getProvider } from '../../repository/ProviderRepository';
+import { getProfileImgStorage } from '../../repository/ProfileimgRepository';
 import { profileImageUrlState } from '../../recoil/atom/profileImageUrlState';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
@@ -70,6 +71,9 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const ACCESSTOKEN_KEY = 'accessToken';
     const REFRESHTOKEN_KEY = 'refreshToken';
     const stringConvert = provider?.toString();
+    const KEY = 'imgUrl';
+    const profileImageUrl = getProfileImgStorage(KEY);
+
     const profileImageUrl = useRecoilValue(profileImageUrlState);
 
     const size = 20;
