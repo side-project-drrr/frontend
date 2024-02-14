@@ -1,21 +1,22 @@
 import ListboxItem from './ListboxItem';
-import { Props } from './type';
+import { IListBoxProps } from './type';
 
-export default function ListBox({ items }: Props) {
+export default function ListBox({ items, onCategoryId, onFilterItems }: IListBoxProps) {
     return (
         <>
-            <div className="flex flex-col gap-6">
-                {items.map(item => (
-                    <ListboxItem
-                        key={item.id}
-                        id={item.id}
-                        title={item.title}
-                        content={item.content}
-                        bookmark={item.bookmark}
-                        views={item.views}
-                    />
-                ))}
-            </div>
+            {onCategoryId === 0 ? (
+                <div className="flex flex-col w-full gap-6">
+                    {items.map((item: any) => (
+                        <ListboxItem key={item.id} item={item} />
+                    ))}
+                </div>
+            ) : (
+                <div className="flex flex-col w-full gap-6">
+                    {onFilterItems.map((item: any) => (
+                        <ListboxItem key={item.id} item={item} />
+                    ))}
+                </div>
+            )}
         </>
     );
 }

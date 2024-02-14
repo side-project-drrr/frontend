@@ -19,16 +19,15 @@ export default function TopKeywords() {
             getTopkeyDatas();
         }
     }, [didMount]);
-    console.log(topkeywordsData);
     return (
-        <div className="flex flex-col mt-5 ">
+        <div className="flex flex-col mt-5">
             <h3 aria-label="top keyword">Top Keywords</h3>
             <div className="flex items-center w-full flex-warp">
                 <ul className="flex flex-wrap justify-around gap-4 mt-3 ">
                     {topkeywordsData?.map(topkeyword => (
                         <li
                             key={topkeyword.id}
-                            className="gap-4 bg-[#E6F1FE] text-[#006FEE] px-4 py-1.5 rounded-2xl flex-1 text-center text-base"
+                            className="gap-4 bg-[#E6F1FE] text-[#006FEE] px-4 py-1.5 rounded-2xl flex-1 text-center text-base my-2"
                             aria-label="top keyword item"
                         >
                             {topkeyword.name}
