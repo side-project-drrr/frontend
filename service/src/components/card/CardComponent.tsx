@@ -4,9 +4,25 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { ICardItemsProps } from './type';
-import kakao from '@monorepo/service/src/assets/kakao.webp';
+import { getAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import { useTokenDecode } from '@monorepo/service/src/hooks/useTokenDecode';
+import { postLikeTechBlogService } from '@monorepo/service/src/service/TechBlogService';
+import { useState } from 'react';
 
 export default function CardComponent({ item }: ICardItemsProps) {
+    const [postLikeClicked, setPostLikeClicked] = useState(false);
+    const TOKEN_KEY = 'accessToken';
+    const getToken = getAuthStorage(TOKEN_KEY);
+    const memberId = useTokenDecode(getToken);
+    async function postLikeTechBlogRender(id: number) {
+        await postLikeTechBlogService({ memberId, postId: id });
+    }
+    const handlePostLike = (id: number) => {
+        postLikeTechBlogRender(id);
+        setPostLikeClicked(true);
+    };
     return (
         <>
             <Card
@@ -26,8 +42,7 @@ export default function CardComponent({ item }: ICardItemsProps) {
                     <CardMedia
                         component="img"
                         width="400"
-                        //item.techBlogPostBasicInfoDto.thumbnailUrl
-                        image={kakao}
+                        image={item.techBlogPostBasicInfoDto.thumbnailUrl}
                         alt="썸네일"
                         style={{ height: '250px' }}
                     />
@@ -56,7 +71,22 @@ export default function CardComponent({ item }: ICardItemsProps) {
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                             <span className="mr-2 text-xs">
-                                좋아요: {item.techBlogPostBasicInfoDto.postLike}
+                                {postLikeClicked ? (
+                                    <FavoriteIcon
+                                        sx={{ fontSize: '20px' }}
+                                        onClick={() =>
+                                            handlePostLike(item.techBlogPostBasicInfoDto.id)
+                                        }
+                                    />
+                                ) : (
+                                    <FavoriteBorderIcon
+                                        sx={{ fontSize: '20px' }}
+                                        onClick={() =>
+                                            handlePostLike(item.techBlogPostBasicInfoDto.id)
+                                        }
+                                    />
+                                )}
+                                {item.techBlogPostBasicInfoDto.postLike}
                             </span>
                             <span>조회수: {item.techBlogPostBasicInfoDto.viewCount}</span>
                         </Typography>

@@ -26,6 +26,7 @@ export default function MainPage() {
     const [categoryId, setCategoryId] = useState(0);
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
     const [didMount, setDidmount] = useState(false);
+
     const size = 10;
 
     const sort = 'createdAt';
@@ -100,9 +101,6 @@ export default function MainPage() {
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
-            <div className="flex w-10/12 gap-6">
-
-        <div className="flex justify-between">
             <div className="flex flex-col w-full gap-6">
                 <div className="flex max-w-3xl mt-8">
                     {getToken && (
