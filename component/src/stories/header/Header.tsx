@@ -5,7 +5,7 @@ import { CiBellOn } from 'react-icons/ci';
 import { Login } from '@monorepo/component/src/stories/login/Login';
 import { useDarkMode } from '@monorepo/service/src/ThemeContext/ThemeProvider';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
-import { getAuthStorage, removeAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
+import { removeAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
 import {
     getProfileImgStorage,
     removeProfileImgStorage,
@@ -32,6 +32,7 @@ const InputTextField = styled(TextField)({
 const buttonStyle = {
     color: 'black',
     width: '100%',
+    padding: '4px',
     '&:focus': {
         outline: 'none',
     },
@@ -74,7 +75,7 @@ function AuthHeader({ onLogout }: IHandleProps) {
                     <Button className="text-black" style={buttonStyle}>
                         Profile
                     </Button>
-                    <Button className="text-black" style={buttonStyle} onClick={onLogout}>
+                    <Button className="text-black" style={buttonStyle} onClick={() => onLogout()}>
                         Logout
                     </Button>
                 </div>
@@ -83,22 +84,23 @@ function AuthHeader({ onLogout }: IHandleProps) {
     );
 }
 
-export default function Header() {
+interface IHeaderProps {
+    authToken: string | null;
+}
+
+export default function Header({ authToken }: IHeaderProps) {
     const { darkMode, toggleDarkMode } = useDarkMode();
     const setProfileOpen = useSetRecoilState(profileModalOpen);
-    const TOKEN_KEY = 'accessToken';
-    const token = getAuthStorage(TOKEN_KEY);
-
     const handleModalClose = () => {
         setProfileOpen(false);
     };
 
     const handleLogout = () => {
         removeProfileImgStorage();
-        removeAuthStorage(TOKEN_KEY);
+        removeAuthStorage('accessToken');
         setProfileOpen(false); // 프로필 메뉴 닫기
     };
-    console.log(token);
+
     return (
         <header
             className={`flex w-screen h-[57px] border-b-2 border-solid border-zinc-500 items-center mt-5 pb-4`}
@@ -134,7 +136,7 @@ export default function Header() {
                         )}
                     </IconButton>
                     <CiBellOn size={26} aria-label="알림" />
-                    {token ? <AuthHeader onLogout={handleLogout} /> : <Login />}
+                    {authToken ? <AuthHeader onLogout={handleLogout} /> : <Login />}
                 </div>
             </div>
         </header>

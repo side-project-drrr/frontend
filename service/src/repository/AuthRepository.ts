@@ -12,6 +12,8 @@ export function setAuthStorage(
     localStorage.setItem(refreshToken_key, refreshValue);
 }
 
-export function removeAuthStorage(key: string) {
-    localStorage.removeItem(key);
+export function removeAuthStorage(key: string | null) {
+    if (key !== null) {
+        localStorage.removeItem(key);
+    }
 }
