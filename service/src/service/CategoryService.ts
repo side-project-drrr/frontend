@@ -32,15 +32,7 @@ export async function putUserCategoryItem(stringConvertNumberActiveData: number[
 export async function AuthCategoryService(memberId: string) {
     try {
         const authCategoryData = HttpClient.get(`/api/v1/categories/member/${memberId}`);
-        return (await authCategoryData).data;
-    } catch (error) {
-        console.error(error);
-    }
-}
 
-export async function fetchTechBlogByCategory(memberId: string) {
-    try {
-        const authCategoryData = HttpClient.get(`/api/v1/categories/member/${memberId}`);
         return (await authCategoryData).data;
     } catch (error) {
         console.error(error);
