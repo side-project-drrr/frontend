@@ -42,8 +42,6 @@ export async function getUserTechBlogService({
 }
 
 export async function postLikeTechBlogService({ memberId, postId }: IPostLikeProps) {
-    console.log(memberId);
-    console.log(postId);
     try {
         const res = await HttpClient.post(`/api/v1/post/like`, {
             memberId: memberId,
