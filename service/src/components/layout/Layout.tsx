@@ -7,9 +7,8 @@ import { getAuthStorage } from '../../repository/AuthRepository';
 export default function Layout() {
     const TOKEN_KEY = 'accessToken';
     const token = getAuthStorage(TOKEN_KEY);
-
     return (
-        <div>
+        <>
             <Header authToken={token} />
             <div className="flex w-full justify-evenly">
                 <main className="flex justify-end w-10/12">
@@ -23,6 +22,6 @@ export default function Layout() {
                     </div>
                 </aside>
             </div>
-        </div>
+        </>
     );
 }

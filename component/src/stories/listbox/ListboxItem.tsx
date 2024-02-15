@@ -5,7 +5,7 @@ export default function ListboxItem({ item }: ItemProps) {
         <>
             <div
                 key={item.techBlogPostBasicInfoDto.id}
-                className="relative flex flex-col justify-around w-10/12 gap-3 pl-6 text-black bg-white rounded-lg h-60"
+                className="relative flex flex-col justify-around w-10/12 gap-3 pl-6 text-blackrounded-lg h-60 bg-[#363D4B] dark:bg-[#363D4B]"
             >
                 <h1 className="text-base font-bold bold">{item.techBlogPostBasicInfoDto.title}</h1>
                 <p className="w-10/12 text-xs">{item.techBlogPostBasicInfoDto.summary}</p>
