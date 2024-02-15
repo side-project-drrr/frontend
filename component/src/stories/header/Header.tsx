@@ -5,13 +5,15 @@ import { CiBellOn } from 'react-icons/ci';
 import { Login } from '@monorepo/component/src/stories/login/Login';
 import { useDarkMode } from '@monorepo/service/src/ThemeContext/ThemeProvider';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
-import { removeAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
+import { getAuthStorage, removeAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
 import {
     getProfileImgStorage,
     removeProfileImgStorage,
 } from '@monorepo/service/src/repository/ProfileimgRepository';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { profileModalOpen } from '@monorepo/service/src/recoil/atom/profileModalOpen';
+import { isLoggedInState } from '@monorepo/service/src/recoil/atom/isLoggedInState';
+import { useLayoutEffect } from 'react';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -84,21 +86,27 @@ function AuthHeader({ onLogout }: IHandleProps) {
     );
 }
 
-interface IHeaderProps {
-    authToken: string | null;
-}
-
-export default function Header({ authToken }: IHeaderProps) {
+export default function Header() {
     const { darkMode, toggleDarkMode } = useDarkMode();
     const setProfileOpen = useSetRecoilState(profileModalOpen);
+    const [loggedIn, setLoggedIn] = useRecoilState(isLoggedInState);
+    const TOKEN_KEY = 'accessToken';
+    const token = getAuthStorage(TOKEN_KEY);
     const handleModalClose = () => {
         setProfileOpen(false);
     };
+
+    useLayoutEffect(() => {
+        if (token) {
+            setLoggedIn(true);
+        }
+    }, [loggedIn]);
 
     const handleLogout = () => {
         removeProfileImgStorage();
         removeAuthStorage('accessToken');
         setProfileOpen(false); // 프로필 메뉴 닫기
+        setLoggedIn(false);
     };
 
     return (
@@ -136,7 +144,7 @@ export default function Header({ authToken }: IHeaderProps) {
                         )}
                     </IconButton>
                     <CiBellOn size={26} aria-label="알림" />
-                    {authToken ? <AuthHeader onLogout={handleLogout} /> : <Login />}
+                    {loggedIn ? <AuthHeader onLogout={handleLogout} /> : <Login />}
                 </div>
             </div>
         </header>

@@ -64,67 +64,67 @@ export default function Carousel({ data }: CarouselProps) {
     };
 
     const onThrottleDragMove = throttle(onDragMove, delay);
-
     return (
         <div
-            className={`relative flex overflow-hidden rounded-md flex-1 will-change-transform dark:bg-[#363D4B] bg-[#363D4B]`}
-            ref={scrollRef}
+            className={`relative flex  overflow-hidden rounded-md w-full will-change-transform dark:bg-[#363D4B] bg-[#363D4B] h-60 m-0 p-0 `}
             onMouseDown={onDragStart}
             onMouseMove={handleOnMouseMove}
             onMouseUp={onDragEnd}
             onMouseLeave={onDragEnd}
             aria-label="추천 게시글"
+            ref={scrollRef}
         >
-            <div className={`transition ease-out duration-400 flex dark:bg-[#363D4B] bg-[#363D4B]`}>
+            <div
+                className={`transition ease-out duration-400 absolute flex w-screen`}
+                style={{ transform: `translateX(-${current * 25}%)` }}
+            >
                 {data.map(item => (
-                    <div
-                        key={item.id}
-                        style={{ transform: `translateX(-${current * 100}%)` }}
-                        className={`w-[23vw] h-[200px] relative flex flex-col dark-box-bg pl-2 pr-2 justify-around text-center overflow-x-scroll `}
-                    >
-                        <h3 aria-label="추천 게시글 제목" className="w-full text-sm ">
+                    <div key={item.id} className="flex flex-col">
+                        <h3
+                            aria-label="추천 게시글 제목"
+                            className="flex justify-center w-full text-lg "
+                        >
                             {item.title}
                         </h3>
-                        <div className={`flex justify-between `}>
-                            <div className="w-[50%]">
+                        <div className="flex justify-around flex-1 w-[480px] ">
+                            <div>
                                 <p
                                     aria-label="추천 게시글 메인 컨텐츠"
-                                    className="w-full text-xs text-left "
+                                    className="flex flex-wrap w-full mt-10 "
                                 >
-                                    {item.content}
+                                    {item.summary}
                                 </p>
                             </div>
-                            <div className="w-[50%]">
+                            <div className="flex justify-center">
                                 <img
-                                    src={item.url}
+                                    src={item.thumbnailUrl}
                                     alt="추천 게시글"
-                                    className="w-full h-[100%] "
+                                    className="w-full rounded-lg h-[180px]"
                                 />
                             </div>
                         </div>
-
-                        <div className="flex gap-4 dark:text-white">
+                        <div className="flex gap-4 ml-10 dark:text-white">
                             <p className="text-xs text-black dark:text-white" aria-label="좋아요">
-                                좋아요: {item.bookmark}
+                                좋아요: {item.viewCount}
                             </p>
                             <p className="text-xs text-black dark:text-white" aria-label="조회수">
-                                조회 수: {item.views}
+                                조회 수: {item.viewCount}
                             </p>
                         </div>
                     </div>
                 ))}
             </div>
             <div
-                className={`absolute bottom-0 flex items-center justify-between w-full h-full text-black dark:text-white`}
+                className={`absolute bottom-0 flex items-center justify-between  h-full text-black dark:text-white w-full`}
             >
-                <RiArrowDropLeftLine onClick={prevSlider} />
-                <RiArrowDropRightLine onClick={nextSlider} />
+                <RiArrowDropLeftLine onClick={prevSlider} size={30} />
+                <RiArrowDropRightLine onClick={nextSlider} size={30} />
             </div>
-            <div className={`absolute bottom-0 flex justify-center w-full gap-4 py-1 `}>
+            <div className={`absolute bottom-0 flex justify-center gap-4 py-1 w-full `}>
                 {data.map((data, index) => (
                     <div
                         className={`w-2 h-2 cursor-pointer rounded-full ${
-                            index === current ? 'bg-white' : 'bg-[#363D4B]'
+                            index === current ? 'bg-white' : 'bg-[#005FEE]'
                         } `}
                         key={data.id}
                         onClick={() => {
