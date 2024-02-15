@@ -103,11 +103,11 @@ export default function Header({ authToken }: IHeaderProps) {
 
     return (
         <header
-            className={`flex w-screen h-[57px] border-b-2 border-solid border-zinc-500 items-center mt-5 pb-4`}
+            className={`flex w-screen h-[57px] border-b-2 border-solid border-zinc-500 items-center mt-5 pb-4 `}
         >
             <div className="flex items-center flex-1 mx-10 " onClick={handleModalClose}>
-                <div className="flex items-center flex-1">
-                    <div className="mx-2 none">
+                <div className="flex items-center flex-1 ">
+                    <div className="mx-2 none ">
                         <BiLogoGit size={40} aria-label="로고" />
                     </div>
                     <div className="grow">
@@ -120,7 +120,7 @@ export default function Header({ authToken }: IHeaderProps) {
                         />
                     </div>
                 </div>
-                <div className="flex items-center justify-around w-1/12">
+                <div className="flex items-center justify-around w-1/12 ">
                     <IconButton
                         onClick={toggleDarkMode}
                         sx={{

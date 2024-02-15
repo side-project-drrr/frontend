@@ -6,11 +6,34 @@ import ItemDetailPage from './pages/ItemDetailPage';
 import CategoryPage from './pages/CategoryPage';
 import SocialCallback from './components/social/SocialCallback';
 import { ThemeProvider } from '@mui/material';
-import theme from './ThemeContext/theme';
+import { darkModeState } from './recoil/atom/darkModeState';
+import { useRecoilValue } from 'recoil';
+import { createTheme } from '@mui/material/styles';
 
 function App() {
+    const darkMode = useRecoilValue(darkModeState);
+
+    const lightTheme = createTheme({
+        palette: {
+            mode: 'light',
+            background: {
+                default: 'red', // 배경색 설정
+            },
+        },
+    });
+
+    // Dark Mode에서의 배경색
+    const darkTheme = createTheme({
+        palette: {
+            mode: 'dark',
+            background: {
+                default: 'red', // 배경색 설정
+            },
+        },
+    });
+    console.log(darkMode);
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
             <Routes>
                 <Route element={<Layout />}>
                     <Route path="/" element={<MainPage />} />

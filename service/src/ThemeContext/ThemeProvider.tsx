@@ -50,6 +50,18 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
         }
     }, []);
 
+    useEffect(() => {
+        if (
+            localStorage.theme === 'dark' ||
+            (!('theme' in localStorage) &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [darkMode]);
+
     useLayoutEffect(() => {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             setDarkMode('dark');
@@ -59,13 +71,15 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     }, []);
 
     const theme = createCustomTheme(darkMode);
-
     return (
         <DarkModeContext.Provider value={{ darkMode, toggleDarkMode }}>
             <MuiThemeProvider
                 theme={{
                     ...theme,
-                    palette: { ...theme.palette, mode: darkMode ? 'dark' : 'light' },
+                    palette: {
+                        ...theme.palette,
+                        mode: darkMode ? 'dark' : 'light',
+                    },
                 }}
             >
                 <CssBaseline />

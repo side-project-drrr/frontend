@@ -1,11 +1,8 @@
 import { useState, useRef, MouseEvent, useCallback } from 'react';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'react-icons/ri';
 import { CarouselProps } from './type';
-import { useDarkMode } from '../../ThemeContext/ThemeProvider';
 
 export default function Carousel({ data }: CarouselProps) {
-    const { darkMode } = useDarkMode();
-
     const [current, setCurrent] = useState(0);
     const [isDrag, setIsDrag] = useState(false);
     const [startX, setStartX] = useState<number>(0);
@@ -67,11 +64,10 @@ export default function Carousel({ data }: CarouselProps) {
     };
 
     const onThrottleDragMove = throttle(onDragMove, delay);
-    const backgroundColorClass =
-        darkMode === 'dark' ? 'bg-white text-black' : 'bg-[#363D4B] text-white';
+
     return (
         <div
-            className={`relative flex overflow-hidden rounded-md flex-1 will-change-transform ${backgroundColorClass}`}
+            className={`relative flex overflow-hidden rounded-md flex-1 will-change-transform dark:bg-[#363D4B] bg-[#363D4B]`}
             ref={scrollRef}
             onMouseDown={onDragStart}
             onMouseMove={handleOnMouseMove}
@@ -79,12 +75,12 @@ export default function Carousel({ data }: CarouselProps) {
             onMouseLeave={onDragEnd}
             aria-label="추천 게시글"
         >
-            <div className={`transition ease-out duration-400 flex ${backgroundColorClass}`}>
+            <div className={`transition ease-out duration-400 flex dark:bg-[#363D4B] bg-[#363D4B]`}>
                 {data.map(item => (
                     <div
                         key={item.id}
                         style={{ transform: `translateX(-${current * 100}%)` }}
-                        className={`w-[23vw] h-[200px] relative flex flex-col dark-box-bg pl-2 pr-2 justify-around text-center overflow-x-scroll ${backgroundColorClass}`}
+                        className={`w-[23vw] h-[200px] relative flex flex-col dark-box-bg pl-2 pr-2 justify-around text-center overflow-x-scroll `}
                     >
                         <h3 aria-label="추천 게시글 제목" className="w-full text-sm ">
                             {item.title}
@@ -107,11 +103,11 @@ export default function Carousel({ data }: CarouselProps) {
                             </div>
                         </div>
 
-                        <div className="flex gap-4">
-                            <p className="text-xs text-black" aria-label="좋아요">
+                        <div className="flex gap-4 dark:text-white">
+                            <p className="text-xs text-black dark:text-white" aria-label="좋아요">
                                 좋아요: {item.bookmark}
                             </p>
-                            <p className="text-xs text-black" aria-label="조회수">
+                            <p className="text-xs text-black dark:text-white" aria-label="조회수">
                                 조회 수: {item.views}
                             </p>
                         </div>
@@ -119,18 +115,16 @@ export default function Carousel({ data }: CarouselProps) {
                 ))}
             </div>
             <div
-                className={`absolute bottom-0 flex items-center justify-between w-full h-full text-black `}
+                className={`absolute bottom-0 flex items-center justify-between w-full h-full text-black dark:text-white`}
             >
                 <RiArrowDropLeftLine onClick={prevSlider} />
                 <RiArrowDropRightLine onClick={nextSlider} />
             </div>
-            <div
-                className={`absolute bottom-0 flex justify-center w-full gap-4 py-1 ${backgroundColorClass} `}
-            >
+            <div className={`absolute bottom-0 flex justify-center w-full gap-4 py-1 `}>
                 {data.map((data, index) => (
                     <div
                         className={`w-2 h-2 cursor-pointer rounded-full ${
-                            index === current ? 'bg-black' : 'bg-gray-500'
+                            index === current ? 'bg-white' : 'bg-[#363D4B]'
                         } `}
                         key={data.id}
                         onClick={() => {
