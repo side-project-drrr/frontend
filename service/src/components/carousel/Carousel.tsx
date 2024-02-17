@@ -78,38 +78,65 @@ export default function Carousel({ data }: CarouselProps) {
                 className={`transition ease-out duration-400 absolute flex w-screen`}
                 style={{ transform: `translateX(-${current * 25}%)` }}
             >
-                {data.map(item => (
-                    <div key={item.id} className="flex flex-col">
+                {data.map((item: any) => (
+                    <div key={item.techBlogPostBasicInfoDto.id} className="flex flex-col h-[25vh] ">
                         <h3
                             aria-label="추천 게시글 제목"
-                            className="flex justify-center w-full text-lg "
+                            className="justify-center w-full text-base  inline-flex"
                         >
-                            {item.title}
+                            {item.techBlogPostBasicInfoDto.title.slice(0, 30)}...
                         </h3>
-                        <div className="flex justify-around flex-1 w-[480px] ">
-                            <div>
+                        <div className="flex justify-around flex-1 w-[480px]">
+                            <div className="w-full  flex flex-wrap">
                                 <p
                                     aria-label="추천 게시글 메인 컨텐츠"
-                                    className="flex flex-wrap w-full mt-10 "
+                                    className="flex flex-wrap w-full mt-5 ml-10 text-sm "
                                 >
-                                    {item.summary}
+                                    {item.techBlogPostBasicInfoDto.summary.slice(0, 60)}...
                                 </p>
                             </div>
-                            <div className="flex justify-center">
+
+                            <div className="flex w-full items-center">
                                 <img
-                                    src={item.thumbnailUrl}
+                                    src={item.techBlogPostBasicInfoDto.thumbnailUrl}
                                     alt="추천 게시글"
-                                    className="w-full rounded-lg h-[180px]"
+                                    className="w-full rounded-lg h-[100px] "
                                 />
                             </div>
                         </div>
-                        <div className="flex gap-4 ml-10 dark:text-white">
-                            <p className="text-xs text-black dark:text-white" aria-label="좋아요">
-                                좋아요: {item.viewCount}
-                            </p>
-                            <p className="text-xs text-black dark:text-white" aria-label="조회수">
-                                조회 수: {item.viewCount}
-                            </p>
+
+                        <div className="flex gap-4 ml-10 dark:text-white mb-5 flex-col">
+                            <div>
+                                <ul className="flex gap-4 overflow-hidden flex-1">
+                                    {item.categoryDto?.map((item: any, index: number) =>
+                                        index < 3 ? (
+                                            <li
+                                                key={item.id}
+                                                id={item.id}
+                                                className="text-sm flex-1 flex"
+                                            >
+                                                #{item.name}
+                                            </li>
+                                        ) : (
+                                            <></>
+                                        ),
+                                    )}
+                                </ul>
+                            </div>
+                            <div className="flex">
+                                <p
+                                    className="text-xs text-black dark:text-white"
+                                    aria-label="좋아요"
+                                >
+                                    좋아요: {item.techBlogPostBasicInfoDto.viewCount}
+                                </p>
+                                <p
+                                    className="text-xs text-black dark:text-white"
+                                    aria-label="조회수"
+                                >
+                                    조회 수: {item.techBlogPostBasicInfoDto.viewCount}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 ))}

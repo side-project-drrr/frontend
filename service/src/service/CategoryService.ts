@@ -12,6 +12,7 @@ export async function getCategoryItem({ page, size, sort, direction }: IGetCateg
         const res = await HttpClient.get(
             `/api/v1/categories?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
         );
+        console.log(res.data);
         return res.data;
     } catch (error) {
         console.error(error);

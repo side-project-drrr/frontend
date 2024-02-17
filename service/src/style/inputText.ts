@@ -3,14 +3,14 @@ import { styled } from '@mui/material';
 
 export const InputTextField = styled(TextField)({
     '& label': {
-        color: '#000000',
+        color: 'black',
     },
 
     '& .MuiOutlinedInput-root': {
-        color: '#000000',
+        color: 'black',
         '& fieldset': {
             borderRadius: 15,
-            width: '24rem',
+            width: '100%',
             backgroundColor: 'transparent',
             borderColor: '#E4E4E7',
             //height: '2.75rem',

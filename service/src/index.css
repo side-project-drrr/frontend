@@ -9,10 +9,10 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    -webkit-text-fill-color: #000;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
-    box-shadow: 0 0 0px 1000px #fff inset;
     transition: background-color 5000s ease-in-out 0s;
+    -webkit-transition: background-color 9999s ease-out;
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    -webkit-text-fill-color: #000 !important;
 }
 
 input:autofill,
@@ -40,12 +40,6 @@ input:autofill:active {
     -webkit-text-size-adjust: 100%;
 }
 
-@layer base {
-    body {
-        @apply bg-light;
-    }
-}
-
 a {
     font-weight: 500;
     color: #646cff;
@@ -60,7 +54,9 @@ body {
     place-items: center;
     overflow-x: hidden;
     -ms-overflow-style: none; /* IE, Edge */
-    scrollbar-width: none;
+    scrollbar-width: none; /* Firefox */
+    list-style-type: none;
+    list-style: none;
 }
 
 h1 {
@@ -79,7 +75,9 @@ button {
     cursor: pointer;
     transition: border-color 0.25s;
 }
-
+button:hover {
+    border-color: #646cff;
+}
 button:focus,
 button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
@@ -88,6 +86,7 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
     :root {
         color: #213547;
+        background-color: #ffffff;
     }
     a:hover {
         color: #747bff;

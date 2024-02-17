@@ -1,4 +1,5 @@
 import HttpClient from '../apis/HttpClient';
+import { getAuthStorage } from '../repository/AuthRepository';
 
 interface ITechBlogCategory {
     page: number;
@@ -38,8 +39,11 @@ export async function getUserTechBlogService({
 
 export async function getRecommendTechBlogService(memberId: string) {
     try {
+        const TOKEN_KEY = 'accessToken';
+        const token = getAuthStorage(TOKEN_KEY);
+        console.log(token);
+
         const res = await HttpClient.get(`/api/v1/recommendation/posts?${memberId}`);
-        console.log('실행');
         return res.data;
     } catch (error) {
         console.error(error);

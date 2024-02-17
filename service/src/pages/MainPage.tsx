@@ -17,6 +17,7 @@ import { AuthCategoryService } from '../service/CategoryService';
 import { getTechBlogService, getUserTechBlogService } from '../service/TechBlogService';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { isLoggedInState } from '../recoil/atom/isLoggedInState';
+import CategoryModal from '../components/modal/CategoryModal';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -92,7 +93,6 @@ export default function MainPage() {
     }, [isCategoryModalOpen]);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
-
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
             <div className="flex flex-col w-full gap-6">
@@ -146,6 +146,7 @@ export default function MainPage() {
                 <div ref={setObservationTarget}></div>
             </div>
             <SignUpModal onSignupNext={handleSignupNext} />
+            <CategoryModal onModalOpen={isCategoryModalOpen} onClose={handleCategoryModalClose} />
         </div>
     );
 }

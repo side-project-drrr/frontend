@@ -6,25 +6,25 @@ import { getAuthStorage } from '../../repository/AuthRepository';
 import { useEffect } from 'react';
 import { useTokenDecode } from '../../hooks/useTokenDecode';
 import { getRecommendTechBlogService } from '../../service/TechBlogService';
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { recommendState } from '../../recoil/atom/recommendState';
+import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 
 export default function Layout() {
     const setRecommendData = useSetRecoilState(recommendState);
     const TOKEN_KEY = 'accessToken';
     const token = getAuthStorage(TOKEN_KEY);
     const memberId = useTokenDecode(token);
+    const loggedIn = useRecoilValue(isLoggedInState);
 
     async function getRecommenedDataRender() {
         const recommendBlogData = await getRecommendTechBlogService(memberId);
-        setRecommendData(recommendBlogData.posts);
+        setRecommendData(recommendBlogData);
     }
 
     useEffect(() => {
-        if (token !== null) {
-            getRecommenedDataRender();
-        }
-    }, [token]);
+        getRecommenedDataRender();
+    }, [loggedIn]);
 
     return (
         <>

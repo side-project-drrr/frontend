@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -16,8 +16,8 @@ import { SignUpService } from '../../service/auth/SocialService';
 import { setAuthStorage } from '../../repository/AuthRepository';
 import { getProvider } from '../../repository/ProviderRepository';
 import { getProfileImgStorage } from '../../repository/ProfileimgRepository';
-import { profileImageUrlState } from '../../recoil/atom/profileImageUrlState';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -73,9 +73,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const stringConvert = provider?.toString();
     const KEY = 'imgUrl';
     const profileImageUrl = getProfileImgStorage(KEY);
-
-    const profileImageUrl = useRecoilValue(profileImageUrlState);
-
+    const setIsLogged = useSetRecoilState(isLoggedInState);
     const size = 20;
 
     const sort = 'name';
@@ -84,7 +82,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
     async function getCategoryList() {
         const categoryData = await getCategoryItem({ page, size, sort, direction });
-        setCategoryItems(categoryData);
+        setCategoryItems(categoryData.content);
     }
 
     async function signupRender() {
@@ -111,6 +109,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     async function handleCategory() {
         signupRender();
         onClose();
+        setIsLogged(true);
         alert('drrr에 오신것을 환영합니다.');
     }
 
@@ -144,7 +143,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             getCategoryList();
         }
     }, [didMount]);
-
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
@@ -173,7 +171,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         ))}
                     </ul>
                     <Button
-                        className="w-10/12 "
+                        className="w-10/12"
                         onClick={handleCategory}
                         style={buttonStyle}
                         role="Button"
