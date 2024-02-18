@@ -5,7 +5,7 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const indexKr = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하']
 const indexEn = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-const indexText = indexKr.concat(indexEn)
+const indexText = indexEn.concat(indexKr)
 
 type allTopicsType = {
     category: topicsType[],
@@ -133,6 +133,12 @@ export default function TopicPage() {
         }
     }
 
+    // 전체 topic 노출
+    function getAllTopics(){
+        setTopicIndex('')
+        setSearchVal('')
+    }
+
     // 옵저버 핸들러
     function obsHandler(entries: IntersectionObserverEntry[]){
         const target = entries[0]
@@ -188,7 +194,7 @@ export default function TopicPage() {
                 if(resKo.status === 200 && resEn.status === 200){
                     const resKoData = resKo.data.content
                     const resEnData = resEn.data.content
-                    const res = resKoData.concat(resEnData)
+                    const res = resEnData.concat(resKoData)
 
                     setAllTopics(res)                    
                 }
@@ -237,14 +243,15 @@ export default function TopicPage() {
             </div>
             <div className='flex justify-between items-center w-full h-[32px]'>
                 <MdKeyboardArrowLeft onClick={handleOnClickLeft} className='cursor-pointer' size={30}/>
-                <div id='category-tab-container'
-                    className='relative h-full w-full overflow-hidden'>
+                <div id='category-tab-container' className='relative h-full w-full overflow-hidden'>
                     <Stack id='category-tab' className='absolute t-0 z-0' style={{left: `${tabPosition}px`, transition: 'all .5s ease'}} direction="row" spacing={1}>
+                        <Chip onClick={getAllTopics} label='All' sx={{cursor:'pointer', background: topicIndex === 'All' ? 'rgba(255, 255, 255, .1)' : 'rgba(255, 255, 255, 0.16)'}}/>
                         {
                             indexText.map((data, index) => (
                                 <Chip onClick={() => handleIndex(data)} key={index} label={data} sx={{cursor:'pointer', background: topicIndex === data ? 'rgba(255, 255, 255, .1)' : 'rgba(255, 255, 255, 0.16)'}}/>
                             ))
                         }
+                        <Chip onClick={() => handleIndex('a')} label='기타' sx={{cursor:'pointer', background: topicIndex === 'All' ? 'rgba(255, 255, 255, .1)' : 'rgba(255, 255, 255, 0.16)'}}/>
                     </Stack>
                 </div>
                 <MdKeyboardArrowRight onClick={handleOnClickRight} className='cursor-pointer' size={30}/>
@@ -255,8 +262,9 @@ export default function TopicPage() {
                         <div className='grid grid-cols-3 gap-10'>
                             {
                                 allTopics.map((data, index) => (
-                                    <div key={index}>
-                                        <h2 className='text-xl font-bold mb-3'>{data.keyIndex}</h2>
+                                    <div className='relative' key={index}>
+                                        <span onClick={() => handleIndex(data.keyIndex)} className='absolute top-0 right-0 text-xs cursor-pointer'>더보기</span>
+                                        <h2 className='border-b-[1px] border-zinc-500 text-xl font-bold mb-3'>{data.keyIndex}</h2>
                                         <ul className='flex flex-col gap-1'>
                                             {
                                                 data.category.map((item, idx) => (
