@@ -12,7 +12,7 @@ import { RecoilRoot } from 'recoil';
 // }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
+    // <React.StrictMode>
         <RecoilRoot>
             <BrowserRouter>
                 <ThemeProvider>
@@ -20,5 +20,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 </ThemeProvider>
             </BrowserRouter>
         </RecoilRoot>
-    </React.StrictMode>,
+    // </React.StrictMode>
 );

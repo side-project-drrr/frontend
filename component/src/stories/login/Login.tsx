@@ -30,7 +30,7 @@ export const Login = () => {
     };
     return (
         <>
-            <BsPersonCircle aria-label="로그인" onClick={handleOpen} size={30} />
+            <BsPersonCircle className='ml-2' aria-label="로그인" onClick={handleOpen} size={26} />
             <Modal
                 open={open}
                 onClose={handleClose}

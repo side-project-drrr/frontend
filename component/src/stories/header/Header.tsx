@@ -61,7 +61,7 @@ function AuthHeader({ onLogout }: IHandleProps) {
     };
 
     return (
-        <div className="relative">
+        <div className="relative p-1">
             {img ? (
                 <Avatar alt="Avatar" src={imgUrl} onClick={e => handleToggleOpen(e)} />
             ) : (
@@ -103,28 +103,27 @@ export default function Header({ authToken }: IHeaderProps) {
 
     return (
         <header
-            className={`flex w-screen h-[57px] border-b-2 border-solid border-zinc-500 items-center mt-5 pb-4 `}
+            className={`flex lg:w-[1280px] md:w-screen py-3.5`}
         >
-            <div className="flex items-center flex-1 mx-10 " onClick={handleModalClose}>
-                <div className="flex items-center flex-1 ">
+            <div className="flex w-full items-center justify-between" onClick={handleModalClose}>
+                <div className="flex items-center">
                     <div className="mx-2 none ">
                         <BiLogoGit size={40} aria-label="로고" />
                     </div>
                     <div className="grow">
                         <InputTextField
                             type="text"
-                            className="max-w-xs"
                             variant="outlined"
                             label="검색"
                             aria-label="검색"
                         />
                     </div>
                 </div>
-                <div className="flex items-center justify-around w-1/12 ">
+                <div className="flex items-center justify-around">
                     <IconButton
                         onClick={toggleDarkMode}
                         sx={{
-                            p: 1,
+                            p: 0,
                         }}
                         size="large"
                         color="inherit"
@@ -135,7 +134,7 @@ export default function Header({ authToken }: IHeaderProps) {
                             <DarkModeOutlined color="action" />
                         )}
                     </IconButton>
-                    <CiBellOn size={26} aria-label="알림" />
+                    <CiBellOn className='ml-2' size={34} aria-label="알림" />
                     {authToken ? <AuthHeader onLogout={handleLogout} /> : <Login />}
                 </div>
             </div>

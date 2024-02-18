@@ -20,7 +20,7 @@ const TopPost = () => {
                 {topContent?.map((content, index) => (
                     <Link
                         to={`/category/detail/${content.id}`}
-                        key={content.id}
+                        key={index}
                         className="text-black dark:text-white"
                     >
                         <li className="flex py-2 " id={String(content.id)}>
