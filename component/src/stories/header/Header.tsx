@@ -12,6 +12,8 @@ import {
 } from '@monorepo/service/src/repository/ProfileimgRepository';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { profileModalOpen } from '@monorepo/service/src/recoil/atom/profileModalOpen';
+import ChatBubble from '../ChatBubble/ChatBubble';
+import { isSearchClickedState } from '@monorepo/service/src/recoil/atom/isSearchClickedState';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -47,6 +49,8 @@ interface IHandleProps {
 
 function AuthHeader({ onLogout }: IHandleProps) {
     const [profileOpen, setProfileOpen] = useRecoilState(profileModalOpen);
+    const setIsSearchClicked = useSetRecoilState(isSearchClickedState);
+
     const KEY = 'imgUrl';
     const img = getProfileImgStorage(KEY);
     let imgUrl;
@@ -58,6 +62,7 @@ function AuthHeader({ onLogout }: IHandleProps) {
         //위 코드가 없을 경우 header 영역 밖을 클릭할 경우의 코드를 넣으면 profilediv 영역이 나타나지 않는다.
         e.stopPropagation();
         setProfileOpen(!profileOpen);
+        setIsSearchClicked(false);
     };
 
     return (
@@ -89,6 +94,9 @@ interface IHeaderProps {
 }
 
 export default function Header({ authToken }: IHeaderProps) {
+    const [isSearchClicked, setIsSearchClicked] = useRecoilState(isSearchClickedState);
+    //const [searchValue, setSearchValue] = useState('');
+
     const { darkMode, toggleDarkMode } = useDarkMode();
     const setProfileOpen = useSetRecoilState(profileModalOpen);
     const handleModalClose = () => {
@@ -101,6 +109,11 @@ export default function Header({ authToken }: IHeaderProps) {
         setProfileOpen(false); // 프로필 메뉴 닫기
     };
 
+    const handleSearchValue = (e: React.ChangeEvent) => {
+        const value = e.target as HTMLElement;
+        console.log(value);
+    };
+
     return (
         <header
             className={`flex w-screen h-[57px] border-b-2 border-solid border-zinc-500 items-center mt-5 pb-4 `}
@@ -110,14 +123,17 @@ export default function Header({ authToken }: IHeaderProps) {
                     <div className="mx-2 none ">
                         <BiLogoGit size={40} aria-label="로고" />
                     </div>
-                    <div className="grow">
+                    <div className="relative grow">
                         <InputTextField
                             type="text"
                             className="max-w-xs"
                             variant="outlined"
                             label="검색"
                             aria-label="검색"
+                            onClick={() => setIsSearchClicked(!isSearchClicked)}
+                            onChange={e => handleSearchValue(e)}
                         />
+                        {isSearchClicked && <ChatBubble />}
                     </div>
                 </div>
                 <div className="flex items-center justify-around w-1/12 ">

@@ -40,6 +40,7 @@ function App() {
                     <Route path="/detail/:id" element={<ItemDetailPage />} />
                     <Route path="/signup/category" element={<CategoryPage />} />
                     <Route path="/category/detail/:id" element={<ItemDetailPage />} />
+                    <Route path="/Exploretopics" element={<ItemDetailPage />} />
                 </Route>
                 <Route path="/kakao/auth" element={<SocialCallback />} />
                 <Route path="/github/auth" element={<SocialCallback />} />
