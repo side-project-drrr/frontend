@@ -78,16 +78,16 @@ export default function Carousel({ data }: CarouselProps) {
                 className={`transition ease-out duration-400 absolute flex w-screen`}
                 style={{ transform: `translateX(-${current * 25}%)` }}
             >
-                {data.map((item: any) => (
+                {data?.map((item: any) => (
                     <div key={item.techBlogPostBasicInfoDto.id} className="flex flex-col h-[25vh] ">
                         <h3
                             aria-label="추천 게시글 제목"
-                            className="justify-center w-full text-base  inline-flex"
+                            className="inline-flex justify-center w-full text-base"
                         >
                             {item.techBlogPostBasicInfoDto.title.slice(0, 30)}...
                         </h3>
                         <div className="flex justify-around flex-1 w-[480px]">
-                            <div className="w-full  flex flex-wrap">
+                            <div className="flex flex-wrap w-full">
                                 <p
                                     aria-label="추천 게시글 메인 컨텐츠"
                                     className="flex flex-wrap w-full mt-5 ml-10 text-sm "
@@ -96,7 +96,7 @@ export default function Carousel({ data }: CarouselProps) {
                                 </p>
                             </div>
 
-                            <div className="flex w-full items-center">
+                            <div className="flex items-center w-full">
                                 <img
                                     src={item.techBlogPostBasicInfoDto.thumbnailUrl}
                                     alt="추천 게시글"
@@ -105,15 +105,15 @@ export default function Carousel({ data }: CarouselProps) {
                             </div>
                         </div>
 
-                        <div className="flex gap-4 ml-10 dark:text-white mb-5 flex-col">
+                        <div className="flex flex-col gap-4 mb-5 ml-10 dark:text-white">
                             <div>
-                                <ul className="flex gap-4 overflow-hidden flex-1">
+                                <ul className="flex flex-1 gap-4 overflow-hidden">
                                     {item.categoryDto?.map((item: any, index: number) =>
                                         index < 3 ? (
                                             <li
                                                 key={item.id}
                                                 id={item.id}
-                                                className="text-sm flex-1 flex"
+                                                className="flex flex-1 text-sm"
                                             >
                                                 #{item.name}
                                             </li>

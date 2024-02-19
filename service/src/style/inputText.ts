@@ -13,7 +13,6 @@ export const InputTextField = styled(TextField)({
             width: '100%',
             backgroundColor: 'transparent',
             borderColor: '#E4E4E7',
-            //height: '2.75rem',
         },
     },
 });
