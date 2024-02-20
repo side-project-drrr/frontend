@@ -10,7 +10,7 @@ interface IGetCategory {
 export async function getCategoryItem({ page, size, sort, direction }: IGetCategory) {
     try {
         const res = await HttpClient.get(
-            `/api/v1/categories?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
+            `/api/v1/categories/all?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
         );
         return res.data;
     } catch (error) {
@@ -31,9 +31,11 @@ export async function putUserCategoryItem(stringConvertNumberActiveData: number[
 
 export async function AuthCategoryService(memberId: string) {
     try {
-        const authCategoryData = HttpClient.get(`/api/v1/categories/member/${memberId}`);
+        const authCategoryData = await HttpClient.get(
+            `/api/v1/members/me/modify/category-preference/${memberId}`,
+        );
 
-        return (await authCategoryData).data;
+        return authCategoryData.data;
     } catch (error) {
         console.error(error);
     }

@@ -46,7 +46,7 @@ export async function SignUpService({
 
 export async function SignUpEmail({ providerId, email }: IAuthEmailProps) {
     try {
-        const res = await HttpClient.post(`/auth/email`, {
+        const res = await HttpClient.post(`/api/v1/send-verification-email`, {
             email: `${email.email}`,
             providerId: `${providerId}`,
         });
@@ -61,7 +61,7 @@ export async function SignUpEmailValidation({
     verificationCode,
 }: IAuthEmailVaildationProps) {
     try {
-        const res = await HttpClient.post(`auth/email/verification`, {
+        const res = await HttpClient.post(`/api/v1/verify-email`, {
             providerId: `${providerId}`,
             verificationCode: `${verificationCode}`,
         });
