@@ -4,12 +4,15 @@ export interface TopKeywordProps {
 }
 
 export interface ITopPostProps {
-    id: number;
-    title: string;
-    summary: string;
-    techBlogCode: string;
-    thumbnailUrl: string;
-    viewCount: number;
-    postLike: number;
-    writtenAt: Date;
+    techBlogPostBasicInfoDto: {
+        id: number;
+        title: string;
+        summary: string;
+        techBlogCode: string;
+        thumbnailUrl: string;
+        viewCount: number;
+        postLike: number;
+        writtenAt: Date;
+        url: string;
+    };
 }

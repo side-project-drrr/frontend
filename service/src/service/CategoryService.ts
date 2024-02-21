@@ -20,7 +20,7 @@ export async function getCategoryItem({ page, size, sort, direction }: IGetCateg
 
 export async function putUserCategoryItem(stringConvertNumberActiveData: number[]) {
     try {
-        const res = await HttpClient.put(`/api/v1/member/preferences/categories`, {
+        const res = await HttpClient.put(`/api/v1/members/me/modify/category-preference`, {
             categoryIds: stringConvertNumberActiveData,
         });
         return res.data;
@@ -30,9 +30,10 @@ export async function putUserCategoryItem(stringConvertNumberActiveData: number[
 }
 
 export async function AuthCategoryService(memberId: string) {
+    console.log(memberId);
     try {
         const authCategoryData = await HttpClient.get(
-            `/api/v1/members/me/modify/category-preference/${memberId}`,
+            `/api/v1/members/me/category-preference?memberId=${memberId}`,
         );
 
         return authCategoryData.data;
