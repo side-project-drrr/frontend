@@ -10,7 +10,7 @@ interface IGetCategory {
 export async function getCategoryItem({ page, size, sort, direction }: IGetCategory) {
     try {
         const res = await HttpClient.get(
-            `/api/v1/categories?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
+            `/api/v1/categories/all?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
         );
         return res.data;
     } catch (error) {
@@ -20,7 +20,7 @@ export async function getCategoryItem({ page, size, sort, direction }: IGetCateg
 
 export async function putUserCategoryItem(stringConvertNumberActiveData: number[]) {
     try {
-        const res = await HttpClient.put(`/api/v1/member/preferences/categories`, {
+        const res = await HttpClient.put(`/api/v1/members/me/modify/category-preference`, {
             categoryIds: stringConvertNumberActiveData,
         });
         return res.data;
@@ -30,10 +30,13 @@ export async function putUserCategoryItem(stringConvertNumberActiveData: number[
 }
 
 export async function AuthCategoryService(memberId: string) {
+    console.log(memberId);
     try {
-        const authCategoryData = HttpClient.get(`/api/v1/categories/member/${memberId}`);
+        const authCategoryData = await HttpClient.get(
+            `/api/v1/members/me/category-preference?memberId=${memberId}`,
+        );
 
-        return (await authCategoryData).data;
+        return authCategoryData.data;
     } catch (error) {
         console.error(error);
     }
