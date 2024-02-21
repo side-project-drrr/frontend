@@ -129,13 +129,7 @@ export default function CategorySlide({
                     </div>
                 </div>
             </div>
-            <RiArrowDropRightLine
-                onClick={nextSlider}
-                size={40}
-                aria-label="오른쪽으로 넘기기"
-                // className="absolute"
-            />
-            {/* <div ref={onSetObservationTarget}></div> */}
+            <RiArrowDropRightLine onClick={nextSlider} size={40} aria-label="오른쪽으로 넘기기" />
             <UserCategoryModal
                 onClose={onClose}
                 onModalOpen={onModalOpen}

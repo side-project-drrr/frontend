@@ -10,10 +10,15 @@ import {
     getProfileImgStorage,
     removeProfileImgStorage,
 } from '@monorepo/service/src/repository/ProfileimgRepository';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { profileModalOpen } from '@monorepo/service/src/recoil/atom/profileModalOpen';
 import ChatBubble from '../ChatBubble/ChatBubble';
 import { isSearchClickedState } from '@monorepo/service/src/recoil/atom/isSearchClickedState';
+import { useEffect, useState } from 'react';
+import { getHeaderKeywordSearch } from '@monorepo/service/src/service/HeaderSearchService';
+import { HeaderSearchDataState } from '@monorepo/service/src/recoil/atom/HeaderSearchDataState';
+import { PageState } from '@monorepo/service/src/recoil/atom/PageState';
+import { Link, useNavigate } from 'react-router-dom';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -95,10 +100,40 @@ interface IHeaderProps {
 
 export default function Header({ authToken }: IHeaderProps) {
     const [isSearchClicked, setIsSearchClicked] = useRecoilState(isSearchClickedState);
-    //const [searchValue, setSearchValue] = useState('');
-
+    const [searchValue, setSearchValue] = useState('');
+    const [valueReset, setValueRest] = useState(false);
+    const [resultSearchValue, setResultSearchValue] = useState<any[]>([]);
+    const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
     const { darkMode, toggleDarkMode } = useDarkMode();
+    const page = useRecoilValue(PageState);
+
     const setProfileOpen = useSetRecoilState(profileModalOpen);
+    const navigate = useNavigate();
+    const size = 10;
+    const sort = 'writtenAt';
+    const direction = 'desc';
+    async function getKeywordSerchRender() {
+        const keywordSearchData = await getHeaderKeywordSearch({
+            page,
+            size,
+            sort,
+            direction,
+            searchValue,
+        });
+        setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
+    }
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Enter') {
+            // 엔터 키를 눌렀을 때 실행할 동작
+            setTechBlogSearchData([]);
+            getKeywordSerchRender();
+            setValueRest(true);
+            setIsSearchClicked(false);
+            setResultSearchValue(prev => [...prev, ...resultSearchValue]);
+            navigate('/search', { state: searchValue });
+        }
+    };
+
     const handleModalClose = () => {
         setProfileOpen(false);
     };
@@ -109,10 +144,14 @@ export default function Header({ authToken }: IHeaderProps) {
         setProfileOpen(false); // 프로필 메뉴 닫기
     };
 
-    const handleSearchValue = (e: React.ChangeEvent) => {
-        const value = e.target as HTMLElement;
-        console.log(value);
+    const handleSearchValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value = e.target.value;
+        setSearchValue(value);
     };
+
+    useEffect(() => {
+        getKeywordSerchRender();
+    }, [page]);
 
     return (
         <header
@@ -120,8 +159,10 @@ export default function Header({ authToken }: IHeaderProps) {
         >
             <div className="flex items-center flex-1 mx-10 " onClick={handleModalClose}>
                 <div className="flex items-center flex-1 ">
-                    <div className="mx-2 none ">
-                        <BiLogoGit size={40} aria-label="로고" />
+                    <div className="mx-2 none">
+                        <Link to="/" className="bg-transparent text-black dark:text-white">
+                            <BiLogoGit size={40} aria-label="로고" />
+                        </Link>
                     </div>
                     <div className="relative grow">
                         <InputTextField
@@ -131,9 +172,12 @@ export default function Header({ authToken }: IHeaderProps) {
                             label="검색"
                             aria-label="검색"
                             onClick={() => setIsSearchClicked(!isSearchClicked)}
+                            onKeyPress={e => handleKeyPress(e)}
                             onChange={e => handleSearchValue(e)}
+                            autoComplete="off"
+                            value={!valueReset ? searchValue : ''}
                         />
-                        {isSearchClicked && <ChatBubble />}
+                        {isSearchClicked && <ChatBubble onSearchValue={resultSearchValue} />}
                     </div>
                 </div>
                 <div className="flex items-center justify-around w-1/12 ">

@@ -16,7 +16,6 @@ import { SignUpService } from '../../service/auth/SocialService';
 import { setAuthStorage } from '../../repository/AuthRepository';
 import { getProvider } from '../../repository/ProviderRepository';
 import { getProfileImgStorage } from '../../repository/ProfileimgRepository';
-import { profileImageUrlState } from '../../recoil/atom/profileImageUrlState';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
 const style = {
@@ -73,8 +72,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const stringConvert = provider?.toString();
     const KEY = 'imgUrl';
     const profileImageUrl = getProfileImgStorage(KEY);
-
-    const profileImageUrl = useRecoilValue(profileImageUrlState);
 
     const size = 20;
 

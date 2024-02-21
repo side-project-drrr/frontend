@@ -9,6 +9,7 @@ import { ThemeProvider } from '@mui/material';
 import { darkModeState } from './recoil/atom/darkModeState';
 import { useRecoilValue } from 'recoil';
 import { createTheme } from '@mui/material/styles';
+import HeaderSearchPage from './pages/HeaderSearchPage';
 
 function App() {
     const darkMode = useRecoilValue(darkModeState);
@@ -31,7 +32,7 @@ function App() {
             },
         },
     });
-    console.log(darkMode);
+
     return (
         <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
             <Routes>
@@ -41,6 +42,7 @@ function App() {
                     <Route path="/signup/category" element={<CategoryPage />} />
                     <Route path="/category/detail/:id" element={<ItemDetailPage />} />
                     <Route path="/Exploretopics" element={<ItemDetailPage />} />
+                    <Route path="/search" element={<HeaderSearchPage />} />
                 </Route>
                 <Route path="/kakao/auth" element={<SocialCallback />} />
                 <Route path="/github/auth" element={<SocialCallback />} />

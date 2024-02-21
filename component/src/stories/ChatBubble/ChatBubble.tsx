@@ -4,7 +4,9 @@ import { isSearchClickedState } from '@monorepo/service/src/recoil/atom/isSearch
 import { useSetRecoilState } from 'recoil';
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-export default function ChatBubble() {
+
+export default function ChatBubble({ onSearchValue }: any) {
+    console.log(onSearchValue);
     const setIsSearchClicked = useSetRecoilState(isSearchClickedState);
     const searchBoxRef = useRef<HTMLDivElement>(null);
 
@@ -32,7 +34,14 @@ export default function ChatBubble() {
         <div className="absolute z-10 flex mt-2" ref={searchBoxRef}>
             <div className="relative flex-1 p-2 mb-2 text-black bg-white rounded-lg w-96">
                 <div className="flex flex-col items-center justify-center">
-                    <div className="flex items-center justify-around w-full gap-2 p-4">
+                    <div className="flex items-center justify-around w-full gap-2 p-4 flex-col">
+                        <div>
+                            {onSearchValue.length !== 1 &&
+                                onSearchValue?.map((value: string, index: number) => (
+                                    <p key={index}>{value}</p>
+                                ))}
+                        </div>
+                        <hr />
                         <Link
                             to="/Exploretopics"
                             className="flex items-center gap-2 text-black hover:text-black"
