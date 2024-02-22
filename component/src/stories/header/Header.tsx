@@ -22,7 +22,6 @@ const InputTextField = styled(TextField)({
         color: 'var(--text)',
         '& fieldset': {
             borderRadius: 20,
-            width: '24rem',
             backgroundColor: 'transparent',
             borderColor: '#E4E4E7',
         },
@@ -31,7 +30,6 @@ const InputTextField = styled(TextField)({
 
 const buttonStyle = {
     color: 'black',
-    width: '100%',
     padding: '4px',
     '&:focus': {
         outline: 'none',
@@ -103,29 +101,23 @@ export default function Header({ authToken }: IHeaderProps) {
 
     return (
         <header
-            className={`flex w-screen h-[57px] border-b-2 border-solid border-zinc-500 items-center mt-5 pb-4 `}
+            className={`flex flex-col items-center w-screen`}
         >
-            <div className="flex items-center flex-1 mx-10 " onClick={handleModalClose}>
-                <div className="flex items-center flex-1 ">
-                    <div className="mx-2 none ">
+            <div className="w-full max-w-screen-xl py-4 flex items-center justify-between" onClick={handleModalClose}>
+                <div className="flex items-center">
+                    <div className="mr-2 none">
                         <BiLogoGit size={40} aria-label="로고" />
                     </div>
-                    <div className="grow">
-                        <InputTextField
-                            type="text"
-                            className="max-w-xs"
-                            variant="outlined"
-                            label="검색"
-                            aria-label="검색"
-                        />
-                    </div>
+                    <InputTextField
+                        type="text"
+                        variant="outlined"
+                        label="검색"
+                        aria-label="검색"
+                    />
                 </div>
-                <div className="flex items-center justify-around w-1/12 ">
+                <div className="flex items-center">
                     <IconButton
                         onClick={toggleDarkMode}
-                        sx={{
-                            p: 1,
-                        }}
                         size="large"
                         color="inherit"
                     >

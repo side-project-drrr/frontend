@@ -31,7 +31,7 @@ function App() {
             },
         },
     });
-    console.log(darkMode);
+    
     return (
         <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
             <Routes>

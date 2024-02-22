@@ -20,5 +20,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 </ThemeProvider>
             </BrowserRouter>
         </RecoilRoot>
-    </React.StrictMode>,
+    </React.StrictMode>
 );
