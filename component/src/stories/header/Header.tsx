@@ -22,7 +22,6 @@ const InputTextField = styled(TextField)({
         color: 'var(--text)',
         '& fieldset': {
             borderRadius: 20,
-            width: '24rem',
             backgroundColor: 'transparent',
             borderColor: '#E4E4E7',
         },
@@ -31,7 +30,6 @@ const InputTextField = styled(TextField)({
 
 const buttonStyle = {
     color: 'black',
-    width: '100%',
     padding: '4px',
     '&:focus': {
         outline: 'none',
@@ -102,39 +100,26 @@ export default function Header({ authToken }: IHeaderProps) {
     };
 
     return (
-        <header
-            className={`flex lg:w-[1280px] md:w-screen py-3.5`}
-        >
-            <div className="flex w-full items-center justify-between" onClick={handleModalClose}>
+        <header className={`flex flex-col items-center w-screen`}>
+            <div
+                className="w-full max-w-screen-xl py-4 flex items-center justify-between"
+                onClick={handleModalClose}
+            >
                 <div className="flex items-center">
-                    <div className="mx-2 none ">
+                    <div className="mr-2 none">
                         <BiLogoGit size={40} aria-label="로고" />
                     </div>
-                    <div className="grow">
-                        <InputTextField
-                            type="text"
-                            variant="outlined"
-                            label="검색"
-                            aria-label="검색"
-                        />
-                    </div>
+                    <InputTextField type="text" variant="outlined" label="검색" aria-label="검색" />
                 </div>
-                <div className="flex items-center justify-around">
-                    <IconButton
-                        onClick={toggleDarkMode}
-                        sx={{
-                            p: 0,
-                        }}
-                        size="large"
-                        color="inherit"
-                    >
+                <div className="flex items-center">
+                    <IconButton onClick={toggleDarkMode} size="large" color="inherit">
                         {darkMode === 'dark' ? (
                             <LightModeOutlined />
                         ) : (
                             <DarkModeOutlined color="action" />
                         )}
                     </IconButton>
-                    <CiBellOn className='ml-2' size={34} aria-label="알림" />
+                    <CiBellOn className="ml-2" size={34} aria-label="알림" />
                     {authToken ? <AuthHeader onLogout={handleLogout} /> : <Login />}
                 </div>
             </div>
