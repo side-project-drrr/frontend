@@ -8,7 +8,7 @@ export default function Layout() {
     const TOKEN_KEY = 'accessToken';
     const token = getAuthStorage(TOKEN_KEY);
     return (
-        <div className='flex w-screen flex-col items-center'>
+        <>
             <Header authToken={token} />
             <div className='w-full h-px bg-[#444]'/>
             <div className="flex justify-center">
@@ -25,6 +25,6 @@ export default function Layout() {
                     </aside>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
