@@ -100,9 +100,9 @@ export default function Header({ authToken }: IHeaderProps) {
     };
 
     return (
-        <header className={`flex flex-col items-center w-screen`}>
+        <header className={`w-full flex justify-center`}>
             <div
-                className="w-full max-w-screen-xl py-4 flex items-center justify-between"
+                className="w-full max-w-screen-xl py-4 flex justify-between"
                 onClick={handleModalClose}
             >
                 <div className="flex items-center">

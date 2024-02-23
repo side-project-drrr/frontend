@@ -10,7 +10,7 @@ export default function Layout() {
     return (
         <div className='flex w-screen flex-col items-center'>
             <Header authToken={token} />
-            <div className='h-px bg-[#444]'/>
+            <div className='w-full h-px bg-[#444]'/>
             <div className="flex justify-center">
                 <div className='max-w-screen-xl flex'>
                     <main className="w-[70%]">
