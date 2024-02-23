@@ -12,7 +12,7 @@ export default function Layout() {
             <Header authToken={token} />
             <div className='w-full h-px bg-[#444]'/>
             <div className="flex justify-center">
-                <div className='max-w-screen-xl flex'>
+                <div className='w-full max-w-screen-xl flex'>
                     <main className="w-[70%]">
                         <section aria-label="메인 콘텐츠">
                             <Outlet />
