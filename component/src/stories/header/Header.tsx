@@ -100,27 +100,19 @@ export default function Header({ authToken }: IHeaderProps) {
     };
 
     return (
-        <header
-            className={`flex flex-col items-center w-screen`}
-        >
-            <div className="w-full max-w-screen-xl py-4 flex items-center justify-between" onClick={handleModalClose}>
+        <header className={`w-full flex justify-center`}>
+            <div
+                className="w-full max-w-screen-xl py-4 flex justify-between"
+                onClick={handleModalClose}
+            >
                 <div className="flex items-center">
                     <div className="mr-2 none">
                         <BiLogoGit size={40} aria-label="로고" />
                     </div>
-                    <InputTextField
-                        type="text"
-                        variant="outlined"
-                        label="검색"
-                        aria-label="검색"
-                    />
+                    <InputTextField type="text" variant="outlined" label="검색" aria-label="검색" />
                 </div>
                 <div className="flex items-center">
-                    <IconButton
-                        onClick={toggleDarkMode}
-                        size="large"
-                        color="inherit"
-                    >
+                    <IconButton onClick={toggleDarkMode} size="large" color="inherit">
                         {darkMode === 'dark' ? (
                             <LightModeOutlined />
                         ) : (
