@@ -3,21 +3,21 @@ module.exports = {
     theme: {
         backgroundImage: { send: "url('./assets/send-2.png')" },
         extend: {
-            // colors: {
-            //     light: {
-            //         DEFAULT: '#C2C2C2',
-            //     },
-            //     dark: {
-            //         text: {
-            //             DEFAULT: '#FFF',
-            //             1: '#D9D9D9',
-            //             2: '#ACACAC',
-            //             3: '#595959',
-            //         },
-            //     }
-            // },
+            colors: {
+                light: {
+                    DEFAULT: '#C2C2C2',
+                },
+                dark: {
+                    text: {
+                        DEFAULT: '#FFF',
+                        1: '#D9D9D9',
+                        2: '#ACACAC',
+                        3: '#595959',
+                    },
+                }
+            },
         },
     },
-    // darkMode: 'class',
+    darkMode: 'class',
     plugins: [],
 };
