@@ -4,15 +4,16 @@ import { FormGroup, Switch } from '@mui/material';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import ListBox from '@monorepo/component/src/stories/listbox/Listbox';
 import CardList from '../components/card/CardList';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { PageState } from '../recoil/atom/PageState';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import { getSearchListStorage, saveSearchListStorage } from '../repository/SearchListRepository';
 
 export default function HeaderSearchPage() {
     const techBlogSearchData = useRecoilValue(HeaderSearchDataState);
-
+    const { search } = useParams();
     const [displayMode, setDisplayMode] = useRecoilState(DisplayModeState);
 
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -20,10 +21,17 @@ export default function HeaderSearchPage() {
     const setPage = useSetRecoilState(PageState);
 
     const location = useLocation();
-
+    const KEY = 'search';
     const fetchMoreIssue = useCallback(() => {
         setPage(prev => prev + 1);
     }, [techBlogSearchData]);
+
+    useEffect(() => {
+        let searchItem = getSearchListStorage(KEY);
+        searchItem.push(search);
+        const uniqueSearch = Array.from(new Set(searchItem));
+        saveSearchListStorage(KEY, uniqueSearch);
+    }, [search]);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 
@@ -31,8 +39,8 @@ export default function HeaderSearchPage() {
         <div className="flex justify-between">
             <div className="flex flex-col w-full gap-6">
                 <div className="flex justify-end w-10/12">
-                    <div className="flex w-full justify-center">
-                        <h1>Result Value:{location.state}</h1>
+                    <div className="flex justify-center w-full">
+                        <h1>Results for {location.state}</h1>
                     </div>
                     <FormGroup>
                         <Switch

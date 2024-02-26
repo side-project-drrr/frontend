@@ -42,7 +42,7 @@ function App() {
                     <Route path="/signup/category" element={<CategoryPage />} />
                     <Route path="/category/detail/:id" element={<ItemDetailPage />} />
                     <Route path="/Exploretopics" element={<ItemDetailPage />} />
-                    <Route path="/search" element={<HeaderSearchPage />} />
+                    <Route path="/search/:search" element={<HeaderSearchPage />} />
                 </Route>
                 <Route path="/kakao/auth" element={<SocialCallback />} />
                 <Route path="/github/auth" element={<SocialCallback />} />

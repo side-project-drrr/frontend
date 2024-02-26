@@ -4,9 +4,10 @@ import { isSearchClickedState } from '@monorepo/service/src/recoil/atom/isSearch
 import { useSetRecoilState } from 'recoil';
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
 
-export default function ChatBubble({ onSearchValue }: any) {
-    console.log(onSearchValue);
+export default function ChatBubble({ onSearchResult }: any) {
     const setIsSearchClicked = useSetRecoilState(isSearchClickedState);
     const searchBoxRef = useRef<HTMLDivElement>(null);
 
@@ -34,29 +35,42 @@ export default function ChatBubble({ onSearchValue }: any) {
         <div className="absolute z-10 flex mt-2" ref={searchBoxRef}>
             <div className="relative flex-1 p-2 mb-2 text-black bg-white rounded-lg w-96">
                 <div className="flex flex-col items-center justify-center">
-                    <div className="flex items-center justify-around w-full gap-2 p-4 flex-col">
-                        <div>
-                            {onSearchValue.length !== 1 &&
-                                onSearchValue?.map((value: string, index: number) => (
-                                    <p key={index}>{value}</p>
-                                ))}
-                        </div>
+                    <div className="flex flex-col w-full p-2">
+                        <h1 className="p-2 text-sm text-[#6B6B6B]">RECENT SEARCHES</h1>
+                        <hr />
+                        {onSearchResult.length !== 1 &&
+                            onSearchResult?.map((value: string, index: number) => (
+                                <div key={index} className="flex w-full gap-4">
+                                    <Link
+                                        to={`/search/${value}`}
+                                        className="flex items-center w-full gap-2 p-4 text-black border-b-2 hover:text-black"
+                                    >
+                                        <p className="flex items-center w-full gap-4">
+                                            <SearchIcon />
+                                            {value}
+                                        </p>
+                                        <div className="flex justify-end w-full">
+                                            <CloseIcon sx={{ opacity: '50%' }} />
+                                        </div>
+                                    </Link>
+                                </div>
+                            ))}
+
                         <hr />
                         <Link
                             to="/Exploretopics"
-                            className="flex items-center gap-2 text-black hover:text-black"
+                            className="flex items-center gap-2 p-4 text-black hover:text-black"
                         >
-                            <p className="flex items-center gap-2 ">
+                            <p className="flex w-full gap-4">
                                 <LanguageIcon />
                                 Explore topics
                             </p>
-                            <div>
+                            <div className="flex justify-end w-full">
                                 <CallMadeIcon />
                             </div>
                         </Link>
                     </div>
                 </div>
-
                 <div className="absolute left-5 w-3 h-3 transform rotate-45 -translate-x-1/2 bg-white top-[-5px]"></div>
             </div>
         </div>

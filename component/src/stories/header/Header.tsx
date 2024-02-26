@@ -19,6 +19,7 @@ import { getHeaderKeywordSearch } from '@monorepo/service/src/service/HeaderSear
 import { HeaderSearchDataState } from '@monorepo/service/src/recoil/atom/HeaderSearchDataState';
 import { PageState } from '@monorepo/service/src/recoil/atom/PageState';
 import { Link, useNavigate } from 'react-router-dom';
+import { getSearchListStorage } from '@monorepo/service/src/repository/SearchListRepository';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -101,17 +102,20 @@ interface IHeaderProps {
 export default function Header({ authToken }: IHeaderProps) {
     const [isSearchClicked, setIsSearchClicked] = useRecoilState(isSearchClickedState);
     const [searchValue, setSearchValue] = useState('');
-    const [valueReset, setValueRest] = useState(false);
-    const [resultSearchValue, setResultSearchValue] = useState<any[]>([]);
+
+    const [getSearchLocalResult, setGetSearchLocalResult] = useState<any[]>([]);
     const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
     const { darkMode, toggleDarkMode } = useDarkMode();
     const page = useRecoilValue(PageState);
-
     const setProfileOpen = useSetRecoilState(profileModalOpen);
+    const KEY = 'search';
+
     const navigate = useNavigate();
     const size = 10;
     const sort = 'writtenAt';
     const direction = 'desc';
+    const searchItem = getSearchListStorage(KEY);
+
     async function getKeywordSerchRender() {
         const keywordSearchData = await getHeaderKeywordSearch({
             page,
@@ -122,15 +126,14 @@ export default function Header({ authToken }: IHeaderProps) {
         });
         setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
     }
+
     const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.key === 'Enter') {
             // 엔터 키를 눌렀을 때 실행할 동작
             setTechBlogSearchData([]);
             getKeywordSerchRender();
-            setValueRest(true);
             setIsSearchClicked(false);
-            setResultSearchValue(prev => [...prev, ...resultSearchValue]);
-            navigate('/search', { state: searchValue });
+            navigate(`/search/${searchValue}`, { state: searchValue });
         }
     };
 
@@ -153,6 +156,10 @@ export default function Header({ authToken }: IHeaderProps) {
         getKeywordSerchRender();
     }, [page]);
 
+    useEffect(() => {
+        setGetSearchLocalResult(searchItem);
+    }, [searchItem]);
+
     return (
         <header
             className={`flex w-screen h-[57px] border-b-2 border-solid border-zinc-500 items-center mt-5 pb-4 `}
@@ -160,7 +167,7 @@ export default function Header({ authToken }: IHeaderProps) {
             <div className="flex items-center flex-1 mx-10 " onClick={handleModalClose}>
                 <div className="flex items-center flex-1 ">
                     <div className="mx-2 none">
-                        <Link to="/" className="bg-transparent text-black dark:text-white">
+                        <Link to="/" className="text-black bg-transparent dark:text-white">
                             <BiLogoGit size={40} aria-label="로고" />
                         </Link>
                     </div>
@@ -172,12 +179,12 @@ export default function Header({ authToken }: IHeaderProps) {
                             label="검색"
                             aria-label="검색"
                             onClick={() => setIsSearchClicked(!isSearchClicked)}
-                            onKeyPress={e => handleKeyPress(e)}
+                            onKeyDown={e => handleKeyPress(e)}
                             onChange={e => handleSearchValue(e)}
                             autoComplete="off"
-                            value={!valueReset ? searchValue : ''}
+                            value={searchValue}
                         />
-                        {isSearchClicked && <ChatBubble onSearchValue={resultSearchValue} />}
+                        {isSearchClicked && <ChatBubble onSearchResult={getSearchLocalResult} />}
                     </div>
                 </div>
                 <div className="flex items-center justify-around w-1/12 ">

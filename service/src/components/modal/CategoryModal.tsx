@@ -170,7 +170,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         ))}
                     </ul>
                     <Button
-                        className="w-10/12 "
+                        className="w-10/12"
                         onClick={handleCategory}
                         style={buttonStyle}
                         role="Button"
