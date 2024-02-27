@@ -19,7 +19,6 @@ export default function HeaderSearchPage() {
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
     const setPage = useSetRecoilState(PageState);
-
     const location = useLocation();
     const KEY = 'search';
     const fetchMoreIssue = useCallback(() => {
@@ -28,7 +27,10 @@ export default function HeaderSearchPage() {
 
     useEffect(() => {
         let searchItem = getSearchListStorage(KEY);
+        console.log('호출');
+
         searchItem.push(search);
+
         const uniqueSearch = Array.from(new Set(searchItem));
         saveSearchListStorage(KEY, uniqueSearch);
     }, [search]);

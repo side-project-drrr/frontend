@@ -6,10 +6,31 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
+import {
+    getSearchListStorage,
+    saveSearchListStorage,
+} from '@monorepo/service/src/repository/SearchListRepository';
 
-export default function ChatBubble({ onSearchResult }: any) {
+interface ISearchProps {
+    onSearchResult: any;
+    onSearchRender: () => void;
+}
+
+export default function ChatBubble({ onSearchResult, onSearchRender }: ISearchProps) {
     const setIsSearchClicked = useSetRecoilState(isSearchClickedState);
     const searchBoxRef = useRef<HTMLDivElement>(null);
+    const KEY = 'search';
+
+    const handleCloseSearchResult = (num: number) => {
+        const getRecentSearchesData = getSearchListStorage(KEY);
+        const filterRecentSearchesData = getRecentSearchesData.filter(
+            (e: string, index: number) => index !== num,
+        );
+        console.log('실행 함수');
+
+        console.log(filterRecentSearchesData);
+        saveSearchListStorage(KEY, filterRecentSearchesData);
+    };
 
     useEffect(() => {
         // 검색 상자가 표시되면 외부 클릭을 감지하여 상자를 숨깁니다.
@@ -38,19 +59,24 @@ export default function ChatBubble({ onSearchResult }: any) {
                     <div className="flex flex-col w-full p-2">
                         <h1 className="p-2 text-sm text-[#6B6B6B]">RECENT SEARCHES</h1>
                         <hr />
-                        {onSearchResult.length !== 1 &&
+                        {onSearchResult.length !== 0 &&
                             onSearchResult?.map((value: string, index: number) => (
                                 <div key={index} className="flex w-full gap-4">
                                     <Link
                                         to={`/search/${value}`}
                                         className="flex items-center w-full gap-2 p-4 text-black border-b-2 hover:text-black"
+                                        onClick={onSearchRender}
                                     >
                                         <p className="flex items-center w-full gap-4">
                                             <SearchIcon />
                                             {value}
                                         </p>
                                         <div className="flex justify-end w-full">
-                                            <CloseIcon sx={{ opacity: '50%' }} />
+                                            <CloseIcon
+                                                sx={{ opacity: '50%' }}
+                                                key={index}
+                                                onClick={() => handleCloseSearchResult(index)}
+                                            />
                                         </div>
                                     </Link>
                                 </div>

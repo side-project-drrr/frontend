@@ -184,7 +184,12 @@ export default function Header({ authToken }: IHeaderProps) {
                             autoComplete="off"
                             value={searchValue}
                         />
-                        {isSearchClicked && <ChatBubble onSearchResult={getSearchLocalResult} />}
+                        {isSearchClicked && (
+                            <ChatBubble
+                                onSearchResult={getSearchLocalResult}
+                                onSearchRender={getKeywordSerchRender}
+                            />
+                        )}
                     </div>
                 </div>
                 <div className="flex items-center justify-around w-1/12 ">
