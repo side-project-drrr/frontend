@@ -17,6 +17,7 @@
   <tbody>
     <tr>            
        <td align="center"><a href="https://github.com/rondido"><img src="https://avatars.githubusercontent.com/u/55516901?v=4" width="100px;" alt=""/><br /><sub><b>박진현</b></sub></a><br /></td>
+       <td align="center"><a href="https://github.com/rondido"><img src="https://avatars.githubusercontent.com/u/70056958?v=4" width="100px;" alt=""/><br /><sub><b>박진영</b></sub></a><br /></td>
     </tr>
   </tbody>
 </table>
@@ -137,50 +138,6 @@ yarn run build
 ---
 
 ## 회고
-
-## Rondido
-
-### Monorepo
-
-백오피스, 서비스, 공통 디자인 컴포넌트를 하나의 저장소에서 관리하기 위해 Monorepo 프로젝트 세팅
-
-이 과정에서 Monorepo 장단점 및 Mutirepo의 차이점을 알게 됨.
-
-Yarn Berry를 사용하면서 Node_modules의 문제점과 zero-install에 대한 학습
-
----
-
-### Category Modal
-
-CategoryModal에서 실시간으로 검색에 맞는 카테고리 표출
-
-회의를 통해 카테고리 갯수가 많지 않아 프론트엔드에서 처리하기에 용이할 것으로 판단되어 프론트에서 처리
-
-백엔드에서 데이터를 받아오는게 아닌 상황이라면 실시간으로 사용자에게 선호 카테고리 리스트를 보여주기에는 어렵다고 판단
-
-원본 배열에 대한 값이 검색을 하는 순간 없어지므로써 검색 한 후 다시 전체 카테고리 리스트를 보여주지 못했따 (filter를 사용함으로써 원본 배열을 훼손하기 때문에)
-
-함수를 사용하면서 리액트의 특성상 함수는 렌더링될때마다 재성생되기때문에 불필요한 렌더링이 일어나 메인이나 카테고리 모달에서 로딩 시간 지연(useMemo를 활용하여 해결)
-
-CategoryItem에서 사용자가 카테고리 선택 시 해당 카테고리 배경색 및 중복 카테고리 제거 하기
-
----
-
-### 전역 상태 관리
-
-prop drilling을 해결하고자 Recoil 도입(동료와 회의를 통해 1deps 이후 recoil 사용)
-
----
-
-
-### 적극적인 img -> Webp 사용
-
-png 파일을 Lighthouse 점수에 대비하여 Webp로 convert하여 사용함으로써 이미지 최적화
-
-Google Ligthouse를 사용하기 전 Google에서 webp 사용을 권장하기 때문에 이미지 파일을 webp로 변환하여 사용
-
----
-
 
 ---
 
