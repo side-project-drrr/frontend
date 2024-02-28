@@ -6,19 +6,22 @@ import ItemDetailPage from './pages/ItemDetailPage';
 import CategoryPage from './pages/CategoryPage';
 import SocialCallback from './components/social/SocialCallback';
 import { ThemeProvider } from '@mui/material';
-import { darkModeState } from './recoil/atom/darkModeState';
-import { useRecoilValue } from 'recoil';
 import { createTheme } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
+import { useDarkMode } from './ThemeContext/ThemeProvider';
 import HeaderSearchPage from './pages/HeaderSearchPage';
 
 function App() {
-    const darkMode = useRecoilValue(darkModeState);
+    const { darkMode } = useDarkMode();
 
     const lightTheme = createTheme({
         palette: {
             mode: 'light',
             background: {
-                default: 'red', // 배경색 설정
+                default: '#ffffff', // 배경색 설정
+            },
+            text: {
+                primary: '#2c2c2c',
             },
         },
     });
@@ -28,13 +31,17 @@ function App() {
         palette: {
             mode: 'dark',
             background: {
-                default: 'red', // 배경색 설정
+                default: '#2c2c2c', // 다크 모드의 주요 색상 설정
+            },
+            text: {
+                primary: '#ffffff',
             },
         },
     });
 
     return (
         <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
+            <CssBaseline />
             <Routes>
                 <Route element={<Layout />}>
                     <Route path="/" element={<MainPage />} />

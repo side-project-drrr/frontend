@@ -5,16 +5,16 @@ module.exports = {
         extend: {
             colors: {
                 light: {
-                    DEFAULT: '#D9D9D9',
+                    DEFAULT: '#C2C2C2',
                 },
                 dark: {
                     text: {
-                        DEFAULT: '#fffff',
+                        DEFAULT: '#FFF',
                         1: '#D9D9D9',
                         2: '#ACACAC',
                         3: '#595959',
                     },
-                },
+                }
             },
         },
     },

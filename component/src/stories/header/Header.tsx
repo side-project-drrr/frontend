@@ -30,7 +30,6 @@ const InputTextField = styled(TextField)({
         color: 'var(--text)',
         '& fieldset': {
             borderRadius: 20,
-            width: '24rem',
             backgroundColor: 'transparent',
             borderColor: '#E4E4E7',
         },
@@ -39,7 +38,6 @@ const InputTextField = styled(TextField)({
 
 const buttonStyle = {
     color: 'black',
-    width: '100%',
     padding: '4px',
     '&:focus': {
         outline: 'none',
@@ -130,8 +128,10 @@ export default function Header({ authToken }: IHeaderProps) {
     const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.key === 'Enter') {
             // 엔터 키를 눌렀을 때 실행할 동작
+            const value = (e.target as HTMLInputElement).value;
             setTechBlogSearchData([]);
             getKeywordSerchRender();
+            setGetSearchLocalResult(prev => [...prev, value]);
             setIsSearchClicked(false);
             navigate(`/search/${searchValue}`);
         }
@@ -158,48 +158,44 @@ export default function Header({ authToken }: IHeaderProps) {
 
     useEffect(() => {
         setGetSearchLocalResult(searchItem);
-    }, [searchItem]);
+    }, []);
+
     return (
-        <header
-            className={`flex w-screen h-[57px] border-b-2 border-solid border-zinc-500 items-center mt-5 pb-4 `}
-        >
-            <div className="flex items-center flex-1 mx-10 " onClick={handleModalClose}>
-                <div className="flex items-center flex-1 ">
+        <header className={`w-full flex justify-center `}>
+            <div
+                className="flex justify-between w-full max-w-screen-xl py-4"
+                onClick={handleModalClose}
+            >
+                <div className="flex items-center">
                     <div className="mx-2 none">
                         <Link to="/" className="text-black bg-transparent dark:text-white">
                             <BiLogoGit size={40} aria-label="로고" />
                         </Link>
                     </div>
-                    <div className="relative grow">
-                        <InputTextField
-                            type="text"
-                            className="max-w-xs"
-                            variant="outlined"
-                            label="검색"
-                            aria-label="검색"
-                            onClick={() => setIsSearchClicked(!isSearchClicked)}
-                            onKeyDown={e => handleKeyPress(e)}
-                            onChange={e => handleSearchValue(e)}
-                            autoComplete="off"
-                            value={searchValue}
+
+                    <InputTextField
+                        type="text"
+                        className="relative max-w-sm w-80"
+                        variant="outlined"
+                        label="검색"
+                        aria-label="검색"
+                        onClick={() => setIsSearchClicked(!isSearchClicked)}
+                        onKeyDown={e => handleKeyPress(e)}
+                        onChange={e => handleSearchValue(e)}
+                        autoComplete="off"
+                        value={searchValue}
+                    />
+
+                    {isSearchClicked && (
+                        <ChatBubble
+                            onSearchResult={getSearchLocalResult}
+                            onSearchRender={getKeywordSerchRender}
+                            onSetSearchResult={setGetSearchLocalResult}
                         />
-                        {isSearchClicked && (
-                            <ChatBubble
-                                onSearchResult={getSearchLocalResult}
-                                onSearchRender={getKeywordSerchRender}
-                            />
-                        )}
-                    </div>
+                    )}
                 </div>
-                <div className="flex items-center justify-around w-1/12 ">
-                    <IconButton
-                        onClick={toggleDarkMode}
-                        sx={{
-                            p: 1,
-                        }}
-                        size="large"
-                        color="inherit"
-                    >
+                <div className="flex items-center">
+                    <IconButton onClick={toggleDarkMode} size="large" color="inherit">
                         {darkMode === 'dark' ? (
                             <LightModeOutlined />
                         ) : (

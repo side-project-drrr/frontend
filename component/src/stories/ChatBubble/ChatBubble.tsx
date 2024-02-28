@@ -14,9 +14,14 @@ import {
 interface ISearchProps {
     onSearchResult: any;
     onSearchRender: () => void;
+    onSetSearchResult: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export default function ChatBubble({ onSearchResult, onSearchRender }: ISearchProps) {
+export default function ChatBubble({
+    onSearchResult,
+    onSearchRender,
+    onSetSearchResult,
+}: ISearchProps) {
     const setIsSearchClicked = useSetRecoilState(isSearchClickedState);
     const searchBoxRef = useRef<HTMLDivElement>(null);
     const KEY = 'search';
@@ -26,7 +31,7 @@ export default function ChatBubble({ onSearchResult, onSearchRender }: ISearchPr
         const filterRecentSearchesData = getRecentSearchesData.filter(
             (e: string, index: number) => index !== num,
         );
-
+        onSetSearchResult(filterRecentSearchesData);
         saveSearchListStorage(KEY, filterRecentSearchesData);
     };
 
@@ -51,8 +56,8 @@ export default function ChatBubble({ onSearchResult, onSearchRender }: ISearchPr
     }, []);
 
     return (
-        <div className="absolute z-10 flex mt-2" ref={searchBoxRef}>
-            <div className="relative flex-1 p-2 mb-2 text-black bg-white rounded-lg w-96">
+        <div className="absolute z-10 w-80 top-20" ref={searchBoxRef}>
+            <div className="relative flex-1 p-2 mb-2 text-black bg-white rounded-lg">
                 <div className="flex flex-col items-center justify-center">
                     <div className="flex flex-col w-full p-2">
                         <h1 className="p-2 text-sm text-[#6B6B6B]">RECENT SEARCHES</h1>
@@ -92,10 +97,10 @@ export default function ChatBubble({ onSearchResult, onSearchRender }: ISearchPr
                             <p className="flex w-full gap-4">
                                 <LanguageIcon />
                                 Explore topics
+                                <p className="flex justify-end w-full bg-red-500">
+                                    <CallMadeIcon />
+                                </p>
                             </p>
-                            <div className="flex justify-end w-full">
-                                <CallMadeIcon />
-                            </div>
                         </Link>
                     </div>
                 </div>

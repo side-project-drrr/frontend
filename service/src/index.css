@@ -30,20 +30,12 @@ input:autofill:active {
     line-height: 1.5;
     font-weight: 400;
 
-    color-scheme: light dark;
-
     box-sizing: border-box;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
-}
-
-@layer base {
-    body {
-        @apply bg-light;
-    }
 }
 
 a {
@@ -56,6 +48,7 @@ a:hover {
 }
 
 body {
+    width: 100%;
     display: flex;
     place-items: center;
     overflow-x: hidden;
@@ -95,4 +88,8 @@ button:focus-visible {
     button {
         background-color: #f9f9f9;
     }
+}
+
+#root {
+    width: 100%;
 }
