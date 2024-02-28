@@ -102,8 +102,8 @@ interface IHeaderProps {
 export default function Header({ authToken }: IHeaderProps) {
     const [isSearchClicked, setIsSearchClicked] = useRecoilState(isSearchClickedState);
     const [searchValue, setSearchValue] = useState('');
-
     const [getSearchLocalResult, setGetSearchLocalResult] = useState<any[]>([]);
+
     const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
     const { darkMode, toggleDarkMode } = useDarkMode();
     const page = useRecoilValue(PageState);
@@ -133,7 +133,7 @@ export default function Header({ authToken }: IHeaderProps) {
             setTechBlogSearchData([]);
             getKeywordSerchRender();
             setIsSearchClicked(false);
-            navigate(`/search/${searchValue}`, { state: searchValue });
+            navigate(`/search/${searchValue}`);
         }
     };
 
@@ -159,7 +159,6 @@ export default function Header({ authToken }: IHeaderProps) {
     useEffect(() => {
         setGetSearchLocalResult(searchItem);
     }, [searchItem]);
-
     return (
         <header
             className={`flex w-screen h-[57px] border-b-2 border-solid border-zinc-500 items-center mt-5 pb-4 `}

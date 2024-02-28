@@ -26,9 +26,7 @@ export default function ChatBubble({ onSearchResult, onSearchRender }: ISearchPr
         const filterRecentSearchesData = getRecentSearchesData.filter(
             (e: string, index: number) => index !== num,
         );
-        console.log('실행 함수');
 
-        console.log(filterRecentSearchesData);
         saveSearchListStorage(KEY, filterRecentSearchesData);
     };
 
@@ -61,28 +59,32 @@ export default function ChatBubble({ onSearchResult, onSearchRender }: ISearchPr
                         <hr />
                         {onSearchResult.length !== 0 &&
                             onSearchResult?.map((value: string, index: number) => (
-                                <div key={index} className="flex w-full gap-4">
+                                <div key={index} className="flex items-center w-full gap-4">
                                     <Link
                                         to={`/search/${value}`}
                                         className="flex items-center w-full gap-2 p-4 text-black border-b-2 hover:text-black"
-                                        onClick={onSearchRender}
                                     >
-                                        <p className="flex items-center w-full gap-4">
+                                        <p
+                                            className="flex items-center w-full gap-4"
+                                            onClick={onSearchRender}
+                                        >
                                             <SearchIcon />
                                             {value}
                                         </p>
-                                        <div className="flex justify-end w-full">
+                                        <div className="flex justify-end w-full ">
                                             <CloseIcon
                                                 sx={{ opacity: '50%' }}
                                                 key={index}
-                                                onClick={() => handleCloseSearchResult(index)}
+                                                onClick={e => {
+                                                    e.preventDefault();
+                                                    handleCloseSearchResult(index);
+                                                }}
                                             />
                                         </div>
                                     </Link>
                                 </div>
                             ))}
 
-                        <hr />
                         <Link
                             to="/Exploretopics"
                             className="flex items-center gap-2 p-4 text-black hover:text-black"

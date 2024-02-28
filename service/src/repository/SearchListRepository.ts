@@ -1,6 +1,5 @@
 // 배열을 로컬 스토리지에 저장하는 함수
 export function saveSearchListStorage(key: string, value: any[]) {
-    console.log(value);
     localStorage.setItem(key, JSON.stringify(value));
 }
 

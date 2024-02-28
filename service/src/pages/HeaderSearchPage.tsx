@@ -8,18 +8,16 @@ import { useCallback, useEffect } from 'react';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { PageState } from '../recoil/atom/PageState';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getSearchListStorage, saveSearchListStorage } from '../repository/SearchListRepository';
 
 export default function HeaderSearchPage() {
     const techBlogSearchData = useRecoilValue(HeaderSearchDataState);
     const { search } = useParams();
     const [displayMode, setDisplayMode] = useRecoilState(DisplayModeState);
-
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
     const setPage = useSetRecoilState(PageState);
-    const location = useLocation();
     const KEY = 'search';
     const fetchMoreIssue = useCallback(() => {
         setPage(prev => prev + 1);
@@ -27,10 +25,7 @@ export default function HeaderSearchPage() {
 
     useEffect(() => {
         let searchItem = getSearchListStorage(KEY);
-        console.log('호출');
-
         searchItem.push(search);
-
         const uniqueSearch = Array.from(new Set(searchItem));
         saveSearchListStorage(KEY, uniqueSearch);
     }, [search]);
@@ -42,7 +37,7 @@ export default function HeaderSearchPage() {
             <div className="flex flex-col w-full gap-6">
                 <div className="flex justify-end w-10/12">
                     <div className="flex justify-center w-full">
-                        <h1>Results for {location.state}</h1>
+                        <h1>Results for {search}</h1>
                     </div>
                     <FormGroup>
                         <Switch
