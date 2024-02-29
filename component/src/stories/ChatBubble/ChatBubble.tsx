@@ -15,12 +15,16 @@ interface ISearchProps {
     onSearchResult: any;
     onSearchRender: () => void;
     onSetSearchResult: React.Dispatch<React.SetStateAction<string[]>>;
+    selectedOption: number;
+    onHandleKeypress: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 export default function ChatBubble({
     onSearchResult,
     onSearchRender,
     onSetSearchResult,
+    selectedOption,
+    onHandleKeypress,
 }: ISearchProps) {
     const setIsSearchClicked = useSetRecoilState(isSearchClickedState);
     const searchBoxRef = useRef<HTMLDivElement>(null);
@@ -54,9 +58,18 @@ export default function ChatBubble({
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+    const handleTest = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        console.log(333);
 
+        if (e.key === 'Enter') {
+            // 엔터 키를 눌렀을 때 실행할 동작
+            console.log(123);
+
+            onSearchRender();
+        }
+    };
     return (
-        <div className="absolute z-10 w-80 top-20" ref={searchBoxRef}>
+        <div className="absolute z-10 mt-2 w-80" ref={searchBoxRef}>
             <div className="relative flex-1 p-2 mb-2 text-black bg-white rounded-lg">
                 <div className="flex flex-col items-center justify-center">
                     <div className="flex flex-col w-full p-2">
@@ -64,15 +77,18 @@ export default function ChatBubble({
                         <hr />
                         {onSearchResult.length !== 0 &&
                             onSearchResult?.map((value: string, index: number) => (
-                                <div key={index} className="flex items-center w-full gap-4">
+                                <div
+                                    key={index}
+                                    className={`flex items-center w-full gap-4 bg-opacity-20 ${
+                                        index === selectedOption ? 'bg-gray-300' : ''
+                                    }`}
+                                    onKeyDown={e => handleTest(e)}
+                                >
                                     <Link
                                         to={`/search/${value}`}
                                         className="flex items-center w-full gap-2 p-4 text-black border-b-2 hover:text-black"
                                     >
-                                        <p
-                                            className="flex items-center w-full gap-4"
-                                            onClick={onSearchRender}
-                                        >
+                                        <p className="flex items-center w-full gap-4">
                                             <SearchIcon />
                                             {value}
                                         </p>
@@ -94,13 +110,11 @@ export default function ChatBubble({
                             to="/Exploretopics"
                             className="flex items-center gap-2 p-4 text-black hover:text-black"
                         >
-                            <p className="flex w-full gap-4">
+                            <p className="flex items-center w-full gap-4 text-sm">
                                 <LanguageIcon />
                                 Explore topics
-                                <p className="flex justify-end w-full bg-red-500">
-                                    <CallMadeIcon />
-                                </p>
                             </p>
+                            <CallMadeIcon />
                         </Link>
                     </div>
                 </div>

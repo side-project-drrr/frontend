@@ -20,6 +20,7 @@ import { HeaderSearchDataState } from '@monorepo/service/src/recoil/atom/HeaderS
 import { PageState } from '@monorepo/service/src/recoil/atom/PageState';
 import { Link, useNavigate } from 'react-router-dom';
 import { getSearchListStorage } from '@monorepo/service/src/repository/SearchListRepository';
+import useHandleKeyPress from '@monorepo/service/src/hooks/useHandleKeyPress';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -99,6 +100,8 @@ interface IHeaderProps {
 
 export default function Header({ authToken }: IHeaderProps) {
     const [isSearchClicked, setIsSearchClicked] = useRecoilState(isSearchClickedState);
+    const [selectedOption, setSelectedOption] = useState<number>(0);
+
     const [searchValue, setSearchValue] = useState('');
     const [getSearchLocalResult, setGetSearchLocalResult] = useState<any[]>([]);
 
@@ -122,18 +125,27 @@ export default function Header({ authToken }: IHeaderProps) {
             direction,
             searchValue,
         });
+        console.log(333);
+
         setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
     }
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        if (e.key === 'Enter') {
-            // 엔터 키를 눌렀을 때 실행할 동작
-            const value = (e.target as HTMLInputElement).value;
-            setTechBlogSearchData([]);
-            getKeywordSerchRender();
-            setGetSearchLocalResult(prev => [...prev, value]);
-            setIsSearchClicked(false);
-            navigate(`/search/${searchValue}`);
+        const value = (e.target as HTMLInputElement).value;
+        if (value !== '') {
+            if (e.key === 'Enter') {
+                // 엔터 키를 눌렀을 때 실행할 동작
+                e.stopPropagation();
+                setTechBlogSearchData([]);
+                getKeywordSerchRender();
+                setGetSearchLocalResult(prev => {
+                    const uniqueValuesSet = new Set([...prev, value]);
+                    const uniqueValuesArray = Array.from(uniqueValuesSet);
+                    return uniqueValuesArray;
+                });
+                setIsSearchClicked(false);
+                navigate(`/search/${searchValue}`);
+            }
         }
     };
 
@@ -160,6 +172,11 @@ export default function Header({ authToken }: IHeaderProps) {
         setGetSearchLocalResult(searchItem);
     }, []);
 
+    const searchKeyIndex = useHandleKeyPress(getSearchLocalResult);
+    useEffect(() => {
+        setSelectedOption(searchKeyIndex);
+    }, [searchKeyIndex]);
+
     return (
         <header className={`w-full flex justify-center `}>
             <div
@@ -172,27 +189,30 @@ export default function Header({ authToken }: IHeaderProps) {
                             <BiLogoGit size={40} aria-label="로고" />
                         </Link>
                     </div>
-
-                    <InputTextField
-                        type="text"
-                        className="relative max-w-sm w-80"
-                        variant="outlined"
-                        label="검색"
-                        aria-label="검색"
-                        onClick={() => setIsSearchClicked(!isSearchClicked)}
-                        onKeyDown={e => handleKeyPress(e)}
-                        onChange={e => handleSearchValue(e)}
-                        autoComplete="off"
-                        value={searchValue}
-                    />
-
-                    {isSearchClicked && (
-                        <ChatBubble
-                            onSearchResult={getSearchLocalResult}
-                            onSearchRender={getKeywordSerchRender}
-                            onSetSearchResult={setGetSearchLocalResult}
+                    <div>
+                        <InputTextField
+                            type="text"
+                            className="relative max-w-sm w-80"
+                            variant="outlined"
+                            label="검색"
+                            aria-label="검색"
+                            onClick={() => setIsSearchClicked(!isSearchClicked)}
+                            onKeyDown={e => handleKeyPress(e)}
+                            onChange={e => handleSearchValue(e)}
+                            autoComplete="off"
+                            value={searchValue}
                         />
-                    )}
+
+                        {isSearchClicked && (
+                            <ChatBubble
+                                onSearchResult={getSearchLocalResult}
+                                onSearchRender={getKeywordSerchRender}
+                                onSetSearchResult={setGetSearchLocalResult}
+                                selectedOption={selectedOption}
+                                onHandleKeypress={handleKeyPress}
+                            />
+                        )}
+                    </div>
                 </div>
                 <div className="flex items-center">
                     <IconButton onClick={toggleDarkMode} size="large" color="inherit">
