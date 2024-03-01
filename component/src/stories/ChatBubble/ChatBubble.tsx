@@ -2,8 +2,8 @@ import LanguageIcon from '@mui/icons-material/Language';
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import { isSearchClickedState } from '@monorepo/service/src/recoil/atom/isSearchClickedState';
 import { useSetRecoilState } from 'recoil';
-import { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import {
@@ -15,20 +15,25 @@ interface ISearchProps {
     onSearchResult: any;
     onSearchRender: () => void;
     onSetSearchResult: React.Dispatch<React.SetStateAction<string[]>>;
-    selectedOption: number;
-    onHandleKeypress: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+
+    onHandleKeypress: (e: React.KeyboardEvent<HTMLDivElement>, text?: string | '') => void;
+
+    onSetSearchValue: React.Dispatch<React.SetStateAction<string>>;
+    onSearchValue: string;
 }
 
-export default function ChatBubble({
+const ChatBubble = ({
     onSearchResult,
     onSearchRender,
-    onSetSearchResult,
-    selectedOption,
-    onHandleKeypress,
-}: ISearchProps) {
+    onSetSearchResult, //selectedOption,
+    onSearchValue,
+}: ISearchProps) => {
     const setIsSearchClicked = useSetRecoilState(isSearchClickedState);
+    const [isAutoSearch, setIsAutoSearch] = useState(false);
+    const [selectedOption, setSelectedOption] = useState(-1);
     const searchBoxRef = useRef<HTMLDivElement>(null);
     const KEY = 'search';
+    const navigate = useNavigate();
 
     const handleCloseSearchResult = (num: number) => {
         const getRecentSearchesData = getSearchListStorage(KEY);
@@ -58,16 +63,35 @@ export default function ChatBubble({
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-    const handleTest = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        console.log(333);
 
-        if (e.key === 'Enter') {
-            // 엔터 키를 눌렀을 때 실행할 동작
-            console.log(123);
+    useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if (event.key === 'ArrowUp') {
+                setIsAutoSearch(true);
+                setSelectedOption(prevSelectedOption => {
+                    const newSelectedOption = prevSelectedOption - 1;
+                    return newSelectedOption < -1 ? onSearchResult.length - 1 : newSelectedOption;
+                });
+            } else if (event.key === 'ArrowDown') {
+                setIsAutoSearch(true);
 
-            onSearchRender();
-        }
-    };
+                setSelectedOption(prevSelectedOption => {
+                    const newSelectedOption = prevSelectedOption + 1;
+                    return newSelectedOption >= onSearchResult.length ? 0 : newSelectedOption;
+                });
+            }
+            if (event.key === 'Enter') {
+                navigate(`/search/${onSearchValue}`);
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyPress);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [onSearchResult]);
+
     return (
         <div className="absolute z-10 mt-2 w-80" ref={searchBoxRef}>
             <div className="relative flex-1 p-2 mb-2 text-black bg-white rounded-lg">
@@ -79,10 +103,15 @@ export default function ChatBubble({
                             onSearchResult?.map((value: string, index: number) => (
                                 <div
                                     key={index}
-                                    className={`flex items-center w-full gap-4 bg-opacity-20 ${
-                                        index === selectedOption ? 'bg-gray-300' : ''
-                                    }`}
-                                    onKeyDown={e => handleTest(e)}
+                                    tabIndex={0}
+                                    className={`flex items-center w-full gap-4 bg-opacity-20 
+                                        ${
+                                            isAutoSearch
+                                                ? index === selectedOption
+                                                    ? 'bg-gray-300'
+                                                    : ''
+                                                : ''
+                                        }`}
                                 >
                                     <Link
                                         to={`/search/${value}`}
@@ -122,4 +151,6 @@ export default function ChatBubble({
             </div>
         </div>
     );
-}
+};
+
+export default ChatBubble;

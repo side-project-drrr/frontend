@@ -1,18 +1,28 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 
-export default function useHandleKeyPress(searchData: any) {
-    const [selectedOption, setSelectedOption] = useState<number>(0);
+interface IHandleProps {
+    getSearchLocalResult: any[];
+    setIsAutoSearch: React.Dispatch<SetStateAction<boolean>>;
+}
+
+export default function useHandleKeyPress({ getSearchLocalResult, setIsAutoSearch }: IHandleProps) {
+    const [selectedOption, setSelectedOption] = useState<number>(-1);
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
             if (event.key === 'ArrowUp') {
+                setIsAutoSearch(true);
                 setSelectedOption(prevSelectedOption => {
                     const newSelectedOption = prevSelectedOption - 1;
-                    return newSelectedOption < 0 ? searchData.length - 1 : newSelectedOption;
+                    return newSelectedOption < -1
+                        ? getSearchLocalResult.length - 1
+                        : newSelectedOption;
                 });
             } else if (event.key === 'ArrowDown') {
+                setIsAutoSearch(true);
+
                 setSelectedOption(prevSelectedOption => {
                     const newSelectedOption = prevSelectedOption + 1;
-                    return newSelectedOption >= searchData.length ? 0 : newSelectedOption;
+                    return newSelectedOption >= getSearchLocalResult.length ? 0 : newSelectedOption;
                 });
             }
         };
@@ -22,7 +32,7 @@ export default function useHandleKeyPress(searchData: any) {
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
         };
-    }, [searchData]);
+    }, [getSearchLocalResult]);
 
     return selectedOption;
 }

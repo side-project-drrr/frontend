@@ -20,7 +20,7 @@ import { HeaderSearchDataState } from '@monorepo/service/src/recoil/atom/HeaderS
 import { PageState } from '@monorepo/service/src/recoil/atom/PageState';
 import { Link, useNavigate } from 'react-router-dom';
 import { getSearchListStorage } from '@monorepo/service/src/repository/SearchListRepository';
-import useHandleKeyPress from '@monorepo/service/src/hooks/useHandleKeyPress';
+//import useHandleKeyPress from '@monorepo/service/src/hooks/useHandleKeyPress';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -100,8 +100,6 @@ interface IHeaderProps {
 
 export default function Header({ authToken }: IHeaderProps) {
     const [isSearchClicked, setIsSearchClicked] = useRecoilState(isSearchClickedState);
-    const [selectedOption, setSelectedOption] = useState<number>(0);
-
     const [searchValue, setSearchValue] = useState('');
     const [getSearchLocalResult, setGetSearchLocalResult] = useState<any[]>([]);
 
@@ -125,8 +123,6 @@ export default function Header({ authToken }: IHeaderProps) {
             direction,
             searchValue,
         });
-        console.log(333);
-
         setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
     }
 
@@ -135,7 +131,6 @@ export default function Header({ authToken }: IHeaderProps) {
         if (value !== '') {
             if (e.key === 'Enter') {
                 // 엔터 키를 눌렀을 때 실행할 동작
-                e.stopPropagation();
                 setTechBlogSearchData([]);
                 getKeywordSerchRender();
                 setGetSearchLocalResult(prev => {
@@ -172,10 +167,7 @@ export default function Header({ authToken }: IHeaderProps) {
         setGetSearchLocalResult(searchItem);
     }, []);
 
-    const searchKeyIndex = useHandleKeyPress(getSearchLocalResult);
-    useEffect(() => {
-        setSelectedOption(searchKeyIndex);
-    }, [searchKeyIndex]);
+    //const searchKeyIndex = useHandleKeyPress({ getSearchLocalResult, setIsAutoSearch });
 
     return (
         <header className={`w-full flex justify-center `}>
@@ -202,14 +194,14 @@ export default function Header({ authToken }: IHeaderProps) {
                             autoComplete="off"
                             value={searchValue}
                         />
-
                         {isSearchClicked && (
                             <ChatBubble
                                 onSearchResult={getSearchLocalResult}
                                 onSearchRender={getKeywordSerchRender}
                                 onSetSearchResult={setGetSearchLocalResult}
-                                selectedOption={selectedOption}
                                 onHandleKeypress={handleKeyPress}
+                                onSetSearchValue={setSearchValue}
+                                onSearchValue={searchValue}
                             />
                         )}
                     </div>
