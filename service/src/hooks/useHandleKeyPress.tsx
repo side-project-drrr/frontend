@@ -1,38 +1,43 @@
-import { SetStateAction, useEffect, useState } from 'react';
+import React, { SetStateAction } from 'react';
 
 interface IHandleProps {
+    key: string;
+    e: React.KeyboardEvent<HTMLDivElement>;
     getSearchLocalResult: any[];
-    setIsAutoSearch: React.Dispatch<SetStateAction<boolean>>;
+    setSearchValue: React.Dispatch<SetStateAction<string>>;
+    selectedSearchIndex: number;
+    setSelectedSearchIndex: React.Dispatch<SetStateAction<number>>;
 }
 
-export default function useHandleKeyPress({ getSearchLocalResult, setIsAutoSearch }: IHandleProps) {
-    const [selectedOption, setSelectedOption] = useState<number>(-1);
-    useEffect(() => {
-        const handleKeyPress = (event: KeyboardEvent) => {
-            if (event.key === 'ArrowUp') {
-                setIsAutoSearch(true);
-                setSelectedOption(prevSelectedOption => {
-                    const newSelectedOption = prevSelectedOption - 1;
-                    return newSelectedOption < -1
-                        ? getSearchLocalResult.length - 1
-                        : newSelectedOption;
-                });
-            } else if (event.key === 'ArrowDown') {
-                setIsAutoSearch(true);
-
-                setSelectedOption(prevSelectedOption => {
-                    const newSelectedOption = prevSelectedOption + 1;
-                    return newSelectedOption >= getSearchLocalResult.length ? 0 : newSelectedOption;
-                });
-            }
-        };
-
-        document.addEventListener('keydown', handleKeyPress);
-
-        return () => {
-            document.removeEventListener('keydown', handleKeyPress);
-        };
-    }, [getSearchLocalResult]);
-
-    return selectedOption;
+export default function useHandleKeyPress({
+    key,
+    e,
+    getSearchLocalResult,
+    setSearchValue,
+    selectedSearchIndex,
+    setSelectedSearchIndex,
+}: IHandleProps) {
+    switch (key) {
+        case 'ArrowDown':
+            e.preventDefault();
+            setSearchValue(getSearchLocalResult[selectedSearchIndex + 1]);
+            setSelectedSearchIndex(prevSelectedOption => {
+                const newSelectedOption = prevSelectedOption + 1; // 1
+                return newSelectedOption >= getSearchLocalResult.length + 1 ? 0 : newSelectedOption;
+            });
+            break;
+        case 'ArrowUp':
+            e.preventDefault();
+            setSearchValue(getSearchLocalResult[selectedSearchIndex - 1]);
+            setSelectedSearchIndex(prevSelectedOption => {
+                const newSelectedOption = prevSelectedOption - 1;
+                return newSelectedOption < -1 ? getSearchLocalResult.length - 1 : newSelectedOption;
+            });
+            break;
+        case 'Escape':
+            setSelectedSearchIndex(-1);
+            break;
+        default:
+            break;
+    }
 }

@@ -2,8 +2,8 @@ import LanguageIcon from '@mui/icons-material/Language';
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import { isSearchClickedState } from '@monorepo/service/src/recoil/atom/isSearchClickedState';
 import { useSetRecoilState } from 'recoil';
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import {
@@ -13,27 +13,22 @@ import {
 
 interface ISearchProps {
     onSearchResult: any;
-    onSearchRender: () => void;
     onSetSearchResult: React.Dispatch<React.SetStateAction<string[]>>;
 
-    onHandleKeypress: (e: React.KeyboardEvent<HTMLDivElement>, text?: string | '') => void;
-
     onSetSearchValue: React.Dispatch<React.SetStateAction<string>>;
-    onSearchValue: string;
+    onSelectedSearchIndex: number;
 }
 
 const ChatBubble = ({
     onSearchResult,
-    onSearchRender,
-    onSetSearchResult, //selectedOption,
-    onSearchValue,
+    onSetSearchResult,
+    onSelectedSearchIndex,
+    onSetSearchValue,
 }: ISearchProps) => {
     const setIsSearchClicked = useSetRecoilState(isSearchClickedState);
-    const [isAutoSearch, setIsAutoSearch] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(-1);
+
     const searchBoxRef = useRef<HTMLDivElement>(null);
     const KEY = 'search';
-    const navigate = useNavigate();
 
     const handleCloseSearchResult = (num: number) => {
         const getRecentSearchesData = getSearchListStorage(KEY);
@@ -63,34 +58,7 @@ const ChatBubble = ({
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
-    useEffect(() => {
-        const handleKeyPress = (event: KeyboardEvent) => {
-            if (event.key === 'ArrowUp') {
-                setIsAutoSearch(true);
-                setSelectedOption(prevSelectedOption => {
-                    const newSelectedOption = prevSelectedOption - 1;
-                    return newSelectedOption < -1 ? onSearchResult.length - 1 : newSelectedOption;
-                });
-            } else if (event.key === 'ArrowDown') {
-                setIsAutoSearch(true);
-
-                setSelectedOption(prevSelectedOption => {
-                    const newSelectedOption = prevSelectedOption + 1;
-                    return newSelectedOption >= onSearchResult.length ? 0 : newSelectedOption;
-                });
-            }
-            if (event.key === 'Enter') {
-                navigate(`/search/${onSearchValue}`);
-            }
-        };
-
-        document.addEventListener('keydown', handleKeyPress);
-
-        return () => {
-            document.removeEventListener('keydown', handleKeyPress);
-        };
-    }, [onSearchResult]);
+    console.log(onSearchResult.length + 1);
 
     return (
         <div className="absolute z-10 mt-2 w-80" ref={searchBoxRef}>
@@ -105,13 +73,8 @@ const ChatBubble = ({
                                     key={index}
                                     tabIndex={0}
                                     className={`flex items-center w-full gap-4 bg-opacity-20 
-                                        ${
-                                            isAutoSearch
-                                                ? index === selectedOption
-                                                    ? 'bg-gray-300'
-                                                    : ''
-                                                : ''
-                                        }`}
+                                        ${index === onSelectedSearchIndex ? 'bg-gray-400' : ''}`}
+                                    onClick={() => onSetSearchValue(value)}
                                 >
                                     <Link
                                         to={`/search/${value}`}
@@ -137,7 +100,10 @@ const ChatBubble = ({
 
                         <Link
                             to="/Exploretopics"
-                            className="flex items-center gap-2 p-4 text-black hover:text-black"
+                            className={`flex items-center gap-2 p-4 text-black hover:text-black  ${
+                                onSearchResult.length === onSelectedSearchIndex ? 'bg-gray-400' : ''
+                            }`}
+                            key={onSearchResult.length + 1}
                         >
                             <p className="flex items-center w-full gap-4 text-sm">
                                 <LanguageIcon />

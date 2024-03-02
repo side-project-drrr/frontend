@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import styled from '@emotion/styled';
 import { TextField, IconButton, Avatar, Button } from '@mui/material';
 import { BiLogoGit } from 'react-icons/bi';
@@ -20,7 +21,7 @@ import { HeaderSearchDataState } from '@monorepo/service/src/recoil/atom/HeaderS
 import { PageState } from '@monorepo/service/src/recoil/atom/PageState';
 import { Link, useNavigate } from 'react-router-dom';
 import { getSearchListStorage } from '@monorepo/service/src/repository/SearchListRepository';
-//import useHandleKeyPress from '@monorepo/service/src/hooks/useHandleKeyPress';
+import useHandleKeyPress from '@monorepo/service/src/hooks/useHandleKeyPress';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -102,13 +103,13 @@ export default function Header({ authToken }: IHeaderProps) {
     const [isSearchClicked, setIsSearchClicked] = useRecoilState(isSearchClickedState);
     const [searchValue, setSearchValue] = useState('');
     const [getSearchLocalResult, setGetSearchLocalResult] = useState<any[]>([]);
+    const [selectedSearchIndex, setSelectedSearchIndex] = useState<number>(-1);
 
     const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
     const { darkMode, toggleDarkMode } = useDarkMode();
     const page = useRecoilValue(PageState);
     const setProfileOpen = useSetRecoilState(profileModalOpen);
     const KEY = 'search';
-
     const navigate = useNavigate();
     const size = 10;
     const sort = 'writtenAt';
@@ -128,7 +129,8 @@ export default function Header({ authToken }: IHeaderProps) {
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
         const value = (e.target as HTMLInputElement).value;
-        if (value !== '') {
+        const key = e.key;
+        if ((value !== '' && searchValue !== '') || selectedSearchIndex !== -1) {
             if (e.key === 'Enter') {
                 // 엔터 키를 눌렀을 때 실행할 동작
                 setTechBlogSearchData([]);
@@ -142,8 +144,21 @@ export default function Header({ authToken }: IHeaderProps) {
                 navigate(`/search/${searchValue}`);
             }
         }
-    };
 
+        useHandleKeyPress({
+            key,
+            e,
+            getSearchLocalResult,
+            setSearchValue,
+            selectedSearchIndex,
+            setSelectedSearchIndex,
+        });
+    };
+    const handleInputClicked = (e: React.MouseEvent<HTMLDivElement>) => {
+        setIsSearchClicked(!isSearchClicked);
+
+        setSearchValue((e.target as HTMLInputElement).value);
+    };
     const handleModalClose = () => {
         setProfileOpen(false);
     };
@@ -166,9 +181,7 @@ export default function Header({ authToken }: IHeaderProps) {
     useEffect(() => {
         setGetSearchLocalResult(searchItem);
     }, []);
-
-    //const searchKeyIndex = useHandleKeyPress({ getSearchLocalResult, setIsAutoSearch });
-
+    console.log(selectedSearchIndex);
     return (
         <header className={`w-full flex justify-center `}>
             <div
@@ -178,7 +191,11 @@ export default function Header({ authToken }: IHeaderProps) {
                 <div className="flex items-center">
                     <div className="mx-2 none">
                         <Link to="/" className="text-black bg-transparent dark:text-white">
-                            <BiLogoGit size={40} aria-label="로고" />
+                            <BiLogoGit
+                                size={40}
+                                aria-label="로고"
+                                onClick={() => setSearchValue('')}
+                            />
                         </Link>
                     </div>
                     <div>
@@ -188,7 +205,7 @@ export default function Header({ authToken }: IHeaderProps) {
                             variant="outlined"
                             label="검색"
                             aria-label="검색"
-                            onClick={() => setIsSearchClicked(!isSearchClicked)}
+                            onClick={e => handleInputClicked(e)}
                             onKeyDown={e => handleKeyPress(e)}
                             onChange={e => handleSearchValue(e)}
                             autoComplete="off"
@@ -197,11 +214,9 @@ export default function Header({ authToken }: IHeaderProps) {
                         {isSearchClicked && (
                             <ChatBubble
                                 onSearchResult={getSearchLocalResult}
-                                onSearchRender={getKeywordSerchRender}
                                 onSetSearchResult={setGetSearchLocalResult}
-                                onHandleKeypress={handleKeyPress}
                                 onSetSearchValue={setSearchValue}
-                                onSearchValue={searchValue}
+                                onSelectedSearchIndex={selectedSearchIndex}
                             />
                         )}
                     </div>
