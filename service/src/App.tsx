@@ -8,7 +8,6 @@ import SocialCallback from './components/social/SocialCallback';
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import { useMemo } from 'react';
 import { useDarkMode } from './ThemeContext/ThemeProvider';
 import TopicPage from './pages/TopicPage';
 
