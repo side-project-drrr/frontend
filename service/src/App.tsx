@@ -9,6 +9,9 @@ import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { useDarkMode } from './ThemeContext/ThemeProvider';
+import LayoutWithAside from './components/layout/LayoutWithAside';
+import LayoutWithOutAside from './components/layout/LayoutWithOutAside';
+import { RecommendedListPage } from './pages/recommendedListPage';
 
 function App() {
     const { darkMode } = useDarkMode();
@@ -42,11 +45,14 @@ function App() {
         <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
             <CssBaseline />
             <Routes>
-                <Route element={<Layout />}>
+                <Route element={<LayoutWithAside />}>
                     <Route path="/" element={<MainPage />} />
                     <Route path="/detail/:id" element={<ItemDetailPage />} />
                     <Route path="/signup/category" element={<CategoryPage />} />
                     <Route path="/category/detail/:id" element={<ItemDetailPage />} />
+                </Route>
+                <Route element={<LayoutWithOutAside />}>
+                    <Route path="/recommend/list" element={<RecommendedListPage />} />
                 </Route>
                 <Route path="/kakao/auth" element={<SocialCallback />} />
                 <Route path="/github/auth" element={<SocialCallback />} />
