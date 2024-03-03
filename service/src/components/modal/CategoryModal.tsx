@@ -16,7 +16,6 @@ import { SignUpService } from '../../service/auth/SocialService';
 import { setAuthStorage } from '../../repository/AuthRepository';
 import { getProvider } from '../../repository/ProviderRepository';
 import { getProfileImgStorage } from '../../repository/ProfileimgRepository';
-import { profileImageUrlState } from '../../recoil/atom/profileImageUrlState';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
 const style = {
@@ -74,16 +73,10 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const KEY = 'imgUrl';
     const profileImageUrl = getProfileImgStorage(KEY);
 
-    const profileImageUrl = useRecoilValue(profileImageUrlState);
-
     const size = 20;
 
-    const sort = 'name';
-
-    const direction = 'DESC';
-
     async function getCategoryList() {
-        const categoryData = await getCategoryItem({ page, size, sort, direction });
+        const categoryData = await getCategoryItem({ page, size });
         setCategoryItems(categoryData);
     }
 
