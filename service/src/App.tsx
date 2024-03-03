@@ -48,7 +48,6 @@ function App() {
                     <Route path="/detail/:id" element={<ItemDetailPage />} />
                     <Route path="/signup/category" element={<CategoryPage />} />
                     <Route path="/category/detail/:id" element={<ItemDetailPage />} />
-                    <Route path="/Exploretopics" element={<ItemDetailPage />} />
                     <Route path="/search/:search" element={<HeaderSearchPage />} />
                 </Route>
                 <Route path="/kakao/auth" element={<SocialCallback />} />
