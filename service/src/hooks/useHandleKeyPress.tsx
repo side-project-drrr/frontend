@@ -27,12 +27,17 @@ export default function useHandleKeyPress({
             });
             break;
         case 'ArrowUp':
-            e.preventDefault();
-            setSearchValue(getSearchLocalResult[selectedSearchIndex - 1]);
-            setSelectedSearchIndex(prevSelectedOption => {
-                const newSelectedOption = prevSelectedOption - 1;
-                return newSelectedOption < -1 ? getSearchLocalResult.length - 1 : newSelectedOption;
-            });
+            if (selectedSearchIndex !== -1) {
+                e.preventDefault();
+                setSearchValue(getSearchLocalResult[selectedSearchIndex - 1]);
+                setSelectedSearchIndex(prevSelectedOption => {
+                    const newSelectedOption = prevSelectedOption - 1;
+                    return newSelectedOption < -1
+                        ? getSearchLocalResult.length - 1
+                        : newSelectedOption;
+                });
+            }
+
             break;
         case 'Escape':
             setSelectedSearchIndex(-1);

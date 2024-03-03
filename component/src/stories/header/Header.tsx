@@ -13,7 +13,7 @@ import {
 } from '@monorepo/service/src/repository/ProfileimgRepository';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { profileModalOpen } from '@monorepo/service/src/recoil/atom/profileModalOpen';
-import ChatBubble from '../ChatBubble/ChatBubble';
+import ChatBubble from '../ChatBubble/HeaderSearchMenu';
 import { isSearchClickedState } from '@monorepo/service/src/recoil/atom/isSearchClickedState';
 import { useEffect, useState } from 'react';
 import { getHeaderKeywordSearch } from '@monorepo/service/src/service/HeaderSearchService';
@@ -104,7 +104,7 @@ export default function Header({ authToken }: IHeaderProps) {
     const [searchValue, setSearchValue] = useState('');
     const [getSearchLocalResult, setGetSearchLocalResult] = useState<any[]>([]);
     const [selectedSearchIndex, setSelectedSearchIndex] = useState<number>(-1);
-
+    const [goToAnotherPage, setGoToAnotherPage] = useState(false);
     const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
     const { darkMode, toggleDarkMode } = useDarkMode();
     const page = useRecoilValue(PageState);
@@ -130,7 +130,7 @@ export default function Header({ authToken }: IHeaderProps) {
     const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
         const value = (e.target as HTMLInputElement).value;
         const key = e.key;
-        if ((value !== '' && searchValue !== '') || selectedSearchIndex !== -1) {
+        if (value !== '' && searchValue !== '' && selectedSearchIndex !== -1) {
             if (e.key === 'Enter') {
                 // 엔터 키를 눌렀을 때 실행할 동작
                 setTechBlogSearchData([]);
@@ -144,7 +144,14 @@ export default function Header({ authToken }: IHeaderProps) {
                 navigate(`/search/${searchValue}`);
             }
         }
-
+        if (goToAnotherPage) {
+            if (e.key === 'Enter') {
+                // 엔터 키를 눌렀을 때 실행할 동작
+                setSearchValue('');
+                setGoToAnotherPage(false);
+                navigate(`/Exploretopics`);
+            }
+        }
         useHandleKeyPress({
             key,
             e,
@@ -181,7 +188,10 @@ export default function Header({ authToken }: IHeaderProps) {
     useEffect(() => {
         setGetSearchLocalResult(searchItem);
     }, []);
-    console.log(selectedSearchIndex);
+    useEffect(() => {
+        if (selectedSearchIndex === -1) setSearchValue('');
+    }, [selectedSearchIndex]);
+
     return (
         <header className={`w-full flex justify-center `}>
             <div
@@ -217,6 +227,7 @@ export default function Header({ authToken }: IHeaderProps) {
                                 onSetSearchResult={setGetSearchLocalResult}
                                 onSetSearchValue={setSearchValue}
                                 onSelectedSearchIndex={selectedSearchIndex}
+                                onSetGoToanotherPage={setGoToAnotherPage}
                             />
                         )}
                     </div>

@@ -17,16 +17,17 @@ interface ISearchProps {
 
     onSetSearchValue: React.Dispatch<React.SetStateAction<string>>;
     onSelectedSearchIndex: number;
+    onSetGoToanotherPage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ChatBubble = ({
+export default function HeaderSearchMenu({
     onSearchResult,
     onSetSearchResult,
     onSelectedSearchIndex,
     onSetSearchValue,
-}: ISearchProps) => {
+    onSetGoToanotherPage,
+}: ISearchProps) {
     const setIsSearchClicked = useSetRecoilState(isSearchClickedState);
-
     const searchBoxRef = useRef<HTMLDivElement>(null);
     const KEY = 'search';
 
@@ -58,7 +59,15 @@ const ChatBubble = ({
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-    console.log(onSearchResult.length + 1);
+
+    useEffect(() => {
+        if (onSearchResult.length === onSelectedSearchIndex) {
+            onSetGoToanotherPage(true);
+            onSetSearchValue('');
+        } else {
+            onSetGoToanotherPage(false);
+        }
+    }, [onSelectedSearchIndex]);
 
     return (
         <div className="absolute z-10 mt-2 w-80" ref={searchBoxRef}>
@@ -71,7 +80,6 @@ const ChatBubble = ({
                             onSearchResult?.map((value: string, index: number) => (
                                 <div
                                     key={index}
-                                    tabIndex={0}
                                     className={`flex items-center w-full gap-4 bg-opacity-20 
                                         ${index === onSelectedSearchIndex ? 'bg-gray-400' : ''}`}
                                     onClick={() => onSetSearchValue(value)}
@@ -117,6 +125,4 @@ const ChatBubble = ({
             </div>
         </div>
     );
-};
-
-export default ChatBubble;
+}
