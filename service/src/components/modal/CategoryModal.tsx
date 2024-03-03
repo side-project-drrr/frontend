@@ -73,15 +73,13 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const stringConvert = provider?.toString();
     const KEY = 'imgUrl';
     const profileImageUrl = getProfileImgStorage(KEY);
-    const setIsLogged = useSetRecoilState(isLoggedInState);
+
     const size = 20;
-
-    const sort = 'name';
-
-    const direction = 'DESC';
+    const setIsLogged = useSetRecoilState(isLoggedInState);
 
     async function getCategoryList() {
-        const categoryData = await getCategoryItem({ page, size, sort, direction });
+        const categoryData = await getCategoryItem({ page, size });
+
         setCategoryItems(categoryData.content);
     }
 
@@ -140,9 +138,11 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     useEffect(() => {
         if (didMount) {
             //카테고리리스트 api 호출
+
             getCategoryList();
         }
     }, [didMount]);
+
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>

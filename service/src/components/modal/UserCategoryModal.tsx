@@ -62,16 +62,12 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
 
     const size = 20;
 
-    const sort = 'name';
-
-    const direction = 'DESC';
-
     const fetchMoreIssue = useCallback(() => {
         setPage(prev => prev + 1);
     }, [categoryItems]);
 
     async function getCategoryList() {
-        const categoryData = await getCategoryItem({ page, size, sort, direction });
+        const categoryData = await getCategoryItem({ page, size });
         setCategoryItems(categoryData.content);
     }
 

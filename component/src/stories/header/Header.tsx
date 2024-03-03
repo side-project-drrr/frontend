@@ -69,13 +69,13 @@ function AuthHeader({ onLogout }: IHandleProps) {
             )}
             {profileOpen && (
                 <div
-                    className="absolute w-[100px] h-[100px] bg-slate-50 flex justify-center items-center flex-col gap-4 right-0 mt-2"
+                    className="w-[100px] h-[100px] bg-slate-50 flex justify-center items-center flex-col gap-4 right-0 mt-2 absolute z-10"
                     aria-label="프로필 메뉴"
                 >
                     <Button className="text-black" style={buttonStyle}>
                         Profile
                     </Button>
-                    <Button className="text-black" style={buttonStyle} onClick={() => onLogout()}>
+                    <Button className="text-black " style={buttonStyle} onClick={onLogout}>
                         Logout
                     </Button>
                 </div>
@@ -123,7 +123,7 @@ export default function Header({ authToken }: IHeaderProps) {
                     </div>
                     <InputTextField type="text" variant="outlined" label="검색" aria-label="검색" />
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center ">
                     <IconButton onClick={toggleDarkMode} size="large" color="inherit">
                         {darkMode === 'dark' ? (
                             <LightModeOutlined />

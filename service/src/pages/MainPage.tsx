@@ -30,10 +30,6 @@ export default function MainPage() {
     const loggedIn = useRecoilValue(isLoggedInState);
     const size = 10;
 
-    const sort = 'createdAt';
-
-    const direction = 'DESC';
-
     const handleModalOpen = useSetRecoilState(modalOpenState);
     const setProfileOpen = useSetRecoilState(profileModalOpen);
 
@@ -44,7 +40,7 @@ export default function MainPage() {
     const tokenDecode = useTokenDecode(getToken);
 
     async function userTechBlogRender() {
-        const userTechBlogData = await getTechBlogService({ page, size, sort, direction });
+        const userTechBlogData = await getTechBlogService({ page, size });
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
     }
 
@@ -52,8 +48,7 @@ export default function MainPage() {
         const userFilterTechBlogData = await getUserTechBlogService({
             page,
             size,
-            sort,
-            direction,
+
             id,
         });
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
@@ -146,7 +141,12 @@ export default function MainPage() {
                 <div ref={setObservationTarget}></div>
             </div>
             <SignUpModal onSignupNext={handleSignupNext} />
-            <CategoryModal onModalOpen={isCategoryModalOpen} onClose={handleCategoryModalClose} />
+            {isCategoryModalOpen && (
+                <CategoryModal
+                    onModalOpen={isCategoryModalOpen}
+                    onClose={handleCategoryModalClose}
+                />
+            )}
         </div>
     );
 }
