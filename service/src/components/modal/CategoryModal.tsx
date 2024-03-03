@@ -75,12 +75,8 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
     const size = 20;
 
-    const sort = 'name';
-
-    const direction = 'DESC';
-
     async function getCategoryList() {
-        const categoryData = await getCategoryItem({ page, size, sort, direction });
+        const categoryData = await getCategoryItem({ page, size });
         setCategoryItems(categoryData);
     }
 

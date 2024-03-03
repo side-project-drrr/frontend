@@ -3,15 +3,11 @@ import HttpClient from '../apis/HttpClient';
 interface IGetCategory {
     page: number;
     size: number;
-    sort: string;
-    direction: string;
 }
 
-export async function getCategoryItem({ page, size, sort, direction }: IGetCategory) {
+export async function getCategoryItem({ page, size }: IGetCategory) {
     try {
-        const res = await HttpClient.get(
-            `/api/v1/categories/all?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
-        );
+        const res = await HttpClient.get(`/api/v1/categories/all?page=${page}&size=${size}`);
         return res.data;
     } catch (error) {
         console.error(error);
@@ -30,7 +26,6 @@ export async function putUserCategoryItem(stringConvertNumberActiveData: number[
 }
 
 export async function AuthCategoryService(memberId: string) {
-    console.log(memberId);
     try {
         const authCategoryData = await HttpClient.get(
             `/api/v1/members/me/category-preference?memberId=${memberId}`,
