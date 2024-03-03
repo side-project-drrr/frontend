@@ -82,17 +82,17 @@ export default function Carousel({ data }: CarouselProps) {
                     <div key={item.techBlogPostBasicInfoDto.id} className="flex flex-col h-[25vh] ">
                         <h3
                             aria-label="추천 게시글 제목"
-                            className="inline-flex justify-center w-full text-base"
+                            className="inline-flex justify-center w-full text-base text-ellipsis"
                         >
-                            {item.techBlogPostBasicInfoDto.title.slice(0, 30)}...
+                            {item.techBlogPostBasicInfoDto.title}
                         </h3>
                         <div className="flex justify-around flex-1 w-[480px]">
                             <div className="flex flex-wrap w-full">
                                 <p
                                     aria-label="추천 게시글 메인 컨텐츠"
-                                    className="flex flex-wrap w-full mt-5 ml-10 text-sm "
+                                    className="flex flex-wrap w-full mt-5 ml-10 text-sm text-ellipsis"
                                 >
-                                    {item.techBlogPostBasicInfoDto.summary.slice(0, 60)}...
+                                    {item.techBlogPostBasicInfoDto.summary}
                                 </p>
                             </div>
 

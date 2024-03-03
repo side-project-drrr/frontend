@@ -11,7 +11,7 @@ interface ITechBlogCategory {
 export async function getTechBlogService({ page, size, sort, direction }: ITechBlogCategory) {
     try {
         const res = await HttpClient.get(
-            `/api/v1/posts?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
+            `/api/v1/posts/all?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
         );
         return res.data;
     } catch (error) {
@@ -28,7 +28,7 @@ export async function getUserTechBlogService({
 }: ITechBlogCategory) {
     try {
         const res = await HttpClient.get(
-            `/api/v1/posts/category/${id}?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
+            `/api/v1/posts/categories/${id}?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
         );
         return res.data;
     } catch (error) {
@@ -38,7 +38,9 @@ export async function getUserTechBlogService({
 
 export async function getRecommendTechBlogService(memberId: string) {
     try {
-        const res = await HttpClient.get(`/api/v1/recommendation/posts?${memberId}`);
+        const res = await HttpClient.get(
+            `/api/v1/members/me/post-recommendation?memberId=${memberId}`,
+        );
         return res.data;
     } catch (error) {
         console.error(error);
