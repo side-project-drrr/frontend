@@ -27,10 +27,6 @@ export default function MainPage() {
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
     const size = 10;
 
-    const sort = 'createdAt';
-
-    const direction = 'DESC';
-
     const handleModalOpen = useSetRecoilState(modalOpenState);
     const setProfileOpen = useSetRecoilState(profileModalOpen);
 
@@ -41,7 +37,7 @@ export default function MainPage() {
     const tokenDecode = useTokenDecode(getToken);
 
     async function userTechBlogRender() {
-        const userTechBlogData = await getTechBlogService({ page, size, sort, direction });
+        const userTechBlogData = await getTechBlogService({ page, size });
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
     }
 
@@ -49,8 +45,7 @@ export default function MainPage() {
         const userFilterTechBlogData = await getUserTechBlogService({
             page,
             size,
-            sort,
-            direction,
+
             id,
         });
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
