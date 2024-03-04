@@ -13,7 +13,6 @@ const TopPost = () => {
     useEffect(() => {
         getTopContentRender();
     }, []);
-    console.log(topContent);
     return (
         <div className="my-8" aria-label="탑 게시글">
             <h2 className="text-lg font-bold ">Top {topContent.length}</h2>
