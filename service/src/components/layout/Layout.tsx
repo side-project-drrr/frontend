@@ -11,5 +11,6 @@ export default function Layout({ children }: { children: ReactNode }) {
             <div className="w-full h-px bg-[#444]" />
             <div className="max-w-screen-xl flex">{children}</div>
         </div>
+
     );
 }

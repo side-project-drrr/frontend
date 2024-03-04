@@ -5,13 +5,13 @@ export default function CardList({ items, onCategoryId, onFilterItems }: IListBo
     return (
         <>
             {onCategoryId === 0 ? (
-                <div className="flex flex-wrap justify-between w-10/12">
+                <div className="flex flex-wrap justify-between pr-10">
                     {items.map((item: any) => (
                         <CardComponent key={item.id} item={item} />
                     ))}
                 </div>
             ) : (
-                <div className="flex flex-wrap justify-between w-10/12">
+                <div className="flex flex-wrap justify-between pr-10">
                     {onFilterItems.map((item: any) => (
                         <CardComponent key={item.id} item={item} />
                     ))}
