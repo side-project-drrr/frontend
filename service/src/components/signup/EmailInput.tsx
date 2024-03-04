@@ -4,6 +4,7 @@ import { InputTextField } from '../../style/inputText';
 import { useEffect } from 'react';
 import { IEmailProps } from './type';
 import { ChangeEvent } from 'react';
+
 export default function EmailInput({
     onEmailCertificationButton,
     onEmailAuthenticationChange,
