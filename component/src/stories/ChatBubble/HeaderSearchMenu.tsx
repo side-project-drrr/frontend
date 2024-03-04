@@ -17,7 +17,6 @@ interface ISearchProps {
 
     onSetSearchValue: React.Dispatch<React.SetStateAction<string>>;
     onSelectedSearchIndex: number;
-    onSetGoToanotherPage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function HeaderSearchMenu({
@@ -25,7 +24,6 @@ export default function HeaderSearchMenu({
     onSetSearchResult,
     onSelectedSearchIndex,
     onSetSearchValue,
-    onSetGoToanotherPage,
 }: ISearchProps) {
     const setIsSearchClicked = useSetRecoilState(isSearchClickedState);
     const searchBoxRef = useRef<HTMLDivElement>(null);
@@ -33,6 +31,7 @@ export default function HeaderSearchMenu({
 
     const handleCloseSearchResult = (num: number) => {
         const getRecentSearchesData = getSearchListStorage(KEY);
+        onSetSearchValue('');
         const filterRecentSearchesData = getRecentSearchesData.filter(
             (e: string, index: number) => index !== num,
         );
@@ -60,15 +59,6 @@ export default function HeaderSearchMenu({
         };
     }, []);
 
-    useEffect(() => {
-        if (onSearchResult.length === onSelectedSearchIndex) {
-            onSetGoToanotherPage(true);
-            onSetSearchValue('');
-        } else {
-            onSetGoToanotherPage(false);
-        }
-    }, [onSelectedSearchIndex]);
-
     return (
         <div className="absolute z-10 mt-2 w-80" ref={searchBoxRef}>
             <div className="relative flex-1 p-2 mb-2 text-black bg-white rounded-lg">
@@ -80,38 +70,35 @@ export default function HeaderSearchMenu({
                             onSearchResult?.map((value: string, index: number) => (
                                 <div
                                     key={index}
-                                    className={`flex items-center w-full gap-4 bg-opacity-20 
+                                    className={`flex items-center w-full gap-4 bg-opacity-20  border-b-2 
                                         ${index === onSelectedSearchIndex ? 'bg-gray-400' : ''}`}
-                                    onClick={() => onSetSearchValue(value)}
                                 >
                                     <Link
                                         to={`/search/${value}`}
-                                        className="flex items-center w-full gap-2 p-4 text-black border-b-2 hover:text-black"
+                                        className="flex items-center w-full gap-2 p-4 text-black hover:text-black"
+                                        onClick={() => onSetSearchValue(value)}
                                     >
                                         <p className="flex items-center w-full gap-4">
                                             <SearchIcon />
                                             {value}
                                         </p>
-                                        <div className="flex justify-end w-full ">
-                                            <CloseIcon
-                                                sx={{ opacity: '50%' }}
-                                                key={index}
-                                                onClick={e => {
-                                                    e.preventDefault();
-                                                    handleCloseSearchResult(index);
-                                                }}
-                                            />
-                                        </div>
                                     </Link>
+                                    <div className="flex justify-end w-full ">
+                                        <CloseIcon
+                                            sx={{ opacity: '50%' }}
+                                            key={index}
+                                            onClick={e => {
+                                                e.preventDefault();
+                                                handleCloseSearchResult(index);
+                                            }}
+                                        />
+                                    </div>
                                 </div>
                             ))}
 
                         <Link
                             to="/Exploretopics"
-                            className={`flex items-center gap-2 p-4 text-black hover:text-black  ${
-                                onSearchResult.length === onSelectedSearchIndex ? 'bg-gray-400' : ''
-                            }`}
-                            key={onSearchResult.length + 1}
+                            className={`flex items-center gap-2 p-4 text-black hover:text-black `}
                         >
                             <p className="flex items-center w-full gap-4 text-sm">
                                 <LanguageIcon />

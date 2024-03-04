@@ -23,7 +23,7 @@ export default function useHandleKeyPress({
             setSearchValue(getSearchLocalResult[selectedSearchIndex + 1]);
             setSelectedSearchIndex(prevSelectedOption => {
                 const newSelectedOption = prevSelectedOption + 1; // 1
-                return newSelectedOption >= getSearchLocalResult.length + 1 ? 0 : newSelectedOption;
+                return newSelectedOption >= getSearchLocalResult.length ? 0 : newSelectedOption;
             });
             break;
         case 'ArrowUp':
