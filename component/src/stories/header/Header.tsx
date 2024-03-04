@@ -5,13 +5,15 @@ import { CiBellOn } from 'react-icons/ci';
 import { Login } from '@monorepo/component/src/stories/login/Login';
 import { useDarkMode } from '@monorepo/service/src/ThemeContext/ThemeProvider';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
-import { removeAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
+import { getAuthStorage, removeAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
 import {
     getProfileImgStorage,
     removeProfileImgStorage,
 } from '@monorepo/service/src/repository/ProfileimgRepository';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { profileModalOpen } from '@monorepo/service/src/recoil/atom/profileModalOpen';
+import { isLoggedInState } from '@monorepo/service/src/recoil/atom/isLoggedInState';
+import { useLayoutEffect } from 'react';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -67,13 +69,13 @@ function AuthHeader({ onLogout }: IHandleProps) {
             )}
             {profileOpen && (
                 <div
-                    className="absolute w-[100px] h-[100px] bg-slate-50 flex justify-center items-center flex-col gap-4 right-0 mt-2"
+                    className="w-[100px] h-[100px] bg-slate-50 flex justify-center items-center flex-col gap-4 right-0 mt-2 absolute z-10"
                     aria-label="프로필 메뉴"
                 >
                     <Button className="text-black" style={buttonStyle}>
                         Profile
                     </Button>
-                    <Button className="text-black" style={buttonStyle} onClick={() => onLogout()}>
+                    <Button className="text-black " style={buttonStyle} onClick={onLogout}>
                         Logout
                     </Button>
                 </div>
@@ -89,20 +91,30 @@ interface IHeaderProps {
 export default function Header({ authToken }: IHeaderProps) {
     const { darkMode, toggleDarkMode } = useDarkMode();
     const setProfileOpen = useSetRecoilState(profileModalOpen);
+    const [loggedIn, setLoggedIn] = useRecoilState(isLoggedInState);
+    const TOKEN_KEY = 'accessToken';
+    const token = getAuthStorage(TOKEN_KEY);
     const handleModalClose = () => {
         setProfileOpen(false);
     };
+
+    useLayoutEffect(() => {
+        if (token) {
+            setLoggedIn(true);
+        }
+    }, [loggedIn]);
 
     const handleLogout = () => {
         removeProfileImgStorage();
         removeAuthStorage('accessToken');
         setProfileOpen(false); // 프로필 메뉴 닫기
+        setLoggedIn(false);
     };
 
     return (
         <header className={`w-full flex justify-center`}>
             <div
-                className="w-full max-w-screen-xl py-4 flex justify-between"
+                className="flex justify-between w-full max-w-screen-xl py-4"
                 onClick={handleModalClose}
             >
                 <div className="flex items-center">
@@ -111,7 +123,7 @@ export default function Header({ authToken }: IHeaderProps) {
                     </div>
                     <InputTextField type="text" variant="outlined" label="검색" aria-label="검색" />
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center ">
                     <IconButton onClick={toggleDarkMode} size="large" color="inherit">
                         {darkMode === 'dark' ? (
                             <LightModeOutlined />
@@ -120,7 +132,7 @@ export default function Header({ authToken }: IHeaderProps) {
                         )}
                     </IconButton>
                     <CiBellOn size={26} aria-label="알림" />
-                    {authToken ? <AuthHeader onLogout={handleLogout} /> : <Login />}
+                    {loggedIn ? <AuthHeader onLogout={handleLogout} /> : <Login />}
                 </div>
             </div>
         </header>

@@ -8,6 +8,7 @@ interface IGetCategory {
 export async function getCategoryItem({ page, size }: IGetCategory) {
     try {
         const res = await HttpClient.get(`/api/v1/categories/all?page=${page}&size=${size}`);
+
         return res.data;
     } catch (error) {
         console.error(error);

@@ -8,7 +8,6 @@ export const useIntersectionObserver = (callback: () => void) => {
             observer.current = new IntersectionObserver(
                 ([entry]) => {
                     if (!entry.isIntersecting) return;
-                    console.log(callback);
                     callback();
                 },
                 { threshold: 1 },
