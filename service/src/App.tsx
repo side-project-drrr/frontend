@@ -1,6 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-
-import Layout from './components/layout/Layout';
 import MainPage from './pages/MainPage';
 import ItemDetailPage from './pages/ItemDetailPage';
 import CategoryPage from './pages/CategoryPage';
@@ -9,6 +7,8 @@ import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { useDarkMode } from './ThemeContext/ThemeProvider';
+import LayoutWithAside from './components/layout/LayoutWIthAside';
+import LayoutWithOutAside from './components/layout/LayoutWIthOutAside';
 
 function App() {
     const { darkMode } = useDarkMode();
@@ -42,12 +42,13 @@ function App() {
         <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
             <CssBaseline />
             <Routes>
-                <Route element={<Layout />}>
+                <Route element={<LayoutWithAside />}>
                     <Route path="/" element={<MainPage />} />
                     <Route path="/detail/:id" element={<ItemDetailPage />} />
                     <Route path="/signup/category" element={<CategoryPage />} />
                     <Route path="/category/detail/:id" element={<ItemDetailPage />} />
                 </Route>
+                <Route element={<LayoutWithOutAside />}></Route>
                 <Route path="/kakao/auth" element={<SocialCallback />} />
                 <Route path="/github/auth" element={<SocialCallback />} />
             </Routes>
