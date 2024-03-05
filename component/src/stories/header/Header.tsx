@@ -15,7 +15,6 @@ import { isLoggedInState } from '@monorepo/service/src/recoil/atom/isLoggedInSta
 import { useLayoutEffect } from 'react';
 import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
 import lightLogo from '@monorepo/service/src/assets/lightLogo.webp';
-import { getDarkModeStorage } from '@monorepo/service/src/repository/DarkRepository';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -96,7 +95,6 @@ export default function Header({ authToken }: IHeaderProps) {
     const [loggedIn, setLoggedIn] = useRecoilState(isLoggedInState);
     const TOKEN_KEY = 'accessToken';
     const token = getAuthStorage(TOKEN_KEY);
-    const darkModeData = getDarkModeStorage('theme');
     const handleModalClose = () => {
         setProfileOpen(false);
     };
@@ -113,7 +111,7 @@ export default function Header({ authToken }: IHeaderProps) {
         setProfileOpen(false); // 프로필 메뉴 닫기
         setLoggedIn(false);
     };
-    console.log(darkModeData);
+
     return (
         <header className={`w-full flex justify-center`}>
             <div
@@ -122,10 +120,10 @@ export default function Header({ authToken }: IHeaderProps) {
             >
                 <div className="flex items-center">
                     <div className="mr-4 none">
-                        {darkModeData === 'light' ? (
-                            <img src={darkLogo} alt="로고" />
-                        ) : (
+                        {darkMode === 'light' ? (
                             <img src={lightLogo} alt="로고" />
+                        ) : (
+                            <img src={darkLogo} alt="로고" />
                         )}
                     </div>
                     <InputTextField
@@ -137,7 +135,7 @@ export default function Header({ authToken }: IHeaderProps) {
                         autoComplete="off"
                     />
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1">
                     <IconButton onClick={toggleDarkMode} size="large" color="inherit">
                         {darkMode === 'dark' ? (
                             <LightModeOutlined />
@@ -145,7 +143,7 @@ export default function Header({ authToken }: IHeaderProps) {
                             <DarkModeOutlined color="action" />
                         )}
                     </IconButton>
-                    <NotificationsActiveIcon />
+                    <NotificationsActiveIcon className="mr-3" />
                     {loggedIn ? <AuthHeader onLogout={handleLogout} /> : <Login />}
                 </div>
             </div>

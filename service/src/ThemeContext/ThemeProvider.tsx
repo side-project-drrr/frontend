@@ -71,6 +71,8 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     }, []);
 
     const theme = createCustomTheme(darkMode);
+    console.log(darkMode);
+
     return (
         <DarkModeContext.Provider value={{ darkMode, toggleDarkMode }}>
             <MuiThemeProvider
