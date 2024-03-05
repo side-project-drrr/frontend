@@ -10,9 +10,9 @@ import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import {
-    setDarkModeState,
-    getDarkModeState,
-    removeDarkModeState,
+    setDarkModeSotrage,
+    getDarkModeStorage,
+    removeDarkModeStorage,
 } from '../repository/DarkRepository';
 import createCustomTheme from './theme';
 
@@ -37,13 +37,13 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     };
 
     useEffect(() => {
-        removeDarkModeState();
-        setDarkModeState(darkMode);
+        removeDarkModeStorage();
+        setDarkModeSotrage(darkMode);
     }, [darkMode]);
 
     // 새로고침시에도 darkmode 구현된 상태로 놔두기
     useLayoutEffect(() => {
-        const savedTheme = getDarkModeState(GET_LOCAL_DARK_KEY);
+        const savedTheme = getDarkModeStorage(GET_LOCAL_DARK_KEY);
         if (savedTheme && ['dark', 'light'].includes(savedTheme)) {
             setDarkMode(savedTheme);
             return;
