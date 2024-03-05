@@ -7,9 +7,9 @@ import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { useDarkMode } from './ThemeContext/ThemeProvider';
-import LayoutWithAside from './components/layout/LayoutWithAside';
-import LayoutWithOutAside from './components/layout/LayoutWithOutAside';
-import { RecommendedListPage } from './pages/recommendedListPage';
+import LayoutWithAside from './components/layout/LayoutWIthAside';
+import LayoutWithOutAside from './components/layout/LayoutWIthOutAside';
+import { RecommendedListPage } from './pages/RecommendedListPage';
 
 function App() {
     const { darkMode } = useDarkMode();
