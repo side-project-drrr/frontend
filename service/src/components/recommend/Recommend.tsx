@@ -16,14 +16,12 @@ export default function Recommend() {
         const recommendBlogData = await getRecommendTechBlogService();
         setRecommendData(recommendBlogData);
     }
-    const randomItem = () => {
-        const randomIndex = Math.floor(Math.random() * recommendData.length);
-        setRandomRecommendData([recommendData[randomIndex]]);
-    };
 
     useEffect(() => {
-        const timeInterval = setInterval(randomItem, 30000);
-        return () => clearInterval(timeInterval);
+        if (recommendData.length > 0) {
+            const randomIndex = Math.floor(Math.random() * recommendData.length);
+            setRandomRecommendData([recommendData[randomIndex]]);
+        }
     }, [recommendData]);
 
     useEffect(() => {

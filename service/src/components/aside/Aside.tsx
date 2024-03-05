@@ -7,7 +7,6 @@ import Recommend from '../recommend/Recommend';
 
 export default function Aside() {
     const loggedIn = useRecoilValue(isLoggedInState);
-
     return (
         <div className="flex flex-col justify-around w-full p-4 my-10">
             {loggedIn && <Recommend />}
