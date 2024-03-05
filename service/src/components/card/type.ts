@@ -1,4 +1,13 @@
 export interface ICardItemsProps {
-    item: any;
-    //onSetObservationTarget: any;
+    item: {
+        techBlogPostBasicInfoDto: {
+            id: string;
+            title: string;
+            summary: string;
+            thumbnailUrl: string;
+            postLike: number;
+            viewCount: number;
+        };
+        categoryDto: { id: string; name: string }[];
+    };
 }
