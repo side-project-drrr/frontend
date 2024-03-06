@@ -26,7 +26,7 @@ export default function TopKeywords() {
                 가장 많이 검색된 기술
             </h1>
             <div className="flex items-center w-full pb-10 pt-2">
-                <ul className="flex justify-around mt-3 gap-2 flex-wrap">
+                <ul className="flex mt-3 gap-2 flex-wrap max-h-[130px] overflow-y-hidden">
                     {topkeywordsData?.map(topkeyword => (
                         <li
                             key={topkeyword.id}

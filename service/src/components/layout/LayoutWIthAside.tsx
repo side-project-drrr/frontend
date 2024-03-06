@@ -10,8 +10,9 @@ export default function LayoutWithAside() {
                     <Outlet />
                 </section>
             </main>
-            <aside className="w-[30%] border-l border-solid border-[#444]">
-                <div className="inline-block sticky right-0 top-10">
+            <aside className="w-[30%] border-l border-solid dark:border-[#444444] border-[#f0f0f0]">
+                <div className="inline-block right-0 top-10">
+                    {/* sticky */}
                     <Aside />
                 </div>
             </aside>
