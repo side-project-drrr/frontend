@@ -19,7 +19,7 @@ export default function Aside() {
 
     async function getRecommenedDataRender() {
         if (memberId !== undefined) {
-            const recommendBlogData = await getRecommendTechBlogService(memberId);
+            const recommendBlogData = await getRecommendTechBlogService();
             setRecommendData(recommendBlogData);
         }
     }
@@ -38,9 +38,10 @@ export default function Aside() {
                     <hr />
                 </>
             )}
+            <TopKeywords />
+
             <TopPost />
             <hr />
-            <TopKeywords />
         </div>
     );
 }
