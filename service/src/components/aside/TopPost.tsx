@@ -1,37 +1,43 @@
-import { useEffect, useState } from 'react';
-import { getTopPostItemService } from '../../service/TopPostService';
-import { ITopPostProps } from './type';
 import { Link } from 'react-router-dom';
+import { ITopPostProps } from './type';
 
-const TopPost = () => {
-    const [topContent, setTopContent] = useState<ITopPostProps[]>([]);
-    async function getTopContentRender() {
-        const topContentData = await getTopPostItemService();
+const TopPost = ({ item }: ITopPostProps) => {
+    console.log(item.techBlogPostBasicInfoDto.thumbnailUrl);
 
-        setTopContent(topContentData);
-    }
-    useEffect(() => {
-        getTopContentRender();
-    }, []);
     return (
-        <div className="my-8" aria-label="탑 게시글">
-            <h2 className="text-lg font-bold ">Top {topContent.length}</h2>
-            <ol className="flex flex-col mt-4 ">
-                {topContent?.map((content, index) => (
-                    <Link
-                        to={`/category/detail/${content.techBlogPostBasicInfoDto.id}`}
-                        key={content.techBlogPostBasicInfoDto.id}
-                        className="text-black dark:text-white"
-                    >
-                        <li className="flex py-2 " id={String(content.techBlogPostBasicInfoDto.id)}>
-                            <span className="mr-3">{index + 1}.</span>
-                            <p className="text-black hover:cursor-pointer text-inherit hover:text-inherit hover:underline dark:text-white">
-                                {content.techBlogPostBasicInfoDto.title}
+        <div className="flex h-[103px]" aria-label="탑 게시글">
+            <div id={item.techBlogPostBasicInfoDto.id} key={item.techBlogPostBasicInfoDto.id}>
+                <Link
+                    to={`/category/detail/${item.techBlogPostBasicInfoDto.id}`}
+                    className="text-black dark:text-white hover:text-black"
+                >
+                    <div className="flex justify-center items-center w-full h-full">
+                        <div className="flex justify-center items-center flex-col w-1/2">
+                            <img
+                                src={item.techBlogPostBasicInfoDto.thumbnailUrl}
+                                alt="썸네일"
+                                className="rounded-sm w-3/4 object-cover"
+                            />
+                        </div>
+                        <div className="text-xs gap-2 flex flex-col">
+                            <p className="text-black hover:cursor-pointer text-inherit hover:text-inherit hover:underline dark:text-white w-full">
+                                {item.techBlogPostBasicInfoDto.title}
                             </p>
-                        </li>
-                    </Link>
-                ))}
-            </ol>
+                            <ul className="flex text-[10px] whitespace-nowrap gap-2 flex-wrap h-7 overflow-y-hidden">
+                                {item.categoryDto.map(data => (
+                                    <li
+                                        key={data.id}
+                                        id={data.id}
+                                        className="text-[10px] dark:bg-[#444444] rounded-lg py-1 px-4 bg-[#F0F0F0] text-black dark:text-white"
+                                    >
+                                        {data.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </Link>
+            </div>
         </div>
     );
 };

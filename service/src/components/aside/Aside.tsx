@@ -7,10 +7,21 @@ import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 import { useTokenDecode } from '../../hooks/useTokenDecode';
 import { getAuthStorage } from '../../repository/AuthRepository';
 import { getRecommendTechBlogService } from '../../service/TechBlogService';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+import { getTopPostItemService } from '../../service/TopPostService';
 
 export default function Aside() {
     const [recommendData, setRecommendData] = useRecoilState(recommendState);
+    const [topContent, setTopContent] = useState([]);
+    async function getTopContentRender() {
+        const topContentData = await getTopPostItemService();
+
+        setTopContent(topContentData);
+    }
+    useEffect(() => {
+        getTopContentRender();
+    }, []);
     const TOKEN_KEY = 'accessToken';
 
     const loggedIn = useRecoilValue(isLoggedInState);
@@ -19,7 +30,7 @@ export default function Aside() {
 
     async function getRecommenedDataRender() {
         if (memberId !== undefined) {
-            const recommendBlogData = await getRecommendTechBlogService(memberId);
+            const recommendBlogData = await getRecommendTechBlogService();
             setRecommendData(recommendBlogData);
         }
     }
@@ -38,8 +49,12 @@ export default function Aside() {
                     <hr />
                 </>
             )}
-            <TopPost />
-            <hr />
+            <h1 className="text-lg font-bold ">가장 많이 읽는 글</h1>
+            <div className="flex flex-col w-full dark:border-[#444444] border-b gap-2 border-[#F0F0F0]">
+                {topContent.map((value: any) => (
+                    <TopPost item={value} key={value.techBlogPostBasicInfoDto.id} />
+                ))}
+            </div>
             <TopKeywords />
         </div>
     );
