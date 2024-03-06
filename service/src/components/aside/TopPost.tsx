@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 import { ITopPostProps } from './type';
+import darkLogo from '../../assets/darkLogo.webp';
 
 const TopPost = ({ item }: ITopPostProps) => {
-    console.log(item.techBlogPostBasicInfoDto.thumbnailUrl);
-
     return (
         <div className="flex h-[103px]" aria-label="탑 게시글">
             <div id={item.techBlogPostBasicInfoDto.id} key={item.techBlogPostBasicInfoDto.id}>
@@ -11,16 +10,35 @@ const TopPost = ({ item }: ITopPostProps) => {
                     to={`/category/detail/${item.techBlogPostBasicInfoDto.id}`}
                     className="text-black dark:text-white hover:text-black"
                 >
-                    <div className="flex justify-center items-center w-full h-full">
-                        <div className="flex justify-center items-center flex-col w-1/2">
-                            <img
-                                src={item.techBlogPostBasicInfoDto.thumbnailUrl}
-                                alt="썸네일"
-                                className="rounded-sm w-3/4 object-cover"
-                            />
+                    <div className="flex justify-center items-center w-full h-full gap-4">
+                        <div className="flex justify-center items-center flex-col">
+                            {item.techBlogPostBasicInfoDto.thumbnailUrl ? (
+                                <div
+                                    style={{
+                                        backgroundImage: `url('${item.techBlogPostBasicInfoDto.thumbnailUrl}')`,
+                                        backgroundSize: 'cover',
+                                        width: '60px',
+                                        height: '60px',
+                                        borderRadius: '20px',
+                                    }}
+                                />
+                            ) : (
+                                <div
+                                    style={{
+                                        backgroundImage: `url('${darkLogo}')`,
+                                        backgroundRepeat: 'no-repeat',
+                                        width: '60px',
+                                        height: '60px',
+                                        borderRadius: '20px',
+                                        backgroundPosition: 'center',
+                                        backgroundSize: '60%',
+                                        backgroundColor: 'rgb(203, 213, 225, 5.0)',
+                                    }}
+                                />
+                            )}
                         </div>
                         <div className="text-xs gap-2 flex flex-col">
-                            <p className="text-black hover:cursor-pointer text-inherit hover:text-inherit hover:underline dark:text-white w-full">
+                            <p className="text-black hover:cursor-pointer text-inherit hover:text-inherit hover:underline dark:text-white w-full ">
                                 {item.techBlogPostBasicInfoDto.title}
                             </p>
                             <ul className="flex text-[10px] whitespace-nowrap gap-2 flex-wrap h-7 overflow-y-hidden">
