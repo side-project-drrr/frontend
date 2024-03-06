@@ -21,7 +21,7 @@ export default function TopKeywords() {
     }, [didMount]);
 
     return (
-        <div className="flex flex-col mt-5 w-full border-b border-[#F0F0F0] dark:border-[#444444] ">
+        <div className="flex flex-col mt-5 w-full bor   der-b border-[#F0F0F0] dark:border-[#444444] ">
             <h1 aria-label="가장 많이 검색된 기술" className="text-base">
                 가장 많이 검색된 기술
             </h1>

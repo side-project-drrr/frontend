@@ -7,9 +7,7 @@ import ListBox from '@monorepo/component/src/stories/listbox/Listbox';
 import SignUpModal from '../components/signup/SignUpModal';
 import CardList from '../components/card/CardList';
 import { profileModalOpen } from '../recoil/atom/profileModalOpen';
-
 import { getAuthStorage } from '../repository/AuthRepository';
-
 import CategorySlide from '../components/carousel/CategorySlide';
 import { userCategoryState } from '../recoil/atom/userCategoryState';
 import { useTokenDecode } from '../hooks/useTokenDecode';
@@ -18,12 +16,13 @@ import { getTechBlogService, getUserTechBlogService } from '../service/TechBlogS
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { isLoggedInState } from '../recoil/atom/isLoggedInState';
 import CategoryModal from '../components/modal/CategoryModal';
+import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
     const [techBlogData, setTechBlogData] = useState<any[]>([]);
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
-    const [displayMode, setDisplayMode] = useState(true);
+    const [displayMode, setDisplayMode] = useRecoilState(DisplayModeState);
     const [page, setPage] = useState(0);
     const [categoryId, setCategoryId] = useState(0);
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리

@@ -9,6 +9,7 @@ import { CssBaseline } from '@mui/material';
 import { useDarkMode } from './ThemeContext/ThemeProvider';
 import LayoutWithAside from './components/layout/LayoutWIthAside';
 import LayoutWithOutAside from './components/layout/LayoutWIthOutAside';
+import HeaderSearchPage from './pages/HeaderSearchPage';
 
 function App() {
     const { darkMode } = useDarkMode();
@@ -47,6 +48,7 @@ function App() {
                     <Route path="/detail/:id" element={<ItemDetailPage />} />
                     <Route path="/signup/category" element={<CategoryPage />} />
                     <Route path="/category/detail/:id" element={<ItemDetailPage />} />
+                    <Route path="/search/:search" element={<HeaderSearchPage />} />
                 </Route>
                 <Route element={<LayoutWithOutAside />}></Route>
                 <Route path="/kakao/auth" element={<SocialCallback />} />
