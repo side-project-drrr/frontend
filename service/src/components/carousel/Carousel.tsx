@@ -3,8 +3,6 @@ import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'react-icons/ri';
 import { CarouselProps } from './type';
 
 export default function Carousel({ data }: CarouselProps) {
-    console.log(data);
-
     const [current, setCurrent] = useState(0);
     const scrollRef = useRef<HTMLDivElement | null>(null);
 
