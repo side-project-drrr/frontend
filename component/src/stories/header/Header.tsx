@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { TextField, IconButton, Avatar, Button } from '@mui/material';
-import { BiLogoGit } from 'react-icons/bi';
-import { CiBellOn } from 'react-icons/ci';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { Login } from '@monorepo/component/src/stories/login/Login';
 import { useDarkMode } from '@monorepo/service/src/ThemeContext/ThemeProvider';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
@@ -14,6 +13,8 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { profileModalOpen } from '@monorepo/service/src/recoil/atom/profileModalOpen';
 import { isLoggedInState } from '@monorepo/service/src/recoil/atom/isLoggedInState';
 import { useLayoutEffect } from 'react';
+import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
+import lightLogo from '@monorepo/service/src/assets/lightLogo.webp';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -118,12 +119,23 @@ export default function Header({ authToken }: IHeaderProps) {
                 onClick={handleModalClose}
             >
                 <div className="flex items-center">
-                    <div className="mr-2 none">
-                        <BiLogoGit size={40} aria-label="로고" />
+                    <div className="mr-4 none">
+                        {darkMode === 'light' ? (
+                            <img src={lightLogo} alt="로고" />
+                        ) : (
+                            <img src={darkLogo} alt="로고" />
+                        )}
                     </div>
-                    <InputTextField type="text" variant="outlined" label="검색" aria-label="검색" />
+                    <InputTextField
+                        type="text"
+                        variant="outlined"
+                        aria-label="검색"
+                        sx={{ width: '18rem' }}
+                        placeholder="검색"
+                        autoComplete="off"
+                    />
                 </div>
-                <div className="flex items-center ">
+                <div className="flex items-center gap-1">
                     <IconButton onClick={toggleDarkMode} size="large" color="inherit">
                         {darkMode === 'dark' ? (
                             <LightModeOutlined />
@@ -131,7 +143,7 @@ export default function Header({ authToken }: IHeaderProps) {
                             <DarkModeOutlined color="action" />
                         )}
                     </IconButton>
-                    <CiBellOn size={26} aria-label="알림" />
+                    <NotificationsActiveIcon className="mr-3" />
                     {loggedIn ? <AuthHeader onLogout={handleLogout} /> : <Login />}
                 </div>
             </div>

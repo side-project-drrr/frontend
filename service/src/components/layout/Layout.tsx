@@ -8,9 +8,8 @@ export default function Layout({ children }: { children: ReactNode }) {
     return (
         <div className="flex flex-col items-center">
             <Header authToken={token} />
-            <div className="w-full h-px bg-[#444]" />
+            <div className="w-full h-px dark:bg-[#444444] bg-[#f0f0f0]" />
             <div className="max-w-screen-xl flex">{children}</div>
         </div>
-
     );
 }
