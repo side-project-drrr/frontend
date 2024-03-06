@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import { recommendState } from '../../recoil/atom/recommendState';
-
 import { getRecommendTechBlogService } from '../../service/TechBlogService';
-import { useRecoilState } from 'recoil';
-import kakao from '../../assets/kakao.webp';
 import { IRandomDataProps } from './type';
+import { BiSolidLike } from 'react-icons/bi';
+import { FaEye } from 'react-icons/fa';
+import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
 
 export default function Recommend() {
-    const [recommendData, setRecommendData] = useRecoilState(recommendState);
+    const [recommendData, setRecommendData] = useState([]);
 
     const [randomRecommendData, setRandomRecommendData] = useState<IRandomDataProps[]>([]);
 
@@ -38,15 +37,30 @@ export default function Recommend() {
                 randomRecommendData.map(data => (
                     <div key={data.techBlogPostBasicInfoDto.id}>
                         <div className="relative flex items-center w-full">
-                            <img src={kakao} alt="썸네일" className="block w-20 h-20 rounded-xl" />
+                            <div className="w-[80px] h-[80px] flex justify-center items-center rounded-[20px]  bg-slate-300">
+                                {data.techBlogPostBasicInfoDto.thumbnailUrl ? (
+                                    <img
+                                        src={data.techBlogPostBasicInfoDto.thumbnailUrl}
+                                        alt="썸네일"
+                                        className="block w-20 h-20 rounded-xl"
+                                    />
+                                ) : (
+                                    <img
+                                        src={darkLogo}
+                                        alt="썸네일"
+                                        className="block w-15 h-15 rounded-xl "
+                                    />
+                                )}
+                            </div>
                             <div className="flex flex-col gap-2 pl-4">
                                 <h1 className="text-sm">{data.techBlogPostBasicInfoDto.title}</h1>
                                 <ul className="flex gap-2">
-                                    <li className="text-sm">
-                                        좋아요 : {data.techBlogPostBasicInfoDto.postLike}
+                                    <li className="text-sm flex gap-2 items-center">
+                                        <BiSolidLike />
+                                        {data.techBlogPostBasicInfoDto.postLike}
                                     </li>
-                                    <li className="text-sm">
-                                        조회수 : {data.techBlogPostBasicInfoDto.viewCount}
+                                    <li className="text-sm flex gap-2 items-center">
+                                        <FaEye /> {data.techBlogPostBasicInfoDto.viewCount}
                                     </li>
                                 </ul>
                             </div>
