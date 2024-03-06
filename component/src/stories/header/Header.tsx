@@ -17,7 +17,6 @@ import lightLogo from '@monorepo/service/src/assets/lightLogo.webp';
 import { useEffect } from 'react';
 import { getAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
 
-
 const InputTextField = styled(TextField)({
     '& label': {
         color: 'var(--sub-text)',
