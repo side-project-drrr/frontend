@@ -19,16 +19,19 @@ export default function TopKeywords() {
             getTopkeyDatas();
         }
     }, [didMount]);
+
     return (
-        <div className="flex flex-col mt-5">
-            <h3 aria-label="top keyword">Top Keywords</h3>
-            <div className="flex items-center w-full flex-warp">
-                <ul className="flex flex-wrap justify-around gap-4 mt-3 ">
+        <div className="flex flex-col mt-5 w-full border-b border-[#F0F0F0] dark:border-[#444444] ">
+            <h1 aria-label="가장 많이 검색된 기술" className="text-base">
+                가장 많이 검색된 기술
+            </h1>
+            <div className="flex items-center w-full pb-10 pt-2">
+                <ul className="flex mt-3 gap-2 flex-wrap max-h-[130px] overflow-y-hidden">
                     {topkeywordsData?.map(topkeyword => (
                         <li
                             key={topkeyword.id}
-                            className="gap-4 bg-[#E6F1FE] text-[#006FEE] px-4 py-1.5 rounded-2xl flex-1 text-center text-base my-2"
                             aria-label="top keyword item"
+                            className=" whitespace-nowrap bg-[#F0F0F0] text-black dark:bg-[#444444] dark:text-white py-2 px-4 rounded-xl text-sm"
                         >
                             {topkeyword.name}
                         </li>
