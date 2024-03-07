@@ -1,9 +1,10 @@
 import { BiLogoGit } from 'react-icons/bi';
 import Box from '@mui/material/Box';
 import SocialLogin from '@monorepo/service/src/components/social/SocialLogin';
+import { loginModalState } from '@monorepo/service/src/recoil/atom/loginModalState';
 import Modal from '@mui/material/Modal';
 import { BsPersonCircle } from 'react-icons/bs';
-import { useState } from 'react';
+import { useRecoilState } from 'recoil';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -23,11 +24,12 @@ const style = {
 };
 
 export const Login = () => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useRecoilState(loginModalState);
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
     };
+
     return (
         <>
             <BsPersonCircle aria-label="로그인" onClick={handleOpen} size={30} />
