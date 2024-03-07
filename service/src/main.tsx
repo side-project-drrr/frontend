@@ -13,12 +13,12 @@ import { RecoilRoot } from 'recoil';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     // <React.StrictMode>
-        <RecoilRoot>
-            <BrowserRouter>
-                <ThemeProvider>
-                    <App />
-                </ThemeProvider>
-            </BrowserRouter>
-        </RecoilRoot>
+    <RecoilRoot>
+        <BrowserRouter>
+            <ThemeProvider>
+                <App />
+            </ThemeProvider>
+        </BrowserRouter>
+    </RecoilRoot>,
     // </React.StrictMode>
 );

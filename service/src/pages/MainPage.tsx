@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import FormGroup from '@mui/material/FormGroup';
 import Switch from '@mui/material/Switch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
@@ -16,6 +16,8 @@ import { useTokenDecode } from '../hooks/useTokenDecode';
 import { AuthCategoryService } from '../service/CategoryService';
 import { getTechBlogService, getUserTechBlogService } from '../service/TechBlogService';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import { isLoggedInState } from '../recoil/atom/isLoggedInState';
+import CategoryModal from '../components/modal/CategoryModal';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -25,11 +27,8 @@ export default function MainPage() {
     const [page, setPage] = useState(0);
     const [categoryId, setCategoryId] = useState(0);
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
+    const loggedIn = useRecoilValue(isLoggedInState);
     const size = 10;
-
-    const sort = 'createdAt';
-
-    const direction = 'DESC';
 
     const handleModalOpen = useSetRecoilState(modalOpenState);
     const setProfileOpen = useSetRecoilState(profileModalOpen);
@@ -41,7 +40,7 @@ export default function MainPage() {
     const tokenDecode = useTokenDecode(getToken);
 
     async function userTechBlogRender() {
-        const userTechBlogData = await getTechBlogService({ page, size, sort, direction });
+        const userTechBlogData = await getTechBlogService({ page, size });
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
     }
 
@@ -49,8 +48,7 @@ export default function MainPage() {
         const userFilterTechBlogData = await getUserTechBlogService({
             page,
             size,
-            sort,
-            direction,
+
             id,
         });
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
@@ -94,7 +92,7 @@ export default function MainPage() {
         <div className="flex justify-between" onClick={handleProfileOpen}>
             <div className="flex flex-col w-full gap-6">
                 <div className="flex max-w-3xl mt-8">
-                    {getToken && (
+                    {loggedIn && (
                         <CategorySlide
                             items={userCategoryItems}
                             onClose={handleCategoryModalClose}
@@ -143,6 +141,12 @@ export default function MainPage() {
                 <div ref={setObservationTarget}></div>
             </div>
             <SignUpModal onSignupNext={handleSignupNext} />
+            {isCategoryModalOpen && (
+                <CategoryModal
+                    onModalOpen={isCategoryModalOpen}
+                    onClose={handleCategoryModalClose}
+                />
+            )}
         </div>
     );
 }
