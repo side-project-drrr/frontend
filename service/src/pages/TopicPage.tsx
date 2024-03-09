@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { TextField } from '@mui/material';
+import { TextField, styled } from '@mui/material';
 import { IndexingComponent } from '../components/topics/Indexing';
 import { ListComponent } from '../components/topics/List';
 import { getEtcIndexTopicsApi, getIndexTopicsApi, getSearchTopicsApi } from '../apis/topics';
 import { useRecoilState } from 'recoil';
 import { searchValueState, topicIndexState, topicState } from '../recoil/atom/topicsState';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import { Input } from '@mui/base';
 
 export default function TopicPage() {
     const [, setTopics] = useRecoilState(topicState);
@@ -86,33 +87,27 @@ export default function TopicPage() {
         }
     }, [page]);
 
+    const inputEl = styled('input')(
+        ({ theme }) => `
+        width: 100%;
+        padding: 15px 0 15px 20px;
+        background: ${theme.palette.primary.main};
+        border-radius: 30px;
+        outline: none;
+    `,
+    );
+
     return (
         <div className="w-full p-10">
             <div className="flex flex-col item-center mb-10">
                 <h1 className="text-center mb-8">Explore topics</h1>
-                <TextField
-                    id="filled-basic"
+                <Input
+                    type="text"
                     value={searchVal}
-                    onChange={e => handleSearch(e.target.value)}
                     placeholder="Enter topic..."
-                    variant="filled"
-                    sx={{
-                        '& .MuiFilledInput-root': {
-                            borderRadius: '30px',
-                        },
-                        '.MuiFilledInput-root::before': {
-                            display: 'none',
-                        },
-                        '.MuiFilledInput-root::after': {
-                            display: 'none',
-                        },
-                        '& .MuiFormLabel-root': {
-                            left: '10px',
-                        },
-                        '.MuiInputBase-input': {
-                            padding: '15px 0 15px 20px',
-                        },
-                    }}
+                    onChange={e => handleSearch(e.target.value)}
+                    style={{ width: '100%' }}
+                    slots={{ input: inputEl }}
                 />
             </div>
             <div className="flex justify-between items-center w-full h-[32px]">
