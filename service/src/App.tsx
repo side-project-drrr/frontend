@@ -22,6 +22,13 @@ function App() {
             },
             text: {
                 primary: '#2c2c2c',
+                secondary: '#ffffff',
+            },
+            primary: {
+                main: '#f2f2f2',
+            },
+            secondary: {
+                main: '#D16E37', // 포인트 색상 (액센트 색상)
             },
         },
     });
@@ -35,6 +42,13 @@ function App() {
             },
             text: {
                 primary: '#ffffff',
+                secondary: '#ffffff',
+            },
+            primary: {
+                main: '#444',
+            },
+            secondary: {
+                main: '#E6783A', // 포인트 색상 (액센트 색상)
             },
         },
     });
