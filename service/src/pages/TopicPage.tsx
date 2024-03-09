@@ -1,54 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import HttpClient from '../apis/HttpClient';
-import { Chip, Input, Stack, TextField } from '@mui/material';
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
-import { FormControl } from '@mui/base';
-
-const indexKr = [
-    '가',
-    '나',
-    '다',
-    '라',
-    '마',
-    '바',
-    '사',
-    '아',
-    '자',
-    '차',
-    '카',
-    '타',
-    '파',
-    '하',
-];
-const indexEn = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'X',
-    'Y',
-    'Z',
-];
-const indexText = indexEn.concat(indexKr);
+import { Dispatch, SetStateAction, createContext, useEffect, useRef, useState } from 'react';
+import { TextField } from '@mui/material';
+import { IndexingComponent } from '../components/topics/Indexing';
+import { ListComponent } from '../components/topics/List';
+import {
+    getEtcIndexTopicsApi,
+    getIndexTopicsApi,
+    getRangeEngApi,
+    getRangeEtcApi,
+    getRangeKorApi,
+    getSearchTopicsApi,
+} from '../apis/topics';
 
 type allTopicsType = {
     category: topicsType[];
@@ -60,6 +21,29 @@ type topicsType = {
     name: string;
 };
 
+type topicContextType = {
+    tabContWidth: number;
+    tabWidth: number;
+    tabPosition: number;
+    setTabPosition: Dispatch<SetStateAction<number>>;
+    topicIndex: string;
+    setTopicIndex: Dispatch<SetStateAction<string>>;
+    setSearchVal: Dispatch<SetStateAction<string>>;
+    handleIndex: (index: string) => void;
+    handleEtcIndex: () => void;
+};
+
+type listContextType = {
+    allTopics: allTopicsType[];
+    topics: topicsType[];
+    topicIndex: string;
+    handleIndex: (index: string) => void;
+    handleEtcIndex: () => void;
+};
+
+export const topicContext = createContext<topicContextType>({} as topicContextType);
+export const listContext = createContext<listContextType>({} as listContextType);
+
 export default function TopicPage() {
     const obsRef = useRef(null);
     const preventRef = useRef(true);
@@ -69,28 +53,13 @@ export default function TopicPage() {
     const [allTopics, setAllTopics] = useState<allTopicsType[]>([]);
     const [topics, setTopics] = useState<topicsType[]>([]);
     const [page, setPage] = useState<number>(0);
-    const [topicIndex, setTopicIndex] = useState<string>('All');
+    const [topicIndex, setTopicIndex] = useState<string>('all');
     const [searchVal, setSearchVal] = useState<string>('');
     const [timer, setTimer] = useState<NodeJS.Timeout>();
 
-    // 검색 api
-    async function getSearchTopicsApi(value: string) {
-        const res = await HttpClient.get('/api/v1/categories/keyword-search', {
-            params: {
-                page: page,
-                size: 200,
-                sort: 'name',
-                direction: 'ASC',
-                keyword: value,
-            },
-        });
-
-        return res;
-    }
-
     // 검색 topic 무한 스크롤
     async function infiniteSearchTopics(value: string) {
-        const res = await getSearchTopicsApi(value);
+        const res = await getSearchTopicsApi(page, value);
 
         if (res.status === 200) {
             setTopics(prev => [...prev, ...res.data.content]);
@@ -109,7 +78,7 @@ export default function TopicPage() {
             setPage(0);
             setTopicIndex('');
 
-            const res = await getSearchTopicsApi(value);
+            const res = await getSearchTopicsApi(page, value);
 
             if (res.status === 200) {
                 setTopics(res.data.content);
@@ -119,43 +88,9 @@ export default function TopicPage() {
         setTimer(newTimer);
     }
 
-    // 탭 오른쪽 왼쪽 클릭시
-    function handleOnClickLeft() {
-        if (tabPosition + 200 > 0) {
-            setTabPosition(0);
-        } else {
-            setTabPosition(tabPosition + 200);
-        }
-    }
-
-    // 탭 오른쪽 화살표 클릭시
-    function handleOnClickRight() {
-        if (tabPosition - 200 < tabContWidth - tabWidth) {
-            setTabPosition(tabContWidth - tabWidth);
-        } else {
-            setTabPosition(tabPosition - 200);
-        }
-    }
-
-    //인덱스 api
-    async function getIndexTopicsApi(index: string) {
-        const res = await HttpClient.get('/api/v1/categories/index-search', {
-            params: {
-                page: page,
-                size: 200,
-                sort: 'name',
-                direction: 'ASC',
-                language: 'KOREAN',
-                index: index,
-            },
-        });
-
-        return res;
-    }
-
     // 인덱스 topic 무한 스크롤
     async function infiniteIndexTopics(index: string) {
-        const res = await getIndexTopicsApi(index);
+        const res = await getIndexTopicsApi(page, index);
 
         if (res.status === 200) {
             setTopics(prev => [...prev, ...res.data.content]);
@@ -163,23 +98,40 @@ export default function TopicPage() {
         }
     }
 
-    // 인덱스별 카테고리 호출
+    // 기타 topic 무한 스크롤
+    async function infiniteEtcIndexTopics() {
+        const res = await getEtcIndexTopicsApi(page);
+
+        if (res.status === 200) {
+            setTopics(prev => [...prev, ...res.data.content]);
+            preventRef.current = true;
+        }
+    }
+
+    // 인덱스별 topic 호출
     async function handleIndex(index: string) {
         setTopicIndex(index);
         setSearchVal('');
         setPage(0);
 
-        const res = await getIndexTopicsApi(index);
+        const res = await getIndexTopicsApi(0, index);
 
         if (res.status === 200) {
             setTopics(res.data.content);
         }
     }
-    console.log(topicIndex);
-    // 전체 topic 노출
-    function getAllTopics() {
-        setTopicIndex('All');
+
+    // 기타 topic 호출
+    async function handleEtcIndex() {
+        setTopicIndex('기타');
         setSearchVal('');
+        setPage(0);
+
+        const res = await getEtcIndexTopicsApi(0);
+
+        if (res.status === 200) {
+            setTopics(res.data.content);
+        }
     }
 
     // 옵저버 핸들러
@@ -202,8 +154,7 @@ export default function TopicPage() {
             const tab = document.getElementById('category-tab')?.offsetWidth;
             tab && setTabWidth(tab);
 
-            const tabContWidth = document.getElementById('category-tab-container')?.offsetWidth;
-            tabContWidth && setTabContWidth(tabContWidth);
+            getTabContainerWidth();
         }
 
         // 반응형으로 인해 너비가 달라지는 탭 컨테이너 너비 구하기
@@ -214,39 +165,24 @@ export default function TopicPage() {
 
         // 전체 카테고리 호출
         async function getAllTopics() {
-            try {
-                const resKo = await HttpClient.get('/api/v1/categories/range', {
-                    params: {
-                        startIdx: '가',
-                        endIdx: '하',
-                        language: 'KOREAN',
-                        size: 10,
-                    },
-                });
+            const resKo = await getRangeKorApi();
+            const resEn = await getRangeEngApi();
+            const resEtc = await getRangeEtcApi();
 
-                const resEn = await HttpClient.get('/api/v1/categories/range', {
-                    params: {
-                        startIdx: 'a',
-                        endIdx: 'z',
-                        language: 'ENGLISH',
-                        size: 10,
-                    },
-                });
+            if (resKo.status === 200 && resEn.status === 200 && resEtc.status === 200) {
+                const resKoData = resKo.data.content;
+                const resEnData = resEn.data.content;
+                const resEtcData = resEtc.data.content;
+                const res = resEnData.concat(resKoData).concat(resEtcData);
 
-                if (resKo.status === 200 && resEn.status === 200) {
-                    const resKoData = resKo.data.content;
-                    const resEnData = resEn.data.content;
-                    const res = resEnData.concat(resKoData);
-
-                    setAllTopics(res);
-                }
-            } catch (error) {
-                console.log(error);
+                setAllTopics(res);
             }
         }
 
-        getTabAndTabContWidth();
         getAllTopics();
+        getTabAndTabContWidth();
+
+        window.addEventListener('resize', getTabContainerWidth);
 
         return () => {
             window.removeEventListener('resize', getTabContainerWidth);
@@ -255,12 +191,15 @@ export default function TopicPage() {
     }, []);
 
     useEffect(() => {
-        searchVal && infiniteSearchTopics(searchVal);
-        topicIndex && infiniteIndexTopics(topicIndex);
+        if (page > 0) {
+            searchVal && infiniteSearchTopics(searchVal);
+            topicIndex !== 'all' && topicIndex !== 'etc' && infiniteIndexTopics(topicIndex);
+            topicIndex === 'etc' && infiniteEtcIndexTopics();
+        }
     }, [page]);
 
     return (
-        <div className="p-10">
+        <div className="w-full p-10">
             <div className="flex flex-col item-center mb-10">
                 <h1 className="text-center mb-8">Explore topics</h1>
                 <TextField
@@ -289,81 +228,28 @@ export default function TopicPage() {
                 />
             </div>
             <div className="flex justify-between items-center w-full h-[32px]">
-                <MdKeyboardArrowLeft
-                    onClick={handleOnClickLeft}
-                    className="cursor-pointer"
-                    size={30}
-                />
-                <div id="category-tab-container" className="relative h-full w-full overflow-hidden">
-                    <Stack
-                        id="category-tab"
-                        className="absolute t-0 z-0"
-                        style={{ left: `${tabPosition}px`, transition: 'all .5s ease' }}
-                        direction="row"
-                        spacing={1}
-                    >
-                        <Chip
-                            onClick={getAllTopics}
-                            label="All"
-                            style={{
-                                cursor: 'pointer',
-                            }}
-                            color={topicIndex === 'All' ? 'secondary' : 'primary'}
-                        />
-                        {indexText.map((data, index) => (
-                            <Chip
-                                onClick={() => handleIndex(data)}
-                                key={index}
-                                label={data}
-                                sx={{ cursor: 'pointer' }}
-                                color={topicIndex === data ? 'secondary' : 'primary'}
-                            />
-                        ))}
-                        <Chip
-                            onClick={() => handleIndex('etc')}
-                            label="기타"
-                            sx={{ cursor: 'pointer' }}
-                            color={topicIndex === 'etc' ? 'secondary' : 'primary'}
-                        />
-                    </Stack>
-                </div>
-                <MdKeyboardArrowRight
-                    onClick={handleOnClickRight}
-                    className="cursor-pointer"
-                    size={30}
-                />
+                <topicContext.Provider
+                    value={{
+                        tabContWidth,
+                        tabWidth,
+                        tabPosition,
+                        setTabPosition,
+                        topicIndex,
+                        setTopicIndex,
+                        setSearchVal,
+                        handleIndex,
+                        handleEtcIndex,
+                    }}
+                >
+                    <IndexingComponent />
+                </topicContext.Provider>
             </div>
-            <div className="mt-10">
-                {topicIndex === 'All' ? (
-                    <div className="grid grid-cols-3 gap-10">
-                        {allTopics.map((data, index) => (
-                            <div className="relative" key={index}>
-                                <span
-                                    onClick={() => handleIndex(data.keyIndex)}
-                                    className="absolute top-0 right-0 text-xs cursor-pointer"
-                                >
-                                    더보기
-                                </span>
-                                <h2 className="border-b-[1px] text-xl font-bold mb-3">
-                                    {data.keyIndex}
-                                </h2>
-                                <ul className="flex flex-col gap-1">
-                                    {data.category.map((item, idx) => (
-                                        <li className="cursor-pointer truncate ..." key={idx}>
-                                            <span className="hover:underline">{item.name}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <Stack spacing={{ sm: 1 }} direction="row" useFlexGap flexWrap="wrap">
-                        {topics.map((data, index) => (
-                            <Chip key={index} label={data.name} sx={{ cursor: 'pointer' }} />
-                        ))}
-                    </Stack>
-                )}
+            <div className="w-full mt-10">
+                <listContext.Provider
+                    value={{ allTopics, topics, topicIndex, handleIndex, handleEtcIndex }}
+                >
+                    <ListComponent />
+                </listContext.Provider>
             </div>
             <div ref={obsRef} />
         </div>
