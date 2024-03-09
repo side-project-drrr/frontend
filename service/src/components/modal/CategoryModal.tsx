@@ -146,7 +146,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
-                <Box sx={style} className="flex flex-col items-center justify-around">
+                <Box sx={style} className="flex flex-col items-center justify-around ">
                     <div className="flex justify-start w-full pb-2 text-black border-b-2 border-solid">
                         <h1 className="text-base">선호 카테고리 등록</h1>
                     </div>
