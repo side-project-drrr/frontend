@@ -3,65 +3,14 @@ import { Chip, Stack } from '@mui/material';
 import { useContext } from 'react';
 import { topicContext } from '../../pages/TopicPage';
 
-const indexKr = [
-    '가',
-    '나',
-    '다',
-    '라',
-    '마',
-    '바',
-    '사',
-    '아',
-    '자',
-    '차',
-    '카',
-    '타',
-    '파',
-    '하',
-];
-const indexEn = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'X',
-    'Y',
-    'Z',
-];
+const indexKr = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하'];
+const indexEn = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
 const indexText = indexEn.concat(indexKr);
 
 export const IndexingComponent = () => {
-    const {
-        tabContWidth,
-        tabWidth,
-        tabPosition,
-        setTabPosition,
-        topicIndex,
-        setTopicIndex,
-        setSearchVal,
-        handleIndex,
-        handleEtcIndex,
-    } = useContext(topicContext);
+    const { tabContWidth, tabWidth, tabPosition, setTabPosition, topicIndex, setTopicIndex, setSearchVal, handleIndex, handleEtcIndex } =
+        useContext(topicContext);
 
     // 탭 오른쪽 왼쪽 클릭시
     function handleOnClickLeft() {
@@ -115,19 +64,10 @@ export const IndexingComponent = () => {
                             color={topicIndex === data ? 'secondary' : 'primary'}
                         />
                     ))}
-                    <Chip
-                        onClick={handleEtcIndex}
-                        label="기타"
-                        sx={{ cursor: 'pointer' }}
-                        color={topicIndex === '기타' ? 'secondary' : 'primary'}
-                    />
+                    <Chip onClick={handleEtcIndex} label="기타" sx={{ cursor: 'pointer' }} color={topicIndex === '기타' ? 'secondary' : 'primary'} />
                 </Stack>
             </div>
-            <MdKeyboardArrowRight
-                onClick={handleOnClickRight}
-                className="cursor-pointer"
-                size={30}
-            />
+            <MdKeyboardArrowRight onClick={handleOnClickRight} className="cursor-pointer" size={30} />
         </>
     );
 };
