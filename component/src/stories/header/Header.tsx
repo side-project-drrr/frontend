@@ -63,7 +63,7 @@ function AuthHeader({ onLogout }: IHandleProps) {
     };
 
     return (
-        <div className="relative p-1">
+        <div className="relative">
             {img ? (
                 <Avatar alt="Avatar" src={imgUrl} onClick={e => handleToggleOpen(e)} />
             ) : (
