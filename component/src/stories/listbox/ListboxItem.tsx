@@ -1,6 +1,8 @@
 import { ItemProps } from './type';
 
 export default function ListboxItem({ item }: ItemProps) {
+    console.log(item);
+
     return (
         <>
             <div

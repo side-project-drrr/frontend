@@ -1,24 +1,25 @@
 import React, {
     createContext,
-    useContext,
-    useState,
     ReactNode,
-    useLayoutEffect,
+    useContext,
     useEffect,
+    useLayoutEffect,
+    useState,
 } from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import {
-    setDarkModeSotrage,
     getDarkModeStorage,
     removeDarkModeStorage,
+    setDarkModeSotrage,
 } from '../repository/DarkRepository';
 import createCustomTheme from './theme';
 
 interface ThemeContextProps {
     darkMode: string;
     toggleDarkMode: () => void;
+    isDarkMode: () => boolean;
 }
 
 const DarkModeContext = createContext<ThemeContextProps | undefined>(undefined);
@@ -35,6 +36,8 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     const toggleDarkMode = () => {
         setDarkMode(prev => (prev === 'light' ? 'dark' : 'light'));
     };
+
+    const isDarkMode = () => darkMode === 'dark';
 
     useEffect(() => {
         removeDarkModeStorage();
@@ -74,7 +77,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     console.log(darkMode);
 
     return (
-        <DarkModeContext.Provider value={{ darkMode, toggleDarkMode }}>
+        <DarkModeContext.Provider value={{ darkMode, toggleDarkMode, isDarkMode }}>
             <MuiThemeProvider
                 theme={{
                     ...theme,

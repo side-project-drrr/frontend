@@ -1,3 +1,5 @@
+import { OAuth2ProviderType } from '../../types/Auth.type.ts';
+
 export interface IProps {
-    state: string;
+    state: OAuth2ProviderType;
 }
