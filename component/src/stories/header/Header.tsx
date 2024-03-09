@@ -1,29 +1,25 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import styled from '@emotion/styled';
-import { TextField, IconButton, Avatar, Button } from '@mui/material';
+import {Avatar, Button, IconButton, TextField} from '@mui/material';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-import { Login } from '@monorepo/component/src/stories/login/Login';
-import { useDarkMode } from '@monorepo/service/src/ThemeContext/ThemeProvider';
-import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
-import { removeAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
-import {
-    getProfileImgStorage,
-    removeProfileImgStorage,
-} from '@monorepo/service/src/repository/ProfileimgRepository';
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import { profileModalOpen } from '@monorepo/service/src/recoil/atom/profileModalOpen';
-import { isLoggedInState } from '@monorepo/service/src/recoil/atom/isLoggedInState';
+import {Login} from '@monorepo/component/src/stories/login/Login';
+import {useDarkMode} from '@monorepo/service/src/ThemeContext/ThemeProvider';
+import {DarkModeOutlined, LightModeOutlined} from '@mui/icons-material';
+import {getAuthStorage, removeAuthStorage} from '@monorepo/service/src/repository/AuthRepository';
+import {getProfileImgStorage, removeProfileImgStorage,} from '@monorepo/service/src/repository/ProfileimgRepository';
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
+import {profileModalOpen} from '@monorepo/service/src/recoil/atom/profileModalOpen';
+import {isLoggedInState} from '@monorepo/service/src/recoil/atom/isLoggedInState';
 import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
 import lightLogo from '@monorepo/service/src/assets/lightLogo.webp';
-import { getAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
 import HeaderSearchMenu from '../ChatBubble/HeaderSearchMenu';
-import { isSearchClickedState } from '@monorepo/service/src/recoil/atom/isSearchClickedState';
-import { useEffect, useState } from 'react';
-import { getHeaderKeywordSearch } from '@monorepo/service/src/service/HeaderSearchService';
-import { HeaderSearchDataState } from '@monorepo/service/src/recoil/atom/HeaderSearchDataState';
-import { PageState } from '@monorepo/service/src/recoil/atom/PageState';
-import { Link, useNavigate } from 'react-router-dom';
-import { getSearchListStorage } from '@monorepo/service/src/repository/SearchListRepository';
+import {isSearchClickedState} from '@monorepo/service/src/recoil/atom/isSearchClickedState';
+import {useEffect, useState} from 'react';
+import {getHeaderKeywordSearch} from '@monorepo/service/src/service/HeaderSearchService';
+import {HeaderSearchDataState} from '@monorepo/service/src/recoil/atom/HeaderSearchDataState';
+import {PageState} from '@monorepo/service/src/recoil/atom/PageState';
+import {Link, useNavigate} from 'react-router-dom';
+import {getSearchListStorage} from '@monorepo/service/src/repository/SearchListRepository';
 import useHandleKeyPress from '@monorepo/service/src/hooks/useHandleKeyPress';
 
 const InputTextField = styled(TextField)({

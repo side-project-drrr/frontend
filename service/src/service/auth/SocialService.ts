@@ -1,5 +1,5 @@
 import HttpClient from '../../apis/HttpClient';
-import { IAuthProps, IAuthEmailProps, IAuthEmailVaildationProps } from './type';
+import { IAuthEmailProps, IAuthEmailVaildationProps, IAuthProps } from './type';
 
 export const SocialService = async (code: string | null, state: string) => {
     try {
@@ -19,6 +19,10 @@ export async function SignInService(providerValue: string) {
     } catch (error) {
         console.error(error);
     }
+}
+
+export async function withdrawMembership() {
+    await HttpClient.delete('/api/v1/auth/members/me/deletion');
 }
 
 export async function SignUpService({

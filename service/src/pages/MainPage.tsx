@@ -47,7 +47,6 @@ export default function MainPage() {
         const userFilterTechBlogData = await getUserTechBlogService({
             page,
             size,
-
             id,
         });
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);

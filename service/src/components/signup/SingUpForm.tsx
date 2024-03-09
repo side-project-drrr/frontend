@@ -6,7 +6,7 @@ import { userInformationState } from '../../recoil/atom/userInformationState';
 import { SignUpEmail, SignUpEmailValidation } from '../../service/auth/SocialService';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import useDebounce from '../../hooks/useDebounce';
-import { ValueProps, IParentProps } from './type';
+import { IParentProps, ValueProps } from './type';
 import EmailInput from './EmailInput';
 
 const msg = {
@@ -30,7 +30,7 @@ export default function SingUpForm({ onSignupNext }: IParentProps) {
     const providerId = useRecoilValue(providerIdState);
     const debouncedInputValue = useDebounce(emailCodeValue, { delay: 500 });
 
-    async function emailVaildationRender() {
+    async function emailVailidationRender() {
         if (emailCodeValue !== '') {
             const emailStatusData = await SignUpEmailValidation({
                 providerId,
