@@ -1,8 +1,8 @@
-import { Box, Card, CardContent, CardHeader, Chip, Typography } from '@mui/material';
-import HttpClient from '../apis/HttpClient';
+import { Box, Card, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { BiSolidLike } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
+import { readPostApi, recommendedListApi } from '../apis/recommanded';
 
 type recommendedItem = {
     category: { id: number; name: string }[];
@@ -12,31 +12,32 @@ type recommendedItem = {
         viewCount: number;
         title: string;
         summary: string;
-    }[];
+    };
 };
 
 export const RecommendedListPage = () => {
     const [list, setList] = useState<recommendedItem[]>([]);
 
     async function onClick(id: number) {
-        const res = await HttpClient.get(`api/v1/members/read-post/${id}`);
+        const res = await readPostApi(id);
+        // 페이지 이동
         console.log(res);
     }
 
     useEffect(() => {
-        async function recommendedListApi() {
-            const res = await HttpClient.get(`api/v1/members/me/post-recommendation/9`);
-            setList((prevList: recommendedItem[]) => {
+        async function recommendedList() {
+            const res = await recommendedListApi();
+            setList(() => {
                 const updatedList = res.data.map(
                     (newData: { categoryDto: {}; techBlogPostBasicInfoDto: {} }) => ({
                         category: newData.categoryDto,
                         postInfo: newData.techBlogPostBasicInfoDto,
                     }),
                 );
-                return [...prevList, ...updatedList];
+                return [...updatedList];
             });
         }
-        recommendedListApi();
+        recommendedList();
     }, []);
 
     return (
@@ -48,42 +49,46 @@ export const RecommendedListPage = () => {
                 }`}
             >
                 {list.length > 0
-                    ? list.map((data, idx) => (
+                    ? list.map(data => (
                           <Card
-                              key={idx}
-                              sx={{
+                              key={data.postInfo.id}
+                              style={{
                                   display: 'flex',
                                   flexDirection: 'column',
                                   justifyContent: 'space-between',
                                   borderRadius: '20px',
-                                  backgroundColor: '#444',
                                   boxShadow: '4',
                                   padding: '20px',
                               }}
                               onClick={() => onClick(data.postInfo.id)}
                           >
-                              <Box sx={{ marginBottom: '10px' }}>
-                                  <Box sx={{ marginBottom: '20px' }}>
-                                      <Typography variant="h5" className="line-clamp-1">
+                              <Box marginBottom="10px">
+                                  <Box marginBottom="10px">
+                                      <Typography
+                                          variant="h5"
+                                          className="line-clamp-1"
+                                          color="text.primary"
+                                      >
                                           {data.postInfo.title}
                                       </Typography>
                                   </Box>
                                   <Typography
                                       variant="body2"
-                                      color="text.secondary"
+                                      color="text.primary"
                                       className="line-clamp-3"
                                   >
                                       {data.postInfo.summary}
                                   </Typography>
                               </Box>
                               <Box>
-                                  <div className="flex flex-wrap mt-3 h-[74px] overflow-y-hidden">
-                                      {data.category.map((item, idx) => (
-                                          <Chip
-                                              key={idx}
-                                              className="mr-2 mb-2"
-                                              label={`#${item.name}`}
-                                          />
+                                  <div className="flex flex-wrap mt-3 max-h-[70px] overflow-y-hidden">
+                                      {data.category.map(item => (
+                                          <span
+                                              key={`${data.postInfo.id}-${item.id}`}
+                                              className="text-[14px] mr-[10px] mb-[2px]"
+                                          >
+                                              #{item.name}
+                                          </span>
                                       ))}
                                   </div>
                                   <div className="flex mt-3">
@@ -99,22 +104,6 @@ export const RecommendedListPage = () => {
                       ))
                     : '추천 게시글이 없습니다.'}
             </div>
-            {/* <div className="grid gap-2">
-                {[1, 1, 1, 1].map((data, idx) => (
-                    <Card key={idx}>
-                        <CardHeader title="이것은 제목" />
-                        <CardContent>
-                            <Typography variant="body2" color="text.secondary">
-                                이것은 내용입니다.
-                            </Typography>
-                            <div>
-                                <Chip label="#JAVA" />
-                                <Chip label="#Spring" />
-                            </div>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div> */}
         </div>
     );
 };
