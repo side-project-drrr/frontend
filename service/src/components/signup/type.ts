@@ -5,8 +5,13 @@ export interface ValueProps {
     nickname: string;
 }
 
-export interface IParentProps {
+export interface ISignModalProps {
     onSignupNext: () => void;
+}
+
+export interface ISignFormProps {
+    onSignupNext: () => void;
+    onHandleClose: () => void;
 }
 
 export interface ISingupFormProps {

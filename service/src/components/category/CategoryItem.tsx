@@ -41,7 +41,7 @@ function CategoryItem({
         <>
             <li
                 key={id}
-                id={id}
+                id={String(id)}
                 className={`bg-[#E6F1FE] h-10 p-5 text-[#006FEE] text-center flex justify-center items-center rounded-lg ${
                     categoriesItemClicked ? 'bg-black' : 'bg-[#E6F1FE]'
                 } hover:bg-red-500 cursor-pointer `}
