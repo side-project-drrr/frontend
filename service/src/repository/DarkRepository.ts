@@ -1,12 +1,11 @@
-export function setDarkModeState(value: string) {
-    console.log(value);
+export function setDarkModeSotrage(value: string) {
     localStorage.setItem('theme', value);
 }
 
-export function getDarkModeState(value: string) {
+export function getDarkModeStorage(value: string) {
     return localStorage.getItem(value);
 }
 
-export function removeDarkModeState() {
+export function removeDarkModeStorage() {
     localStorage.removeItem('theme');
 }

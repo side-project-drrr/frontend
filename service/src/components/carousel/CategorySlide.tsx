@@ -64,26 +64,20 @@ export default function CategorySlide({
     return (
         <>
             <div>
-                {current !== 0 && (
-                    <RiArrowDropLeftLine
-                        onClick={prevSlider}
-                        size={40}
-                        aria-label="왼쪽으로 넘기기"
-                    />
-                )}
+                <RiArrowDropLeftLine onClick={prevSlider} size={40} aria-label="왼쪽으로 넘기기" />
             </div>
             <div
-                className={`relative flex w-full overflow-hidden justify-between items-center`}
+                className={`relative flex w-full overflow-hidden justify-between items-center `}
                 ref={scrollRef}
                 aria-label="선호 카테고리"
             >
                 <div
-                    className={` transition ease-out duration-400 absolute flex justify-center items-center`}
-                    style={{ transform: `translate3d(-${current * 30}px,0px,0px)` }}
+                    className={` transition ease-out duration-400 absolute flex justify-center items-center h-[29px]`}
+                    style={{ transform: `translate3d(-${current * 80}px,0px,0px)` }}
                 >
                     <div className="flex items-center w-full">
                         <Button
-                            className="text-[#006FEE] w-14 h-7 text-center text-xs flex items-center justify-start"
+                            className="h-[29px]  w-8 text-center text-xs flex justify-center items-center rounded-[20px] dark:bg-[#444444] bg-[#f0f0f0]"
                             onClick={onHandleModalOpen}
                             role="Button"
                             aria-label="카테고리추가 버튼"
@@ -91,39 +85,37 @@ export default function CategorySlide({
                             <AddIcon />
                         </Button>
                         <div className={`relative flex dark-box-bg pl-2 pr-2 text-center `}>
-                            <Button
+                            <p
                                 id={ALLCATEGORYNUM}
-                                className={`flex bg-[#E6F1FE] text-[#006FEE] p-1 rounded-lg  items-center w-20 text-center justify-center ${
+                                className={`flex p-1 rounded-lg px-4  h-[29px] items-center w-22 text-center justify-center  whitespace-nowrap ${
                                     Number(ALLCATEGORYNUM) === onCategoryId
-                                        ? 'bg-[#005FEE] text-white'
-                                        : 'bg-[#E6F1FE]'
+                                        ? 'text-[#FFB6C1] dark:bg-[#444444] bg-[#f0f0f0] border-solid border-[#FFB6C1]  border'
+                                        : 'dark:bg-[#444444] bg-[#f0f0f0]'
                                 } `}
-                                role="Button"
                                 aria-label="카테고리추가 버튼"
                                 onClick={(e: any) => handleUserCategoryId(e.target.id)}
                             >
-                                For You
-                            </Button>
+                                전체 게시글
+                            </p>
                         </div>
                         {items?.map((item: any) => (
                             <div
                                 key={item.id}
-                                className={`flex dark-box-bg pl-2 pr-2 text-center transition ease-out duration-400 justify-center items-center`}
+                                className={`flex dark-box-bg pl-2 pr-2 text-center transition ease-out duration-400 justify-center items-center w-full`}
                                 aria-label="선호 카테고리 영역"
                             >
-                                <Button
-                                    className={`flex bg-[#E6F1FE] text-[#006FEE] p-1 rounded-lg text-center items-center flex-1 ${
+                                <p
+                                    className={`flex  h-[29px] p-1 rounded-[20px] text-center items-center flex-1 whitespace-nowrap px-4 ${
                                         item.id === onCategoryId
-                                            ? 'bg-[#005FEE] text-white'
-                                            : 'bg-[#E6F1FE]'
+                                            ? 'text-[#FFB6C1] dark:bg-[#444444] bg-[#f0f0f0] border-solid border-[#FFB6C1]  border'
+                                            : 'dark:bg-[#444444] bg-[#f0f0f0]'
                                     } `}
                                     id={item.id}
-                                    role="Button"
                                     aria-label="카테고리"
                                     onClick={(e: any) => handleUserCategoryId(e.target.id)}
                                 >
                                     {item.name}
-                                </Button>
+                                </p>
                             </div>
                         ))}
                     </div>
