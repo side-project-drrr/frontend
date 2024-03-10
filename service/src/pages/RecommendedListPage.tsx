@@ -2,7 +2,7 @@ import { Box, Card, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { BiSolidLike } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
-import { readPostApi, recommendedListApi } from '../apis/recommanded';
+import { readPostApi, recommendedListApi } from '../apis/recommended';
 
 type recommendedItem = {
     category: { id: number; name: string }[];
