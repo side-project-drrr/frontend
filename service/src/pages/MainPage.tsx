@@ -101,7 +101,7 @@ export default function MainPage() {
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
             <div className="flex flex-col w-full gap-6">
-                <div className="flex w-full pr-4 mt-8">
+                <div className="flex w-full mt-8 pr-4">
                     {loggedIn ? (
                         <CategorySlide
                             items={userCategoryItems}
@@ -120,7 +120,7 @@ export default function MainPage() {
                     ) : (
                         <div className="flex w-full justify-center dark:bg-[#444444] bg-[#f0f0f0] p-4 ">
                             더 많은 정보를 원한다면{' '}
-                            <span className="mx-2 border-b" onClick={handleLoginModal}>
+                            <span className="border-b mx-2" onClick={handleLoginModal}>
                                 로그인
                             </span>
                             해주세요.
