@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 export const useIntersectionObserver = (callback: () => void) => {
     const [observationTarget, setObservationTarget] = useState<HTMLDivElement | null>(null);
     const observer = useRef<IntersectionObserver | null>(null);
+
     useEffect(() => {
         if (observationTarget) {
             observer.current = new IntersectionObserver(
