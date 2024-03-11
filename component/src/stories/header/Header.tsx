@@ -1,6 +1,23 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import styled from '@emotion/styled';
-import { TextField, IconButton, Avatar, Button } from '@mui/material';
+import {
+    TextField,
+    IconButton,
+    Avatar,
+    Button,
+    Badge,
+    Box,
+    Menu,
+    MenuItem,
+    Divider,
+    Typography,
+    ButtonBase,
+    useTheme,
+    Popper,
+    Fade,
+    Paper,
+    MenuList,
+} from '@mui/material';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 
 import { Login } from '@monorepo/component/src/stories/login/Login';
@@ -26,6 +43,7 @@ import { isLoggedInState } from '@monorepo/service/src/recoil/atom/isLoggedInSta
 import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
 import lightLogo from '@monorepo/service/src/assets/lightLogo.webp';
 import { getAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
+import { Dropdown } from '@mui/base';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -118,6 +136,9 @@ export default function Header() {
 
     const searchItem = getSearchListStorage(KEY);
 
+    const [open, setOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
     async function getKeywordSearchRender() {
         const keywordSearchData = await getHeaderKeywordSearch({
             page,
@@ -193,6 +214,13 @@ export default function Header() {
         }
     }, [token]);
 
+    // 알림 여부 가져오는 api
+
+    // 알림 팝업 함수
+    const handleAlarmClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+        setOpen(previousOpen => !previousOpen);
+    };
     return (
         <header className={`w-full flex justify-center `}>
             <div
@@ -240,7 +268,65 @@ export default function Header() {
                                 <DarkModeOutlined color="action" />
                             )}
                         </IconButton>
-                        <NotificationsActiveIcon className="mr-3" />
+                        <Badge
+                            aria-describedby="alarm-popper"
+                            onClick={handleAlarmClick}
+                            badgeContent={'!'}
+                            color="secondary"
+                            className="mr-[10px]"
+                        >
+                            <NotificationsActiveIcon />
+                        </Badge>
+                        <Popper id="alarm-popper" anchorEl={anchorEl} open={open} transition>
+                            {({ TransitionProps }) => (
+                                <Fade {...TransitionProps} timeout={350}>
+                                    <Paper>
+                                        <Box maxHeight={500} width={300} overflow="hidden">
+                                            <Box
+                                                width="100%"
+                                                display="flex"
+                                                flexDirection="row-reverse"
+                                                px="15px"
+                                            >
+                                                <ButtonBase>
+                                                    <Typography variant="body2" py={'10px'}>
+                                                        더보기
+                                                    </Typography>
+                                                </ButtonBase>
+                                            </Box>
+                                            <MenuList>
+                                                {[1, 1, 1, 1, 1].map((data, idx) => (
+                                                    <>
+                                                        <MenuItem key={idx}>
+                                                            <Box
+                                                                display="flex"
+                                                                flexDirection="column"
+                                                                py="5px"
+                                                            >
+                                                                <Typography
+                                                                    variant="body1"
+                                                                    mb="2px"
+                                                                >
+                                                                    ...님이 좋아하실만한 기술
+                                                                    블로그!
+                                                                </Typography>
+                                                                <Typography
+                                                                    variant="body2"
+                                                                    color="#ABABAB"
+                                                                >
+                                                                    2024.03.10 (금)
+                                                                </Typography>
+                                                            </Box>
+                                                        </MenuItem>
+                                                        <Divider />
+                                                    </>
+                                                ))}
+                                            </MenuList>
+                                        </Box>
+                                    </Paper>
+                                </Fade>
+                            )}
+                        </Popper>
                         {loggedIn ? <AuthHeader onLogout={handleLogout} /> : <Login />}
                     </div>
                 </div>
