@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div className="flex flex-col items-center">
             <Header />
             <div className="w-full h-px dark:bg-[#444444] bg-[#f0f0f0]" />
-            <div className="flex w-full max-w-screen-xl">{children}</div>
+            <div className="w-full max-w-screen-xl flex">{children}</div>
         </div>
     );
 }

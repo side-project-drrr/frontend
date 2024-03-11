@@ -25,6 +25,5 @@ export const headerSearchMenu: Story = {
         onSetSearchResult: () => {},
         onSelectedSearchIndex: 0, // 초기값 설정
         onSetSearchValue: () => {},
-        onSetGoToanotherPage: () => {},
     },
 };

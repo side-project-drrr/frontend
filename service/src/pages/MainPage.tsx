@@ -60,8 +60,11 @@ export default function MainPage() {
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
     };
+
     const handleSignupNext = () => {
         setCategoryModalOpen(true);
+
+        setHandleModalOpen(false);
 
         setHandleModalOpen(false);
     };
@@ -74,6 +77,7 @@ export default function MainPage() {
     };
     const handleLoginModal = () => {
         setLoginModalOpen(true);
+        setUserIsCategoryModalOpen(false);
     };
 
     const fetchMoreIssue = useCallback(() => {
@@ -94,7 +98,6 @@ export default function MainPage() {
     }, [isCategoryModalOpen]);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
-    console.log(filterTechBlogData);
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
@@ -140,6 +143,12 @@ export default function MainPage() {
                 <div ref={setObservationTarget}></div>
             </div>
             <SignUpModal onSignupNext={handleSignupNext} />
+            {isCategoryModalOpen && (
+                <CategoryModal
+                    onModalOpen={isCategoryModalOpen}
+                    onClose={handleCategoryModalClose}
+                />
+            )}
             {isCategoryModalOpen && (
                 <CategoryModal
                     onModalOpen={isCategoryModalOpen}

@@ -114,10 +114,10 @@ export const IndexingComponent = ({
     return (
         <>
             <MdKeyboardArrowLeft onClick={handleOnClickLeft} className="cursor-pointer" size={30} />
-            <div id="category-tab-container" className="relative w-full h-full overflow-hidden">
+            <div id="category-tab-container" className="relative h-full w-full overflow-hidden">
                 <Stack
                     id="category-tab"
-                    className="absolute z-0 t-0"
+                    className="absolute t-0 z-0"
                     style={{ left: `${tabPosition}px`, transition: 'all .5s ease' }}
                     direction="row"
                     spacing={1}

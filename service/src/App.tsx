@@ -68,6 +68,7 @@ function App() {
                     <Route path="/topics" element={<TopicPage />} />
                 </Route>
                 <Route element={<LayoutWithOutAside />}></Route>
+                <Route element={<LayoutWithOutAside />}></Route>
                 <Route path="/kakao/auth" element={<SocialCallback />} />
                 <Route path="/github/auth" element={<SocialCallback />} />
             </Routes>

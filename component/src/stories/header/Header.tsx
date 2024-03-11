@@ -2,6 +2,7 @@
 import styled from '@emotion/styled';
 import { TextField, IconButton, Avatar, Button } from '@mui/material';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+
 import { Login } from '@monorepo/component/src/stories/login/Login';
 import { useDarkMode } from '@monorepo/service/src/ThemeContext/ThemeProvider';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
@@ -166,6 +167,7 @@ export default function Header() {
         removeAuthStorage('accessToken');
         setProfileOpen(false); // 프로필 메뉴 닫기
         setLoggedIn(false);
+        setLoggedIn(false);
     };
 
     const handleSearchValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -230,15 +232,17 @@ export default function Header() {
                     </div>
                 </div>
                 <div className="flex items-center gap-1">
-                    <IconButton onClick={toggleDarkMode} size="large" color="inherit">
-                        {darkMode === 'dark' ? (
-                            <LightModeOutlined />
-                        ) : (
-                            <DarkModeOutlined color="action" />
-                        )}
-                    </IconButton>
-                    <NotificationsActiveIcon className="mr-3" />
-                    {loggedIn ? <AuthHeader onLogout={handleLogout} /> : <Login />}
+                    <div className="flex items-center gap-1">
+                        <IconButton onClick={toggleDarkMode} size="large" color="inherit">
+                            {darkMode === 'dark' ? (
+                                <LightModeOutlined />
+                            ) : (
+                                <DarkModeOutlined color="action" />
+                            )}
+                        </IconButton>
+                        <NotificationsActiveIcon className="mr-3" />
+                        {loggedIn ? <AuthHeader onLogout={handleLogout} /> : <Login />}
+                    </div>
                 </div>
             </div>
         </header>
