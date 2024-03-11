@@ -4,7 +4,7 @@ import { IListBoxProps } from '@monorepo/component/src/stories/listbox/type';
 export default function CardList({ items, onCategoryId, onFilterItems }: IListBoxProps) {
     return (
         <>
-            {onCategoryId === 0 ? (
+            {onCategoryId === 0 || onCategoryId === undefined ? (
                 <div className="flex flex-wrap justify-between pr-10">
                     {items.map((item: any) => (
                         <CardComponent key={item.id} item={item} />

@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import styled from '@emotion/styled';
 import { TextField, IconButton, Avatar, Button } from '@mui/material';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+
 import { Login } from '@monorepo/component/src/stories/login/Login';
 import { useDarkMode } from '@monorepo/service/src/ThemeContext/ThemeProvider';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
@@ -9,12 +11,20 @@ import {
     getProfileImgStorage,
     removeProfileImgStorage,
 } from '@monorepo/service/src/repository/ProfileimgRepository';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { profileModalOpen } from '@monorepo/service/src/recoil/atom/profileModalOpen';
+import HeaderSearchMenu from '../ChatBubble/HeaderSearchMenu';
+import { isSearchFocusedState } from '@monorepo/service/src/recoil/atom/isSearchFocusedState';
+import { useEffect, useState } from 'react';
+import { getHeaderKeywordSearch } from '@monorepo/service/src/service/HeaderSearchService';
+import { HeaderSearchDataState } from '@monorepo/service/src/recoil/atom/HeaderSearchDataState';
+import { PageState } from '@monorepo/service/src/recoil/atom/PageState';
+import { Link, useNavigate } from 'react-router-dom';
+import { getSearchListStorage } from '@monorepo/service/src/repository/SearchListRepository';
+import useHandleKeyPress from '@monorepo/service/src/hooks/useHandleKeyPress';
 import { isLoggedInState } from '@monorepo/service/src/recoil/atom/isLoggedInState';
 import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
 import lightLogo from '@monorepo/service/src/assets/lightLogo.webp';
-import { useEffect } from 'react';
 import { getAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
 
 const InputTextField = styled(TextField)({
@@ -49,6 +59,8 @@ interface IHandleProps {
 
 function AuthHeader({ onLogout }: IHandleProps) {
     const [profileOpen, setProfileOpen] = useRecoilState(profileModalOpen);
+    const setIsSearchClicked = useSetRecoilState(isSearchFocusedState);
+
     const KEY = 'imgUrl';
     const img = getProfileImgStorage(KEY);
     let imgUrl;
@@ -60,6 +72,7 @@ function AuthHeader({ onLogout }: IHandleProps) {
         //위 코드가 없을 경우 header 영역 밖을 클릭할 경우의 코드를 넣으면 profilediv 영역이 나타나지 않는다.
         e.stopPropagation();
         setProfileOpen(!profileOpen);
+        setIsSearchClicked(false);
     };
 
     return (
@@ -87,11 +100,63 @@ function AuthHeader({ onLogout }: IHandleProps) {
 }
 
 export default function Header() {
-    const { darkMode, toggleDarkMode } = useDarkMode();
-    const setProfileOpen = useSetRecoilState(profileModalOpen);
+    const [isSearchFocused, setIsSearchfouced] = useRecoilState(isSearchFocusedState);
+    const [searchValue, setSearchValue] = useState('');
+    const [getSearchLocalResult, setGetSearchLocalResult] = useState<any[]>([]);
+    const [selectedSearchIndex, setSelectedSearchIndex] = useState<number>(-1);
+    const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
     const [loggedIn, setLoggedIn] = useRecoilState(isLoggedInState);
+
+    const { darkMode, toggleDarkMode } = useDarkMode();
+    const page = useRecoilValue(PageState);
+    const setProfileOpen = useSetRecoilState(profileModalOpen);
+    const KEY = 'search';
+    const navigate = useNavigate();
+    const size = 10;
     const TOKEN_KEY = 'accessToken';
     const token = getAuthStorage(TOKEN_KEY);
+
+    const searchItem = getSearchListStorage(KEY);
+
+    async function getKeywordSearchRender() {
+        const keywordSearchData = await getHeaderKeywordSearch({
+            page,
+            size,
+            searchValue,
+        });
+        setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
+    }
+
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        const value = (e.target as HTMLInputElement).value;
+        const key = e.key;
+        if (value !== '' && searchValue !== '') {
+            if (e.key === 'Enter') {
+                // 엔터 키를 눌렀을 때 실행할 동작
+                setTechBlogSearchData([]);
+                getKeywordSearchRender();
+                setGetSearchLocalResult(prev => {
+                    const uniqueValuesSet = new Set([...prev, value]);
+                    const uniqueValuesArray = Array.from(uniqueValuesSet);
+                    return uniqueValuesArray;
+                });
+                setIsSearchfouced(false);
+                navigate(`/search/${searchValue}`);
+            }
+        }
+
+        useHandleKeyPress({
+            key,
+            e,
+            getSearchLocalResult,
+            setSearchValue,
+            selectedSearchIndex,
+            setSelectedSearchIndex,
+        });
+    };
+    const handleInputFocused = () => {
+        setIsSearchfouced(!isSearchFocused);
+    };
 
     const handleModalClose = () => {
         setProfileOpen(false);
@@ -102,7 +167,25 @@ export default function Header() {
         removeAuthStorage('accessToken');
         setProfileOpen(false); // 프로필 메뉴 닫기
         setLoggedIn(false);
+        setLoggedIn(false);
     };
+
+    const handleSearchValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value = e.target.value;
+        setSearchValue(value);
+    };
+
+    useEffect(() => {
+        getKeywordSearchRender();
+    }, [page]);
+
+    useEffect(() => {
+        setGetSearchLocalResult(searchItem);
+    }, []);
+
+    useEffect(() => {
+        if (selectedSearchIndex === -1) setSearchValue('');
+    }, [selectedSearchIndex]);
 
     useEffect(() => {
         if (token) {
@@ -111,38 +194,55 @@ export default function Header() {
     }, [token]);
 
     return (
-        <header className={`w-full flex justify-center`}>
+        <header className={`w-full flex justify-center `}>
             <div
                 className="flex justify-between w-full max-w-screen-xl py-4"
                 onClick={handleModalClose}
             >
                 <div className="flex items-center">
                     <div className="mr-4 none">
-                        {darkMode === 'light' ? (
-                            <img src={lightLogo} alt="로고" />
-                        ) : (
-                            <img src={darkLogo} alt="로고" />
+                        <Link to="/" onClick={() => setSearchValue('')}>
+                            {darkMode === 'light' ? (
+                                <img src={lightLogo} alt="로고" />
+                            ) : (
+                                <img src={darkLogo} alt="로고" />
+                            )}
+                        </Link>
+                    </div>
+                    <div>
+                        <InputTextField
+                            type="text"
+                            className="relative max-w-sm w-80"
+                            aria-label="검색"
+                            onFocus={handleInputFocused}
+                            onKeyDown={e => handleKeyPress(e)}
+                            onChange={e => handleSearchValue(e)}
+                            autoComplete="off"
+                            value={searchValue}
+                            placeholder="검색"
+                        />
+                        {isSearchFocused && (
+                            <HeaderSearchMenu
+                                onSearchResult={getSearchLocalResult}
+                                onSetSearchResult={setGetSearchLocalResult}
+                                onSetSearchValue={setSearchValue}
+                                onSelectedSearchIndex={selectedSearchIndex}
+                            />
                         )}
                     </div>
-                    <InputTextField
-                        type="text"
-                        variant="outlined"
-                        aria-label="검색"
-                        sx={{ width: '18rem' }}
-                        placeholder="검색"
-                        autoComplete="off"
-                    />
                 </div>
                 <div className="flex items-center gap-1">
-                    <IconButton onClick={toggleDarkMode} size="large" color="inherit">
-                        {darkMode === 'dark' ? (
-                            <LightModeOutlined />
-                        ) : (
-                            <DarkModeOutlined color="action" />
-                        )}
-                    </IconButton>
-                    <NotificationsActiveIcon className="mr-3" />
-                    {loggedIn ? <AuthHeader onLogout={handleLogout} /> : <Login />}
+                    <div className="flex items-center gap-1">
+                        <IconButton onClick={toggleDarkMode} size="large" color="inherit">
+                            {darkMode === 'dark' ? (
+                                <LightModeOutlined />
+                            ) : (
+                                <DarkModeOutlined color="action" />
+                            )}
+                        </IconButton>
+                        <NotificationsActiveIcon className="mr-3" />
+                        {loggedIn ? <AuthHeader onLogout={handleLogout} /> : <Login />}
+                    </div>
                 </div>
             </div>
         </header>
