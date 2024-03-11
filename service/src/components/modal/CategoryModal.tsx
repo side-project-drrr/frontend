@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -17,6 +17,7 @@ import { setAuthStorage } from '../../repository/AuthRepository';
 import { getProvider } from '../../repository/ProviderRepository';
 import { getProfileImgStorage } from '../../repository/ProfileimgRepository';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -74,10 +75,12 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const profileImageUrl = getProfileImgStorage(KEY);
 
     const size = 20;
+    const setIsLogged = useSetRecoilState(isLoggedInState);
 
     async function getCategoryList() {
         const categoryData = await getCategoryItem({ page, size });
-        setCategoryItems(categoryData);
+
+        setCategoryItems(categoryData.content);
     }
 
     async function signupRender() {
@@ -104,6 +107,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     async function handleCategory() {
         signupRender();
         onClose();
+        setIsLogged(true);
         alert('drrr에 오신것을 환영합니다.');
     }
 
@@ -134,6 +138,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     useEffect(() => {
         if (didMount) {
             //카테고리리스트 api 호출
+
             getCategoryList();
         }
     }, [didMount]);
@@ -141,7 +146,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
-                <Box sx={style} className="flex flex-col items-center justify-around">
+                <Box sx={style} className="flex flex-col items-center justify-around ">
                     <div className="flex justify-start w-full pb-2 text-black border-b-2 border-solid">
                         <h1 className="text-base">선호 카테고리 등록</h1>
                     </div>

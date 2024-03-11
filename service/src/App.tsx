@@ -1,6 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-
-import Layout from './components/layout/Layout';
 import MainPage from './pages/MainPage';
 import ItemDetailPage from './pages/ItemDetailPage';
 import CategoryPage from './pages/CategoryPage';
@@ -9,6 +7,9 @@ import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { useDarkMode } from './ThemeContext/ThemeProvider';
+import LayoutWithAside from './components/layout/LayoutWIthAside';
+import LayoutWithOutAside from './components/layout/LayoutWIthOutAside';
+import TopicPage from './pages/TopicPage';
 import HeaderSearchPage from './pages/HeaderSearchPage';
 
 function App() {
@@ -22,6 +23,13 @@ function App() {
             },
             text: {
                 primary: '#2c2c2c',
+                secondary: '#ffffff',
+            },
+            primary: {
+                main: '#f2f2f2',
+            },
+            secondary: {
+                main: '#D16E37', // 포인트 색상 (액센트 색상)
             },
         },
     });
@@ -35,6 +43,13 @@ function App() {
             },
             text: {
                 primary: '#ffffff',
+                secondary: '#ffffff',
+            },
+            primary: {
+                main: '#444',
+            },
+            secondary: {
+                main: '#E6783A', // 포인트 색상 (액센트 색상)
             },
         },
     });
@@ -43,13 +58,16 @@ function App() {
         <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
             <CssBaseline />
             <Routes>
-                <Route element={<Layout />}>
+                <Route element={<LayoutWithAside />}>
                     <Route path="/" element={<MainPage />} />
                     <Route path="/detail/:id" element={<ItemDetailPage />} />
                     <Route path="/signup/category" element={<CategoryPage />} />
                     <Route path="/category/detail/:id" element={<ItemDetailPage />} />
                     <Route path="/search/:search" element={<HeaderSearchPage />} />
+
+                    <Route path="/topics" element={<TopicPage />} />
                 </Route>
+                <Route element={<LayoutWithOutAside />}></Route>
                 <Route path="/kakao/auth" element={<SocialCallback />} />
                 <Route path="/github/auth" element={<SocialCallback />} />
             </Routes>

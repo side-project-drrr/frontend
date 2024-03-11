@@ -1,6 +1,6 @@
 import LanguageIcon from '@mui/icons-material/Language';
 import CallMadeIcon from '@mui/icons-material/CallMade';
-import { isSearchClickedState } from '@monorepo/service/src/recoil/atom/isSearchClickedState';
+import { isSearchFocusedState } from '@monorepo/service/src/recoil/atom/isSearchFocusedState';
 import { useSetRecoilState } from 'recoil';
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -25,7 +25,7 @@ export default function HeaderSearchMenu({
     onSelectedSearchIndex,
     onSetSearchValue,
 }: ISearchProps) {
-    const setIsSearchClicked = useSetRecoilState(isSearchClickedState);
+    const setIsSearchClicked = useSetRecoilState(isSearchFocusedState);
     const searchBoxRef = useRef<HTMLDivElement>(null);
     const KEY = 'search';
 
@@ -83,7 +83,7 @@ export default function HeaderSearchMenu({
                                             {value}
                                         </p>
                                     </Link>
-                                    <div className="flex justify-end w-full ">
+                                    <div className="flex justify-end w-full pr-4">
                                         <CloseIcon
                                             sx={{ opacity: '50%' }}
                                             key={index}

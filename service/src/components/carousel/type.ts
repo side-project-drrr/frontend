@@ -1,10 +1,13 @@
 export type CarouselProps = {
     data: {
         id: number;
-        url: string;
+        createdDate: Date;
+        thumbnailUrl: string;
         title: string;
-        content: string;
-        bookmark: number;
-        views: number;
+        summary: number;
+        urlSuffix: string;
+        url: string;
+        techBlogCode: string;
+        viewCount: number;
     }[];
 };

@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import styled from '@emotion/styled';
 import { TextField, IconButton, Avatar, Button } from '@mui/material';
-import { BiLogoGit } from 'react-icons/bi';
-import { CiBellOn } from 'react-icons/ci';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { Login } from '@monorepo/component/src/stories/login/Login';
 import { useDarkMode } from '@monorepo/service/src/ThemeContext/ThemeProvider';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
@@ -14,7 +13,7 @@ import {
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { profileModalOpen } from '@monorepo/service/src/recoil/atom/profileModalOpen';
 import HeaderSearchMenu from '../ChatBubble/HeaderSearchMenu';
-import { isSearchClickedState } from '@monorepo/service/src/recoil/atom/isSearchClickedState';
+import { isSearchFocusedState } from '@monorepo/service/src/recoil/atom/isSearchFocusedState';
 import { useEffect, useState } from 'react';
 import { getHeaderKeywordSearch } from '@monorepo/service/src/service/HeaderSearchService';
 import { HeaderSearchDataState } from '@monorepo/service/src/recoil/atom/HeaderSearchDataState';
@@ -22,6 +21,10 @@ import { PageState } from '@monorepo/service/src/recoil/atom/PageState';
 import { Link, useNavigate } from 'react-router-dom';
 import { getSearchListStorage } from '@monorepo/service/src/repository/SearchListRepository';
 import useHandleKeyPress from '@monorepo/service/src/hooks/useHandleKeyPress';
+import { isLoggedInState } from '@monorepo/service/src/recoil/atom/isLoggedInState';
+import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
+import lightLogo from '@monorepo/service/src/assets/lightLogo.webp';
+import { getAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -55,7 +58,7 @@ interface IHandleProps {
 
 function AuthHeader({ onLogout }: IHandleProps) {
     const [profileOpen, setProfileOpen] = useRecoilState(profileModalOpen);
-    const setIsSearchClicked = useSetRecoilState(isSearchClickedState);
+    const setIsSearchClicked = useSetRecoilState(isSearchFocusedState);
 
     const KEY = 'imgUrl';
     const img = getProfileImgStorage(KEY);
@@ -80,13 +83,13 @@ function AuthHeader({ onLogout }: IHandleProps) {
             )}
             {profileOpen && (
                 <div
-                    className="absolute w-[100px] h-[100px] bg-slate-50 flex justify-center items-center flex-col gap-4 right-0 mt-2"
+                    className="w-[100px] h-[100px] bg-slate-50 flex justify-center items-center flex-col gap-4 right-0 mt-2 absolute z-10"
                     aria-label="프로필 메뉴"
                 >
                     <Button className="text-black" style={buttonStyle}>
                         Profile
                     </Button>
-                    <Button className="text-black" style={buttonStyle} onClick={() => onLogout()}>
+                    <Button className="text-black " style={buttonStyle} onClick={onLogout}>
                         Logout
                     </Button>
                 </div>
@@ -95,32 +98,29 @@ function AuthHeader({ onLogout }: IHandleProps) {
     );
 }
 
-interface IHeaderProps {
-    authToken: string | null;
-}
-
-export default function Header({ authToken }: IHeaderProps) {
-    const [isSearchClicked, setIsSearchClicked] = useRecoilState(isSearchClickedState);
+export default function Header() {
+    const [isSearchFocused, setIsSearchfouced] = useRecoilState(isSearchFocusedState);
     const [searchValue, setSearchValue] = useState('');
     const [getSearchLocalResult, setGetSearchLocalResult] = useState<any[]>([]);
     const [selectedSearchIndex, setSelectedSearchIndex] = useState<number>(-1);
     const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
+    const [loggedIn, setLoggedIn] = useRecoilState(isLoggedInState);
+
     const { darkMode, toggleDarkMode } = useDarkMode();
     const page = useRecoilValue(PageState);
     const setProfileOpen = useSetRecoilState(profileModalOpen);
     const KEY = 'search';
     const navigate = useNavigate();
     const size = 10;
-    const sort = 'writtenAt';
-    const direction = 'desc';
+    const TOKEN_KEY = 'accessToken';
+    const token = getAuthStorage(TOKEN_KEY);
+
     const searchItem = getSearchListStorage(KEY);
 
-    async function getKeywordSerchRender() {
+    async function getKeywordSearchRender() {
         const keywordSearchData = await getHeaderKeywordSearch({
             page,
             size,
-            sort,
-            direction,
             searchValue,
         });
         setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
@@ -133,13 +133,13 @@ export default function Header({ authToken }: IHeaderProps) {
             if (e.key === 'Enter') {
                 // 엔터 키를 눌렀을 때 실행할 동작
                 setTechBlogSearchData([]);
-                getKeywordSerchRender();
+                getKeywordSearchRender();
                 setGetSearchLocalResult(prev => {
                     const uniqueValuesSet = new Set([...prev, value]);
                     const uniqueValuesArray = Array.from(uniqueValuesSet);
                     return uniqueValuesArray;
                 });
-                setIsSearchClicked(false);
+                setIsSearchfouced(false);
                 navigate(`/search/${searchValue}`);
             }
         }
@@ -153,11 +153,10 @@ export default function Header({ authToken }: IHeaderProps) {
             setSelectedSearchIndex,
         });
     };
-    const handleInputClicked = (e: React.MouseEvent<HTMLDivElement>) => {
-        setIsSearchClicked(!isSearchClicked);
-
-        setSearchValue((e.target as HTMLInputElement).value);
+    const handleInputFocused = () => {
+        setIsSearchfouced(!isSearchFocused);
     };
+
     const handleModalClose = () => {
         setProfileOpen(false);
     };
@@ -166,6 +165,7 @@ export default function Header({ authToken }: IHeaderProps) {
         removeProfileImgStorage();
         removeAuthStorage('accessToken');
         setProfileOpen(false); // 프로필 메뉴 닫기
+        setLoggedIn(false);
     };
 
     const handleSearchValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -174,15 +174,22 @@ export default function Header({ authToken }: IHeaderProps) {
     };
 
     useEffect(() => {
-        getKeywordSerchRender();
+        getKeywordSearchRender();
     }, [page]);
 
     useEffect(() => {
         setGetSearchLocalResult(searchItem);
     }, []);
+
     useEffect(() => {
         if (selectedSearchIndex === -1) setSearchValue('');
     }, [selectedSearchIndex]);
+
+    useEffect(() => {
+        if (token) {
+            setLoggedIn(true);
+        }
+    }, [token]);
 
     return (
         <header className={`w-full flex justify-center `}>
@@ -191,29 +198,28 @@ export default function Header({ authToken }: IHeaderProps) {
                 onClick={handleModalClose}
             >
                 <div className="flex items-center">
-                    <div className="mx-2 none">
-                        <Link to="/" className="text-black bg-transparent dark:text-white">
-                            <BiLogoGit
-                                size={40}
-                                aria-label="로고"
-                                onClick={() => setSearchValue('')}
-                            />
+                    <div className="mr-4 none">
+                        <Link to="/" onClick={() => setSearchValue('')}>
+                            {darkMode === 'light' ? (
+                                <img src={lightLogo} alt="로고" />
+                            ) : (
+                                <img src={darkLogo} alt="로고" />
+                            )}
                         </Link>
                     </div>
                     <div>
                         <InputTextField
                             type="text"
                             className="relative max-w-sm w-80"
-                            variant="outlined"
-                            label="검색"
                             aria-label="검색"
-                            onClick={e => handleInputClicked(e)}
+                            onFocus={handleInputFocused}
                             onKeyDown={e => handleKeyPress(e)}
                             onChange={e => handleSearchValue(e)}
                             autoComplete="off"
                             value={searchValue}
+                            placeholder="검색"
                         />
-                        {isSearchClicked && (
+                        {isSearchFocused && (
                             <HeaderSearchMenu
                                 onSearchResult={getSearchLocalResult}
                                 onSetSearchResult={setGetSearchLocalResult}
@@ -223,7 +229,7 @@ export default function Header({ authToken }: IHeaderProps) {
                         )}
                     </div>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center gap-1">
                     <IconButton onClick={toggleDarkMode} size="large" color="inherit">
                         {darkMode === 'dark' ? (
                             <LightModeOutlined />
@@ -231,8 +237,8 @@ export default function Header({ authToken }: IHeaderProps) {
                             <DarkModeOutlined color="action" />
                         )}
                     </IconButton>
-                    <CiBellOn size={26} aria-label="알림" />
-                    {authToken ? <AuthHeader onLogout={handleLogout} /> : <Login />}
+                    <NotificationsActiveIcon className="mr-3" />
+                    {loggedIn ? <AuthHeader onLogout={handleLogout} /> : <Login />}
                 </div>
             </div>
         </header>

@@ -1,21 +1,20 @@
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { HeaderSearchDataState } from '../recoil/atom/HeaderSearchDataState';
-import { FormGroup, Switch } from '@mui/material';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
-import ListBox from '@monorepo/component/src/stories/listbox/Listbox';
-import CardList from '../components/card/CardList';
+
 import { useCallback, useEffect } from 'react';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { PageState } from '../recoil/atom/PageState';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { useParams } from 'react-router-dom';
 import { getSearchListStorage, saveSearchListStorage } from '../repository/SearchListRepository';
+import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
+import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
 
 export default function HeaderSearchPage() {
     const techBlogSearchData = useRecoilValue(HeaderSearchDataState);
     const { search } = useParams();
-    const [displayMode, setDisplayMode] = useRecoilState(DisplayModeState);
-    const label = { inputProps: { 'aria-label': 'Switch demo' } };
+    const displayMode = useRecoilValue(DisplayModeState);
 
     const setPage = useSetRecoilState(PageState);
     const KEY = 'search';
@@ -33,20 +32,13 @@ export default function HeaderSearchPage() {
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 
     return (
-        <div className="flex justify-between">
+        <div className="flex justify-between w-full">
             <div className="flex flex-col w-full gap-6">
-                <div className="flex justify-end w-10/12">
-                    <div className="flex justify-center w-full">
-                        <h1>Results for {search}</h1>
+                <div className="flex w-full">
+                    <div className="flex justify-around w-full mt-5 ">
+                        <h1 className="w-full">Results for {search}</h1>
+                        <DisplayModeSwitch />
                     </div>
-                    <FormGroup>
-                        <Switch
-                            {...label}
-                            defaultChecked
-                            onChange={e => setDisplayMode(e.target.checked)}
-                            aria-label="DisplayMode Switch"
-                        />
-                    </FormGroup>
                 </div>
                 <div
                     className={`${
@@ -54,15 +46,11 @@ export default function HeaderSearchPage() {
                     } `}
                 >
                     {techBlogSearchData.length !== 0 ? (
-                        displayMode ? (
-                            <ListBox items={techBlogSearchData} />
-                        ) : (
-                            <CardList items={techBlogSearchData} />
-                        )
+                        <ConditionalRenderer items={techBlogSearchData} />
                     ) : (
-                        <div>
-                            <QuestionMarkIcon />
-                            <p>검색된 결과가 없습니다.</p>
+                        <div className="flex justify-center w-full h-[80vh] items-center flex-col">
+                            <QuestionMarkIcon sx={{ fontSize: '100px' }} />
+                            <p className="">검색된 결과가 없습니다.</p>
                         </div>
                     )}
                 </div>
