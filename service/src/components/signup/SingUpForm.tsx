@@ -1,24 +1,26 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Button } from '@mui/base/Button';
 
 import { userInformationState } from '../../recoil/atom/userInformationState';
 import { SignUpEmail, SignUpEmailValidation } from '../../service/auth/SocialService';
 import { providerIdState } from '../../recoil/atom/providerIdState';
-import useDebounce from '../../hooks/useDebounce';
-import { ValueProps, IParentProps } from './type';
-import EmailInput from './EmailInput';
+import { ValueProps, ISignFormProps } from './type';
+import SignUpInputForm from './SignUpInputForm';
+import SignupTitle from '@monorepo/component/src/stories/singupTitle/SignupTitle';
 
 const msg = {
     email: '올바른 이메일 형식이 아닙니다.',
-    nickname: '닉네임을 입력해주세요',
-    emailsuccess: '이메일 인증이 완료되었습니다.',
-    emailfailed: '이메일 인증이 실패하였습니다.',
+    nickName: '닉네임을 입력해주세요',
+    emailSuccess: '이메일 인증이 완료되었습니다.',
+    emailFailed: '이메일 인증이 실패하였습니다.',
+    emailDuplicate: '중복된 이메일이 있습니다.',
 };
 
-export default function SingUpForm({ onSignupNext }: IParentProps) {
+export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormProps) {
     const [profileValue, setProfileValue] = useRecoilState(userInformationState);
     const [emailCodeValue, setEmailCodeValue] = useState('');
+    const [emailCodeVerified, setEmailCodeVerified] = useState(false);
     const [errorMsg, setErrorMsg] = useState({
         nickname: '',
         email: '',
@@ -28,7 +30,6 @@ export default function SingUpForm({ onSignupNext }: IParentProps) {
     const [buttonDisabled, setButtonDisabled] = useState(false);
 
     const providerId = useRecoilValue(providerIdState);
-    const debouncedInputValue = useDebounce(emailCodeValue, { delay: 500 });
 
     async function emailVaildationRender() {
         if (emailCodeValue !== '') {
@@ -39,15 +40,17 @@ export default function SingUpForm({ onSignupNext }: IParentProps) {
             if (emailStatusData.isVerified) {
                 setErrorMsg(prevErrorMsg => ({
                     ...prevErrorMsg,
-                    email: msg.emailsuccess,
+                    email: msg.emailSuccess,
                 }));
                 setButtonDisabled(true);
+                setEmailCodeVerified(true);
             } else {
                 setErrorMsg(prevErrorMsg => ({
                     ...prevErrorMsg,
-                    email: msg.emailfailed,
+                    email: msg.emailFailed,
                 }));
                 setButtonDisabled(false);
+                setEmailCodeVerified(false);
             }
         }
     }
@@ -56,7 +59,7 @@ export default function SingUpForm({ onSignupNext }: IParentProps) {
         onSignupNext();
     };
 
-    const handleEmailCertificationButton = async () => {
+    const handleEmailCertificationButton = () => {
         const emailValidationState = validationEmailChecked(profileValue.email);
         if (emailValidationState === undefined) {
             setErrorMsg({
@@ -78,7 +81,7 @@ export default function SingUpForm({ onSignupNext }: IParentProps) {
     };
 
     const handleSignup = (profileValue: ValueProps) => {
-        if (errorMsg.email === msg.emailfailed || profileValue.email === '') {
+        if (errorMsg.email === msg.emailFailed || profileValue.email === '') {
             setErrorMsg(prevErrorMsg => ({
                 ...prevErrorMsg,
                 email: msg.email,
@@ -88,14 +91,22 @@ export default function SingUpForm({ onSignupNext }: IParentProps) {
         if (profileValue.nickname === '') {
             setErrorMsg(prevErrorMsg => ({
                 ...prevErrorMsg,
-                nickname: msg.nickname,
+                nickname: msg.nickName,
             }));
             return;
         }
     };
 
     async function emailCodeRender() {
-        await SignUpEmail({ providerId, email: { email: profileValue.email } });
+        const validationData = await SignUpEmail({
+            providerId,
+            email: { email: profileValue.email },
+        });
+        if (validationData?.status !== 200)
+            setErrorMsg(prevErrorMsg => ({
+                ...prevErrorMsg,
+                email: msg.emailDuplicate,
+            }));
     }
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -117,25 +128,11 @@ export default function SingUpForm({ onSignupNext }: IParentProps) {
         }
     };
 
-    useEffect(() => {
-        emailVaildationRender();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedInputValue]);
     return (
         <>
-            <div className="flex flex-col items-center justify-center w-full gap-2 ">
-                <div className="border-b border-solid grow border-[#121212] w-full text-black ">
-                    <h1 className="pb-3 text-base">시작하기</h1>
-                </div>
-                <div
-                    className="flex text-black border-b border-solid grow border-[#121212] flex-wrap w-full p-5"
-                    aria-label="이용 약관"
-                >
-                    <p className="w-9/12">
-                        지금 로그인하고 매일 새로운 기술블로그 소식을 전달받아보세요
-                    </p>
-                </div>
-                <EmailInput
+            <div className="flex flex-col items-center w-full gap-2 ">
+                <SignupTitle onHangleCloseClick={onHandleClose} />
+                <SignUpInputForm
                     onEmailCertificationButton={handleEmailCertificationButton}
                     onEmailAuthenticationChange={handleEmailAuthenticationChange}
                     onInputChange={handleInputChange}
@@ -144,21 +141,36 @@ export default function SingUpForm({ onSignupNext }: IParentProps) {
                 />
                 <p className="text-sm text-red-500">{errorMsg.email && errorMsg.email}</p>
                 <p className="text-sm text-red-500">{errorMsg.nickname && errorMsg.nickname}</p>
-                <Button
-                    onClick={() => {
-                        handleSignup(profileValue);
-                        handleNextClick();
-                    }}
-                    aria-label="다음"
-                    disabled={!buttonDisabled}
-                    slotProps={{
-                        root: () => ({
-                            className: `bg-blue-500 w-full text-white rounded-1xl h-12`,
-                        }),
-                    }}
-                >
-                    다음
-                </Button>
+                {emailCodeVerified ? (
+                    <Button
+                        onClick={() => {
+                            handleSignup(profileValue);
+                            handleNextClick();
+                        }}
+                        aria-label="다음"
+                        disabled={!buttonDisabled}
+                        slotProps={{
+                            root: () => ({
+                                className: `bg-[#E6783A] w-9/12 text-white rounded-1xl h-10 text-center`,
+                            }),
+                        }}
+                    >
+                        다음
+                    </Button>
+                ) : (
+                    <Button
+                        onClick={emailVaildationRender}
+                        aria-label="인증"
+                        // disabled={!buttonDisabled}
+                        slotProps={{
+                            root: () => ({
+                                className: `bg-[#E6783A] w-9/12 text-white rounded-1xl h-10 text-center`,
+                            }),
+                        }}
+                    >
+                        인증
+                    </Button>
+                )}
             </div>
         </>
     );

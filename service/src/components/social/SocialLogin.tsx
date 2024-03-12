@@ -28,6 +28,7 @@ export default function SocialLogin({ state }: IProps) {
     const locationUrl = (url: string) => {
         window.location.assign(url);
     };
+    const imgState = state === 'github' ? github : kakao;
 
     return (
         <div>
@@ -35,33 +36,18 @@ export default function SocialLogin({ state }: IProps) {
                 className="bg-transparent border-none hover:border-none focus:border-none focus:outline-none"
                 onClick={handleLogin}
             >
-                {state === 'github' ? (
-                    <picture>
-                        <source
-                            srcSet={github}
-                            type="image/webp"
-                            className="w-32 shadow-md rounded-xl shadow-black"
-                        />
-                        <img
-                            src={github}
-                            alt="github login"
-                            className="w-32 shadow-md rounded-xl shadow-black "
-                        />
-                    </picture>
-                ) : (
-                    <picture>
-                        <source
-                            srcSet={kakao}
-                            type="image/webp"
-                            className="w-32 shadow-md rounded-xl shadow-black "
-                        />
-                        <img
-                            src={kakao}
-                            alt="kakao login"
-                            className="w-32 shadow-md rounded-xl shadow-black"
-                        />
-                    </picture>
-                )}
+                <picture>
+                    <source
+                        srcSet={imgState}
+                        type="image/webp"
+                        className="box-border shadow-lg w-28 rounded-xl shadow-gray-700"
+                    />
+                    <img
+                        src={imgState}
+                        alt="kakao login"
+                        className="box-border shadow-lg w-28 rounded-xl shadow-gray-700"
+                    />
+                </picture>
             </button>
         </div>
     );
