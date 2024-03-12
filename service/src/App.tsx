@@ -20,13 +20,14 @@ function App() {
             mode: 'light',
             background: {
                 default: '#ffffff', // 배경색 설정
+                paper: '#f0f0f0',
             },
             text: {
                 primary: '#2c2c2c',
                 secondary: '#ffffff',
             },
             primary: {
-                main: '#f2f2f2',
+                main: '#f0f0f0',
             },
             secondary: {
                 main: '#D16E37', // 포인트 색상 (액센트 색상)
@@ -40,6 +41,7 @@ function App() {
             mode: 'dark',
             background: {
                 default: '#2c2c2c', // 다크 모드의 주요 색상 설정
+                paper: '#444',
             },
             text: {
                 primary: '#ffffff',
