@@ -5,6 +5,12 @@ interface IGetCategory {
     size: number;
 }
 
+interface ISearchCategory {
+    keyword: string;
+    page: number;
+    size: number;
+}
+
 export async function getCategoryItem({ page, size }: IGetCategory) {
     try {
         const res = await HttpClient.get(`/api/v1/categories/all?page=${page}&size=${size}`);
@@ -26,10 +32,22 @@ export async function putUserCategoryItem(stringConvertNumberActiveData: number[
     }
 }
 
-export async function AuthCategoryService(memberId: string) {
+export async function AuthCategoryService() {
+    try {
+        const authCategoryData = await HttpClient.get(`/api/v1/members/me/category-preference`);
+
+        return authCategoryData.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function categogrySearchService({ keyword, page, size }: ISearchCategory) {
+    console.log(keyword);
+
     try {
         const authCategoryData = await HttpClient.get(
-            `/api/v1/members/me/category-preference?memberId=${memberId}`,
+            `/api/v1/categories/keyword-search?keyword=${keyword}&page=${page}&size=${size}`,
         );
 
         return authCategoryData.data;

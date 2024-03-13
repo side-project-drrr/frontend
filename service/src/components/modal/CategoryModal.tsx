@@ -1,15 +1,13 @@
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import styled from '@emotion/styled';
 
 import CategoryItem from '../category/CategoryItem';
 import { CategoryProps } from './type';
-import { getCategoryItem } from '../../service/CategoryService';
+import { categogrySearchService, getCategoryItem } from '../../service/CategoryService';
 import { userInformationState } from '../../recoil/atom/userInformationState';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { SignUpService } from '../../service/auth/SocialService';
@@ -18,6 +16,10 @@ import { getProvider } from '../../repository/ProviderRepository';
 import { getProfileImgStorage } from '../../repository/ProfileimgRepository';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
+import SignupTitle from '@monorepo/component/src/stories/singupTitle/SignupTitle';
+import { InputTextField } from '../../style/inputText';
+import { IconButton } from '@mui/material';
+import { BsSend } from 'react-icons/bs';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -30,32 +32,6 @@ const style = {
     boxShadow: 24,
     p: 4,
     borderRadius: '10px',
-};
-
-const InputTextField = styled(TextField)({
-    '& label': {
-        color: 'black',
-    },
-
-    '& .MuiOutlinedInput-root': {
-        color: 'black',
-        '& fieldset': {
-            borderRadius: 10,
-            width: '24rem',
-            backgroundColor: 'transparent',
-            borderColor: '#E4E4E7',
-            height: '3rem',
-            textAlign: 'center',
-            marginTop: '0.5rem',
-            minWidth: '10rem',
-        },
-    },
-});
-
-const buttonStyle = {
-    backgroundImage: 'linear-gradient(to right, #47F938 20%, #006FEE 20%)',
-    color: 'white', // Set the text color if needed
-    borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
 };
 
 interface ICategory {
@@ -81,10 +57,25 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const size = 20;
     const setIsLogged = useSetRecoilState(isLoggedInState);
 
+    const buttonStyle = {
+        backgroundImage: `linear-gradient(to right, #FFA471 ${activeCategoriesData.length}0%, #F0F0F0 20%)`,
+        color: 'black', // Set the text color if needed
+        borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
+    };
+
     async function getCategoryList() {
         const categoryData = await getCategoryItem({ page, size });
 
         setCategoryItems(prev => [...prev, ...categoryData.content]);
+    }
+    async function getCategorySearchRender() {
+        const categorySearchData = await categogrySearchService({
+            keyword: categorySearchValue,
+            page,
+            size,
+        });
+
+        setCategoryItems(categorySearchData);
     }
 
     async function signupRender() {
@@ -120,14 +111,14 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
         setCategorySearchValue(value);
     };
 
-    const categorySearchItemList = useMemo(() => {
-        if (categorySearchValue) {
-            return categoryItems.filter(item =>
-                item.name.toLocaleUpperCase().startsWith(categorySearchValue.toLocaleUpperCase()),
-            );
-        }
-        return categoryItems;
-    }, [categoryItems, categorySearchValue]);
+    // const categorySearchItemList = useMemo(() => {
+    //     if (categorySearchValue) {
+    //         return categoryItems.filter(item =>
+    //             item.name.toLocaleUpperCase().startsWith(categorySearchValue.toLocaleUpperCase()),
+    //         );
+    //     }
+    //     return categoryItems;
+    // }, [categoryItems, categorySearchValue]);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 
@@ -151,19 +142,30 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
         <>
             <Modal onClose={onClose} open={onModalOpen}>
                 <Box sx={style} className="flex flex-col items-center justify-around ">
-                    <div className="flex justify-start w-full pb-2 text-black border-b-2 border-solid">
-                        <h1 className="text-base">선호 카테고리 등록</h1>
-                    </div>
-                    <div className="flex items-center w-full ml-6">
+                    <SignupTitle onHangleCloseClick={onClose} />
+                    <div className="flex items-center justify-center w-full">
                         <InputTextField
                             placeholder="검색"
                             variant="outlined"
                             onChange={handleCategorySearchItem}
                             aria-label="검색창"
+                            sx={{ width: '67%' }}
+                            InputProps={{
+                                endAdornment: (
+                                    <IconButton
+                                        color="primary"
+                                        component="span"
+                                        className="w-10 h-10"
+                                        onClick={getCategorySearchRender}
+                                    >
+                                        <BsSend className="hover:text-[#E6783A]" />
+                                    </IconButton>
+                                ),
+                            }}
                         />
                     </div>
-                    <ul className="flex flex-wrap justify-around w-full h-[25vh] gap-4 overflow-y-scroll">
-                        {categorySearchItemList?.map(categoryitem => (
+                    <ul className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2">
+                        {categoryItems?.map(categoryitem => (
                             <CategoryItem
                                 key={categoryitem.id}
                                 id={categoryitem.id}
@@ -175,7 +177,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         ))}
                     </ul>
                     <Button
-                        className="w-10/12"
+                        className="w-[65%]"
                         onClick={handleCategory}
                         style={buttonStyle}
                         role="Button"

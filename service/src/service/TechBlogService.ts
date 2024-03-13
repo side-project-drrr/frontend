@@ -33,7 +33,9 @@ export async function getUserTechBlogService({
 }
 
 export async function getRecommendTechBlogService() {
-    const COUNT = 5;
+    const COUNT = 9;
+    console.log(3333);
+
     try {
         const res = await HttpClient.get(`/api/v1/members/me/post-recommendation/${COUNT}`);
         return res.data;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { CategoryItemsProps } from './type';
 
 function UserCategoryItem({
@@ -13,7 +13,7 @@ function UserCategoryItem({
 
     const someUserSelectedCategories = () => {
         if (onUserCategoryItems !== undefined) {
-            const userCategory = onUserCategoryItems.some(item => item.id === id);
+            const userCategory = onUserCategoryItems.some(item => item.name === String(title));
             //여기서는 사용자가 선택한 선호카테고리가 같은 전체 리스트의 값과 같은 id를 boolean 표시
             if (userCategory) {
                 const updatedCategories = onUserCategoryItems.map((category: any) =>
@@ -27,12 +27,13 @@ function UserCategoryItem({
 
     const handleActiveCategoryItem = (e: React.MouseEvent<HTMLElement>) => {
         const categoryItemId = e.currentTarget.id;
+
         const set = new Set(activeCategoriesData);
+
         if (set.has(categoryItemId)) {
             const filterActiveCateogiesData = activeCategoriesData.filter(
                 categoryitem => categoryitem !== categoryItemId,
             );
-
             setActiveCategoriesData(filterActiveCateogiesData);
             setCategoriesItemClicked(false);
         } else {
@@ -51,9 +52,9 @@ function UserCategoryItem({
         <>
             <li
                 key={id}
-                id={id}
-                className={`bg-[#E6F1FE] h-10 p-5 text-[#006FEE] text-center flex justify-center items-center rounded-lg  flex-1 ${
-                    categoriesItemClicked ? 'bg-black' : 'bg-[#E6F1FE]'
+                id={String(id)}
+                className={`p-2 whitespace-nowrap text-center flex justify-center items-center rounded-lg flex-warp overflow-x-hidden ${
+                    categoriesItemClicked ? 'bg-[#2C2C2C] text-white' : 'bg-[#F2F2F2]  text-black '
                 } hover:bg-red-500 cursor-pointer `}
                 onClick={handleActiveCategoryItem}
                 aria-label="카테고리"
@@ -65,4 +66,4 @@ function UserCategoryItem({
     );
 }
 
-export default UserCategoryItem;
+export default memo(UserCategoryItem);

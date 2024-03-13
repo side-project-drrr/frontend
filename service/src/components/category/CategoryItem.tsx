@@ -42,8 +42,8 @@ function CategoryItem({
             <li
                 key={id}
                 id={String(id)}
-                className={`bg-[#E6F1FE] h-10 p-5 text-[#006FEE] text-center flex justify-center items-center rounded-lg ${
-                    categoriesItemClicked ? 'bg-black' : 'bg-[#E6F1FE]'
+                className={` h-10 p-5 whitespace-nowrap text-center flex justify-center items-center rounded-lg  flex-1 ${
+                    categoriesItemClicked ? 'bg-[#2C2C2C] text-white' : 'bg-[#F2F2F2]  text-black '
                 } hover:bg-red-500 cursor-pointer `}
                 onClick={handleActiveCategoryItem}
             >

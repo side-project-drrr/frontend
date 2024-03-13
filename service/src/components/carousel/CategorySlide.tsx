@@ -1,18 +1,15 @@
-import { useRef, useState, SetStateAction } from 'react';
+import { useRef, useState, SetStateAction, useEffect } from 'react';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'react-icons/ri';
 import { Button } from '@mui/base/Button';
 import AddIcon from '@mui/icons-material/Add';
 import UserCategoryModal from '../modal/UserCategoryModal';
+import { getAuthStorage } from '../../repository/AuthRepository';
+import { AuthCategoryService } from '../../service/CategoryService';
 
 interface CarouselProps {
-    items: {
-        id: string;
-        name: string;
-    }[];
     onModalOpen: boolean;
     onClose: () => void;
     onHandleModalOpen?: () => void;
-    userGetCategoryRender: () => void;
     onUserFilterTechBlogRender: any;
     onSetCategoryId: React.Dispatch<SetStateAction<number>>;
     onCategoryId: number;
@@ -20,30 +17,44 @@ interface CarouselProps {
     onSetPage: React.Dispatch<SetStateAction<number>>;
     onSetObservationTarget: any;
     onSetFilterTechBlogData: any;
+    onIsCategoryModalOpen: boolean;
 }
 
 export default function CategorySlide({
-    items,
     onHandleModalOpen,
     onModalOpen,
     onClose,
-    userGetCategoryRender,
     onUserFilterTechBlogRender,
     onSetCategoryId,
     onCategoryId,
     onUserTechBlogRender,
     onSetPage,
-
     onSetFilterTechBlogData,
+    onIsCategoryModalOpen,
 }: CarouselProps) {
     const [current, setCurrent] = useState(0);
+    const [userCategoryItems, setUserCategoryItems] = useState([]); //선호 카테고리
+
+    const TOKEN_KEY = 'accessToken';
+    const getToken = getAuthStorage(TOKEN_KEY);
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const prevSlider = () => {
-        setCurrent(current === 0 ? items.length - 1 : current - 1);
+        setCurrent(current === 0 ? userCategoryItems.length - 1 : current - 1);
     };
     const nextSlider = () => {
-        setCurrent(current === items.length - 1 ? 0 : current + 1);
+        setCurrent(current === userCategoryItems.length - 1 ? 0 : current + 1);
     };
+
+    async function userGetCategoryRender() {
+        const userCategoryData = await AuthCategoryService();
+        setUserCategoryItems(userCategoryData);
+    }
+
+    useEffect(() => {
+        if (getToken) {
+            userGetCategoryRender();
+        }
+    }, [onIsCategoryModalOpen]);
 
     const handleUserCategoryId = (id: string) => {
         const numberId = parseInt(id, 10);
@@ -61,6 +72,7 @@ export default function CategorySlide({
     };
 
     const ALLCATEGORYNUM = '0';
+
     return (
         <>
             <div>
@@ -98,7 +110,7 @@ export default function CategorySlide({
                                 전체 게시글
                             </p>
                         </div>
-                        {items?.map((item: any) => (
+                        {userCategoryItems?.map((item: any) => (
                             <div
                                 key={item.id}
                                 className={`flex dark-box-bg pl-2 pr-2 text-center transition ease-out duration-400 justify-center items-center w-full`}

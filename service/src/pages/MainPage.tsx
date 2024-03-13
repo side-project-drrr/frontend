@@ -1,14 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
 import { profileModalOpen } from '../recoil/atom/profileModalOpen';
-import { getAuthStorage } from '../repository/AuthRepository';
 import CategorySlide from '../components/carousel/CategorySlide';
-import { userCategoryState } from '../recoil/atom/userCategoryState';
-import { useTokenDecode } from '../hooks/useTokenDecode';
-import { AuthCategoryService } from '../service/CategoryService';
 import { getTechBlogService, getUserTechBlogService } from '../service/TechBlogService';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { isLoggedInState } from '../recoil/atom/isLoggedInState';
@@ -25,18 +21,12 @@ export default function MainPage() {
     const displayMode = useRecoilValue(DisplayModeState);
     const [page, setPage] = useState(0);
     const [categoryId, setCategoryId] = useState(0);
-    const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
     const loggedIn = useRecoilValue(isLoggedInState);
     const size = 10;
 
     const setHandleModalOpen = useSetRecoilState(modalOpenState);
     const setLoginModalOpen = useSetRecoilState(loginModalState);
     const setProfileOpen = useSetRecoilState(profileModalOpen);
-
-    const TOKEN_KEY = 'accessToken';
-    const getToken = getAuthStorage(TOKEN_KEY);
-
-    const tokenDecode = useTokenDecode(getToken);
 
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
@@ -47,16 +37,11 @@ export default function MainPage() {
         const userFilterTechBlogData = await getUserTechBlogService({
             page,
             size,
-
             id,
         });
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
     }
 
-    async function userGetCategoryRender() {
-        const userCategoryData = await AuthCategoryService(tokenDecode);
-        setUserCategoryItems(userCategoryData);
-    }
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
     };
@@ -91,12 +76,6 @@ export default function MainPage() {
         userFilterTechBlogRender(categoryId);
     }, [page]);
 
-    useEffect(() => {
-        if (getToken) {
-            userGetCategoryRender();
-        }
-    }, [isCategoryModalOpen]);
-
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 
     return (
@@ -105,11 +84,9 @@ export default function MainPage() {
                 <div className="flex w-full pr-4 mt-8">
                     {loggedIn ? (
                         <CategorySlide
-                            items={userCategoryItems}
                             onClose={handleCategoryModalClose}
                             onModalOpen={userIsCategoryModalOpen}
                             onHandleModalOpen={handleUserCategoryModal}
-                            userGetCategoryRender={userGetCategoryRender}
                             onUserFilterTechBlogRender={userFilterTechBlogRender}
                             onSetCategoryId={setCategoryId}
                             onCategoryId={categoryId}
@@ -117,6 +94,7 @@ export default function MainPage() {
                             onSetPage={setPage}
                             onSetObservationTarget={setObservationTarget}
                             onSetFilterTechBlogData={setFilterTechBlogData}
+                            nnIsCategoryModalOpen={isCategoryModalOpen}
                         />
                     ) : (
                         <div className="flex w-full justify-center dark:bg-[#444444] bg-[#f0f0f0] p-4 ">
@@ -143,12 +121,6 @@ export default function MainPage() {
                 <div ref={setObservationTarget}></div>
             </div>
             <SignUpModal onSignupNext={handleSignupNext} />
-            {isCategoryModalOpen && (
-                <CategoryModal
-                    onModalOpen={isCategoryModalOpen}
-                    onClose={handleCategoryModalClose}
-                />
-            )}
             {isCategoryModalOpen && (
                 <CategoryModal
                     onModalOpen={isCategoryModalOpen}
