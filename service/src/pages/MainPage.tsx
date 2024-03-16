@@ -94,7 +94,7 @@ export default function MainPage() {
                             onSetPage={setPage}
                             onSetObservationTarget={setObservationTarget}
                             onSetFilterTechBlogData={setFilterTechBlogData}
-                            nnIsCategoryModalOpen={isCategoryModalOpen}
+                            onIsCategoryModalOpen={isCategoryModalOpen}
                         />
                     ) : (
                         <div className="flex w-full justify-center dark:bg-[#444444] bg-[#f0f0f0] p-4 ">

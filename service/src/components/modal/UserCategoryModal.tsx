@@ -6,15 +6,14 @@ import Button from '@mui/material/Button';
 
 import { UserCategoryProps } from './type';
 import {
-    categogrySearchService,
+    categorySearchService,
     getCategoryItem,
     putUserCategoryItem,
 } from '../../service/CategoryService';
 
 import UserCategoryItem from '../category/UserCategoryItem';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
-import { userCategoryState } from '../../recoil/atom/userCategoryState';
-import { useRecoilValue } from 'recoil';
+
 import SignupTitle from '@monorepo/component/src/stories/singupTitle/SignupTitle';
 import { InputTextField } from '../../style/inputText';
 import { IconButton } from '@mui/material';
@@ -26,8 +25,8 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '25%',
-    height: '53%',
+    width: '35%',
+    height: '58%',
     bgcolor: 'white',
     boxShadow: 24,
     p: 4,
@@ -36,9 +35,9 @@ const style = {
 
 function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: UserCategoryProps) {
     const [categoryItems, setCategoryItems] = useState<any[]>([]); //전체 카테고리 리스트
-    const userCategoryItems = useRecoilValue(userCategoryState); //선호 카테고리
     const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
+    const [isSearching, setIsSearching] = useState(false); // 검색value
     const [page, setPage] = useState(0);
 
     const buttonStyle = {
@@ -50,16 +49,19 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     const size = 20;
 
     async function getCategorySearchRender() {
-        const categorySearchData = await categogrySearchService({
+        const categorySearchData = await categorySearchService({
             keyword: categorySearchValue,
             page,
             size,
         });
-        setCategoryItems(categorySearchData.content);
+
+        setCategoryItems(prev => [...prev, ...categorySearchData.content]);
+        setIsSearching(true);
     }
 
-    async function getCategoryList() {
+    async function getCategoryListRender() {
         const categoryData = await getCategoryItem({ page, size });
+
         setCategoryItems(prev => [...prev, ...categoryData.content]);
     }
 
@@ -80,6 +82,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         }
         onClose();
     };
+
     const fetchMoreIssue = useCallback(() => {
         setPage(prev => prev + 1);
     }, [categoryItems]);
@@ -89,12 +92,20 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     const searchValueDebounce = useDebounce(categorySearchValue, { delay: 500 });
 
     useEffect(() => {
-        getCategoryList();
-    }, [page]);
+        if (onModalOpen && !isSearching) {
+            getCategoryListRender();
+        }
+    }, [page, onModalOpen]);
 
     useEffect(() => {
-        getCategorySearchRender();
-    }, [searchValueDebounce]);
+        if (categorySearchValue.length > 0) {
+            getCategorySearchRender();
+            setCategoryItems([]);
+            setPage(0);
+        } else {
+            setIsSearching(false);
+        }
+    }, [categorySearchValue, searchValueDebounce]);
 
     return (
         <>
@@ -129,11 +140,10 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                             <>
                                 <UserCategoryItem
                                     key={categoryitem.id}
-                                    id={categoryitem.id}
+                                    categoryId={categoryitem.id}
                                     title={categoryitem.name}
                                     setActiveCategoriesData={setActiveCategoriesData}
                                     activeCategoriesData={activeCategoriesData}
-                                    onUserCategoryItems={userCategoryItems}
                                     onSetObservationTarget={setObservationTarget}
                                 />
                             </>

@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 
 import CategoryItem from '../category/CategoryItem';
 import { CategoryProps } from './type';
-import { categogrySearchService, getCategoryItem } from '../../service/CategoryService';
+import { categorySearchService, getCategoryItem } from '../../service/CategoryService';
 import { userInformationState } from '../../recoil/atom/userInformationState';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { SignUpService } from '../../service/auth/SocialService';
@@ -40,7 +40,6 @@ interface ICategory {
 }
 
 function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
-    const [didMount, setDidmount] = useState(false);
     const [categoryItems, setCategoryItems] = useState<ICategory[]>([]); //전체 카테고리 리스트
     const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
@@ -69,7 +68,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
         setCategoryItems(prev => [...prev, ...categoryData.content]);
     }
     async function getCategorySearchRender() {
-        const categorySearchData = await categogrySearchService({
+        const categorySearchData = await categorySearchService({
             keyword: categorySearchValue,
             page,
             size,
@@ -111,32 +110,13 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
         setCategorySearchValue(value);
     };
 
-    // const categorySearchItemList = useMemo(() => {
-    //     if (categorySearchValue) {
-    //         return categoryItems.filter(item =>
-    //             item.name.toLocaleUpperCase().startsWith(categorySearchValue.toLocaleUpperCase()),
-    //         );
-    //     }
-    //     return categoryItems;
-    // }, [categoryItems, categorySearchValue]);
-
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 
     useEffect(() => {
-        getCategoryList();
-    }, [page]);
-
-    useEffect(() => {
-        setDidmount(true);
-    }, []);
-
-    useEffect(() => {
-        if (didMount) {
-            //카테고리리스트 api 호출
-
+        if (onModalOpen) {
             getCategoryList();
         }
-    }, [didMount]);
+    }, [page, onModalOpen]);
 
     return (
         <>
@@ -168,7 +148,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         {categoryItems?.map(categoryitem => (
                             <CategoryItem
                                 key={categoryitem.id}
-                                id={categoryitem.id}
+                                categoryId={categoryitem.id}
                                 title={categoryitem.name}
                                 setActiveCategoriesData={setActiveCategoriesData}
                                 activeCategoriesData={activeCategoriesData}

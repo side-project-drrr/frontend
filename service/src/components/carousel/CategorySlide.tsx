@@ -5,6 +5,8 @@ import AddIcon from '@mui/icons-material/Add';
 import UserCategoryModal from '../modal/UserCategoryModal';
 import { getAuthStorage } from '../../repository/AuthRepository';
 import { AuthCategoryService } from '../../service/CategoryService';
+import { useRecoilState } from 'recoil';
+import { userCategoryState } from '../../recoil/atom/userCategoryState';
 
 interface CarouselProps {
     onModalOpen: boolean;
@@ -33,7 +35,7 @@ export default function CategorySlide({
     onIsCategoryModalOpen,
 }: CarouselProps) {
     const [current, setCurrent] = useState(0);
-    const [userCategoryItems, setUserCategoryItems] = useState([]); //선호 카테고리
+    const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
 
     const TOKEN_KEY = 'accessToken';
     const getToken = getAuthStorage(TOKEN_KEY);
@@ -47,6 +49,8 @@ export default function CategorySlide({
 
     async function userGetCategoryRender() {
         const userCategoryData = await AuthCategoryService();
+        console.log(userCategoryData);
+
         setUserCategoryItems(userCategoryData);
     }
 

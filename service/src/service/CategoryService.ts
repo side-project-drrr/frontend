@@ -35,6 +35,7 @@ export async function putUserCategoryItem(stringConvertNumberActiveData: number[
 export async function AuthCategoryService() {
     try {
         const authCategoryData = await HttpClient.get(`/api/v1/members/me/category-preference`);
+        console.log(authCategoryData);
 
         return authCategoryData.data;
     } catch (error) {
@@ -42,14 +43,11 @@ export async function AuthCategoryService() {
     }
 }
 
-export async function categogrySearchService({ keyword, page, size }: ISearchCategory) {
-    console.log(keyword);
-
+export async function categorySearchService({ keyword, page, size }: ISearchCategory) {
     try {
         const authCategoryData = await HttpClient.get(
             `/api/v1/categories/keyword-search?keyword=${keyword}&page=${page}&size=${size}`,
         );
-
         return authCategoryData.data;
     } catch (error) {
         console.error(error);

@@ -12,7 +12,6 @@ export default function Recommend() {
     const [recommendData, setRecommendData] = useState([]);
     const loggedIn = useRecoilValue(isLoggedInState);
     const [randomRecommendData, setRandomRecommendData] = useState<IRandomDataProps[]>([]);
-    console.log(loggedIn);
 
     async function getRecommenedDataRender() {
         const recommendBlogData = await getRecommendTechBlogService();
@@ -27,11 +26,8 @@ export default function Recommend() {
     }, [recommendData]);
 
     useEffect(() => {
-        console.log(3333);
-
         getRecommenedDataRender();
     }, [loggedIn]);
-    console.log(randomRecommendData);
 
     return (
         <div className="flex flex-col justify-around gap-2 pb-8 border-b dark:border-[#444444] border-[#f0f0f0]">

@@ -1,22 +1,26 @@
 import { useState, useEffect, memo } from 'react';
 import { CategoryItemsProps } from './type';
+import { useRecoilValue } from 'recoil';
+import { userCategoryState } from '../../recoil/atom/userCategoryState';
 
 function UserCategoryItem({
-    id,
+    categoryId,
     title,
     setActiveCategoriesData,
     activeCategoriesData,
-    onUserCategoryItems,
+
     onSetObservationTarget,
 }: CategoryItemsProps) {
     const [categoriesItemClicked, setCategoriesItemClicked] = useState<boolean>(false);
+    const userCategoryItems = useRecoilValue(userCategoryState); //선호 카테고리
 
     const someUserSelectedCategories = () => {
-        if (onUserCategoryItems !== undefined) {
-            const userCategory = onUserCategoryItems.some(item => item.name === String(title));
+        if (userCategoryItems.length > 0) {
+            const userCategory = userCategoryItems.some(item => item.name === title);
+
             //여기서는 사용자가 선택한 선호카테고리가 같은 전체 리스트의 값과 같은 id를 boolean 표시
             if (userCategory) {
-                const updatedCategories = onUserCategoryItems.map((category: any) =>
+                const updatedCategories = userCategoryItems.map((category: any) =>
                     String(category.id),
                 );
                 setActiveCategoriesData([...updatedCategories]);
@@ -51,8 +55,8 @@ function UserCategoryItem({
     return (
         <>
             <li
-                key={id}
-                id={String(id)}
+                key={categoryId}
+                id={String(categoryId)}
                 className={`p-2 whitespace-nowrap text-center flex justify-center items-center rounded-lg flex-warp overflow-x-hidden ${
                     categoriesItemClicked ? 'bg-[#2C2C2C] text-white' : 'bg-[#F2F2F2]  text-black '
                 } hover:bg-red-500 cursor-pointer `}
