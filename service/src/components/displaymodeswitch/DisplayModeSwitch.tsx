@@ -8,7 +8,7 @@ export default function DisplayModeSwitch() {
     const setDisplayMode = useSetRecoilState(DisplayModeState);
 
     return (
-        <div className="flex justify-end w-full pr-10">
+        <div className="flex justify-end w-full">
             <FormGroup>
                 <Switch
                     {...label}

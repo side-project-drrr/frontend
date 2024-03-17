@@ -11,6 +11,7 @@ import LayoutWithAside from './components/layout/LayoutWIthAside';
 import LayoutWithOutAside from './components/layout/LayoutWIthOutAside';
 import TopicPage from './pages/TopicPage';
 import HeaderSearchPage from './pages/HeaderSearchPage';
+import { AlarmListPage } from './pages/AlarmListPage';
 
 function App() {
     const { darkMode } = useDarkMode();
@@ -66,13 +67,12 @@ function App() {
                     <Route path="/signup/category" element={<CategoryPage />} />
                     <Route path="/category/detail/:id" element={<ItemDetailPage />} />
                     <Route path="/search/:search" element={<HeaderSearchPage />} />
-
                     <Route path="/topics" element={<TopicPage />} />
+                    <Route path="/alarm/list" element={<AlarmListPage />} />
                 </Route>
                 <Route element={<LayoutWithOutAside />}></Route>
-                <Route element={<LayoutWithOutAside />}></Route>
-                <Route path="/kakao/auth" element={<SocialCallback />} />
                 <Route path="/github/auth" element={<SocialCallback />} />
+                <Route path="/kakao/auth" element={<SocialCallback />} />
             </Routes>
         </ThemeProvider>
     );

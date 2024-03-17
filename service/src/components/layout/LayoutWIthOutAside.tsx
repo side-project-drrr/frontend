@@ -4,8 +4,8 @@ import Layout from './Layout';
 export default function LayoutWithOutAside() {
     return (
         <Layout>
-            <main>
-                <section aria-label="메인 콘텐츠" className="p-3">
+            <main className="w-full">
+                <section aria-label="메인 콘텐츠" className="w-full p-10">
                     <Outlet />
                 </section>
             </main>

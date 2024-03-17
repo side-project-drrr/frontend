@@ -5,13 +5,13 @@ export default function ListBox({ items, onCategoryId, onFilterItems }: IListBox
     return (
         <>
             {onCategoryId === 0 || onCategoryId === undefined ? (
-                <div className="flex flex-col w-full gap-6 pr-10">
+                <div className="flex flex-col w-full gap-6">
                     {items.map((item: any) => (
                         <ListboxItem key={item.id} item={item} />
                     ))}
                 </div>
             ) : (
-                <div className="flex flex-col w-full gap-6 pr-10">
+                <div className="flex flex-col w-full gap-6">
                     {onFilterItems.map((item: any) => (
                         <ListboxItem key={item.id} item={item} />
                     ))}

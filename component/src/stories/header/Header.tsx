@@ -194,7 +194,7 @@ export default function Header() {
     }, [token]);
 
     return (
-        <header className={`w-full flex justify-center `}>
+        <header className={`w-full flex justify-center px-[10px]`}>
             <div
                 className="flex justify-between w-full max-w-screen-xl py-4"
                 onClick={handleModalClose}

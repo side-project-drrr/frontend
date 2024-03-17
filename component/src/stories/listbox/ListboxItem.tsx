@@ -1,16 +1,20 @@
+import { Box, Chip } from '@mui/material';
 import { ItemProps } from './type';
 
 export default function ListboxItem({ item }: ItemProps) {
     return (
         <>
-            <div
+            <Box
                 key={item.techBlogPostBasicInfoDto.id}
-                className="relative flex flex-col justify-around gap-3 border-b dark:border-[#444444] border-[#f0f0f0]"
+                borderBottom={1}
+                borderColor="primary.main"
+                padding="20px 10px"
+                className="relative flex flex-col justify-around gap-3"
             >
-                <h1 className="w-full ml-2 overflow-hidden text-xl font-bold bold whitespace-nowrap text-ellipsis">
+                <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap text-ellipsis">
                     {item.techBlogPostBasicInfoDto.title}
                 </h1>
-                <div className="flex items-center justify-between p-2 w-full gap-10">
+                <div className="flex items-center justify-between w-full gap-10">
                     <p className="text-base block overflow-hidden text-ellipsis h-[140px] max-h-[140px] w-full ">
                         {item.techBlogPostBasicInfoDto.summary}
                     </p>
@@ -20,18 +24,18 @@ export default function ListboxItem({ item }: ItemProps) {
                         className="flex justify-center w-40 rounded-2xl right-10 h-36"
                     />
                 </div>
-                <ul className="flex gap-2 w-full p-2 flex-wrap overflow-y-hidden h-[40px]">
+                <Box className="flex gap-2 w-full flex-wrap overflow-y-hidden h-[40px]">
                     {item.categoryDto?.map((item: { id: string; name: string }) => (
-                        <li
+                        <Chip
                             key={item.id}
                             id={item.id}
-                            className="text-sm dark:bg-[#444444] rounded-xl px-4 py-1 bg-[#F0F0F0]"
-                        >
-                            #{item.name}
-                        </li>
+                            label={`#${item.name}`}
+                            color="primary"
+                            className="text-sm rounded-xl px-4 py-1"
+                        />
                     ))}
-                </ul>
-                <div className="flex justify-between w-3/12 p-2 mb-4">
+                </Box>
+                <div className="flex justify-between w-3/12">
                     <span className="flex items-center justify-around text-xs text-center">
                         좋아요: {item.techBlogPostBasicInfoDto.postLike}
                     </span>
@@ -39,7 +43,7 @@ export default function ListboxItem({ item }: ItemProps) {
                         조회수: {item.techBlogPostBasicInfoDto.viewCount}
                     </span>
                 </div>
-            </div>
+            </Box>
         </>
     );
 }
