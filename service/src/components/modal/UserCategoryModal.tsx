@@ -11,7 +11,7 @@ import {
     putUserCategoryItem,
 } from '../../service/CategoryService';
 
-import UserCategoryItem from '../category/UserCategoryItem';
+import PrivateCategoryItems from '../category/PrivateCategoryItems';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
 import SignupTitle from '@monorepo/component/src/stories/singupTitle/SignupTitle';
@@ -19,14 +19,20 @@ import { InputTextField } from '../../style/inputText';
 import { IconButton } from '@mui/material';
 import { BsSend } from 'react-icons/bs';
 import useDebounce from '../../hooks/useDebounce';
+import { useRecoilState } from 'recoil';
+import { categorySearchValueState } from '../../recoil/atom/categorySearchValueState';
+import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
+import { useRecoilValue } from 'recoil';
+import { userCategoryState } from '../../recoil/atom/userCategoryState';
+import SelectedCategoryDisplay from '../category/SelectedCategoryDisplay';
 
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '35%',
-    height: '58%',
+    width: '40%',
+    height: '70%',
     bgcolor: 'white',
     boxShadow: 24,
     p: 4,
@@ -34,14 +40,17 @@ const style = {
 };
 
 function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: UserCategoryProps) {
-    const [categoryItems, setCategoryItems] = useState<any[]>([]); //전체 카테고리 리스트
-    const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
-    const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
+    const [categoryItems, setCategoryItems] = useRecoilState(categoryItemsState); //전체 카테고리 리스트
+    const [activeCategoriesIdData, setActiveCategoriesIdData] = useState<string[]>([]); // 카테고리 선택
+    const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [isSearching, setIsSearching] = useState(false); // 검색value
     const [page, setPage] = useState(0);
+    const userCategoryItems = useRecoilValue(userCategoryState); //선호 카테고리
 
     const buttonStyle = {
-        backgroundImage: `linear-gradient(to right, #FFA471 ${activeCategoriesData.length}0%, #F0F0F0 20%)`,
+        backgroundImage: `linear-gradient(to right, #FFA471 ${
+            userCategoryItems.length + activeCategoriesIdData.length
+        }0%, #F0F0F0 20%)`,
         color: 'black', // Set the text color if needed
         borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
     };
@@ -138,25 +147,26 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                     <ul className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2">
                         {categoryItems?.map(categoryitem => (
                             <>
-                                <UserCategoryItem
+                                <PrivateCategoryItems
                                     key={categoryitem.id}
                                     categoryId={categoryitem.id}
                                     title={categoryitem.name}
-                                    setActiveCategoriesData={setActiveCategoriesData}
-                                    activeCategoriesData={activeCategoriesData}
+                                    setActiveCategoriesData={setActiveCategoriesIdData}
+                                    activeCategoriesData={activeCategoriesIdData}
                                     onSetObservationTarget={setObservationTarget}
                                 />
                             </>
                         ))}
                     </ul>
+                    <SelectedCategoryDisplay />
                     <Button
                         className="w-[65%]"
                         style={buttonStyle}
-                        onClick={() => handleUserCreateCategory(activeCategoriesData)}
+                        onClick={() => handleUserCreateCategory(activeCategoriesIdData)}
                         role="Button"
                         aria-label="카테고리 선택 완료"
                     >
-                        <p>선택({activeCategoriesData.length}/10)</p>
+                        <p>선택({userCategoryItems.length + activeCategoriesIdData.length}/10)</p>
                     </Button>
                 </Box>
             </Modal>

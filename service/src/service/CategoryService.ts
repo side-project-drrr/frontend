@@ -35,7 +35,6 @@ export async function putUserCategoryItem(stringConvertNumberActiveData: number[
 export async function AuthCategoryService() {
     try {
         const authCategoryData = await HttpClient.get(`/api/v1/members/me/category-preference`);
-        console.log(authCategoryData);
 
         return authCategoryData.data;
     } catch (error) {

@@ -49,7 +49,6 @@ export default function CategorySlide({
 
     async function userGetCategoryRender() {
         const userCategoryData = await AuthCategoryService();
-        console.log(userCategoryData);
 
         setUserCategoryItems(userCategoryData);
     }
@@ -58,7 +57,7 @@ export default function CategorySlide({
         if (getToken) {
             userGetCategoryRender();
         }
-    }, [onIsCategoryModalOpen]);
+    }, []);
 
     const handleUserCategoryId = (id: string) => {
         const numberId = parseInt(id, 10);

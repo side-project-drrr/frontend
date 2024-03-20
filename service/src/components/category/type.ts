@@ -5,7 +5,6 @@ export interface CategoryItemsProps {
     title: string;
     setActiveCategoriesData: Dispatch<SetStateAction<any[]>>;
     activeCategoriesData: string[];
-
     onSetObservationTarget: any;
 }
 export interface IUserCategoryProps {

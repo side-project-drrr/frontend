@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -20,6 +20,8 @@ import SignupTitle from '@monorepo/component/src/stories/singupTitle/SignupTitle
 import { InputTextField } from '../../style/inputText';
 import { IconButton } from '@mui/material';
 import { BsSend } from 'react-icons/bs';
+import { categorySearchValueState } from '../../recoil/atom/categorySearchValueState';
+import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -34,15 +36,10 @@ const style = {
     borderRadius: '10px',
 };
 
-interface ICategory {
-    id: number;
-    name: string;
-}
-
 function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
-    const [categoryItems, setCategoryItems] = useState<ICategory[]>([]); //전체 카테고리 리스트
+    const [categoryItems, setCategoryItems] = useRecoilState(categoryItemsState); //전체 카테고리 리스트
     const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
-    const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
+    const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [page, setPage] = useState(0);
     const profileValue = useRecoilValue(userInformationState);
     const providerId = useRecoilValue(providerIdState);

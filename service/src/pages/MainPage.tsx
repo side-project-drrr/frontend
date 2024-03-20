@@ -12,6 +12,8 @@ import CategoryModal from '../components/modal/CategoryModal';
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
+import { categorySearchValueState } from '../recoil/atom/categorySearchValueState';
+import { categoryItemsState } from '../recoil/atom/categoryItemsState';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -22,8 +24,9 @@ export default function MainPage() {
     const [page, setPage] = useState(0);
     const [categoryId, setCategoryId] = useState(0);
     const loggedIn = useRecoilValue(isLoggedInState);
+    const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
     const size = 10;
-
+    const setCategoryItems = useSetRecoilState(categoryItemsState);
     const setHandleModalOpen = useSetRecoilState(modalOpenState);
     const setLoginModalOpen = useSetRecoilState(loginModalState);
     const setProfileOpen = useSetRecoilState(profileModalOpen);
@@ -59,6 +62,8 @@ export default function MainPage() {
     const handleCategoryModalClose = () => {
         setCategoryModalOpen(false);
         setUserIsCategoryModalOpen(false);
+        setCategorySearchValue('');
+        setCategoryItems([]);
     };
     const handleLoginModal = () => {
         setLoginModalOpen(true);
