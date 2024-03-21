@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import HttpClient from '../../apis/HttpClient';
 import { IAuthProps, IAuthEmailProps, IAuthEmailVaildationProps } from './type';
 
@@ -50,9 +51,13 @@ export async function SignUpEmail({ providerId, email }: IAuthEmailProps) {
             email: `${email.email}`,
             providerId: `${providerId}`,
         });
-        return res.data;
+
+        return res;
     } catch (error) {
         console.error(error);
+        if (error instanceof AxiosError) {
+            console.log(error.response?.data);
+        }
     }
 }
 
@@ -65,6 +70,7 @@ export async function SignUpEmailValidation({
             providerId: `${providerId}`,
             verificationCode: `${verificationCode}`,
         });
+
         return res.data;
     } catch (error) {
         console.error(error);

@@ -4,12 +4,58 @@ import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { searchValueState, topicIndexState } from '../../recoil/atom/topicsState';
 
-const indexKr = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하'];
-const indexEn = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+const indexKr = [
+    '가',
+    '나',
+    '다',
+    '라',
+    '마',
+    '바',
+    '사',
+    '아',
+    '자',
+    '차',
+    '카',
+    '타',
+    '파',
+    '하',
+];
+const indexEn = [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+];
 
 const indexText = indexEn.concat(indexKr);
 
-export const IndexingComponent = ({ onHandleIndex }: { onHandleIndex: (index: string) => void }) => {
+export const IndexingComponent = ({
+    onHandleIndex,
+}: {
+    onHandleIndex: (index: string) => void;
+}) => {
     const [topicIndex, setTopicIndex] = useRecoilState(topicIndexState);
     const [, setSearchVal] = useRecoilState(searchValueState);
 
@@ -101,7 +147,11 @@ export const IndexingComponent = ({ onHandleIndex }: { onHandleIndex: (index: st
                     />
                 </Stack>
             </div>
-            <MdKeyboardArrowRight onClick={handleOnClickRight} className="cursor-pointer" size={30} />
+            <MdKeyboardArrowRight
+                onClick={handleOnClickRight}
+                className="cursor-pointer"
+                size={30}
+            />
         </>
     );
 };

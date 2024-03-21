@@ -1,15 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import FormGroup from '@mui/material/FormGroup';
-import Switch from '@mui/material/Switch';
+import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
-import ListBox from '@monorepo/component/src/stories/listbox/Listbox';
 import SignUpModal from '../components/signup/SignUpModal';
-import CardList from '../components/card/CardList';
 import { profileModalOpen } from '../recoil/atom/profileModalOpen';
-
 import { getAuthStorage } from '../repository/AuthRepository';
-
 import CategorySlide from '../components/carousel/CategorySlide';
 import { userCategoryState } from '../recoil/atom/userCategoryState';
 import { useTokenDecode } from '../hooks/useTokenDecode';
@@ -19,13 +14,15 @@ import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { isLoggedInState } from '../recoil/atom/isLoggedInState';
 import CategoryModal from '../components/modal/CategoryModal';
 import { loginModalState } from '../recoil/atom/loginModalState';
+import { DisplayModeState } from '../recoil/atom/DisplayModeState';
+import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState(false);
     const [techBlogData, setTechBlogData] = useState<any[]>([]);
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
-    const [displayMode, setDisplayMode] = useState(true);
+    const displayMode = useRecoilValue(DisplayModeState);
     const [page, setPage] = useState(0);
     const [categoryId, setCategoryId] = useState(0);
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
@@ -38,7 +35,6 @@ export default function MainPage() {
 
     const TOKEN_KEY = 'accessToken';
     const getToken = getAuthStorage(TOKEN_KEY);
-    const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
     const tokenDecode = useTokenDecode(getToken);
 
@@ -64,8 +60,11 @@ export default function MainPage() {
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
     };
+
     const handleSignupNext = () => {
         setCategoryModalOpen(true);
+
+        setHandleModalOpen(false);
 
         setHandleModalOpen(false);
     };
@@ -78,6 +77,7 @@ export default function MainPage() {
     };
     const handleLoginModal = () => {
         setLoginModalOpen(true);
+        setUserIsCategoryModalOpen(false);
     };
 
     const fetchMoreIssue = useCallback(() => {
@@ -98,10 +98,11 @@ export default function MainPage() {
     }, [isCategoryModalOpen]);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
+
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
             <div className="flex flex-col w-full gap-6">
-                <div className="flex w-full mt-8 pr-4">
+                <div className="flex w-full pr-4 mt-8">
                     {loggedIn ? (
                         <CategorySlide
                             items={userCategoryItems}
@@ -120,7 +121,7 @@ export default function MainPage() {
                     ) : (
                         <div className="flex w-full justify-center dark:bg-[#444444] bg-[#f0f0f0] p-4 ">
                             더 많은 정보를 원한다면{' '}
-                            <span className="border-b mx-2" onClick={handleLoginModal}>
+                            <span className="mx-2 border-b" onClick={handleLoginModal}>
                                 로그인
                             </span>
                             해주세요.
@@ -132,33 +133,22 @@ export default function MainPage() {
                         displayMode ? 'flex w-full gap-6 flex-col' : 'flex w-full gap-6 flex-wrap'
                     }`}
                 >
-                    <div className="flex justify-end w-10/12">
-                        <FormGroup>
-                            <Switch
-                                {...label}
-                                defaultChecked
-                                onChange={e => setDisplayMode(e.target.checked)}
-                                aria-label="DisplayMode Switch"
-                            />
-                        </FormGroup>
-                    </div>
-                    {displayMode ? (
-                        <ListBox
-                            items={techBlogData}
-                            onCategoryId={categoryId}
-                            onFilterItems={filterTechBlogData}
-                        />
-                    ) : (
-                        <CardList
-                            items={techBlogData}
-                            onCategoryId={categoryId}
-                            onFilterItems={filterTechBlogData}
-                        />
-                    )}
+                    <DisplayModeSwitch />
+                    <ConditionalRenderer
+                        items={techBlogData}
+                        onCategoryId={categoryId}
+                        onFilterItems={filterTechBlogData}
+                    />
                 </div>
                 <div ref={setObservationTarget}></div>
             </div>
             <SignUpModal onSignupNext={handleSignupNext} />
+            {isCategoryModalOpen && (
+                <CategoryModal
+                    onModalOpen={isCategoryModalOpen}
+                    onClose={handleCategoryModalClose}
+                />
+            )}
             {isCategoryModalOpen && (
                 <CategoryModal
                     onModalOpen={isCategoryModalOpen}

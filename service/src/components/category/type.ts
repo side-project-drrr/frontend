@@ -1,7 +1,7 @@
 import { SetStateAction, Dispatch } from 'react';
 
 export interface CategoryItemsProps {
-    id: string;
+    id: number;
     title: string;
     setActiveCategoriesData: Dispatch<SetStateAction<any[]>>;
     activeCategoriesData: string[];

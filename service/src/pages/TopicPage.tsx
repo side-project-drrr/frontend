@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { TextField, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import { IndexingComponent } from '../components/topics/Indexing';
 import { ListComponent } from '../components/topics/List';
 import { getEtcIndexTopicsApi, getIndexTopicsApi, getSearchTopicsApi } from '../apis/topics';
@@ -99,8 +99,8 @@ export default function TopicPage() {
 
     return (
         <div className="w-full p-10">
-            <div className="flex flex-col item-center mb-10">
-                <h1 className="text-center mb-8">Explore topics</h1>
+            <div className="flex flex-col mb-10 item-center">
+                <h1 className="mb-8 text-center">Explore topics</h1>
                 <Input
                     type="text"
                     value={searchVal}

@@ -47,7 +47,6 @@ const InputTextField = styled(TextField)({
             height: '3rem',
             textAlign: 'center',
             marginTop: '0.5rem',
-            //maxWidth: '24rem',
             minWidth: '10rem',
         },
     },
@@ -59,9 +58,14 @@ const buttonStyle = {
     borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
 };
 
+interface ICategory {
+    id: number;
+    name: string;
+}
+
 function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [didMount, setDidmount] = useState(false);
-    const [categoryItems, setCategoryItems] = useState<any[]>([]); //전체 카테고리 리스트
+    const [categoryItems, setCategoryItems] = useState<ICategory[]>([]); //전체 카테고리 리스트
     const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useState(''); // 검색value
     const [page, setPage] = useState(0);
@@ -80,7 +84,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     async function getCategoryList() {
         const categoryData = await getCategoryItem({ page, size });
 
-        setCategoryItems(categoryData.content);
+        setCategoryItems(prev => [...prev, ...categoryData.content]);
     }
 
     async function signupRender() {
