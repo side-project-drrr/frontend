@@ -1,34 +1,65 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { useRecoilValue } from 'recoil';
-import { userCategoryState } from '../../recoil/atom/userCategoryState';
-import { useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { useEffect, useState } from 'react';
+import { activeCategoryState } from '../../recoil/atom/activeCategoryState';
+import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
+//import { categoriesItemClickedState } from '../../recoil/atom/categoriesItemClickedState';
 
 export default function SelectedCategoryDisplay() {
     const [selectedCategoryId, setSelectedCategoryId] = useState<string>(''); // 선택된 카테고리의 ID
-    const userCategoryItems = useRecoilValue(userCategoryState); // 선호 카테고리 목록
-
+    const [activeCategory, setActiveCategory] = useRecoilState(activeCategoryState);
+    //const [filteredUserCategoryItems, setFilterdUserCategoryItems] = useState<IProps[]>([]);
+    const categoryItems = useRecoilValue(categoryItemsState);
+    //const setCategoriesItemClicked = useSetRecoilState(categoriesItemClickedState);
     // 선택된 카테고리를 제외한 모든 카테고리 아이템을 필터링
-    const filteredUserCategoryItems = userCategoryItems.filter(
-        item => String(item.id) !== selectedCategoryId,
-    );
+    const handleFilteredUserCategoryItems = () => {
+        const abc = activeCategory.filter(item => String(item.id) !== selectedCategoryId);
+        setActiveCategory([...abc]);
+    };
 
     // 카테고리 아이템을 클릭했을 때 해당 아이템의 ID를 state에 설정
     const handleUserCategoryItem = (e: React.MouseEvent<HTMLElement>) => {
-        setSelectedCategoryId(e.currentTarget.id);
+        const selectedCategoryId = e.currentTarget.id;
+        console.log(33333);
+
+        setSelectedCategoryId(selectedCategoryId);
+        const set = new Set(activeCategory.map(v => String(v.id)));
+
+        if (set.has(selectedCategoryId)) {
+            const filterActiveCategoiesData = activeCategory.filter(
+                categoryitem => String(categoryitem.id) !== selectedCategoryId,
+            );
+            setActiveCategory([...filterActiveCategoiesData]);
+            //setCategoriesItemClicked(false);
+        } else {
+            if (activeCategory.length < 10) {
+                const someActiveCategoiesData = categoryItems.filter(
+                    item => String(item.id) === selectedCategoryId,
+                );
+                setActiveCategory(prev => [...prev, ...someActiveCategoiesData]);
+                //  setCategoriesItemClicked(true);
+            }
+        }
     };
+
+    console.log(activeCategory);
+
+    useEffect(() => {
+        handleFilteredUserCategoryItems();
+    }, []);
 
     return (
         <ul className="flex whitespace-nowrap p-5 gap-2 items-center flex-wrap w-[75%]">
-            {filteredUserCategoryItems &&
-                filteredUserCategoryItems.map(usercategoryitem => (
+            {activeCategory &&
+                activeCategory.map(categoryItem => (
                     <li
-                        key={usercategoryitem.id}
-                        id={usercategoryitem.id}
+                        key={categoryItem.id}
+                        id={String(categoryItem.id)}
                         className="flex bg-[#f0f0f0] text-black gap-2 text-sm pr-2 pl-2 rounded-lg items-center justify-center"
                         onClick={e => handleUserCategoryItem(e)}
                     >
                         <CloseIcon sx={{ width: '20px' }} />
-                        {usercategoryitem.name}
+                        {categoryItem.name}
                     </li>
                 ))}
         </ul>

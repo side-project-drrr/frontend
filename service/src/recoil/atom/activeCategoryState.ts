@@ -5,7 +5,7 @@ interface Props {
     name: string;
 }
 
-export const userCategoryState = atom<Props[]>({
-    key: 'userCategoryState',
+export const activeCategoryState = atom<Props[]>({
+    key: 'activeCategoryState',
     default: [],
 });

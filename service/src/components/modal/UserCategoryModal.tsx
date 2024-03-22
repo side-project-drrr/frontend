@@ -25,6 +25,10 @@ import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 import { useRecoilValue } from 'recoil';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import SelectedCategoryDisplay from '../category/SelectedCategoryDisplay';
+import { selectedCategoryState } from '../../recoil/atom/selectedCategoryState';
+import UserSelectedCategoryDisplay from '../category/UserSelectedCategoryDisplay';
+import { activeCategoryState } from '../../recoil/atom/activeCategoryState';
+import { categoriesItemClickedState } from '../../recoil/atom/categoriesItemClickedState';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -39,14 +43,22 @@ const style = {
     borderRadius: '10px',
 };
 
+export interface IActiveDataProps {
+    id: number;
+    name: string;
+}
+
 function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: UserCategoryProps) {
     const [categoryItems, setCategoryItems] = useRecoilState(categoryItemsState); //전체 카테고리 리스트
-    const [activeCategoriesIdData, setActiveCategoriesIdData] = useState<string[]>([]); // 카테고리 선택
+    const [activeCategoriesIdData, setActiveCategoriesIdData] = useRecoilState(activeCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [isSearching, setIsSearching] = useState(false); // 검색value
     const [page, setPage] = useState(0);
     const userCategoryItems = useRecoilValue(userCategoryState); //선호 카테고리
-
+    const [selectedCategory, setSelectedCategory] = useRecoilState(selectedCategoryState);
+    const [categoriesItemClicked, setCategoriesItemClicked] = useRecoilState(
+        categoriesItemClickedState,
+    );
     const buttonStyle = {
         backgroundImage: `linear-gradient(to right, #FFA471 ${
             userCategoryItems.length + activeCategoriesIdData.length
@@ -63,6 +75,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
             page,
             size,
         });
+        console.log(5555555555);
 
         setCategoryItems(prev => [...prev, ...categorySearchData.content]);
         setIsSearching(true);
@@ -74,8 +87,8 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         setCategoryItems(prev => [...prev, ...categoryData.content]);
     }
 
-    async function userUpdateCategoryRender(activeCategoriesData: string[]) {
-        const stringConvertNumberActiveData = activeCategoriesData.map(data => +data);
+    async function userUpdateCategoryRender(activeCategoriesData: { id: number; name: string }[]) {
+        const stringConvertNumberActiveData = activeCategoriesData.map(data => +data.id);
         return await putUserCategoryItem(stringConvertNumberActiveData);
     }
 
@@ -84,9 +97,12 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         setCategorySearchValue(value);
     };
 
-    const handleUserCreateCategory = async (activeCategoriesData: string[]) => {
+    const handleUserCreateCategory = async (
+        activeCategoriesData: { id: number; name: string }[],
+    ) => {
         const data = await userUpdateCategoryRender(activeCategoriesData);
         if (data !== undefined) {
+            setSelectedCategory(false);
             await userGetCategoryRender();
         }
         onClose();
@@ -115,13 +131,14 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
             setIsSearching(false);
         }
     }, [categorySearchValue, searchValueDebounce]);
+    console.log(activeCategoriesIdData);
+    console.log(selectedCategory);
 
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
                 <Box sx={style} className="flex flex-col items-center justify-around w-full">
                     <SignupTitle onHangleCloseClick={onClose} />
-
                     <div className="flex items-center justify-center w-full mt-5">
                         <InputTextField
                             placeholder="검색"
@@ -154,11 +171,19 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                                     setActiveCategoriesData={setActiveCategoriesIdData}
                                     activeCategoriesData={activeCategoriesIdData}
                                     onSetObservationTarget={setObservationTarget}
+                                    onSetCategoriesItemClicked={setCategoriesItemClicked}
+                                    onCategoriesItemClicked={categoriesItemClicked}
                                 />
                             </>
                         ))}
                     </ul>
-                    <SelectedCategoryDisplay />
+
+                    {selectedCategory ? (
+                        <SelectedCategoryDisplay />
+                    ) : (
+                        <UserSelectedCategoryDisplay />
+                    )}
+
                     <Button
                         className="w-[65%]"
                         style={buttonStyle}

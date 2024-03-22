@@ -4,16 +4,15 @@ export interface CategoryItemsProps {
     categoryId: number;
     title: string;
     setActiveCategoriesData: Dispatch<SetStateAction<any[]>>;
-    activeCategoriesData: string[];
+    activeCategoriesData: { id: number; name: string }[];
     onSetObservationTarget: any;
-}
-export interface IUserCategoryProps {
-    token: string | null;
+    onSetCategoriesItemClicked: Dispatch<SetStateAction<boolean>>;
+    onCategoriesItemClicked: boolean;
 }
 
 export interface ICategoryProps {
     userCategoryData: {
-        id: string;
+        id: number;
         name: string;
     };
 }
