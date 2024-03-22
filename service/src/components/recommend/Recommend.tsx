@@ -5,6 +5,7 @@ import { IRandomDataProps } from './type';
 import { BiSolidLike } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
 import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
+import { Link } from '@mui/material';
 
 export default function Recommend() {
     const [recommendData, setRecommendData] = useState([]);
@@ -31,7 +32,20 @@ export default function Recommend() {
         <div className="flex flex-col justify-around gap-2 pb-8 border-b dark:border-[#444444] border-[#f0f0f0]">
             <div className="flex items-center justify-between w-full mb-4">
                 <h1 className="text-base font-bold">추천 게시글</h1>
-                <p className="text-xs bg-transparent">더 보기</p>
+                <p className="text-xs bg-transparent">
+                    <Link
+                        href="/recommend/list"
+                        color="text.primary"
+                        underline="none"
+                        sx={{
+                            '&:hover': {
+                                color: 'text.primary', // hover 시 변경할 색상 설정
+                            },
+                        }}
+                    >
+                        더보기
+                    </Link>
+                </p>
             </div>
             {randomRecommendData &&
                 randomRecommendData.map(data => (
