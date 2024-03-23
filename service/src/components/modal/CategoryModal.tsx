@@ -22,6 +22,7 @@ import { IconButton } from '@mui/material';
 import { BsSend } from 'react-icons/bs';
 import { categorySearchValueState } from '../../recoil/atom/categorySearchValueState';
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
+import { userCategoryState } from '../../recoil/atom/userCategoryState';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -38,7 +39,8 @@ const style = {
 
 function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [categoryItems, setCategoryItems] = useRecoilState(categoryItemsState); //전체 카테고리 리스트
-    const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
+    const [didMount, setDidMount] = useState(false); //전체 카테고리 리스트
+    const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [page, setPage] = useState(0);
     const profileValue = useRecoilValue(userInformationState);
@@ -54,7 +56,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const setIsLogged = useSetRecoilState(isLoggedInState);
 
     const buttonStyle = {
-        backgroundImage: `linear-gradient(to right, #FFA471 ${activeCategoriesData.length}0%, #F0F0F0 20%)`,
+        backgroundImage: `linear-gradient(to right, #FFA471 ${userCategoryItems.length}0%, #F0F0F0 20%)`,
         color: 'black', // Set the text color if needed
         borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
     };
@@ -77,7 +79,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     async function signupRender() {
         const tokenData = await SignUpService({
             email: profileValue.email,
-            categoryIds: activeCategoriesData,
+            categoryIds: userCategoryItems.map(item => +item.id),
             nickName: profileValue.nickname,
             provider: stringConvert,
             providerId,
@@ -110,10 +112,14 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 
     useEffect(() => {
-        if (onModalOpen) {
+        if (onModalOpen && didMount) {
             getCategoryList();
         }
-    }, [page, onModalOpen]);
+    }, [page, onModalOpen, didMount]);
+
+    useEffect(() => {
+        setDidMount(true);
+    }, []);
 
     return (
         <>
@@ -147,8 +153,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                                 key={categoryitem.id}
                                 categoryId={categoryitem.id}
                                 title={categoryitem.name}
-                                setActiveCategoriesData={setActiveCategoriesData}
-                                activeCategoriesData={activeCategoriesData}
                                 onSetObservationTarget={setObservationTarget}
                             />
                         ))}
@@ -160,7 +164,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         role="Button"
                         aria-label="카테고리 선택 완료"
                     >
-                        <p>선택({activeCategoriesData.length}/10)</p>
+                        <p>선택({userCategoryItems.length}/10)</p>
                     </Button>
                 </Box>
             </Modal>

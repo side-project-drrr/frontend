@@ -1,48 +1,43 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useEffect, useState } from 'react';
-import { activeCategoryState } from '../../recoil/atom/activeCategoryState';
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
-//import { categoriesItemClickedState } from '../../recoil/atom/categoriesItemClickedState';
+import { userCategoryState } from '../../recoil/atom/userCategoryState';
 
 export default function SelectedCategoryDisplay() {
     const [selectedCategoryId, setSelectedCategoryId] = useState<string>(''); // 선택된 카테고리의 ID
-    const [activeCategory, setActiveCategory] = useRecoilState(activeCategoryState);
-    //const [filteredUserCategoryItems, setFilterdUserCategoryItems] = useState<IProps[]>([]);
+    const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
+
     const categoryItems = useRecoilValue(categoryItemsState);
-    //const setCategoriesItemClicked = useSetRecoilState(categoriesItemClickedState);
-    // 선택된 카테고리를 제외한 모든 카테고리 아이템을 필터링
+
     const handleFilteredUserCategoryItems = () => {
-        const abc = activeCategory.filter(item => String(item.id) !== selectedCategoryId);
-        setActiveCategory([...abc]);
+        const filterUserCategoryItem = userCategoryItems.filter(
+            item => String(item.id) !== selectedCategoryId,
+        );
+        setUserCategoryItems([...filterUserCategoryItem]);
     };
 
     // 카테고리 아이템을 클릭했을 때 해당 아이템의 ID를 state에 설정
     const handleUserCategoryItem = (e: React.MouseEvent<HTMLElement>) => {
         const selectedCategoryId = e.currentTarget.id;
-        console.log(33333);
 
         setSelectedCategoryId(selectedCategoryId);
-        const set = new Set(activeCategory.map(v => String(v.id)));
+        const set = new Set(userCategoryItems.map(v => String(v.id)));
 
         if (set.has(selectedCategoryId)) {
-            const filterActiveCategoiesData = activeCategory.filter(
+            const filterActiveCategoiesData = userCategoryItems.filter(
                 categoryitem => String(categoryitem.id) !== selectedCategoryId,
             );
-            setActiveCategory([...filterActiveCategoiesData]);
-            //setCategoriesItemClicked(false);
+            setUserCategoryItems([...filterActiveCategoiesData]);
         } else {
-            if (activeCategory.length < 10) {
+            if (userCategoryItems.length < 10) {
                 const someActiveCategoiesData = categoryItems.filter(
                     item => String(item.id) === selectedCategoryId,
                 );
-                setActiveCategory(prev => [...prev, ...someActiveCategoiesData]);
-                //  setCategoriesItemClicked(true);
+                setUserCategoryItems(prev => [...prev, ...someActiveCategoiesData]);
             }
         }
     };
-
-    console.log(activeCategory);
 
     useEffect(() => {
         handleFilteredUserCategoryItems();
@@ -50,8 +45,8 @@ export default function SelectedCategoryDisplay() {
 
     return (
         <ul className="flex whitespace-nowrap p-5 gap-2 items-center flex-wrap w-[75%]">
-            {activeCategory &&
-                activeCategory.map(categoryItem => (
+            {userCategoryItems &&
+                userCategoryItems.map(categoryItem => (
                     <li
                         key={categoryItem.id}
                         id={String(categoryItem.id)}

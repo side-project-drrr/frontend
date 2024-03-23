@@ -19,16 +19,12 @@ import { InputTextField } from '../../style/inputText';
 import { IconButton } from '@mui/material';
 import { BsSend } from 'react-icons/bs';
 import useDebounce from '../../hooks/useDebounce';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { categorySearchValueState } from '../../recoil/atom/categorySearchValueState';
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
-import { useRecoilValue } from 'recoil';
-import { userCategoryState } from '../../recoil/atom/userCategoryState';
+
 import SelectedCategoryDisplay from '../category/SelectedCategoryDisplay';
-import { selectedCategoryState } from '../../recoil/atom/selectedCategoryState';
-import UserSelectedCategoryDisplay from '../category/UserSelectedCategoryDisplay';
-import { activeCategoryState } from '../../recoil/atom/activeCategoryState';
-import { categoriesItemClickedState } from '../../recoil/atom/categoriesItemClickedState';
+import { userCategoryState } from '../../recoil/atom/userCategoryState';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -50,19 +46,13 @@ export interface IActiveDataProps {
 
 function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: UserCategoryProps) {
     const [categoryItems, setCategoryItems] = useRecoilState(categoryItemsState); //전체 카테고리 리스트
-    const [activeCategoriesIdData, setActiveCategoriesIdData] = useRecoilState(activeCategoryState); // 카테고리 선택
+    const [didMount, setDidMount] = useState(false); //전체 카테고리 리스트
+    const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [isSearching, setIsSearching] = useState(false); // 검색value
     const [page, setPage] = useState(0);
-    const userCategoryItems = useRecoilValue(userCategoryState); //선호 카테고리
-    const [selectedCategory, setSelectedCategory] = useRecoilState(selectedCategoryState);
-    const [categoriesItemClicked, setCategoriesItemClicked] = useRecoilState(
-        categoriesItemClickedState,
-    );
     const buttonStyle = {
-        backgroundImage: `linear-gradient(to right, #FFA471 ${
-            userCategoryItems.length + activeCategoriesIdData.length
-        }0%, #F0F0F0 20%)`,
+        backgroundImage: `linear-gradient(to right, #FFA471 ${userCategoryItems.length}0%, #F0F0F0 20%)`,
         color: 'black', // Set the text color if needed
         borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
     };
@@ -75,8 +65,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
             page,
             size,
         });
-        console.log(5555555555);
-
         setCategoryItems(prev => [...prev, ...categorySearchData.content]);
         setIsSearching(true);
     }
@@ -102,7 +90,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     ) => {
         const data = await userUpdateCategoryRender(activeCategoriesData);
         if (data !== undefined) {
-            setSelectedCategory(false);
             await userGetCategoryRender();
         }
         onClose();
@@ -117,10 +104,14 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     const searchValueDebounce = useDebounce(categorySearchValue, { delay: 500 });
 
     useEffect(() => {
-        if (onModalOpen && !isSearching) {
+        if (onModalOpen && !isSearching && didMount) {
             getCategoryListRender();
         }
-    }, [page, onModalOpen]);
+    }, [page, onModalOpen, didMount]);
+
+    useEffect(() => {
+        setDidMount(true);
+    }, []);
 
     useEffect(() => {
         if (categorySearchValue.length > 0) {
@@ -131,8 +122,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
             setIsSearching(false);
         }
     }, [categorySearchValue, searchValueDebounce]);
-    console.log(activeCategoriesIdData);
-    console.log(selectedCategory);
 
     return (
         <>
@@ -168,30 +157,21 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                                     key={categoryitem.id}
                                     categoryId={categoryitem.id}
                                     title={categoryitem.name}
-                                    setActiveCategoriesData={setActiveCategoriesIdData}
-                                    activeCategoriesData={activeCategoriesIdData}
                                     onSetObservationTarget={setObservationTarget}
-                                    onSetCategoriesItemClicked={setCategoriesItemClicked}
-                                    onCategoriesItemClicked={categoriesItemClicked}
                                 />
                             </>
                         ))}
                     </ul>
 
-                    {selectedCategory ? (
-                        <SelectedCategoryDisplay />
-                    ) : (
-                        <UserSelectedCategoryDisplay />
-                    )}
-
+                    <SelectedCategoryDisplay />
                     <Button
                         className="w-[65%]"
                         style={buttonStyle}
-                        onClick={() => handleUserCreateCategory(activeCategoriesIdData)}
+                        onClick={() => handleUserCreateCategory(userCategoryItems)}
                         role="Button"
                         aria-label="카테고리 선택 완료"
                     >
-                        <p>선택({userCategoryItems.length + activeCategoriesIdData.length}/10)</p>
+                        <p>선택({userCategoryItems.length}/10)</p>
                     </Button>
                 </Box>
             </Modal>

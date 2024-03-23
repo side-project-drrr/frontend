@@ -32,7 +32,6 @@ export default function CategorySlide({
     onUserTechBlogRender,
     onSetPage,
     onSetFilterTechBlogData,
-    onIsCategoryModalOpen,
 }: CarouselProps) {
     const [current, setCurrent] = useState(0);
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
@@ -49,7 +48,6 @@ export default function CategorySlide({
 
     async function userGetCategoryRender() {
         const userCategoryData = await AuthCategoryService();
-
         setUserCategoryItems(userCategoryData);
     }
 
@@ -113,6 +111,7 @@ export default function CategorySlide({
                                 전체 게시글
                             </p>
                         </div>
+
                         {userCategoryItems?.map((item: any) => (
                             <div
                                 key={item.id}
@@ -137,11 +136,13 @@ export default function CategorySlide({
                 </div>
             </div>
             <RiArrowDropRightLine onClick={nextSlider} size={40} aria-label="오른쪽으로 넘기기" />
-            <UserCategoryModal
-                onClose={onClose}
-                onModalOpen={onModalOpen}
-                userGetCategoryRender={userGetCategoryRender}
-            />
+            {onModalOpen && (
+                <UserCategoryModal
+                    onClose={onClose}
+                    onModalOpen={onModalOpen}
+                    userGetCategoryRender={userGetCategoryRender}
+                />
+            )}
         </>
     );
 }
