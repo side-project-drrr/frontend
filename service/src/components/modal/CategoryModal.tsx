@@ -13,7 +13,7 @@ import { getCategoryItem } from '../../service/CategoryService';
 import { userInformationState } from '../../recoil/atom/userInformationState';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { SignUpService } from '../../service/auth/SocialService';
-import { setAuthStorage } from '../../repository/AuthRepository';
+import { setAccessTokenStorage, setRefreshTokenStorage } from '../../repository/AuthRepository';
 import { getProvider } from '../../repository/ProviderRepository';
 import { getProfileImgStorage } from '../../repository/ProfileimgRepository';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
@@ -96,12 +96,8 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             providerId,
             profileImageUrl,
         });
-        setAuthStorage(
-            ACCESSTOKEN_KEY,
-            tokenData.accessToken,
-            REFRESHTOKEN_KEY,
-            tokenData.refreshToken,
-        );
+        setAccessTokenStorage(ACCESSTOKEN_KEY, tokenData.accessToken);
+        setRefreshTokenStorage(REFRESHTOKEN_KEY, tokenData.refreshToken);
     }
 
     const fetchMoreIssue = useCallback(() => {

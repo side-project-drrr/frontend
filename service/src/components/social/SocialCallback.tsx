@@ -5,7 +5,7 @@ import { useSetRecoilState } from 'recoil';
 import { SocialService, SignInService } from '../../service/auth/SocialService';
 import { modalOpenState } from '../../recoil/atom/modalOpenState';
 import { providerIdState } from '../../recoil/atom/providerIdState';
-import { setAuthStorage } from '../../repository/AuthRepository';
+import { setAccessTokenStorage, setRefreshTokenStorage } from '../../repository/AuthRepository';
 import { setProfileImgStorage } from '../../repository/ProfileimgRepository';
 
 export default function SocialCallback() {
@@ -27,12 +27,8 @@ export default function SocialCallback() {
     ) {
         if (isRegistered) {
             const authData = await SignInService(providerId);
-            setAuthStorage(
-                ACCESSTOKEN_KEY,
-                authData.accessToken,
-                REFRESHTOKEN_KEY,
-                authData.refreshToken,
-            );
+            setAccessTokenStorage(ACCESSTOKEN_KEY, authData.accessToken);
+            setRefreshTokenStorage(REFRESHTOKEN_KEY, authData.refreshToken);
             setProviderIdState(providerId);
             setProfileImgStorage(profileImageUrl);
             navigate('/');
