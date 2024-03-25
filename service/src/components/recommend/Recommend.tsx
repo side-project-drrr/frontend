@@ -9,7 +9,8 @@ import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 import { useRecoilValue } from 'recoil';
 
 export default function Recommend() {
-    const [recommendData, setRecommendData] = useState<IRandomDataProps[]>([]);
+    const [recommendData, setRecommendData] = useState([]);
+    const [randomRecommendData, setRandomRecommendData] = useState<IRandomDataProps[]>([]);
     const loggedIn = useRecoilValue(isLoggedInState);
 
     async function getRecommenedDataRender() {
@@ -21,14 +22,20 @@ export default function Recommend() {
         getRecommenedDataRender();
     }, [loggedIn]);
 
+    useEffect(() => {
+        if (recommendData.length > 0) {
+            const randomIndex = Math.floor(Math.random() * recommendData.length);
+            setRandomRecommendData([recommendData[randomIndex]]);
+        }
+    }, [recommendData]);
     return (
         <div className="flex flex-col justify-around gap-2 pb-8 border-b dark:border-[#444444] border-[#f0f0f0]">
             <div className="flex items-center justify-between w-full mb-4">
                 <h1 className="text-base font-bold">추천 게시글</h1>
                 <p className="text-xs bg-transparent">더 보기</p>
             </div>
-            {recommendData.length > 0 ? (
-                recommendData.map(data => (
+            {randomRecommendData.length > 0 ? (
+                randomRecommendData.map(data => (
                     <div key={data.techBlogPostBasicInfoDto.id}>
                         <div className="relative flex items-center w-full">
                             <div className="w-[100px] h-[100px] flex justify-center items-center rounded-[20px]  bg-slate-300">
