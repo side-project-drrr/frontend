@@ -1,5 +1,7 @@
 // import { deleteSubscribePush, subscribePush } from '../service/PushService';
 
+import { subscribePush, unSubscribePush } from '../service/PushService';
+
 const PUBLIC_KEY = import.meta.env.VITE_APP_VAPID_PUBLIC_KEY;
 
 // type Store = {
@@ -50,58 +52,6 @@ const PUBLIC_KEY = import.meta.env.VITE_APP_VAPID_PUBLIC_KEY;
 //     console.log('postSubscription', { response });
 // }
 
-// async function deleteSubscription() {
-//     const response = await deleteSubscribePush();
-//     console.log('deleteSubscription', { response });
-// }
-
-// 여기서 sw에 VAPID_KEY를 보내서 endpoint 및 기타 사항 받아옴
-// export async function subscribe() {
-//     if (store.pushSubscription) {
-//         return;
-//     }
-
-//     try {
-//         const registration = store.serviceWorkerRegistration;
-
-//         if (!registration) {
-//             return;
-//         }
-
-//         await registration.pushManager
-//             .subscribe({
-//                 applicationServerKey: PUBLIC_KEY,
-//                 userVisibleOnly: true,
-//             })
-//             .then(subscription => {
-//                 console.log(subscription);
-//                 store.pushSubscription = subscription;
-//                 postSubscription(subscription);
-//             });
-//     } catch (error) {
-//         console.error('subscribe', { error });
-//     }
-// }
-
-// export async function unsubscribe() {
-//     const subscription = store.pushSubscription;
-
-//     if (!subscription) {
-//         return;
-//     }
-
-//     try {
-//         const unsubscribed = await subscription.unsubscribe();
-//         store.pushSubscription = null;
-//         console.log('unsubscribe', { unsubscribed });
-//         await deleteSubscription();
-//     } catch (error) {
-//         console.error('unsubscribe', { error });
-//     }
-// }
-
-// // registerServiceWorker();
-
 // 기기에 service worker 등록 (최초 1회만 실행)
 export async function registerServiceWorker() {
     if (!('serviceWorker' in navigator)) return;
@@ -113,7 +63,7 @@ export async function registerServiceWorker() {
         navigator.serviceWorker
             .register('/src/webpush/sw.js')
             .then(registration => {
-                console.log('Service worker registered:', registration);
+                console.log('Service worker 등록 완료 : ', registration);
                 requestNotificationPermission();
             })
             .catch(error => {
@@ -127,7 +77,7 @@ async function requestNotificationPermission() {
     // if (Notification.permission === 'default') {
     Notification.requestPermission().then(permission => {
         if (permission === 'granted') {
-            console.log('Notification permission granted');
+            console.log('알림 허용');
             // 푸시 알림 구독 등 추가 로직 수행
         }
     });
@@ -147,8 +97,11 @@ export async function subscribe() {
                 userVisibleOnly: true,
                 applicationServerKey: PUBLIC_KEY,
             });
+
+            console.log(subscription);
             // api 호출
-            console.log('Subscription successful:', subscription);
+            const res = await subscribePush(subscription);
+            console.log(res);
             return subscription;
         } catch (error) {
             console.error('Error subscribing:', error);
@@ -160,14 +113,18 @@ export async function subscribe() {
 }
 
 // 비구독 버튼 클릭시
-async function unSubscribe() {
+export async function unSubscribe() {
+    //서비스워커 사용이 불가한 브라우저는 비구독 또한 무의미
+    if (!('serviceWorker' in navigator)) return;
+
     try {
         const registration = await navigator.serviceWorker.ready;
         const subscription = await registration.pushManager.getSubscription(); //구독상태 확인
         if (subscription) {
             await subscription.unsubscribe();
-            console.log('Unsubscription successful');
             // api 호출
+            const res = await unSubscribePush();
+            console.log(res);
             return true;
         } else {
             console.log('No subscription found');

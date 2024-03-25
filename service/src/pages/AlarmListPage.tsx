@@ -1,5 +1,5 @@
 import ListboxItem from '@monorepo/component/src/stories/listbox/ListboxItem';
-import { Box, styled } from '@mui/material';
+import { Box, Button, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -7,6 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useParams } from 'react-router-dom';
 import HttpClient from '../apis/HttpClient';
+import { subscribe, unSubscribe } from '../webpush/main';
 
 type itemType = {
     id: number;
@@ -69,8 +70,15 @@ export const AlarmListPage = () => {
         }
     }, [from, to]);
 
+    const testClick = async () => {
+        const res = await HttpClient.post(`/api/v1/members/me/web-push/test`);
+        console.log(res);
+    };
     return (
         <Box>
+            <span onClick={testClick}>테스트 푸시</span>
+            <Button onClick={subscribe}>구독</Button>
+            <Button onClick={unSubscribe}>비구독</Button>
             <Box display="flex" alignItems="center" marginBottom={'30px'}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <StyledDatePicker value={stDate} onChange={(date: any) => setStDate(date)} />
