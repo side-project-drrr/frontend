@@ -1,8 +1,7 @@
 import { useEffect, memo } from 'react';
 import { CategoryItemsProps } from './type';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
-import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 import { selectedCategoryState } from '../../recoil/atom/selectedCategoryState';
 
 function PrivateCategoryItems({
@@ -12,7 +11,6 @@ function PrivateCategoryItems({
     onSetObservationTarget,
 }: CategoryItemsProps) {
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
-    const categoryItems = useRecoilValue(categoryItemsState);
     const setSelectedCategoryState = useSetRecoilState(selectedCategoryState);
 
     const someUserSelectedCategories = () => {
@@ -26,8 +24,8 @@ function PrivateCategoryItems({
         }
     };
 
-    const handleActiveCategoryItem = (e: React.MouseEvent<HTMLElement>) => {
-        const clickedCategoryId = e.currentTarget.id;
+    const handleActiveCategoryItem = (id: string) => {
+        const clickedCategoryId = id;
         setSelectedCategoryState(true);
         const set = new Set(userCategoryItems.map(v => String(v.id)));
 
@@ -39,10 +37,7 @@ function PrivateCategoryItems({
             setUserCategoryItems(filterActiveCategoiesData);
         } else {
             if (userCategoryItems.length < 10) {
-                const someActiveCategoiesData = categoryItems.filter(
-                    item => String(item.id) === clickedCategoryId,
-                );
-                setUserCategoryItems(prev => [...prev, ...someActiveCategoiesData]);
+                setUserCategoryItems(prev => [...prev, ...userCategoryItems]);
             }
         }
     };
@@ -57,11 +52,11 @@ function PrivateCategoryItems({
                 key={categoryId}
                 id={String(categoryId)}
                 className={`p-2 whitespace-nowrap text-center flex justify-center items-center rounded-lg flex-warp overflow-x-hidden ${
-                    userCategoryItems.some(v => v.id === categoryId)
+                    userCategoryItems.some(categoryItem => categoryItem.id === categoryId)
                         ? 'bg-[#2C2C2C] text-white'
                         : 'bg-[#F2F2F2]  text-black '
                 } hover:bg-red-500 cursor-pointer `}
-                onClick={e => handleActiveCategoryItem(e)}
+                onClick={() => handleActiveCategoryItem(String(categoryId))}
                 aria-label="카테고리"
             >
                 {title}

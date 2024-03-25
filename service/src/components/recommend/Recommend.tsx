@@ -9,21 +9,13 @@ import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 import { useRecoilValue } from 'recoil';
 
 export default function Recommend() {
-    const [recommendData, setRecommendData] = useState([]);
+    const [recommendData, setRecommendData] = useState<IRandomDataProps[]>([]);
     const loggedIn = useRecoilValue(isLoggedInState);
-    const [randomRecommendData, setRandomRecommendData] = useState<IRandomDataProps[]>([]);
 
     async function getRecommenedDataRender() {
         const recommendBlogData = await getRecommendTechBlogService();
         setRecommendData(recommendBlogData);
     }
-
-    useEffect(() => {
-        if (recommendData.length > 0) {
-            const randomIndex = Math.floor(Math.random() * recommendData.length);
-            setRandomRecommendData([recommendData[randomIndex]]);
-        }
-    }, [recommendData]);
 
     useEffect(() => {
         getRecommenedDataRender();
@@ -35,8 +27,8 @@ export default function Recommend() {
                 <h1 className="text-base font-bold">추천 게시글</h1>
                 <p className="text-xs bg-transparent">더 보기</p>
             </div>
-            {randomRecommendData.length > 0 ? (
-                randomRecommendData.map(data => (
+            {recommendData.length > 0 ? (
+                recommendData.map(data => (
                     <div key={data.techBlogPostBasicInfoDto.id}>
                         <div className="relative flex items-center w-full">
                             <div className="w-[100px] h-[100px] flex justify-center items-center rounded-[20px]  bg-slate-300">

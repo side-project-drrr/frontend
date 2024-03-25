@@ -16,9 +16,7 @@ import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
 import SignupTitle from '@monorepo/component/src/stories/singupTitle/SignupTitle';
 import { InputTextField } from '../../style/inputText';
-import { IconButton } from '@mui/material';
-import { BsSend } from 'react-icons/bs';
-import useDebounce from '../../hooks/useDebounce';
+
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { categorySearchValueState } from '../../recoil/atom/categorySearchValueState';
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
@@ -49,6 +47,8 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     const [didMount, setDidMount] = useState(false); //전체 카테고리 리스트
     const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
+    const [timer, setTimer] = useState<NodeJS.Timeout>();
+
     const [isSearching, setIsSearching] = useState(false); // 검색value
     const [page, setPage] = useState(0);
     const buttonStyle = {
@@ -56,6 +56,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         color: 'black', // Set the text color if needed
         borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
     };
+    console.log(userCategoryItems);
 
     const size = 20;
 
@@ -79,15 +80,38 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         const stringConvertNumberActiveData = activeCategoriesData.map(data => +data.id);
         return await putUserCategoryItem(stringConvertNumberActiveData);
     }
+    const searchDataDebouce = () => {
+        if (timer) {
+            clearTimeout(timer);
+        }
+        const newTimer = setTimeout(async () => {
+            setPage(0);
+            await getCategorySearchRender();
+        }, 1000);
+        setTimer(newTimer);
+    };
 
     const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
+        if (value.length > 0) {
+            searchDataDebouce();
+        }
+
         setCategorySearchValue(value);
+    };
+    const handleCategorySearchKeyborad = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.keyCode === 8 && categorySearchValue.length > 0) {
+            setPage(0);
+        }
     };
 
     const handleUserCreateCategory = async (
         activeCategoriesData: { id: number; name: string }[],
     ) => {
+        if (activeCategoriesData.length === 0) {
+            alert('선호 카테고리는 무조건 1개 이상 선택해야 합니다.');
+            return;
+        }
         const data = await userUpdateCategoryRender(activeCategoriesData);
         if (data !== undefined) {
             await userGetCategoryRender();
@@ -101,11 +125,15 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 
-    const searchValueDebounce = useDebounce(categorySearchValue, { delay: 500 });
-
     useEffect(() => {
         if (onModalOpen && !isSearching && didMount) {
             getCategoryListRender();
+        }
+    }, [page, onModalOpen, didMount]);
+
+    useEffect(() => {
+        if (onModalOpen && isSearching && didMount) {
+            getCategorySearchRender();
         }
     }, [page, onModalOpen, didMount]);
 
@@ -115,13 +143,11 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
 
     useEffect(() => {
         if (categorySearchValue.length > 0) {
-            getCategorySearchRender();
             setCategoryItems([]);
-            setPage(0);
         } else {
             setIsSearching(false);
         }
-    }, [categorySearchValue, searchValueDebounce]);
+    }, [categorySearchValue]);
 
     return (
         <>
@@ -135,18 +161,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                             onChange={handleCategorySearchItem}
                             aria-label="검색창"
                             sx={{ width: '67%' }}
-                            InputProps={{
-                                endAdornment: (
-                                    <IconButton
-                                        color="primary"
-                                        component="span"
-                                        className="w-10 h-10"
-                                        onClick={getCategorySearchRender}
-                                    >
-                                        <BsSend className="hover:text-[#E6783A]" />
-                                    </IconButton>
-                                ),
-                            }}
+                            onKeyDown={e => handleCategorySearchKeyborad(e)}
                             autoComplete="off"
                         />
                     </div>

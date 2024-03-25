@@ -19,7 +19,6 @@ interface CarouselProps {
     onSetPage: React.Dispatch<SetStateAction<number>>;
     onSetObservationTarget: any;
     onSetFilterTechBlogData: any;
-    onIsCategoryModalOpen: boolean;
 }
 
 export default function CategorySlide({

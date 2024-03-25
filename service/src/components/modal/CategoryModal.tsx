@@ -77,6 +77,10 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     }
 
     async function signupRender() {
+        if (userCategoryItems.length === 0) {
+            alert('선호 카테고리는 무조건 1개 이상 선택해야 합니다.');
+            return;
+        }
         const tokenData = await SignUpService({
             email: profileValue.email,
             categoryIds: userCategoryItems.map(item => +item.id),
