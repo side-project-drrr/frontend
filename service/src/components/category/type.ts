@@ -1,25 +1,16 @@
-import { SetStateAction, Dispatch } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface CategoryItemsProps {
-    id: number;
+    categoryId: number;
     title: string;
-    setActiveCategoriesData: Dispatch<SetStateAction<any[]>>;
+    setActiveCategoriesData: Dispatch<SetStateAction<string[]>>;
     activeCategoriesData: string[];
-    onUserCategoryItems?:
-        | {
-              id: string;
-              name: string;
-          }[]
-        | undefined;
     onSetObservationTarget: any;
-}
-export interface IUserCategoryProps {
-    token: string | null;
 }
 
 export interface ICategoryProps {
     userCategoryData: {
-        id: string;
+        id: number;
         name: string;
     };
 }

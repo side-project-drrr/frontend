@@ -23,16 +23,15 @@ export default function Recommend() {
     }
 
     useEffect(() => {
+        getRecommenedDataRender();
+    }, []);
+
+    useEffect(() => {
         if (recommendData.length > 0) {
             const randomIndex = Math.floor(Math.random() * recommendData.length);
             setRandomRecommendData([recommendData[randomIndex]]);
         }
     }, [recommendData]);
-
-    useEffect(() => {
-        getRecommenedDataRender();
-    }, []);
-
     return (
         <ErrorBoundary fallbackRender={ErrorFallback}>
             <div className="flex flex-col justify-around gap-2 pb-8 border-b dark:border-[#444444] border-[#f0f0f0]">
