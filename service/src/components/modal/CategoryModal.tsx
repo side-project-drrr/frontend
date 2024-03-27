@@ -105,7 +105,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     }, [categoryItems]);
 
     async function handleCategory() {
-        signupRender();
+        await signupRender();
         onClose();
         setIsLogged(true);
         alert('drrr에 오신것을 환영합니다.');

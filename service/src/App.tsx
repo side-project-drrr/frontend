@@ -64,7 +64,6 @@ function App() {
                     <Route path="/signup/category" element={<CategoryPage />} />
                     <Route path="/category/detail/:id" element={<ItemDetailPage />} />
                     <Route path="/search/:search" element={<HeaderSearchPage />} />
-
                     <Route path="/topics" element={<TopicPage />} />
                 </Route>
                 <Route element={<LayoutWithOutAside />}></Route>

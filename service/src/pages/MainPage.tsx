@@ -7,15 +7,14 @@ import { profileModalOpen } from '../recoil/atom/profileModalOpen';
 import { getAuthStorage } from '../repository/AuthRepository';
 import CategorySlide from '../components/carousel/CategorySlide';
 import { userCategoryState } from '../recoil/atom/userCategoryState';
-import { useTokenDecode } from '../hooks/useTokenDecode';
 import { AuthCategoryService } from '../service/CategoryService';
 import { getTechBlogService, getUserTechBlogService } from '../service/TechBlogService';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { isLoggedInState } from '../recoil/atom/isLoggedInState';
 import CategoryModal from '../components/modal/CategoryModal';
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
+import { isLoggedInState } from '../recoil/atom/isLoggedInState';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -36,10 +35,9 @@ export default function MainPage() {
     const TOKEN_KEY = 'accessToken';
     const getToken = getAuthStorage(TOKEN_KEY);
 
-    const tokenDecode = useTokenDecode(getToken);
-
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
+
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
     }
 
@@ -47,14 +45,15 @@ export default function MainPage() {
         const userFilterTechBlogData = await getUserTechBlogService({
             page,
             size,
-
             id,
         });
+
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
     }
 
     async function userGetCategoryRender() {
-        const userCategoryData = await AuthCategoryService(tokenDecode);
+        const userCategoryData = await AuthCategoryService();
+
         setUserCategoryItems(userCategoryData);
     }
     const handleUserCategoryModal = () => {
@@ -68,6 +67,7 @@ export default function MainPage() {
 
         setHandleModalOpen(false);
     };
+
     const handleProfileOpen = () => {
         setProfileOpen(false);
     };
@@ -143,12 +143,6 @@ export default function MainPage() {
                 <div ref={setObservationTarget}></div>
             </div>
             <SignUpModal onSignupNext={handleSignupNext} />
-            {isCategoryModalOpen && (
-                <CategoryModal
-                    onModalOpen={isCategoryModalOpen}
-                    onClose={handleCategoryModalClose}
-                />
-            )}
             {isCategoryModalOpen && (
                 <CategoryModal
                     onModalOpen={isCategoryModalOpen}

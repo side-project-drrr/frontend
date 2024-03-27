@@ -15,6 +15,7 @@ HttpClient.interceptors.request.use(
         const INITIAL_TOKEN = 'accessToken';
         const getToken = getAuthStorage(INITIAL_TOKEN);
         const token = getToken;
+
         if (token !== null) {
             config.headers.Authorization = `Bearer ${token}`;
         }

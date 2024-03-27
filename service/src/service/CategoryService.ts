@@ -26,11 +26,9 @@ export async function putUserCategoryItem(stringConvertNumberActiveData: number[
     }
 }
 
-export async function AuthCategoryService(memberId: string) {
+export async function AuthCategoryService() {
     try {
-        const authCategoryData = await HttpClient.get(
-            `/api/v1/members/me/category-preference?memberId=${memberId}`,
-        );
+        const authCategoryData = await HttpClient.get(`/api/v1/members/me/category-preference`);
 
         return authCategoryData.data;
     } catch (error) {

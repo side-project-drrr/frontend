@@ -14,15 +14,17 @@ const store: Store = {
     pushSubscription: null,
 };
 
-async function registerServiceWorker() {
+export async function registerServiceWorker() {
     if (!('serviceWorker' in navigator)) return;
 
     //이미 등록되어 있는 정보 가져오기
     let registration = await navigator.serviceWorker.getRegistration();
+
     if (!registration) {
         registration = await navigator.serviceWorker.register('/src/webpush/sw.js');
     }
     console.log(registration);
+
     store.serviceWorkerRegistration = registration ?? null;
     store.pushSupport = !!registration?.pushManager;
     store.pushSubscription = await registration?.pushManager?.getSubscription();
