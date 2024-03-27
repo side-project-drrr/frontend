@@ -1,14 +1,17 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { useEffect, useState } from 'react';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
+import { activeCategoryState } from '../../recoil/atom/activeCategoryState';
+import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 
 export default function SelectedCategoryDisplay() {
     const [selectedCategoryId, setSelectedCategoryId] = useState<string>(''); // 선택된 카테고리의 ID
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
-
+    const [activeCategory, setActiveCategory] = useRecoilState(activeCategoryState);
+    const categoryItems = useRecoilValue(categoryItemsState);
     const handleFilteredUserCategoryItems = () => {
-        const filterUserCategoryItem = userCategoryItems.filter(
+        const filterUserCategoryItem = activeCategory.filter(
             item => String(item.id) !== selectedCategoryId,
         );
         setUserCategoryItems([...filterUserCategoryItem]);
@@ -19,16 +22,19 @@ export default function SelectedCategoryDisplay() {
         const selectedCategoryId = id;
 
         setSelectedCategoryId(selectedCategoryId);
-        const set = new Set(userCategoryItems.map(v => String(v.id)));
+        const set = new Set(activeCategory.map(v => String(v.id)));
 
         if (set.has(selectedCategoryId)) {
-            const filterActiveCategoiesData = userCategoryItems.filter(
+            const filterActiveCategoiesData = activeCategory.filter(
                 categoryitem => String(categoryitem.id) !== selectedCategoryId,
             );
             setUserCategoryItems([...filterActiveCategoiesData]);
         } else {
             if (userCategoryItems.length < 10) {
-                setUserCategoryItems(prev => [...prev, ...userCategoryItems]);
+                const someActiveCategoiesData = categoryItems.filter(
+                    item => String(item.id) === selectedCategoryId,
+                );
+                setActiveCategory(prev => [...prev, ...someActiveCategoiesData]);
             }
         }
     };

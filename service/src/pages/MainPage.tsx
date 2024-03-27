@@ -5,16 +5,15 @@ import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
 import { profileModalOpen } from '../recoil/atom/profileModalOpen';
 import CategorySlide from '../components/carousel/CategorySlide';
-
 import { getTechBlogService, getUserTechBlogService } from '../service/TechBlogService';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import CategoryModal from '../components/modal/CategoryModal';
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
-import { isLoggedInState } from '../recoil/atom/isLoggedInState';
-import { categoryItemsState } from '../recoil/atom/categoryItemsState';
 import { categorySearchValueState } from '../recoil/atom/categorySearchValueState';
+import { categoryItemsState } from '../recoil/atom/categoryItemsState';
+import { isLoggedInState } from '../recoil/atom/isLoggedInState';
+import CategoryModal from '../components/modal/CategoryModal';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);

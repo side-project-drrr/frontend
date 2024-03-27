@@ -11,14 +11,12 @@ function CategoryItem({
     const [categoriesItemClicked, setCategoriesItemClicked] = useState<boolean>(false);
     const handleActiveCategoryItem = (e: React.MouseEvent<HTMLElement>) => {
         const clickedCategoryId = e.currentTarget.id;
-        console.log(clickedCategoryId);
 
         const set = new Set(activeCategoriesData);
         if (set.has(clickedCategoryId)) {
             const filterActiveCateogiesData = activeCategoriesData.filter(
                 categoryitem => categoryitem !== String(categoryId),
             );
-            console.log(filterActiveCateogiesData);
 
             setActiveCategoriesData(filterActiveCateogiesData);
             setCategoriesItemClicked(false);

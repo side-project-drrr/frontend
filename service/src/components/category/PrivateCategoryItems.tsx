@@ -7,7 +7,8 @@ import { selectedCategoryState } from '../../recoil/atom/selectedCategoryState';
 function PrivateCategoryItems({
     categoryId,
     title,
-
+    setActiveCategoriesData,
+    activeCategoriesData,
     onSetObservationTarget,
 }: CategoryItemsProps) {
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
@@ -27,14 +28,13 @@ function PrivateCategoryItems({
     const handleActiveCategoryItem = (id: string) => {
         const clickedCategoryId = id;
         setSelectedCategoryState(true);
-        const set = new Set(userCategoryItems.map(v => String(v.id)));
-
+        const set = new Set(activeCategoriesData);
         if (set.has(clickedCategoryId)) {
-            const filterActiveCategoiesData = userCategoryItems.filter(
-                categoryitem => String(categoryitem.id) !== clickedCategoryId,
+            const filterActiveCategoiesData = activeCategoriesData.filter(
+                categoryitem => categoryitem !== clickedCategoryId,
             );
 
-            setUserCategoryItems(filterActiveCategoiesData);
+            setActiveCategoriesData(filterActiveCategoiesData);
         } else {
             if (userCategoryItems.length < 10) {
                 setUserCategoryItems(prev => [...prev, ...userCategoryItems]);

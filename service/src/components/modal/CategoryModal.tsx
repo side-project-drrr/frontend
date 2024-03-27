@@ -120,6 +120,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     useEffect(() => {
         setDidMount(true);
     }, []);
+    console.log(8888);
 
     return (
         <>
@@ -147,6 +148,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                             }}
                         />
                     </div>
+
                     <ul className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2">
                         {categoryItems?.map(categoryitem => (
                             <CategoryItem
