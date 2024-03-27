@@ -1,8 +1,8 @@
-{   
-    "include": ["./src/**/*"],
-    
+{
+    "include": ["./src/**/*", "../webpush"],
+
     "compilerOptions": {
-      "rootDir": "src",
+        "rootDir": "src"
     },
     "extends": "../tsconfig.json"
 }

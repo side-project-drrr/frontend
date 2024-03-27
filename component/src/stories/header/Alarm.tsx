@@ -64,7 +64,6 @@ export const AlarmComponent = () => {
                     pushDate: date,
                 },
             });
-            console.log(res);
             if (res.status === 200) {
                 navigate(`/alarm/list?from=${date}&to=${date}`);
             }
@@ -81,7 +80,7 @@ export const AlarmComponent = () => {
                         memberId: memberId,
                     },
                 });
-                console.log(res);
+
                 if (res.status === 200) {
                     if (res.data.length > 0) {
                         setAlarmList(res.data);

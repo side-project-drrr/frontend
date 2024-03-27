@@ -7,7 +7,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useParams } from 'react-router-dom';
 import HttpClient from '../apis/HttpClient';
-import { subscribe, unSubscribe } from '../webpush/main';
 
 type itemType = {
     id: number;
@@ -19,12 +18,10 @@ type itemType = {
         postLike: number;
         viewCount: number;
     };
-    categoryDto: [
-        {
-            id: number;
-            name: String;
-        },
-    ];
+    categoryDto: {
+        id: number;
+        name: String;
+    }[];
 };
 
 const StyledDatePicker = styled(DatePicker)(({ theme }: { theme: any }) => ({
@@ -34,10 +31,29 @@ const StyledDatePicker = styled(DatePicker)(({ theme }: { theme: any }) => ({
     },
 }));
 
+// 현재 날짜를 가져오는 함수
+function getCurrentDate() {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고, 두 자리로 만듭니다.
+    const day = currentDate.getDate().toString().padStart(2, '0'); // 일자를 두 자리로 만듭니다.
+    return `${year}-${month}-${day}`;
+}
+
+// 7일 전 날짜를 가져오는 함수
+function getSevenDaysAgoDate() {
+    const currentDate = new Date();
+    const sevenDaysAgo = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000); // 현재 시간에서 7일을 빼고 새로운 날짜 객체 생성
+    const year = sevenDaysAgo.getFullYear();
+    const month = (sevenDaysAgo.getMonth() + 1).toString().padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고, 두 자리로 만듭니다.
+    const day = sevenDaysAgo.getDate().toString().padStart(2, '0'); // 일자를 두 자리로 만듭니다.
+    return `${year}-${month}-${day}`;
+}
+
 export const AlarmListPage = () => {
     const { from, to } = useParams();
-    const [stDate, setStDate] = useState<Dayjs | null>(dayjs(new Date()));
-    const [enDate, setEnDate] = useState<Dayjs | null>(dayjs(new Date()));
+    const [stDate, setStDate] = useState<string>(getSevenDaysAgoDate());
+    const [enDate, setEnDate] = useState<string>(getCurrentDate());
     const [list, setList] = useState<itemType[]>([]);
 
     async function getList(from: string, to: string) {
@@ -49,7 +65,6 @@ export const AlarmListPage = () => {
                 },
             });
 
-            console.log(res);
             if (res.status === 200) {
                 setList(res.data);
             }
@@ -60,30 +75,28 @@ export const AlarmListPage = () => {
 
     useEffect(() => {
         if (from && to) {
-            setStDate(dayjs(from));
-            setEnDate(dayjs(to));
+            setStDate(from);
+            setEnDate(from);
 
             getList(from, to);
         } else {
-            console.log(stDate);
-            console.log(enDate);
+            getList(stDate, enDate);
         }
     }, [from, to]);
 
-    const testClick = async () => {
-        const res = await HttpClient.post(`/api/v1/members/me/web-push/test`);
-        console.log(res);
-    };
     return (
         <Box>
-            <span onClick={testClick}>테스트 푸시</span>
-            <Button onClick={subscribe}>구독</Button>
-            <Button onClick={unSubscribe}>비구독</Button>
             <Box display="flex" alignItems="center" marginBottom={'30px'}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <StyledDatePicker value={stDate} onChange={(date: any) => setStDate(date)} />
+                    <StyledDatePicker
+                        value={dayjs(stDate)}
+                        onChange={(date: any) => setStDate(date.toISOString().slice(0, 10))}
+                    />
                     <span className="px-2">~</span>
-                    <StyledDatePicker value={enDate} onChange={(date: any) => setEnDate(date)} />
+                    <StyledDatePicker
+                        value={dayjs(enDate)}
+                        onChange={(date: any) => setEnDate(date.toISOString().slice(0, 10))}
+                    />
                 </LocalizationProvider>
             </Box>
             <Box>{list && list.map(data => <ListboxItem key={data.id} item={data} />)}</Box>

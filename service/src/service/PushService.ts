@@ -5,8 +5,8 @@ const token = import.meta.env.VITE_APP_TOKEN;
 
 export async function subscribePush(subscription: any) {
     const jsonString = subscription.toJSON();
-    const res = axios.post(
-        `${BASE_URL}/api/v1/members/me/web-push/subscription`,
+    const res = await axios.post(
+        `${BASE_URL}api/v1/members/me/web-push/subscription`,
         {
             endpoint: `${jsonString.endpoint}`,
             expirationTime: `${jsonString.expirationTime}`,
@@ -20,17 +20,17 @@ export async function subscribePush(subscription: any) {
             },
         },
     );
-    const data = (await res).data;
+    const data = res.data;
     return data;
 }
 
 export async function unSubscribePush() {
-    const res = axios.delete(`${BASE_URL}/api/v1/members/me/web-push/subscription`, {
+    const res = await axios.delete(`${BASE_URL}api/v1/members/me/web-push/subscription`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
         },
     });
-    const data = (await res).data;
+    const data = res.data;
     return data;
 }
