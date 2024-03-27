@@ -47,7 +47,6 @@ export default function CategorySlide({
 
     async function userGetCategoryRender() {
         const userCategoryData = await AuthCategoryService();
-
         setUserCategoryItems(userCategoryData);
     }
 

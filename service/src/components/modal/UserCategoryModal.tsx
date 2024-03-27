@@ -48,7 +48,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [timer, setTimer] = useState<NodeJS.Timeout>();
-    const [activeCategoriesIdData, setActiveCategoriesIdData] = useState<string[]>([]); // 카테고리 선택
+
     const [isSearching, setIsSearching] = useState(false); // 검색value
     const [page, setPage] = useState(0);
     const buttonStyle = {
@@ -56,6 +56,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         color: 'black', // Set the text color if needed
         borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
     };
+    console.log(userCategoryItems);
 
     const size = 20;
 
@@ -172,8 +173,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                                     categoryId={categoryitem.id}
                                     title={categoryitem.name}
                                     onSetObservationTarget={setObservationTarget}
-                                    setActiveCategoriesData={setActiveCategoriesIdData}
-                                    activeCategoriesData={activeCategoriesIdData}
                                 />
                             </>
                         ))}

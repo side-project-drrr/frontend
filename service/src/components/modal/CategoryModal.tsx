@@ -22,6 +22,7 @@ import { IconButton } from '@mui/material';
 import { BsSend } from 'react-icons/bs';
 import { categorySearchValueState } from '../../recoil/atom/categorySearchValueState';
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
+import { userCategoryState } from '../../recoil/atom/userCategoryState';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -39,8 +40,7 @@ const style = {
 function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [categoryItems, setCategoryItems] = useRecoilState(categoryItemsState); //전체 카테고리 리스트
     const [didMount, setDidMount] = useState(false); //전체 카테고리 리스트
-    const [activeCategoriesData, setActiveCategoriesData] = useState<any[]>([]); // 카테고리 선택
-
+    const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [page, setPage] = useState(0);
     const profileValue = useRecoilValue(userInformationState);
@@ -56,7 +56,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const setIsLogged = useSetRecoilState(isLoggedInState);
 
     const buttonStyle = {
-        backgroundImage: `linear-gradient(to right, #FFA471 ${activeCategoriesData.length}0%, #F0F0F0 20%)`,
+        backgroundImage: `linear-gradient(to right, #FFA471 ${userCategoryItems.length}0%, #F0F0F0 20%)`,
         color: 'black', // Set the text color if needed
         borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
     };
@@ -77,13 +77,13 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     }
 
     async function signupRender() {
-        if (activeCategoriesData.length === 0) {
+        if (userCategoryItems.length === 0) {
             alert('선호 카테고리는 무조건 1개 이상 선택해야 합니다.');
             return;
         }
         const tokenData = await SignUpService({
             email: profileValue.email,
-            categoryIds: activeCategoriesData,
+            categoryIds: userCategoryItems.map(item => +item.id),
             nickName: profileValue.nickname,
             provider: stringConvert,
             providerId,
@@ -120,7 +120,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     useEffect(() => {
         setDidMount(true);
     }, []);
-    console.log(8888);
 
     return (
         <>
@@ -148,7 +147,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                             }}
                         />
                     </div>
-
                     <ul className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2">
                         {categoryItems?.map(categoryitem => (
                             <CategoryItem
@@ -156,8 +154,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                                 categoryId={categoryitem.id}
                                 title={categoryitem.name}
                                 onSetObservationTarget={setObservationTarget}
-                                setActiveCategoriesData={setActiveCategoriesData}
-                                activeCategoriesData={activeCategoriesData}
                             />
                         ))}
                     </ul>
@@ -168,7 +164,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         role="Button"
                         aria-label="카테고리 선택 완료"
                     >
-                        <p>선택({activeCategoriesData.length}/10)</p>
+                        <p>선택({userCategoryItems.length}/10)</p>
                     </Button>
                 </Box>
             </Modal>

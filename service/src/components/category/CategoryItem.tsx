@@ -1,29 +1,22 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { CategoryItemsProps } from './type';
+import { useRecoilState } from 'recoil';
+import { userCategoryState } from '../../recoil/atom/userCategoryState';
 
-function CategoryItem({
-    categoryId,
-    title,
-    onSetObservationTarget,
-    setActiveCategoriesData,
-    activeCategoriesData,
-}: CategoryItemsProps) {
-    const [categoriesItemClicked, setCategoriesItemClicked] = useState<boolean>(false);
+function CategoryItem({ categoryId, title, onSetObservationTarget }: CategoryItemsProps) {
+    const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
+
     const handleActiveCategoryItem = (e: React.MouseEvent<HTMLElement>) => {
         const clickedCategoryId = e.currentTarget.id;
-
-        const set = new Set(activeCategoriesData);
+        const set = new Set(userCategoryItems.map(v => String(v.id)));
         if (set.has(clickedCategoryId)) {
-            const filterActiveCateogiesData = activeCategoriesData.filter(
-                categoryitem => categoryitem !== String(categoryId),
+            const filterActiveCateogiesData = userCategoryItems.filter(
+                categoryitem => String(categoryitem.id) !== clickedCategoryId,
             );
-
-            setActiveCategoriesData(filterActiveCateogiesData);
-            setCategoriesItemClicked(false);
+            setUserCategoryItems(filterActiveCateogiesData);
         } else {
-            if (activeCategoriesData.length < 10) {
-                setActiveCategoriesData(prev => [...prev, clickedCategoryId]);
-                setCategoriesItemClicked(true);
+            if (userCategoryItems.length < 10) {
+                setUserCategoryItems(prev => [...prev, ...userCategoryItems]);
             }
         }
     };
@@ -34,7 +27,9 @@ function CategoryItem({
                 key={categoryId}
                 id={String(categoryId)}
                 className={` h-10 p-5 whitespace-nowrap text-center flex justify-center items-center rounded-lg  flex-1 ${
-                    categoriesItemClicked ? 'bg-[#2C2C2C] text-white' : 'bg-[#F2F2F2]  text-black '
+                    userCategoryItems.some(categoryItem => categoryItem.id === categoryId)
+                        ? 'bg-[#2C2C2C] text-white'
+                        : 'bg-[#F2F2F2]  text-black '
                 } hover:bg-red-500 cursor-pointer `}
                 onClick={handleActiveCategoryItem}
             >

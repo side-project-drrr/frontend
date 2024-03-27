@@ -1,17 +1,14 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { useEffect, useState } from 'react';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
-import { activeCategoryState } from '../../recoil/atom/activeCategoryState';
-import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 
 export default function SelectedCategoryDisplay() {
     const [selectedCategoryId, setSelectedCategoryId] = useState<string>(''); // 선택된 카테고리의 ID
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
-    const [activeCategory, setActiveCategory] = useRecoilState(activeCategoryState);
-    const categoryItems = useRecoilValue(categoryItemsState);
+
     const handleFilteredUserCategoryItems = () => {
-        const filterUserCategoryItem = activeCategory.filter(
+        const filterUserCategoryItem = userCategoryItems.filter(
             item => String(item.id) !== selectedCategoryId,
         );
         setUserCategoryItems([...filterUserCategoryItem]);
@@ -22,19 +19,16 @@ export default function SelectedCategoryDisplay() {
         const selectedCategoryId = id;
 
         setSelectedCategoryId(selectedCategoryId);
-        const set = new Set(activeCategory.map(v => String(v.id)));
+        const set = new Set(userCategoryItems.map(v => String(v.id)));
 
         if (set.has(selectedCategoryId)) {
-            const filterActiveCategoiesData = activeCategory.filter(
+            const filterActiveCategoiesData = userCategoryItems.filter(
                 categoryitem => String(categoryitem.id) !== selectedCategoryId,
             );
             setUserCategoryItems([...filterActiveCategoiesData]);
         } else {
             if (userCategoryItems.length < 10) {
-                const someActiveCategoiesData = categoryItems.filter(
-                    item => String(item.id) === selectedCategoryId,
-                );
-                setActiveCategory(prev => [...prev, ...someActiveCategoiesData]);
+                setUserCategoryItems(prev => [...prev, ...userCategoryItems]);
             }
         }
     };
