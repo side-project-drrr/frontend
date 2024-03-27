@@ -1,5 +1,5 @@
 import ListboxItem from '@monorepo/component/src/stories/listbox/ListboxItem';
-import { Box, Button, styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -7,22 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useParams } from 'react-router-dom';
 import HttpClient from '../apis/HttpClient';
-
-type itemType = {
-    id: number;
-    techBlogPostBasicInfoDto: {
-        id: number;
-        title: String;
-        summary: String;
-        thumbnailUrl: String;
-        postLike: number;
-        viewCount: number;
-    };
-    categoryDto: {
-        id: number;
-        name: String;
-    }[];
-};
+import { ItemProps } from '@monorepo/component/src/stories/listbox/type';
 
 const StyledDatePicker = styled(DatePicker)(({ theme }: { theme: any }) => ({
     '& .MuiInputBase-root': {
@@ -54,7 +39,7 @@ export const AlarmListPage = () => {
     const { from, to } = useParams();
     const [stDate, setStDate] = useState<string>(getSevenDaysAgoDate());
     const [enDate, setEnDate] = useState<string>(getCurrentDate());
-    const [list, setList] = useState<itemType[]>([]);
+    const [list, setList] = useState<ItemProps[]>([]);
 
     async function getList(from: string, to: string) {
         try {
@@ -90,16 +75,16 @@ export const AlarmListPage = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <StyledDatePicker
                         value={dayjs(stDate)}
-                        onChange={(date: any) => setStDate(date.toISOString().slice(0, 10))}
+                        onChange={(date: Dayjs) => setStDate(date.toISOString().slice(0, 10))}
                     />
                     <span className="px-2">~</span>
                     <StyledDatePicker
                         value={dayjs(enDate)}
-                        onChange={(date: any) => setEnDate(date.toISOString().slice(0, 10))}
+                        onChange={(date: Dayjs) => setEnDate(date.toISOString().slice(0, 10))}
                     />
                 </LocalizationProvider>
             </Box>
-            <Box>{list && list.map(data => <ListboxItem key={data.id} item={data} />)}</Box>
+            <Box>{list && list.map((data: any) => <ListboxItem key={data.id} item={data} />)}</Box>
         </Box>
     );
 };

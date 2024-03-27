@@ -1,19 +1,6 @@
 /* eslint-disable no-restricted-globals */
 // <reference lib="webworker" />
 
-// self.addEventListener('push', function (event) {
-//     console.log('push event 생성');
-
-//     const title = 'drrr---';
-//     const options = {
-//         body: 'Yay it works.',
-//         icon: 'images/icon.png',
-//         badge: 'images/badge.png',
-//     };
-
-//     event.waitUntil(self.registration.showNotification(title, options));
-// });
-
 self.addEventListener('push', event => {
     // 보내는 데이터 타입
     const data = event.data.json();
