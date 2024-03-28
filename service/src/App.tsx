@@ -8,9 +8,10 @@ import { createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { useDarkMode } from './ThemeContext/ThemeProvider';
 import LayoutWithAside from './components/layout/LayoutWIthAside';
-import LayoutWithOutAside from './components/layout/LayoutWIthOutAside';
+import LayoutWithOutAside from './components/layout/LayoutWithOutAside';
 import TopicPage from './pages/TopicPage';
 import HeaderSearchPage from './pages/HeaderSearchPage';
+import { RecommendedListPage } from './pages/RecommendedListPage';
 
 function App() {
     const { darkMode } = useDarkMode();
@@ -20,6 +21,7 @@ function App() {
             mode: 'light',
             background: {
                 default: '#ffffff', // 배경색 설정
+                paper: '#f0f0f0',
             },
             text: {
                 primary: '#2c2c2c',
@@ -40,6 +42,7 @@ function App() {
             mode: 'dark',
             background: {
                 default: '#2c2c2c', // 다크 모드의 주요 색상 설정
+                paper: '#444',
             },
             text: {
                 primary: '#ffffff',
@@ -66,8 +69,9 @@ function App() {
                     <Route path="/search/:search" element={<HeaderSearchPage />} />
                     <Route path="/topics" element={<TopicPage />} />
                 </Route>
-                <Route element={<LayoutWithOutAside />}></Route>
-                <Route element={<LayoutWithOutAside />}></Route>
+                <Route element={<LayoutWithOutAside />}>
+                    <Route path="/recommend/list" element={<RecommendedListPage />} />
+                </Route>
                 <Route path="/kakao/auth" element={<SocialCallback />} />
                 <Route path="/github/auth" element={<SocialCallback />} />
             </Routes>
