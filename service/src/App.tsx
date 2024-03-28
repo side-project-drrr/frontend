@@ -69,8 +69,6 @@ function App() {
                     <Route path="/search/:search" element={<HeaderSearchPage />} />
                     <Route path="/topics" element={<TopicPage />} />
                 </Route>
-                <Route element={<LayoutWithOutAside />}></Route>
-                <Route element={<LayoutWithOutAside />}></Route>
                 <Route element={<LayoutWithOutAside />}>
                     <Route path="/recommend/list" element={<RecommendedListPage />} />
                 </Route>

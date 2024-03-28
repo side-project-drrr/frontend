@@ -52,7 +52,7 @@ export const RecommendedListPage = () => {
                     list.map(data => (
                         <Card
                             key={data.postInfo.id}
-                            style={{
+                            sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
                                 justifyContent: 'space-between',
