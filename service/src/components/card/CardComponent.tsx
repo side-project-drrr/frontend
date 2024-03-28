@@ -3,7 +3,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { ICardItemsProps } from './type';
-import kakao from '@monorepo/service/src/assets/kakao.webp';
 
 export default function CardComponent({ item }: ICardItemsProps) {
     return (
@@ -21,8 +20,7 @@ export default function CardComponent({ item }: ICardItemsProps) {
                 <div className="px-6 pt-6">
                     <CardMedia
                         component="img"
-                        //item.techBlogPostBasicInfoDto.thumbnailUrl
-                        image={kakao}
+                        image={item.techBlogPostBasicInfoDto.thumbnailUrl}
                         alt="썸네일"
                         sx={{ height: '175px', width: '100%', borderRadius: '20px' }}
                     />

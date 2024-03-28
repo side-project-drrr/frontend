@@ -82,11 +82,15 @@ export default function MainPage() {
     }, [page]);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
+    console.log(loggedIn);
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
-            <div className="flex flex-col w-full gap-6">
-                <div className="flex w-full pr-4 mt-8">
+            <div className="flex flex-col w-full">
+                <div className="mt-14">
+                    <DisplayModeSwitch />
+                </div>
+                <div className="flex w-full pr-4 mt-6 mb-8">
                     {loggedIn ? (
                         <CategorySlide
                             onClose={handleCategoryModalClose}
@@ -115,7 +119,6 @@ export default function MainPage() {
                         displayMode ? 'flex w-full gap-6 flex-col' : 'flex w-full gap-6 flex-wrap'
                     }`}
                 >
-                    <DisplayModeSwitch />
                     <ConditionalRenderer
                         items={techBlogData}
                         onCategoryId={categoryId}
