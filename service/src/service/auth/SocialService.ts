@@ -76,3 +76,27 @@ export async function SignUpEmailValidation({
         console.error(error);
     }
 }
+
+export async function LogoutService(accessToken: string, refreshToken: string) {
+    try {
+        const res = await HttpClient.post(`/api/v1/auth/signout`, {
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+        });
+        return res.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function reissuanceTokenService(accessToken: string, refreshToken: string) {
+    try {
+        const res = await HttpClient.post(`/api/v1/auth/access-token`, {
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+        });
+        return res.data;
+    } catch (error) {
+        console.error(error);
+    }
+}

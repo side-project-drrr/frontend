@@ -1,21 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
 import { profileModalOpen } from '../recoil/atom/profileModalOpen';
-import { getAuthStorage } from '../repository/AuthRepository';
 import CategorySlide from '../components/carousel/CategorySlide';
-import { userCategoryState } from '../recoil/atom/userCategoryState';
-import { useTokenDecode } from '../hooks/useTokenDecode';
-import { AuthCategoryService } from '../service/CategoryService';
 import { getTechBlogService, getUserTechBlogService } from '../service/TechBlogService';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { isLoggedInState } from '../recoil/atom/isLoggedInState';
-import CategoryModal from '../components/modal/CategoryModal';
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
+import { categorySearchValueState } from '../recoil/atom/categorySearchValueState';
+import { categoryItemsState } from '../recoil/atom/categoryItemsState';
+import { isLoggedInState } from '../recoil/atom/isLoggedInState';
+import CategoryModal from '../components/modal/CategoryModal';
 import { Box } from '@mui/material';
 
 export default function MainPage() {
@@ -26,21 +24,17 @@ export default function MainPage() {
     const displayMode = useRecoilValue(DisplayModeState);
     const [page, setPage] = useState(0);
     const [categoryId, setCategoryId] = useState(0);
-    const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
     const loggedIn = useRecoilValue(isLoggedInState);
+    const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
     const size = 10;
-
+    const setCategoryItems = useSetRecoilState(categoryItemsState);
     const setHandleModalOpen = useSetRecoilState(modalOpenState);
     const setLoginModalOpen = useSetRecoilState(loginModalState);
     const setProfileOpen = useSetRecoilState(profileModalOpen);
 
-    const TOKEN_KEY = 'accessToken';
-    const getToken = getAuthStorage(TOKEN_KEY);
-
-    const tokenDecode = useTokenDecode(getToken);
-
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
+
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
     }
 
@@ -48,16 +42,12 @@ export default function MainPage() {
         const userFilterTechBlogData = await getUserTechBlogService({
             page,
             size,
-
             id,
         });
+
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
     }
 
-    async function userGetCategoryRender() {
-        const userCategoryData = await AuthCategoryService(tokenDecode);
-        setUserCategoryItems(userCategoryData);
-    }
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
     };
@@ -69,12 +59,15 @@ export default function MainPage() {
 
         setHandleModalOpen(false);
     };
+
     const handleProfileOpen = () => {
         setProfileOpen(false);
     };
     const handleCategoryModalClose = () => {
         setCategoryModalOpen(false);
         setUserIsCategoryModalOpen(false);
+        setCategorySearchValue('');
+        setCategoryItems([]);
     };
     const handleLoginModal = () => {
         setLoginModalOpen(true);
@@ -92,25 +85,21 @@ export default function MainPage() {
         userFilterTechBlogRender(categoryId);
     }, [page]);
 
-    useEffect(() => {
-        if (getToken) {
-            userGetCategoryRender();
-        }
-    }, [isCategoryModalOpen]);
-
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
+    console.log(loggedIn);
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
             <div className="flex flex-col w-full gap-6">
-                <div className="flex w-full">
+                <div className="mt-14">
+                    <DisplayModeSwitch />
+                </div>
+                <div className="flex w-full pr-4 mt-8">
                     {loggedIn ? (
                         <CategorySlide
-                            items={userCategoryItems}
                             onClose={handleCategoryModalClose}
                             onModalOpen={userIsCategoryModalOpen}
                             onHandleModalOpen={handleUserCategoryModal}
-                            userGetCategoryRender={userGetCategoryRender}
                             onUserFilterTechBlogRender={userFilterTechBlogRender}
                             onSetCategoryId={setCategoryId}
                             onCategoryId={categoryId}
@@ -134,7 +123,6 @@ export default function MainPage() {
                         displayMode ? 'flex w-full gap-6 flex-col' : 'flex w-full gap-6 flex-wrap'
                     }`}
                 >
-                    <DisplayModeSwitch />
                     <ConditionalRenderer
                         items={techBlogData}
                         onCategoryId={categoryId}
@@ -144,12 +132,6 @@ export default function MainPage() {
                 <div ref={setObservationTarget}></div>
             </div>
             <SignUpModal onSignupNext={handleSignupNext} />
-            {isCategoryModalOpen && (
-                <CategoryModal
-                    onModalOpen={isCategoryModalOpen}
-                    onClose={handleCategoryModalClose}
-                />
-            )}
             {isCategoryModalOpen && (
                 <CategoryModal
                     onModalOpen={isCategoryModalOpen}

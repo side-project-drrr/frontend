@@ -12,6 +12,7 @@ export default function Aside() {
     const [topContent, setTopContent] = useState([]);
 
     const loggedIn = useRecoilValue(isLoggedInState);
+
     async function getTopContentRender() {
         const topContentData = await getTopPostItemService();
 
