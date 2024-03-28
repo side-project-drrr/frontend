@@ -7,13 +7,13 @@ import { profileModalOpen } from '../recoil/atom/profileModalOpen';
 import CategorySlide from '../components/carousel/CategorySlide';
 import { getTechBlogService, getUserTechBlogService } from '../service/TechBlogService';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { isLoggedInState } from '../recoil/atom/isLoggedInState';
-import CategoryModal from '../components/modal/CategoryModal';
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
 import { categorySearchValueState } from '../recoil/atom/categorySearchValueState';
 import { categoryItemsState } from '../recoil/atom/categoryItemsState';
+import { isLoggedInState } from '../recoil/atom/isLoggedInState';
+import CategoryModal from '../components/modal/CategoryModal';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -33,6 +33,7 @@ export default function MainPage() {
 
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
+
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
     }
 
@@ -42,6 +43,7 @@ export default function MainPage() {
             size,
             id,
         });
+
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
     }
 
@@ -56,6 +58,7 @@ export default function MainPage() {
 
         setHandleModalOpen(false);
     };
+
     const handleProfileOpen = () => {
         setProfileOpen(false);
     };

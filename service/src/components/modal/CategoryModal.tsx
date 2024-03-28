@@ -11,7 +11,7 @@ import { categorySearchService, getCategoryItem } from '../../service/CategorySe
 import { userInformationState } from '../../recoil/atom/userInformationState';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { SignUpService } from '../../service/auth/SocialService';
-import { setAuthStorage } from '../../repository/AuthRepository';
+import { setAccessTokenStorage, setRefreshTokenStorage } from '../../repository/AuthRepository';
 import { getProvider } from '../../repository/ProviderRepository';
 import { getProfileImgStorage } from '../../repository/ProfileimgRepository';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
@@ -92,12 +92,8 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             providerId,
             profileImageUrl,
         });
-        setAuthStorage(
-            ACCESSTOKEN_KEY,
-            tokenData.accessToken,
-            REFRESHTOKEN_KEY,
-            tokenData.refreshToken,
-        );
+        setAccessTokenStorage(ACCESSTOKEN_KEY, tokenData.accessToken);
+        setRefreshTokenStorage(REFRESHTOKEN_KEY, tokenData.refreshToken);
     }
 
     const fetchMoreIssue = useCallback(() => {
@@ -105,7 +101,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     }, [categoryItems]);
 
     async function handleCategory() {
-        signupRender();
+        await signupRender();
         onClose();
         setIsLogged(true);
         alert('drrr에 오신것을 환영합니다.');
