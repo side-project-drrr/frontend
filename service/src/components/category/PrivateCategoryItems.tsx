@@ -1,8 +1,9 @@
 import { useEffect, memo } from 'react';
 import { CategoryItemsProps } from './type';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import { selectedCategoryState } from '../../recoil/atom/selectedCategoryState';
+import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 
 function PrivateCategoryItems({
     categoryId,
@@ -12,7 +13,7 @@ function PrivateCategoryItems({
 }: CategoryItemsProps) {
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
     const setSelectedCategoryState = useSetRecoilState(selectedCategoryState);
-
+    const categoryItem = useRecoilValue(categoryItemsState);
     const someUserSelectedCategories = () => {
         if (userCategoryItems.length > 0) {
             const userCategory = userCategoryItems.some(item => item.name === title);
@@ -37,7 +38,11 @@ function PrivateCategoryItems({
             setUserCategoryItems(filterActiveCategoiesData);
         } else {
             if (userCategoryItems.length < 10) {
-                setUserCategoryItems(prev => [...prev, ...userCategoryItems]);
+                const someCategoryData = categoryItem.filter(
+                    category => String(category.id) === clickedCategoryId,
+                );
+
+                setUserCategoryItems(prev => [...prev, ...someCategoryData]);
             }
         }
     };

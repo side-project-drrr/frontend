@@ -56,18 +56,17 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         color: 'black', // Set the text color if needed
         borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
     };
-    console.log(userCategoryItems);
 
     const size = 20;
 
-    async function getCategorySearchRender() {
+    async function getCategorySearchRender(categorySearchValue: string) {
         const categorySearchData = await categorySearchService({
             keyword: categorySearchValue,
             page,
             size,
         });
+
         setCategoryItems(prev => [...prev, ...categorySearchData.content]);
-        setIsSearching(true);
     }
 
     async function getCategoryListRender() {
@@ -80,21 +79,24 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         const stringConvertNumberActiveData = activeCategoriesData.map(data => +data.id);
         return await putUserCategoryItem(stringConvertNumberActiveData);
     }
-    const searchDataDebouce = () => {
+    const searchDataDebouce = (value: string) => {
         if (timer) {
             clearTimeout(timer);
         }
         const newTimer = setTimeout(async () => {
             setPage(0);
-            await getCategorySearchRender();
+            setCategoryItems([]);
+
+            await getCategorySearchRender(value);
         }, 1000);
+
         setTimer(newTimer);
     };
 
     const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         if (value.length > 0) {
-            searchDataDebouce();
+            searchDataDebouce(value);
         }
 
         setCategorySearchValue(value);
@@ -133,7 +135,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
 
     useEffect(() => {
         if (onModalOpen && isSearching && didMount) {
-            getCategorySearchRender();
+            getCategorySearchRender(categorySearchValue);
         }
     }, [page, onModalOpen, didMount]);
 
@@ -144,6 +146,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     useEffect(() => {
         if (categorySearchValue.length > 0) {
             setCategoryItems([]);
+            setIsSearching(true);
         } else {
             setIsSearching(false);
         }
