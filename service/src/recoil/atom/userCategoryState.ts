@@ -1,11 +1,6 @@
 import { atom } from 'recoil';
 
-interface Props {
-    id: number;
-    name: string;
-}
-
-export const userCategoryState = atom<Props[]>({
+export const userCategoryState = atom<any[]>({
     key: 'userCategoryState',
     default: [],
 });

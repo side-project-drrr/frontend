@@ -26,6 +26,7 @@ import { isLoggedInState } from '@monorepo/service/src/recoil/atom/isLoggedInSta
 import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
 import lightLogo from '@monorepo/service/src/assets/lightLogo.webp';
 import { getAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
+import { LogoutService } from '@monorepo/service/src/service/auth/SocialService';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -114,7 +115,9 @@ export default function Header() {
     const navigate = useNavigate();
     const size = 10;
     const TOKEN_KEY = 'accessToken';
+    const REFRESHTOKEN_KEY = 'refreshToken';
     const token = getAuthStorage(TOKEN_KEY);
+    const refresh_Token = getAuthStorage(REFRESHTOKEN_KEY);
 
     const searchItem = getSearchListStorage(KEY);
 
@@ -126,7 +129,11 @@ export default function Header() {
         });
         setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
     }
-
+    async function getLogoutRender() {
+        if (token && refresh_Token) {
+            await LogoutService(token, refresh_Token);
+        }
+    }
     const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
         const value = (e.target as HTMLInputElement).value;
         const key = e.key;
@@ -162,12 +169,12 @@ export default function Header() {
         setProfileOpen(false);
     };
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         removeProfileImgStorage();
         removeAuthStorage('accessToken');
         setProfileOpen(false); // 프로필 메뉴 닫기
         setLoggedIn(false);
-        setLoggedIn(false);
+        await getLogoutRender();
     };
 
     const handleSearchValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

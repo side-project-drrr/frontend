@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
 import { SocialService, SignInService } from '../../service/auth/SocialService';
 import { modalOpenState } from '../../recoil/atom/modalOpenState';
 import { providerIdState } from '../../recoil/atom/providerIdState';
-import { setAuthStorage } from '../../repository/AuthRepository';
+import { setAccessTokenStorage, setRefreshTokenStorage } from '../../repository/AuthRepository';
 import { setProfileImgStorage } from '../../repository/ProfileimgRepository';
+import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 
 export default function SocialCallback() {
     const [didMount, setDidMount] = useState(false);
@@ -19,6 +20,7 @@ export default function SocialCallback() {
     const ACCESSTOKEN_KEY = 'accessToken';
     const REFRESHTOKEN_KEY = 'refreshToken';
     const navigate = useNavigate();
+    const setLoggedIn = useSetRecoilState(isLoggedInState);
 
     async function socialLoginRender(
         isRegistered: string,
@@ -27,17 +29,16 @@ export default function SocialCallback() {
     ) {
         if (isRegistered) {
             const authData = await SignInService(providerId);
-            setAuthStorage(
-                ACCESSTOKEN_KEY,
-                authData.accessToken,
-                REFRESHTOKEN_KEY,
-                authData.refreshToken,
-            );
+
+            setAccessTokenStorage(ACCESSTOKEN_KEY, authData.accessToken);
+            setRefreshTokenStorage(REFRESHTOKEN_KEY, authData.refreshToken);
             setProviderIdState(providerId);
             setProfileImgStorage(profileImageUrl);
+            setLoggedIn(true);
             navigate('/');
         } else {
             navigate('/');
+
             setProviderIdState(providerId);
             setProfileImgStorage(profileImageUrl);
             setModalOpen(true);
