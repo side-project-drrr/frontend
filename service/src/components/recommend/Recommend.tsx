@@ -53,7 +53,7 @@ export default function Recommend() {
                         </Link>
                     </p>
                 </div>
-                {randomRecommendData &&
+                {randomRecommendData.length > 0 ? (
                     randomRecommendData.map(data => (
                         <div key={data.techBlogPostBasicInfoDto.id}>
                             <div className="relative flex items-center w-full">
@@ -88,7 +88,12 @@ export default function Recommend() {
                                 </div>
                             </div>
                         </div>
-                    ))}
+                    ))
+                ) : (
+                    <>
+                        <p>추천 게시글이 없습니다.</p>
+                    </>
+                )}
             </div>
         </ErrorBoundary>
     );

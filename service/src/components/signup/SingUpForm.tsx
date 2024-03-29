@@ -7,7 +7,7 @@ import { SignUpEmail, SignUpEmailValidation } from '../../service/auth/SocialSer
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { ValueProps, ISignFormProps } from './type';
 import SignUpInputForm from './SignUpInputForm';
-import SignupTitle from '@monorepo/component/src/stories/singupTitle/SignupTitle';
+import ModalTitle from '@monorepo/component/src/stories/modalTitle/ModalTitle';
 
 const msg = {
     email: '올바른 이메일 형식이 아닙니다.',
@@ -131,7 +131,7 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
     return (
         <>
             <div className="flex flex-col items-center w-full gap-2 ">
-                <SignupTitle onHangleCloseClick={onHandleClose} />
+                <ModalTitle onHangleCloseClick={onHandleClose} state="signup" />
                 <SignUpInputForm
                     onEmailCertificationButton={handleEmailCertificationButton}
                     onEmailAuthenticationChange={handleEmailAuthenticationChange}
@@ -161,7 +161,6 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                     <Button
                         onClick={emailVaildationRender}
                         aria-label="인증"
-                        // disabled={!buttonDisabled}
                         slotProps={{
                             root: () => ({
                                 className: `bg-[#E6783A] w-9/12 text-white rounded-1xl h-10 text-center`,

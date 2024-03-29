@@ -12,6 +12,7 @@ import LayoutWithOutAside from './components/layout/LayoutWithOutAside';
 import TopicPage from './pages/TopicPage';
 import HeaderSearchPage from './pages/HeaderSearchPage';
 import { RecommendedListPage } from './pages/RecommendedListPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
     const { darkMode } = useDarkMode();
@@ -71,6 +72,7 @@ function App() {
                 </Route>
                 <Route element={<LayoutWithOutAside />}>
                     <Route path="/recommend/list" element={<RecommendedListPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
                 </Route>
                 <Route path="/kakao/auth" element={<SocialCallback />} />
                 <Route path="/github/auth" element={<SocialCallback />} />
