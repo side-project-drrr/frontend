@@ -31,7 +31,6 @@ export default function MainPage() {
     const setHandleModalOpen = useSetRecoilState(modalOpenState);
     const setLoginModalOpen = useSetRecoilState(loginModalState);
     const setProfileOpen = useSetRecoilState(profileModalOpen);
-
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
 
@@ -86,7 +85,6 @@ export default function MainPage() {
     }, [page]);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
-    console.log(loggedIn);
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>

@@ -8,9 +8,11 @@ import { createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { useDarkMode } from './ThemeContext/ThemeProvider';
 import LayoutWithAside from './components/layout/LayoutWIthAside';
-import LayoutWithOutAside from './components/layout/LayoutWIthOutAside';
+import LayoutWithOutAside from './components/layout/LayoutWithOutAside';
 import TopicPage from './pages/TopicPage';
 import HeaderSearchPage from './pages/HeaderSearchPage';
+import { RecommendedListPage } from './pages/RecommendedListPage';
+import { UserProfileProvider } from './context/UserProfile';
 import { AlarmListPage } from './pages/AlarmListPage';
 import { ViewPage } from './pages/ViewPage';
 
@@ -61,22 +63,25 @@ function App() {
     return (
         <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
             <CssBaseline />
-            <Routes>
-                <Route element={<LayoutWithAside />}>
-                    <Route path="/" element={<MainPage />} />
-                    <Route path="/detail/:id" element={<ItemDetailPage />} />
-                    <Route path="/signup/category" element={<CategoryPage />} />
-                    <Route path="/category/detail/:id" element={<ItemDetailPage />} />
-                    <Route path="/search/:search" element={<HeaderSearchPage />} />
-                    <Route path="/topics" element={<TopicPage />} />
-                    <Route path="/alarm/list" element={<AlarmListPage />} />
-                </Route>
-                <Route element={<LayoutWithOutAside />}>
-                    <Route path="/view/:id" element={<ViewPage />} />
-                </Route>
-                <Route path="/github/auth" element={<SocialCallback />} />
-                <Route path="/kakao/auth" element={<SocialCallback />} />
-            </Routes>
+            <UserProfileProvider>
+                <Routes>
+                    <Route element={<LayoutWithAside />}>
+                        <Route path="/" element={<MainPage />} />
+                        <Route path="/detail/:id" element={<ItemDetailPage />} />
+                        <Route path="/signup/category" element={<CategoryPage />} />
+                        <Route path="/category/detail/:id" element={<ItemDetailPage />} />
+                        <Route path="/search/:search" element={<HeaderSearchPage />} />
+                        <Route path="/topics" element={<TopicPage />} />
+                        <Route path="/alarm/list" element={<AlarmListPage />} />
+                    </Route>
+                    <Route element={<LayoutWithOutAside />}>
+                        <Route path="/recommend/list" element={<RecommendedListPage />} />
+                        <Route path="/view/:id" element={<ViewPage />} />
+                    </Route>
+                    <Route path="/kakao/auth" element={<SocialCallback />} />
+                    <Route path="/github/auth" element={<SocialCallback />} />
+                </Routes>
+            </UserProfileProvider>
         </ThemeProvider>
     );
 }
