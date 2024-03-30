@@ -68,14 +68,12 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                     ...prevErrorMsg,
                     email: msg.emailSuccess,
                 }));
-                //setButtonDisabled(true);
                 setEmailCodeVerified(true);
             } else {
                 setErrorMsg(prevErrorMsg => ({
                     ...prevErrorMsg,
                     email: msg.emailFailed,
                 }));
-                //setButtonDisabled(false);
                 setEmailCodeVerified(false);
             }
         }
@@ -156,7 +154,6 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
             return false;
         }
     };
-    console.log(buttonDisabled);
 
     return (
         <>
