@@ -11,6 +11,7 @@ export default function SignUpInputForm({
     onInputChange,
     onCount,
     onSetCount,
+    onNickNameValidationRender,
 }: IEmailProps) {
     const formatTime = (time: number) => {
         const minutes = Math.floor(time / 60);
@@ -31,13 +32,25 @@ export default function SignUpInputForm({
     return (
         <>
             <div className="flex flex-col items-center justify-around w-full gap-2 ">
-                <div className="flex justify-center items-center w-full mt-5">
+                <div className="flex items-center justify-center w-full mt-5">
                     <InputTextField
                         onChange={(e: ChangeEvent<HTMLInputElement>) => onInputChange(e)}
                         aria-label="닉네임"
                         placeholder="닉네임"
                         name="nickname"
                         autoComplete="off"
+                        InputProps={{
+                            endAdornment: (
+                                <IconButton
+                                    color="primary"
+                                    component="span"
+                                    className="w-10 h-10"
+                                    onClick={onNickNameValidationRender}
+                                >
+                                    <BsSend className="hover:text-[#E6783A]" />
+                                </IconButton>
+                            ),
+                        }}
                     />
                 </div>
 
@@ -63,8 +76,8 @@ export default function SignUpInputForm({
                         name="email"
                     />
                 </div>
-                <div className="flex flex-col gap-4 w-full relative ">
-                    <div className=" flex items-center justify-center w-full gap-2 ">
+                <div className="relative flex flex-col w-full gap-4 ">
+                    <div className="flex items-center justify-center w-full gap-2 ">
                         <InputTextField
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                 onEmailAuthenticationChange(e)
