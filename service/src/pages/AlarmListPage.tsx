@@ -5,7 +5,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import HttpClient from '../apis/HttpClient';
 import { ItemProps } from '@monorepo/component/src/stories/listbox/type';
 
@@ -36,7 +36,7 @@ function getSevenDaysAgoDate() {
 }
 
 export const AlarmListPage = () => {
-    const { from, to } = useParams();
+    const { from, to } = useLocation().state;
     const [stDate, setStDate] = useState<string>(getSevenDaysAgoDate());
     const [enDate, setEnDate] = useState<string>(getCurrentDate());
     const [list, setList] = useState<ItemProps[]>([]);
@@ -59,6 +59,7 @@ export const AlarmListPage = () => {
     }
 
     useEffect(() => {
+        console.log(from);
         if (from && to) {
             setStDate(from);
             setEnDate(from);

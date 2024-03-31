@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 type alarmType = {
     openStatus: Boolean;
     readStatus: Boolean;
-    postCount: Number;
+    postCount: number;
     pushDate: String;
 };
 
@@ -39,19 +39,31 @@ export const AlarmComponent = () => {
     const [open, setOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [alarmList, setAlarmList] = useState<alarmType[]>([]);
-    const [mark, setMark] = useState(true);
+    const [mark, setMark] = useState(false);
 
     // 알림 팝업 함수
     async function handleAlarmClick(event: React.MouseEvent<HTMLButtonElement>) {
         setAnchorEl(event.currentTarget);
         setOpen(previousOpen => !previousOpen);
 
-        // 알림 열기 처리 api
-        try {
-            const res = await HttpClient.post(`/api/v1/members/me/web-push/posts/open`);
-            console.log(res);
-        } catch (error) {
-            console.error(error);
+        if (mark) {
+            let dates = [];
+            for (let list of alarmList) {
+                dates.push(list.pushDate);
+            }
+
+            // 알림 열기 처리 api
+            try {
+                const res = await HttpClient.post('/api/v1/members/me/web-push/posts/open', {
+                    pushDates: dates,
+                });
+
+                if (res.status === 200) {
+                    setMark(false);
+                }
+            } catch (error) {
+                console.error(error);
+            }
         }
     }
 
@@ -59,13 +71,13 @@ export const AlarmComponent = () => {
     async function handleAlarmListClick(date: String) {
         //알림 읽음 처리 api
         try {
-            const res = await HttpClient.post(`/api/v1/members/me/web-push/posts/read`, {
-                params: {
-                    pushDate: date,
-                },
-            });
+            const res = await HttpClient.post(
+                `/api/v1/members/me/web-push/posts/read?pushDate=${date}`,
+            );
+
             if (res.status === 200) {
-                navigate(`/alarm/list?from=${date}&to=${date}`);
+                navigate(`/alarm/list`, { state: { from: date, to: date } });
+                setOpen(false);
             }
         } catch (error) {
             console.error(error);
@@ -85,12 +97,10 @@ export const AlarmComponent = () => {
                     if (res.data.length > 0) {
                         setAlarmList(res.data);
 
-                        // 가장 최근 날짜를 오픈한 기록이 있다면
-                        if (res.data[0].openStatus) {
-                            setMark(false);
+                        // 가장 최근 날짜를 오픈한 기록이 없다면
+                        if (!res.data[0].openStatus) {
+                            setMark(true);
                         }
-                    } else {
-                        setMark(false);
                     }
                 }
             } catch (error) {
@@ -110,11 +120,12 @@ export const AlarmComponent = () => {
                 color="secondary"
                 className="mr-[10px]"
                 invisible={!mark}
+                sx={{ cursor: alarmList.length > 0 ? 'pointer' : 'none' }}
             >
                 <NotificationsActiveIcon />
             </Badge>
 
-            {mark && (
+            {alarmList.length > 0 && (
                 <Popper
                     id="alarm-popper"
                     anchorEl={anchorEl}
@@ -133,11 +144,10 @@ export const AlarmComponent = () => {
                     {({ TransitionProps }) => (
                         <Fade {...TransitionProps} timeout={350}>
                             <Box
-                                maxHeight={500}
                                 width={350}
                                 overflow="hidden"
                                 bgcolor="background.paper"
-                                p="15px"
+                                py="15px"
                                 border="1px solid primary.main"
                                 borderRadius="20px"
                                 boxShadow={4}
@@ -146,11 +156,11 @@ export const AlarmComponent = () => {
                                     width="100%"
                                     display="flex"
                                     flexDirection="row-reverse"
-                                    px="15px"
+                                    px="30px"
                                 >
-                                    <Link href={`/alarm/list?from=${sevenDaysAgo}&to=${today}`}>
+                                    <Link href={'/alarm/list'}>
                                         <ButtonBase>
-                                            <Typography variant="body2" py={'10px'}>
+                                            <Typography variant="body2" color="text.primary">
                                                 더보기
                                             </Typography>
                                         </ButtonBase>
@@ -158,23 +168,41 @@ export const AlarmComponent = () => {
                                 </Box>
                                 <MenuList>
                                     {alarmList.map((data, idx) => (
-                                        <>
-                                            <MenuItem
-                                                key={idx}
-                                                onClick={() => handleAlarmListClick(data.pushDate)}
-                                            >
-                                                <Box display="flex" flexDirection="column" py="5px">
-                                                    <Typography variant="body1" mb="2px">
-                                                        ...님이 좋아하실만한 기술 블로그!
-                                                    </Typography>
-                                                    <Typography variant="body2" color="#ABABAB">
-                                                        {data.pushDate}
-                                                        2024.03.10 (금)
-                                                    </Typography>
-                                                </Box>
-                                            </MenuItem>
-                                            <Divider />
-                                        </>
+                                        <MenuItem
+                                            key={idx}
+                                            onClick={() => handleAlarmListClick(data.pushDate)}
+                                            sx={{
+                                                padding: '10px 30px',
+                                                opacity: data.readStatus ? '.4' : '1',
+                                            }}
+                                        >
+                                            <Box display="flex" flexDirection="column" py="10px">
+                                                <Typography variant="body1" mb="2px">
+                                                    ...님이 좋아하실만한 기술 블로그!
+                                                </Typography>
+                                                <Typography variant="body2" color="#ABABAB">
+                                                    {data.pushDate}
+                                                </Typography>
+                                                <Typography
+                                                    color="text.secondary"
+                                                    sx={{
+                                                        position: 'absolute',
+                                                        right: '30px',
+                                                        top: '50%',
+                                                        transform: 'translate(0, -50%)',
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        borderRadius: '50%',
+                                                        backgroundColor: 'secondary.main',
+                                                        textAlign: 'center',
+                                                        lineHeight: '20px',
+                                                        fontSize: '10px',
+                                                    }}
+                                                >
+                                                    {data.postCount}
+                                                </Typography>
+                                            </Box>
+                                        </MenuItem>
                                     ))}
                                 </MenuList>
                             </Box>
