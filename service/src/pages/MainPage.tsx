@@ -3,7 +3,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
-import { profileModalOpen } from '../recoil/atom/profileModalOpen';
+import { profileHeaderMenu } from '../recoil/atom/profileHeaderMenu';
 import CategorySlide from '../components/carousel/CategorySlide';
 import { getTechBlogService, getUserTechBlogService } from '../service/TechBlogService';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
@@ -31,7 +31,7 @@ export default function MainPage() {
     const setCategoryItems = useSetRecoilState(categoryItemsState);
     const setHandleModalOpen = useSetRecoilState(modalOpenState);
     const setLoginModalOpen = useSetRecoilState(loginModalState);
-    const setProfileOpen = useSetRecoilState(profileModalOpen);
+    const setProfileHeaderMenu = useSetRecoilState(profileHeaderMenu);
 
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
@@ -62,7 +62,7 @@ export default function MainPage() {
     };
 
     const handleProfileOpen = () => {
-        setProfileOpen(false);
+        setProfileHeaderMenu(false);
     };
     const handleCategoryModalClose = () => {
         setCategoryModalOpen(false);

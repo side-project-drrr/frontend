@@ -24,6 +24,6 @@ export interface IEmailProps {
     onEmailAuthenticationChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onCount: number;
-
     onSetCount: Dispatch<SetStateAction<number>>;
+    onNickNameValidationRender: () => void;
 }
