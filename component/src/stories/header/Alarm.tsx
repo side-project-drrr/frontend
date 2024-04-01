@@ -24,12 +24,6 @@ type alarmType = {
     pushDate: String;
 };
 
-// 날짜 변수 선언
-const currentDate = new Date();
-const sevenDaysAgoDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-const today = currentDate.toISOString().slice(0, 10);
-const sevenDaysAgo = sevenDaysAgoDate.toISOString().slice(0, 10);
-
 export const AlarmComponent = () => {
     const TOKEN_KEY = 'accessToken';
     const getToken = getAuthStorage(TOKEN_KEY);

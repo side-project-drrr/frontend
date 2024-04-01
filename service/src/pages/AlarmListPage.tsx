@@ -43,12 +43,9 @@ export const AlarmListPage = () => {
 
     async function getList(from: string, to: string) {
         try {
-            const res = await HttpClient.get(`/api/v1/members/me/web-push/posts/date`, {
-                params: {
-                    from: from,
-                    to: to,
-                },
-            });
+            const res = await HttpClient.get(
+                `/api/v1/members/me/web-push/posts/date?from=${from}&to=${to}`,
+            );
 
             if (res.status === 200) {
                 setList(res.data);
@@ -59,7 +56,6 @@ export const AlarmListPage = () => {
     }
 
     useEffect(() => {
-        console.log(from);
         if (from && to) {
             setStDate(from);
             setEnDate(from);
