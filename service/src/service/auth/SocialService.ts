@@ -71,7 +71,7 @@ export async function SignUpEmailValidation({
             verificationCode: `${verificationCode}`,
         });
 
-        return res.data;
+        return res;
     } catch (error) {
         console.error(error);
     }
@@ -95,6 +95,15 @@ export async function reissuanceTokenService(accessToken: string, refreshToken: 
             accessToken: accessToken,
             refreshToken: refreshToken,
         });
+        return res.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function nickNameValidation(nickname: string) {
+    try {
+        const res = await HttpClient.get(`/api/v1/auth/check-nickname?nickname=${nickname}`);
         return res.data;
     } catch (error) {
         console.error(error);
