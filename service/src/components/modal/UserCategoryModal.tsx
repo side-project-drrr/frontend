@@ -17,12 +17,13 @@ import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import SignupTitle from '@monorepo/component/src/stories/singupTitle/SignupTitle';
 import { InputTextField } from '../../style/inputText';
 
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { categorySearchValueState } from '../../recoil/atom/categorySearchValueState';
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 
 import SelectedCategoryDisplay from '../category/SelectedCategoryDisplay';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
+import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -48,9 +49,12 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [timer, setTimer] = useState<NodeJS.Timeout>();
+    const setUserCategoryItems = useSetRecoilState(userCategoryState); //선호 카테고리
 
     const [isSearching, setIsSearching] = useState(false); // 검색value
     const [page, setPage] = useState(0);
+    const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
+
     const buttonStyle = {
         backgroundImage: `linear-gradient(to right, #FFA471 ${userCategoryItems.length}0%, #F0F0F0 20%)`,
         color: 'black', // Set the text color if needed
@@ -111,7 +115,12 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         activeCategoriesData: { id: number; name: string }[],
     ) => {
         if (activeCategoriesData.length === 0) {
-            alert('선호 카테고리는 무조건 1개 이상 선택해야 합니다.');
+            setSnackbarOpen({
+                open: true,
+                vertical: 'top',
+                horizontal: 'center',
+                text: 'under',
+            });
             return;
         }
         const data = await userUpdateCategoryRender(activeCategoriesData);
@@ -142,6 +151,10 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     useEffect(() => {
         setDidMount(true);
     }, []);
+
+    useEffect(() => {
+        setUserCategoryItems(prev => [...prev]);
+    }, [onModalOpen]);
 
     useEffect(() => {
         if (categorySearchValue.length > 0) {

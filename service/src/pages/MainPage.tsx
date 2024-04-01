@@ -14,6 +14,8 @@ import { categorySearchValueState } from '../recoil/atom/categorySearchValueStat
 import { categoryItemsState } from '../recoil/atom/categoryItemsState';
 import { isLoggedInState } from '../recoil/atom/isLoggedInState';
 import CategoryModal from '../components/modal/CategoryModal';
+import UserSnackbar from '../components/snackbar/UserSnackbar';
+import { LoginSuccess } from '../components/modal/LoginSuccess';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -30,6 +32,7 @@ export default function MainPage() {
     const setHandleModalOpen = useSetRecoilState(modalOpenState);
     const setLoginModalOpen = useSetRecoilState(loginModalState);
     const setProfileOpen = useSetRecoilState(profileModalOpen);
+
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
 
@@ -135,6 +138,8 @@ export default function MainPage() {
                     onClose={handleCategoryModalClose}
                 />
             )}
+            <UserSnackbar />;
+            <LoginSuccess />
         </div>
     );
 }
