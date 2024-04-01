@@ -5,7 +5,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import HttpClient from '../apis/HttpClient';
 import { ItemProps } from '@monorepo/component/src/stories/listbox/type';
 
@@ -81,7 +81,12 @@ export const AlarmListPage = () => {
                     />
                 </LocalizationProvider>
             </Box>
-            <Box>{list && list.map((data: any) => <ListboxItem key={data.id} item={data} />)}</Box>
+            <Box>
+                {list &&
+                    list.map((data: any) => (
+                        <ListboxItem key={data.techBlogPostBasicInfoDto.id} item={data} />
+                    ))}
+            </Box>
         </Box>
     );
 };

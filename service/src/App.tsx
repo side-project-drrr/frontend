@@ -76,7 +76,7 @@ function App() {
                     </Route>
                     <Route element={<LayoutWithOutAside />}>
                         <Route path="/recommend/list" element={<RecommendedListPage />} />
-                        <Route path="/view/:id" element={<ViewPage />} />
+                        <Route path="/view/:postId" element={<ViewPage />} />
                     </Route>
                     <Route path="/kakao/auth" element={<SocialCallback />} />
                     <Route path="/github/auth" element={<SocialCallback />} />

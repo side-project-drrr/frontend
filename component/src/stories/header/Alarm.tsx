@@ -24,6 +24,25 @@ type alarmType = {
     pushDate: String;
 };
 
+// 현재 날짜를 가져오는 함수
+function getCurrentDate() {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고, 두 자리로 만듭니다.
+    const day = currentDate.getDate().toString().padStart(2, '0'); // 일자를 두 자리로 만듭니다.
+    return `${year}-${month}-${day}`;
+}
+
+// 7일 전 날짜를 가져오는 함수
+function getSevenDaysAgoDate() {
+    const currentDate = new Date();
+    const sevenDaysAgo = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000); // 현재 시간에서 7일을 빼고 새로운 날짜 객체 생성
+    const year = sevenDaysAgo.getFullYear();
+    const month = (sevenDaysAgo.getMonth() + 1).toString().padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고, 두 자리로 만듭니다.
+    const day = sevenDaysAgo.getDate().toString().padStart(2, '0'); // 일자를 두 자리로 만듭니다.
+    return `${year}-${month}-${day}`;
+}
+
 export const AlarmComponent = () => {
     const TOKEN_KEY = 'accessToken';
     const getToken = getAuthStorage(TOKEN_KEY);
@@ -34,6 +53,10 @@ export const AlarmComponent = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [alarmList, setAlarmList] = useState<alarmType[]>([]);
     const [mark, setMark] = useState(false);
+
+    const readMore = () => {
+        navigate(`/alarm/list`, { state: { from: getSevenDaysAgoDate(), to: getCurrentDate() } });
+    };
 
     // 알림 팝업 함수
     async function handleAlarmClick(event: React.MouseEvent<HTMLButtonElement>) {
@@ -152,13 +175,11 @@ export const AlarmComponent = () => {
                                     flexDirection="row-reverse"
                                     px="30px"
                                 >
-                                    <Link href={'/alarm/list'}>
-                                        <ButtonBase>
-                                            <Typography variant="body2" color="text.primary">
-                                                더보기
-                                            </Typography>
-                                        </ButtonBase>
-                                    </Link>
+                                    <ButtonBase onClick={readMore}>
+                                        <Typography variant="body2" color="text.primary">
+                                            더보기
+                                        </Typography>
+                                    </ButtonBase>
                                 </Box>
                                 <MenuList>
                                     {alarmList.map((data, idx) => (
