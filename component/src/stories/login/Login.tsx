@@ -5,7 +5,7 @@ import Modal from '@mui/material/Modal';
 import { BsPersonCircle } from 'react-icons/bs';
 import { useRecoilState } from 'recoil';
 
-import SingupTitle from '../singupTitle/SignupTitle';
+import ModalTitle from '../modalTitle/ModalTitle';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -14,7 +14,7 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: '22.6%',
     height: '438px',
-    bgcolor: 'background.paper',
+    bgcolor: '#FFFFFF',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
@@ -42,7 +42,7 @@ export const Login = () => {
             >
                 <Box sx={style}>
                     <div className="flex flex-col items-center justify-between gap-8">
-                        <SingupTitle onHangleCloseClick={handleClose} />
+                        <ModalTitle onHangleCloseClick={handleClose} state="signup" />
                         <div className="flex items-center justify-around w-full gap-4 ">
                             <div>
                                 <SocialLogin state="kakao" />

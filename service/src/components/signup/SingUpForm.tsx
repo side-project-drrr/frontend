@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Button } from '@mui/base/Button';
 
@@ -11,7 +11,7 @@ import {
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { ValueProps, ISignFormProps } from './type';
 import SignUpInputForm from './SignUpInputForm';
-import SignupTitle from '@monorepo/component/src/stories/singupTitle/SignupTitle';
+import ModalTitle from '@monorepo/component/src/stories/modalTitle/ModalTitle';
 
 const msg = {
     email: '올바른 이메일 형식이 아닙니다.',
@@ -63,12 +63,14 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                 providerId,
                 verificationCode: emailCodeValue,
             });
-            if (emailStatusData.isVerified) {
-                setErrorMsg(prevErrorMsg => ({
-                    ...prevErrorMsg,
-                    email: msg.emailSuccess,
-                }));
-                setEmailCodeVerified(true);
+            if (emailStatusData !== undefined) {
+                if (emailStatusData.data.isVerified) {
+                    setErrorMsg(prevErrorMsg => ({
+                        ...prevErrorMsg,
+                        email: msg.emailSuccess,
+                    }));
+                    setEmailCodeVerified(true);
+                }
             } else {
                 setErrorMsg(prevErrorMsg => ({
                     ...prevErrorMsg,
@@ -154,11 +156,14 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
             return false;
         }
     };
+    useEffect(() => {
+        setEmailCodeVerified(false);
+    }, [emailCodeValue]);
 
     return (
         <>
             <div className="flex flex-col items-center w-full gap-2 ">
-                <SignupTitle onHangleCloseClick={onHandleClose} />
+                <ModalTitle onHangleCloseClick={onHandleClose} state="signup" />
                 <SignUpInputForm
                     onEmailCertificationButton={handleEmailCertificationButton}
                     onEmailAuthenticationChange={handleEmailAuthenticationChange}
