@@ -14,7 +14,7 @@ import {
 import PrivateCategoryItems from '../category/PrivateCategoryItems';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
-import SignupTitle from '@monorepo/component/src/stories/singupTitle/SignupTitle';
+import ModalTitle from '@monorepo/component/src/stories/modalTitle/ModalTitle';
 import { InputTextField } from '../../style/inputText';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -31,7 +31,7 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: '40%',
     height: '70%',
-    bgcolor: 'white',
+    bgcolor: '#FFFFFF',
     boxShadow: 24,
     p: 4,
     borderRadius: '10px',
@@ -156,7 +156,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         <>
             <Modal onClose={onClose} open={onModalOpen}>
                 <Box sx={style} className="flex flex-col items-center justify-around w-full">
-                    <SignupTitle onHangleCloseClick={onClose} />
+                    <ModalTitle onHangleCloseClick={onClose} state="signup" />
                     <div className="flex items-center justify-center w-full mt-5">
                         <InputTextField
                             placeholder="검색"

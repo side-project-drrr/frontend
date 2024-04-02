@@ -71,7 +71,7 @@ export async function SignUpEmailValidation({
             verificationCode: `${verificationCode}`,
         });
 
-        return res.data;
+        return res;
     } catch (error) {
         console.error(error);
     }

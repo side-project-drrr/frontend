@@ -11,7 +11,7 @@ import {
     removeProfileImgStorage,
 } from '@monorepo/service/src/repository/ProfileimgRepository';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import { profileModalOpen } from '@monorepo/service/src/recoil/atom/profileModalOpen';
+import { profileHeaderMenu } from '@monorepo/service/src/recoil/atom/profileHeaderMenu';
 import HeaderSearchMenu from '../ChatBubble/HeaderSearchMenu';
 import { isSearchFocusedState } from '@monorepo/service/src/recoil/atom/isSearchFocusedState';
 import { useEffect, useState } from 'react';
@@ -59,11 +59,11 @@ interface IHandleProps {
 }
 
 function AuthHeader({ onLogout }: IHandleProps) {
-    const [profileOpen, setProfileOpen] = useRecoilState(profileModalOpen);
+    const [profileHeaderMenuOpen, setProfileHeaderMenuOpen] = useRecoilState(profileHeaderMenu);
     const setIsSearchClicked = useSetRecoilState(isSearchFocusedState);
-
     const KEY = 'imgUrl';
     const img = getProfileImgStorage(KEY);
+    const navigate = useNavigate();
     let imgUrl;
     if (img !== null) {
         imgUrl = img;
@@ -72,7 +72,7 @@ function AuthHeader({ onLogout }: IHandleProps) {
         //e.stopPropagation을 통해  button에서 클릭했을때 profileDiv 영역을 관리 할 수 있게 됬다.
         //위 코드가 없을 경우 header 영역 밖을 클릭할 경우의 코드를 넣으면 profilediv 영역이 나타나지 않는다.
         e.stopPropagation();
-        setProfileOpen(!profileOpen);
+        setProfileHeaderMenuOpen(!profileHeaderMenuOpen);
         setIsSearchClicked(false);
     };
 
@@ -83,12 +83,16 @@ function AuthHeader({ onLogout }: IHandleProps) {
             ) : (
                 <Login />
             )}
-            {profileOpen && (
+            {profileHeaderMenuOpen && (
                 <div
                     className="w-[100px] h-[100px] bg-slate-50 flex justify-center items-center flex-col gap-4 right-0 mt-2 absolute z-10"
                     aria-label="프로필 메뉴"
                 >
-                    <Button className="text-black" style={buttonStyle}>
+                    <Button
+                        className="text-black"
+                        style={buttonStyle}
+                        onClick={() => navigate('profile')}
+                    >
                         Profile
                     </Button>
                     <Button className="text-black " style={buttonStyle} onClick={onLogout}>
@@ -110,7 +114,7 @@ export default function Header() {
 
     const { darkMode, toggleDarkMode } = useDarkMode();
     const page = useRecoilValue(PageState);
-    const setProfileOpen = useSetRecoilState(profileModalOpen);
+    const setProfileOpen = useSetRecoilState(profileHeaderMenu);
     const KEY = 'search';
     const navigate = useNavigate();
     const size = 10;

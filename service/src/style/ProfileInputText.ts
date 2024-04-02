@@ -1,8 +1,8 @@
 import { TextField } from '@mui/material';
 import styled from '@emotion/styled';
 
-export const InputTextField = styled(TextField)({
-    width: '75%',
+export const ProfileInputText = styled(TextField)({
+    width: '80%',
     height: '43px',
 
     ' .MuiOutlinedInput-root': {
