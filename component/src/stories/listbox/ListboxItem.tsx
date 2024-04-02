@@ -9,15 +9,20 @@ export default function ListboxItem({ item }: ItemProps) {
                 href={`/view/${item.techBlogPostBasicInfoDto.id}`}
                 color="text.primary"
                 underline="none"
+                sx={{
+                    '&:hover': {
+                        color: 'text.primary',
+                    },
+                }}
             >
                 <Box
                     key={item.techBlogPostBasicInfoDto.id}
                     borderBottom={1}
                     borderColor="primary.main"
-                    padding="25px 20px"
+                    padding="30px 20px"
                     className="relative flex flex-col justify-around"
                 >
-                    <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap text-ellipsis mb-[10px]">
+                    <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap text-ellipsis mb-[20px]">
                         {item.techBlogPostBasicInfoDto.title}
                     </h1>
                     <div className="flex items-center justify-between w-full">
@@ -26,7 +31,7 @@ export default function ListboxItem({ item }: ItemProps) {
                         </p>
 
                         {item.techBlogPostBasicInfoDto.thumbnailUrl ? (
-                            <Box sx={{ width: '200px' }}>
+                            <Box sx={{ minWidth: '140px', height: '140px' }}>
                                 <img
                                     src={item.techBlogPostBasicInfoDto.thumbnailUrl}
                                     alt="썸네일"
@@ -39,7 +44,7 @@ export default function ListboxItem({ item }: ItemProps) {
                                     display: 'flex',
                                     alignItem: 'center',
                                     justifyContent: 'center',
-                                    width: '140px',
+                                    minWidth: '140px',
                                     height: '140px',
                                     backgroundColor: 'rgb(158, 158, 158)',
                                     borderRadius: '20px',

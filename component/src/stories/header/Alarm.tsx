@@ -2,20 +2,18 @@ import {
     Badge,
     Box,
     MenuItem,
-    Divider,
     Typography,
     ButtonBase,
     Popper,
     Fade,
     MenuList,
-    Link,
 } from '@mui/material';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import React, { useEffect, useState } from 'react';
-import HttpClient from '@monorepo/service/src/apis/HttpClient';
 import { getAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
 import { useTokenDecode } from '@monorepo/service/src/hooks/useTokenDecode';
 import { useNavigate } from 'react-router-dom';
+import { alarmOpenApi, alarmReadApi, getPushDataApi } from '../api/alarm';
 
 type alarmType = {
     openStatus: Boolean;
@@ -69,17 +67,10 @@ export const AlarmComponent = () => {
                 dates.push(list.pushDate);
             }
 
-            // 알림 열기 처리 api
-            try {
-                const res = await HttpClient.post('/api/v1/members/me/web-push/posts/open', {
-                    pushDates: dates,
-                });
+            const res = await alarmReadApi(dates);
 
-                if (res.status === 200) {
-                    setMark(false);
-                }
-            } catch (error) {
-                console.error(error);
+            if (res.status === 200) {
+                setMark(false);
             }
         }
     }
@@ -87,41 +78,27 @@ export const AlarmComponent = () => {
     // 알림 리스트 클릭 시
     async function handleAlarmListClick(date: String) {
         //알림 읽음 처리 api
-        try {
-            const res = await HttpClient.post(
-                `/api/v1/members/me/web-push/posts/read?pushDate=${date}`,
-            );
+        const res = await alarmOpenApi(date);
 
-            if (res.status === 200) {
-                navigate(`/alarm/list`, { state: { from: date, to: date } });
-                setOpen(false);
-            }
-        } catch (error) {
-            console.error(error);
+        if (res.status === 200) {
+            navigate(`/alarm/list`, { state: { from: date, to: date } });
+            setOpen(false);
         }
     }
 
     useEffect(() => {
         async function getAlarmList() {
-            try {
-                const res = await HttpClient.get(`/api/v1/members/me/web-push/posts/count/7`, {
-                    params: {
-                        memberId: memberId,
-                    },
-                });
+            const res = await getPushDataApi(memberId);
 
-                if (res.status === 200) {
-                    if (res.data.length > 0) {
-                        setAlarmList(res.data);
+            if (res.status === 200) {
+                if (res.data.length > 0) {
+                    setAlarmList(res.data);
 
-                        // 가장 최근 날짜를 오픈한 기록이 없다면
-                        if (!res.data[0].openStatus) {
-                            setMark(true);
-                        }
+                    // 가장 최근 날짜를 오픈한 기록이 없다면
+                    if (!res.data[0].openStatus) {
+                        setMark(true);
                     }
                 }
-            } catch (error) {
-                console.error(error);
             }
         }
 
