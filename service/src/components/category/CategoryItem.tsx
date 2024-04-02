@@ -1,13 +1,14 @@
 import { memo } from 'react';
 import { CategoryItemsProps } from './type';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
+import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
 
 function CategoryItem({ categoryId, title, onSetObservationTarget }: CategoryItemsProps) {
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
-    //const [categoriesItemClicked, setCategoriesItemClicked] = useState<boolean>(false);
     const categoryItem = useRecoilValue(categoryItemsState);
+    const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
 
     const handleActiveCategoryItem = (e: React.MouseEvent<HTMLElement>) => {
         const clickedCategoryId = e.currentTarget.id;
@@ -19,14 +20,20 @@ function CategoryItem({ categoryId, title, onSetObservationTarget }: CategoryIte
             );
 
             setUserCategoryItems(filterActiveCateogiesData);
-            //setCategoriesItemClicked(false);
         } else {
             if (userCategoryItems.length < 10) {
                 const someCategoryItem = categoryItem.filter(
                     item => String(item.id) === clickedCategoryId,
                 );
                 setUserCategoryItems(prev => [...prev, ...someCategoryItem]);
-                //setCategoriesItemClicked(true);
+            } else {
+                setSnackbarOpen({
+                    open: true,
+                    vertical: 'top',
+                    horizontal: 'center',
+                    text: 'under',
+                });
+                return;
             }
         }
     };
