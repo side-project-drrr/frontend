@@ -2,7 +2,6 @@ import { subscribePush, unSubscribePush } from '../service/PushService';
 
 const PUBLIC_KEY = import.meta.env.VITE_APP_VAPID_PUBLIC_KEY;
 
-let isSubscribed = false;
 let swRegistration: ServiceWorkerRegistration | null = null;
 
 function urlB64ToUint8Array(base64String: string) {
@@ -32,7 +31,7 @@ export function subscribeUser() {
                 const res = await subscribePush(subscription);
 
                 if (res.status === 200) {
-                    isSubscribed = true;
+                    console.log('구독');
                 }
             })
             .catch(function (err) {
@@ -46,25 +45,9 @@ export async function unSubscribeUser() {
     const res = await unSubscribePush();
 
     if (res.status === 200) {
-        isSubscribed = false;
+        console.log('구독취소');
     }
 }
-
-// 기본값 세팅하는 부분 필요한 경우 사용
-// export function initializeUI() {
-//     // Set the initial subscription value
-//     if (swRegistration) {
-//         swRegistration.pushManager.getSubscription().then(function (subscription) {
-//             isSubscribed = !(subscription === null);
-
-//             if (isSubscribed) {
-//                 console.log('User IS subscribed.');
-//             } else {
-//                 console.log('User is NOT subscribed.');
-//             }
-//         });
-//     }
-// }
 
 // 웹 사이트 접근 시 실행
 export function registerServiceWorker() {

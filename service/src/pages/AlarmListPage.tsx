@@ -6,8 +6,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useLocation } from 'react-router-dom';
-import HttpClient from '../apis/HttpClient';
 import { ItemProps } from '@monorepo/component/src/stories/listbox/type';
+import { getListApi } from '@monorepo/component/src/stories/api/alarm';
 
 const StyledDatePicker = styled(DatePicker)(({ theme }: { theme: any }) => ({
     '& .MuiInputBase-root': {
@@ -41,28 +41,23 @@ export const AlarmListPage = () => {
     const [enDate, setEnDate] = useState<string>(getCurrentDate());
     const [list, setList] = useState<ItemProps[]>([]);
 
-    async function getList(from: string, to: string) {
-        try {
-            const res = await HttpClient.get(
-                `/api/v1/members/me/web-push/posts/date?from=${from}&to=${to}`,
-            );
+    // 리스트 호출
+    async function getList() {
+        const res = await getListApi(stDate, enDate);
 
-            if (res.status === 200) {
-                setList(res.data);
-            }
-        } catch (error) {
-            console.error(error);
+        if (res.status === 200) {
+            setList(res.data);
         }
     }
+
+    useEffect(() => {
+        getList();
+    }, [stDate, enDate]);
 
     useEffect(() => {
         if (from && to) {
             setStDate(from);
             setEnDate(from);
-
-            getList(from, to);
-        } else {
-            getList(stDate, enDate);
         }
     }, [from, to]);
 
@@ -77,7 +72,7 @@ export const AlarmListPage = () => {
                     <span className="px-2">~</span>
                     <StyledDatePicker
                         value={dayjs(enDate)}
-                        onChange={(date: Dayjs) => setEnDate(date.toISOString().slice(0, 10))}
+                        onChange={(date: any) => setEnDate(date.toISOString().slice(0, 10))}
                     />
                 </LocalizationProvider>
             </Box>
