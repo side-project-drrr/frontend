@@ -14,6 +14,8 @@ import { categorySearchValueState } from '../recoil/atom/categorySearchValueStat
 import { categoryItemsState } from '../recoil/atom/categoryItemsState';
 import { isLoggedInState } from '../recoil/atom/isLoggedInState';
 import CategoryModal from '../components/modal/CategoryModal';
+import UserSnackbar from '../components/snackbar/UserSnackbar';
+import { LoginSuccess } from '../components/modal/LoginSuccess';
 import { Box } from '@mui/material';
 
 export default function MainPage() {
@@ -137,6 +139,8 @@ export default function MainPage() {
                     onClose={handleCategoryModalClose}
                 />
             )}
+            <UserSnackbar />;
+            <LoginSuccess />
         </div>
     );
 }
