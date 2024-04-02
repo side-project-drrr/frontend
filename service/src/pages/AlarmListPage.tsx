@@ -57,7 +57,7 @@ export const AlarmListPage = () => {
     useEffect(() => {
         if (from && to) {
             setStDate(from);
-            setEnDate(from);
+            setEnDate(to);
         }
     }, [from, to]);
 
