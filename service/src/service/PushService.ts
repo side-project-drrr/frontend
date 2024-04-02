@@ -2,7 +2,6 @@ import axios from 'axios';
 import HttpClient from '../apis/HttpClient';
 
 const BASE_URL = import.meta.env.VITE_APP_BACK_END_LOCAL;
-const token = import.meta.env.VITE_APP_TOKEN;
 
 export async function subscribePush(subscription: any) {
     const jsonString = subscription.toJSON();
@@ -17,12 +16,7 @@ export async function subscribePush(subscription: any) {
 }
 
 export async function deleteSubscribePush() {
-    const res = axios.delete(`${BASE_URL}/api/v1/subscription`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    const res = axios.delete(`${BASE_URL}/api/v1/subscription`);
     const data = (await res).data;
     return data;
 }

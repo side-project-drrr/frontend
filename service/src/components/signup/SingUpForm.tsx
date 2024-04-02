@@ -12,16 +12,7 @@ import { providerIdState } from '../../recoil/atom/providerIdState';
 import { ValueProps, ISignFormProps } from './type';
 import SignUpInputForm from './SignUpInputForm';
 import ModalTitle from '@monorepo/component/src/stories/modalTitle/ModalTitle';
-
-const msg = {
-    email: '올바른 이메일 형식이 아닙니다.',
-    nickName: '닉네임을 입력해주세요',
-    emailSuccess: '이메일 인증이 완료되었습니다.',
-    emailFailed: '이메일 인증이 실패하였습니다.',
-    emailDuplicate: '중복된 이메일이 있습니다.',
-    nickNameDuplicate: '중복된 닉네임이 있습니다.',
-    nickNameSuccess: '사용 가능한 닉네임입니다.',
-};
+import { msg } from '../../constants/message';
 
 export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormProps) {
     const [profileValue, setProfileValue] = useRecoilState(userInformationState);
@@ -63,6 +54,7 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                 providerId,
                 verificationCode: emailCodeValue,
             });
+            console.log(emailStatusData);
             if (emailStatusData !== undefined) {
                 if (emailStatusData.data.isVerified) {
                     setErrorMsg(prevErrorMsg => ({
@@ -70,13 +62,13 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                         email: msg.emailSuccess,
                     }));
                     setEmailCodeVerified(true);
+                } else {
+                    setErrorMsg(prevErrorMsg => ({
+                        ...prevErrorMsg,
+                        email: msg.emailFailed,
+                    }));
+                    setEmailCodeVerified(false);
                 }
-            } else {
-                setErrorMsg(prevErrorMsg => ({
-                    ...prevErrorMsg,
-                    email: msg.emailFailed,
-                }));
-                setEmailCodeVerified(false);
             }
         }
     }

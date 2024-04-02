@@ -23,6 +23,7 @@ import { categorySearchValueState } from '../../recoil/atom/categorySearchValueS
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import SelectedCategoryDisplay from '../category/SelectedCategoryDisplay';
+import { useProfileState } from '../../context/UserProfile';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -53,7 +54,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const profileImageUrl = getProfileImgStorage(KEY);
     const [timer, setTimer] = useState<NodeJS.Timeout>();
     const [isSearching, setIsSearching] = useState(false); // 검색value
-
+    const { login } = useProfileState();
     const size = 20;
     const setIsLogged = useSetRecoilState(isLoggedInState);
 
@@ -92,6 +93,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             providerId,
             profileImageUrl,
         });
+        login(tokenData.accessToken);
         setAccessTokenStorage(ACCESSTOKEN_KEY, tokenData.accessToken);
         setRefreshTokenStorage(REFRESHTOKEN_KEY, tokenData.refreshToken);
     }

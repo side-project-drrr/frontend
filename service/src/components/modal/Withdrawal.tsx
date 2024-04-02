@@ -2,10 +2,15 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { useRecoilState } from 'recoil';
 
-import { ProfileInputText } from '../../style/ProfileInputText';
+import { ProfileUserInputText } from '../../style/ProfileInputText';
 import ModalTitle from '@monorepo/component/src/stories/modalTitle/ModalTitle';
 import { userSecession } from '../../recoil/atom/userSecession';
 import Button from '@mui/material/Button';
+import { useProfileState } from '../../context/UserProfile';
+import { useState } from 'react';
+import { deleteUserService } from '../../service/ProfileService';
+import { removeAuthStorage } from '../../repository/AuthRepository';
+import { useNavigate } from 'react-router-dom';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -41,6 +46,33 @@ const buttonStyle = {
 
 export const Withdrawal = () => {
     const [open, setOpen] = useRecoilState(userSecession);
+    const [buttonState, setButtonState] = useState(false);
+    const { userData } = useProfileState();
+
+    const navigate = useNavigate();
+    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const value = e.target.value;
+        if (userData && 'nickname' in userData) {
+            if (value === userData.nickname) {
+                setButtonState(true);
+            } else {
+                setButtonState(false);
+            }
+        } else {
+            setButtonState(false);
+        }
+    };
+    async function handleDeleteUserRender() {
+        const data = await deleteUserService();
+        if (data !== undefined) {
+            if (data.status === 200) {
+                removeAuthStorage('accessToken');
+                removeAuthStorage('refreshToken');
+                removeAuthStorage('imgUrl');
+                navigate('/');
+            }
+        }
+    }
     const handleClose = () => {
         setOpen(false);
     };
@@ -56,8 +88,18 @@ export const Withdrawal = () => {
                 <Box sx={style}>
                     <div className="flex flex-col items-center justify-between gap-8">
                         <ModalTitle onHangleCloseClick={handleClose} state="profile" />
-                        <ProfileInputText placeholder="닉네임" autoComplete="off" />
-                        <Button sx={buttonStyle}>회원 탈퇴</Button>
+                        <ProfileUserInputText
+                            placeholder="닉네임"
+                            autoComplete="off"
+                            onChange={e => handleInputChange(e)}
+                        />
+                        <Button
+                            sx={buttonStyle}
+                            disabled={!buttonState}
+                            onClick={handleDeleteUserRender}
+                        >
+                            회원 탈퇴
+                        </Button>
                     </div>
                 </Box>
             </Modal>

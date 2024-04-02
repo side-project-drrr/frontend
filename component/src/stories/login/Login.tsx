@@ -4,7 +4,6 @@ import { loginModalState } from '@monorepo/service/src/recoil/atom/loginModalSta
 import Modal from '@mui/material/Modal';
 import { BsPersonCircle } from 'react-icons/bs';
 import { useRecoilState } from 'recoil';
-
 import ModalTitle from '../modalTitle/ModalTitle';
 
 const style = {
