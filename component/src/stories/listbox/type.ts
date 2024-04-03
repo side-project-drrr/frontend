@@ -26,15 +26,4 @@ export interface ItemProps {
         };
         categoryDto: { id: string; name: string }[];
     };
-    item: {
-        techBlogPostBasicInfoDto: {
-            id: string;
-            title: string;
-            summary: string;
-            thumbnailUrl: string;
-            postLike: number;
-            viewCount: number;
-        };
-        categoryDto: { id: string; name: string }[];
-    };
 }

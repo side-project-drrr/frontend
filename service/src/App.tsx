@@ -13,6 +13,8 @@ import HeaderSearchPage from './pages/HeaderSearchPage';
 import { RecommendedListPage } from './pages/RecommendedListPage';
 import { UserProfileProvider } from './context/UserProfile';
 import ProfilePage from './pages/ProfilePage';
+import { AlarmListPage } from './pages/AlarmListPage';
+import { ViewPage } from './pages/ViewPage';
 
 function App() {
     const { darkMode } = useDarkMode();
@@ -29,7 +31,7 @@ function App() {
                 secondary: '#ffffff',
             },
             primary: {
-                main: '#f2f2f2',
+                main: '#f0f0f0',
             },
             secondary: {
                 main: '#D16E37', // 포인트 색상 (액센트 색상)
@@ -69,9 +71,11 @@ function App() {
                         <Route path="/category/detail/:id" element={<ItemDetailPage />} />
                         <Route path="/search/:search" element={<HeaderSearchPage />} />
                         <Route path="/topics" element={<TopicPage />} />
+                        <Route path="/alarm/list" element={<AlarmListPage />} />
                     </Route>
                     <Route element={<LayoutWithOutAside />}>
                         <Route path="/recommend/list" element={<RecommendedListPage />} />
+                        <Route path="/view/:postId" element={<ViewPage />} />
                         <Route path="/profile" element={<ProfilePage />} />
                     </Route>
                     <Route path="/kakao/auth" element={<SocialCallback />} />

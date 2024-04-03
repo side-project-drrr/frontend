@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TopKeywordProps } from './type';
 import { getTopkeyword } from '../../service/TopKeyword';
+import { Box } from '@mui/material';
 
 export default function TopKeywords() {
     const [topkeywordsData, setTopkeywordsData] = useState<TopKeywordProps[]>([]);
@@ -21,11 +22,19 @@ export default function TopKeywords() {
     }, [didMount]);
 
     return (
-        <div className="flex flex-col mt-5 w-full border-b border-[#F0F0F0] dark:border-[#444444] ">
-            <h1 aria-label="가장 많이 검색된 기술" className="text-base">
+        <Box
+            borderBottom={1}
+            borderColor={'primary.main'}
+            flex="flex"
+            flexDirection="column"
+            width={'100%'}
+            paddingBottom={'20px'}
+            marginBottom={'20px'}
+        >
+            <h1 aria-label="가장 많이 검색된 기술" className="text-lg font-bold">
                 가장 많이 검색된 기술
             </h1>
-            <div className="flex items-center w-full pb-10 pt-2">
+            <div className="flex items-center w-full">
                 <ul className="flex mt-3 gap-2 flex-wrap max-h-[130px] overflow-y-hidden">
                     {topkeywordsData?.map(topkeyword => (
                         <li
@@ -38,6 +47,6 @@ export default function TopKeywords() {
                     ))}
                 </ul>
             </div>
-        </div>
+        </Box>
     );
 }

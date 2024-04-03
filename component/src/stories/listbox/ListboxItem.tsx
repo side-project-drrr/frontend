@@ -1,45 +1,82 @@
+import { Box, Chip, Link } from '@mui/material';
 import { ItemProps } from './type';
+import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
 
 export default function ListboxItem({ item }: ItemProps) {
     return (
         <>
-            <div
-                key={item.techBlogPostBasicInfoDto.id}
-                className="relative flex flex-col justify-around gap-3 border-b dark:border-[#444444] border-[#f0f0f0]"
+            <Link
+                href={`/view/${item.techBlogPostBasicInfoDto.id}`}
+                color="text.primary"
+                underline="none"
+                sx={{
+                    '&:hover': {
+                        color: 'text.primary',
+                    },
+                }}
             >
-                <h1 className="w-full ml-2 overflow-hidden text-xl font-bold bold whitespace-nowrap text-ellipsis">
-                    {item.techBlogPostBasicInfoDto.title}
-                </h1>
-                <div className="flex items-center justify-between p-2 w-full gap-10">
-                    <p className="text-base block overflow-hidden text-ellipsis h-[140px] max-h-[140px] w-full ">
-                        {item.techBlogPostBasicInfoDto.summary}
-                    </p>
-                    <img
-                        src={item.techBlogPostBasicInfoDto.thumbnailUrl}
-                        alt="썸네일"
-                        className="flex justify-center w-40 rounded-2xl right-10 h-36"
-                    />
-                </div>
-                <ul className="flex gap-2 w-full p-2 flex-wrap overflow-y-hidden h-[40px]">
-                    {item.categoryDto?.map((item: { id: string; name: string }) => (
-                        <li
-                            key={item.id}
-                            id={item.id}
-                            className="text-sm dark:bg-[#444444] rounded-xl px-4 py-1 bg-[#F0F0F0]"
-                        >
-                            #{item.name}
-                        </li>
-                    ))}
-                </ul>
-                <div className="flex justify-between w-3/12 p-2 mb-4">
-                    <span className="flex items-center justify-around text-xs text-center">
-                        좋아요: {item.techBlogPostBasicInfoDto.postLike}
-                    </span>
-                    <span className="text-xs">
-                        조회수: {item.techBlogPostBasicInfoDto.viewCount}
-                    </span>
-                </div>
-            </div>
+                <Box
+                    key={item.techBlogPostBasicInfoDto.id}
+                    borderBottom={1}
+                    borderColor="primary.main"
+                    padding="30px 20px"
+                    className="relative flex flex-col justify-around"
+                >
+                    <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap text-ellipsis mb-[20px]">
+                        {item.techBlogPostBasicInfoDto.title}
+                    </h1>
+                    <div className="flex items-center justify-between w-full">
+                        <p className="text-base overflow-hidden text-ellipsis h-[140px] max-h-[140px] mr-[20px]">
+                            {item.techBlogPostBasicInfoDto.summary}
+                        </p>
+
+                        {item.techBlogPostBasicInfoDto.thumbnailUrl ? (
+                            <Box sx={{ minWidth: '140px', height: '140px' }}>
+                                <img
+                                    src={item.techBlogPostBasicInfoDto.thumbnailUrl}
+                                    alt="썸네일"
+                                    className="flex justify-center w-40 rounded-2xl right-10 h-36"
+                                />
+                            </Box>
+                        ) : (
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItem: 'center',
+                                    justifyContent: 'center',
+                                    minWidth: '140px',
+                                    height: '140px',
+                                    backgroundColor: 'rgb(158, 158, 158)',
+                                    borderRadius: '20px',
+                                    backgroundImage: `url(${darkLogo})`,
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'center center',
+                                    backgroundSize: '30%',
+                                }}
+                            ></Box>
+                        )}
+                    </div>
+                    <Box className="flex gap-2 w-full flex-wrap overflow-y-hidden h-[40px] mt-[20px]">
+                        {item.categoryDto?.map((item: { id: string; name: string }) => (
+                            <Chip
+                                key={item.id}
+                                id={item.id}
+                                label={`#${item.name}`}
+                                color="primary"
+                                className="text-sm rounded-xl px-4 py-1"
+                            />
+                        ))}
+                    </Box>
+                    <div className="flex justify-between w-3/12 mt-[10px]">
+                        <span className="flex items-center justify-around text-xs text-center">
+                            좋아요: {item.techBlogPostBasicInfoDto.postLike}
+                        </span>
+                        <span className="text-xs">
+                            조회수: {item.techBlogPostBasicInfoDto.viewCount}
+                        </span>
+                    </div>
+                </Box>
+            </Link>
         </>
     );
 }

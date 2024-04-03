@@ -16,6 +16,7 @@ import { isLoggedInState } from '../recoil/atom/isLoggedInState';
 import CategoryModal from '../components/modal/CategoryModal';
 import UserSnackbar from '../components/snackbar/UserSnackbar';
 import { LoginSuccess } from '../components/modal/LoginSuccess';
+import { Box } from '@mui/material';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -90,11 +91,11 @@ export default function MainPage() {
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full gap-6">
                 <div className="mt-14">
                     <DisplayModeSwitch />
                 </div>
-                <div className="flex w-full pr-4 mt-6 mb-8">
+                <div className="flex w-full pr-4 mt-8">
                     {loggedIn ? (
                         <CategorySlide
                             onClose={handleCategoryModalClose}
@@ -109,13 +110,13 @@ export default function MainPage() {
                             onSetFilterTechBlogData={setFilterTechBlogData}
                         />
                     ) : (
-                        <div className="flex w-full justify-center dark:bg-[#444444] bg-[#f0f0f0] p-4 ">
+                        <Box bgcolor="background.paper" className="flex w-full justify-center p-4 ">
                             더 많은 정보를 원한다면{' '}
                             <span className="mx-2 border-b" onClick={handleLoginModal}>
                                 로그인
                             </span>
                             해주세요.
-                        </div>
+                        </Box>
                     )}
                 </div>
                 <div

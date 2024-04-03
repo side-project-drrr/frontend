@@ -1,21 +1,21 @@
 import { Outlet } from 'react-router-dom';
 import Aside from '../aside/Aside';
 import Layout from './Layout';
+import { Box } from '@mui/material';
 
 export default function LayoutWithAside() {
     return (
         <Layout>
-            <main className="w-[70%]">
-                <section className="w-full" aria-label="메인 콘텐츠">
+            <main className="lg:w-[70%] w-full">
+                <section className="w-full pt-10 px-[10px] lg:pr-10" aria-label="메인 콘텐츠">
                     <Outlet />
                 </section>
             </main>
-            <aside className="w-[30%] border-l border-solid dark:border-[#444444] border-[#f0f0f0]">
-                <div className="inline-block right-0 top-10">
-                    {/* sticky */}
+            <Box width="30%" borderLeft={1} borderColor="primary.main" className="hidden lg:block">
+                <div className="pl-10 pt-10 pr-[10px]">
                     <Aside />
                 </div>
-            </aside>
+            </Box>
         </Layout>
     );
 }

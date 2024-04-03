@@ -1,96 +1,67 @@
-import { deleteSubscribePush, subscribePush } from '../service/PushService';
+import { subscribePush, unSubscribePush } from '../service/PushService';
 
 const PUBLIC_KEY = import.meta.env.VITE_APP_VAPID_PUBLIC_KEY;
 
-type Store = {
-    pushSupport: boolean;
-    serviceWorkerRegistration: ServiceWorkerRegistration | null;
-    pushSubscription: PushSubscription | null;
-};
+let swRegistration: ServiceWorkerRegistration | null = null;
 
-const store: Store = {
-    pushSupport: false,
-    serviceWorkerRegistration: null,
-    pushSubscription: null,
-};
+function urlB64ToUint8Array(base64String: string) {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
 
-export async function registerServiceWorker() {
-    if (!('serviceWorker' in navigator)) return;
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
 
-    //이미 등록되어 있는 정보 가져오기
-    let registration = await navigator.serviceWorker.getRegistration();
-
-    if (!registration) {
-        registration = await navigator.serviceWorker.register('/src/webpush/sw.js');
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
     }
-    console.log(registration);
-
-    store.serviceWorkerRegistration = registration ?? null;
-    store.pushSupport = !!registration?.pushManager;
-    store.pushSubscription = await registration?.pushManager?.getSubscription();
+    return outputArray;
 }
 
-//백엔드에 push에 대한 정보 보내기
-async function postSubscription(subscription?: PushSubscription) {
-    console.log('postSubscription', { subscription });
+// api 구독
+export function subscribeUser() {
+    const applicationServerKey = urlB64ToUint8Array(PUBLIC_KEY);
 
-    if (!subscription) {
-        return;
-    }
-
-    const response = await subscribePush(subscription);
-
-    console.log('postSubscription', { response });
-}
-
-async function deleteSubscription() {
-    const response = await deleteSubscribePush();
-    console.log('deleteSubscription', { response });
-}
-
-// 여기서 sw에 VAPID_KEY를 보내서 endpoint 및 기타 사항 받아옴
-export async function subscribe() {
-    if (store.pushSubscription) {
-        return;
-    }
-
-    try {
-        const registration = store.serviceWorkerRegistration;
-
-        if (!registration) {
-            return;
-        }
-
-        await registration.pushManager
+    if (swRegistration) {
+        swRegistration.pushManager
             .subscribe({
-                applicationServerKey: PUBLIC_KEY,
                 userVisibleOnly: true,
+                applicationServerKey: applicationServerKey,
             })
-            .then(subscription => {
-                console.log(subscription);
-                store.pushSubscription = subscription;
-                postSubscription(subscription);
+            .then(async function (subscription) {
+                const res = await subscribePush(subscription);
+
+                if (res.status === 200) {
+                    console.log('구독');
+                }
+            })
+            .catch(function (err) {
+                console.log('Failed to subscribe the user: ', err);
             });
-    } catch (error) {
-        console.error('subscribe', { error });
     }
 }
 
-export async function unsubscribe() {
-    const subscription = store.pushSubscription;
+// api 구독취소
+export async function unSubscribeUser() {
+    const res = await unSubscribePush();
 
-    if (!subscription) {
-        return;
-    }
-
-    try {
-        const unsubscribed = await subscription.unsubscribe();
-        store.pushSubscription = null;
-        console.log('unsubscribe', { unsubscribed });
-        await deleteSubscription();
-    } catch (error) {
-        console.error('unsubscribe', { error });
+    if (res.status === 200) {
+        console.log('구독취소');
     }
 }
 
-registerServiceWorker();
+// 웹 사이트 접근 시 실행
+export function registerServiceWorker() {
+    // 기기에 service worker 등록
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+        navigator.serviceWorker
+            .register('/src/webpush/sw.js')
+            .then(reg => {
+                swRegistration = reg;
+            })
+            .catch(error => {
+                console.error('Service worker registration failed:', error);
+            });
+    } else {
+        console.warn('Push messaging is not supported');
+    }
+}

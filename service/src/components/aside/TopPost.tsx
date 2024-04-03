@@ -41,7 +41,7 @@ const TopPost = ({ item }: ITopPostProps) => {
                             <p className="text-black hover:cursor-pointer text-inherit hover:text-inherit hover:underline dark:text-white w-full ">
                                 {item.techBlogPostBasicInfoDto.title}
                             </p>
-                            <ul className="flex text-[10px] whitespace-nowrap gap-2 flex-wrap h-7 overflow-y-hidden">
+                            <ul className="flex text-[10px] gap-2 flex-wrap h-7 overflow-y-hidden">
                                 {item.categoryDto.map(data => (
                                     <li
                                         key={data.id}

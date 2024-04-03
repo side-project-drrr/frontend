@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import styled from '@emotion/styled';
 import { TextField, IconButton, Avatar, Button } from '@mui/material';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 
 import { Login } from '@monorepo/component/src/stories/login/Login';
 import { useDarkMode } from '@monorepo/service/src/ThemeContext/ThemeProvider';
@@ -27,6 +26,7 @@ import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
 import lightLogo from '@monorepo/service/src/assets/lightLogo.webp';
 import { getAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
 import { LogoutService } from '@monorepo/service/src/service/auth/SocialService';
+import { AlarmComponent } from './Alarm';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -206,7 +206,7 @@ export default function Header() {
     }, [token]);
 
     return (
-        <header className={`w-full flex justify-center `}>
+        <header className={`w-full flex justify-center px-[10px]`}>
             <div
                 className="flex justify-between w-full max-w-screen-xl py-4"
                 onClick={handleModalClose}
@@ -252,7 +252,7 @@ export default function Header() {
                                 <DarkModeOutlined color="action" />
                             )}
                         </IconButton>
-                        <NotificationsActiveIcon className="mr-3" />
+                        <AlarmComponent />
                         {loggedIn ? <AuthHeader onLogout={handleLogout} /> : <Login />}
                     </div>
                 </div>

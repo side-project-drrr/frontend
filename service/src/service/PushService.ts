@@ -1,22 +1,20 @@
 import axios from 'axios';
 import HttpClient from '../apis/HttpClient';
 
-const BASE_URL = import.meta.env.VITE_APP_BACK_END_LOCAL;
-
 export async function subscribePush(subscription: any) {
     const jsonString = subscription.toJSON();
-    const res = HttpClient.post('/api/v1/subscription', {
+    const res = await HttpClient.post('api/v1/members/me/web-push/subscription', {
         endpoint: `${jsonString.endpoint}`,
         expirationTime: `${jsonString.expirationTime}`,
         p256dh: `${jsonString.keys.p256dh}`,
         auth: `${jsonString.keys.auth}`,
     });
-    const data = (await res).data;
+    const data = res.data;
     return data;
 }
 
-export async function deleteSubscribePush() {
-    const res = axios.delete(`${BASE_URL}/api/v1/subscription`);
-    const data = (await res).data;
+export async function unSubscribePush() {
+    const res = await HttpClient.delete('api/v1/members/me/web-push/subscription');
+    const data = res.data;
     return data;
 }

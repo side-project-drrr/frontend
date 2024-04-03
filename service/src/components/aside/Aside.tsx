@@ -6,6 +6,7 @@ import { useRecoilValue } from 'recoil';
 import Recommend from '../recommend/Recommend';
 import { useEffect, useState } from 'react';
 import { getTopPostItemService } from '../../service/TopPostService';
+import { Box } from '@mui/material';
 
 export default function Aside() {
     const [topContent, setTopContent] = useState([]);
@@ -22,15 +23,15 @@ export default function Aside() {
     }, []);
 
     return (
-        <div className="flex flex-col justify-around w-full p-4 my-10">
+        <div className="flex flex-col justify-around w-full">
             {loggedIn && <Recommend />}
             <TopKeywords />
-            <h1 className="mt-6 mb-2 text-lg font-bold">가장 많이 읽는 글</h1>
-            <div className="flex flex-col w-full dark:border-[#444444]  border-b border-[#F0F0F0] mb-4">
+            <h1 className="text-lg font-bold">가장 많이 읽는 글</h1>
+            <Box borderBottom={1} borderColor="primary.main" className="flex flex-col w-full mb-4">
                 {topContent.map((value: any) => (
                     <TopPost item={value} key={value.techBlogPostBasicInfoDto.id} />
                 ))}
-            </div>
+            </Box>
         </div>
     );
 }

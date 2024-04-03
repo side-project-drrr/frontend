@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import ListboxItem from './ListboxItem';
 import { IListBoxProps } from './type';
 
@@ -5,17 +6,17 @@ export default function ListBox({ items, onCategoryId, onFilterItems }: IListBox
     return (
         <>
             {onCategoryId === 0 || onCategoryId === undefined ? (
-                <div className="flex flex-col w-full gap-6 pr-10">
+                <Box>
                     {items.map((item: any) => (
                         <ListboxItem key={item.id} item={item} />
                     ))}
-                </div>
+                </Box>
             ) : (
-                <div className="flex flex-col w-full gap-6 pr-10">
+                <Box>
                     {onFilterItems.map((item: any) => (
                         <ListboxItem key={item.id} item={item} />
                     ))}
-                </div>
+                </Box>
             )}
         </>
     );
