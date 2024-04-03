@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
+import { msg } from '../../constants/message';
 
 function CategoryItem({ categoryId, title, onSetObservationTarget }: CategoryItemsProps) {
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
@@ -31,7 +32,7 @@ function CategoryItem({ categoryId, title, onSetObservationTarget }: CategoryIte
                     open: true,
                     vertical: 'top',
                     horizontal: 'center',
-                    text: 'under',
+                    text: msg.under,
                 });
                 return;
             }

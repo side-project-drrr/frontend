@@ -24,6 +24,7 @@ import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 import SelectedCategoryDisplay from '../category/SelectedCategoryDisplay';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
+import { msg } from '../../constants/message';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -119,7 +120,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                 open: true,
                 vertical: 'top',
                 horizontal: 'center',
-                text: 'under',
+                text: msg.under,
             });
             return;
         }

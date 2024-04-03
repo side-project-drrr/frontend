@@ -25,6 +25,8 @@ import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import SelectedCategoryDisplay from '../category/SelectedCategoryDisplay';
 import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
 import { loginSuccessState } from '../../recoil/atom/loginSuccessState';
+import { useProfileState } from '../../context/UserProfile';
+import { msg } from '../../constants/message';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -59,7 +61,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const size = 20;
     const setIsLogged = useSetRecoilState(isLoggedInState);
     const setLoginSucess = useSetRecoilState(loginSuccessState);
-
+    const { login } = useProfileState();
     const buttonStyle = {
         backgroundImage: `linear-gradient(to right, #FFA471 ${userCategoryItems.length}0%, #F0F0F0 20%)`,
         color: 'black', // Set the text color if needed
@@ -92,6 +94,8 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
         });
         if (tokenData.accessToken.length > 0) {
             setLoginSucess(true);
+            login(tokenData.accessToken);
+
             setAccessTokenStorage(ACCESSTOKEN_KEY, tokenData.accessToken);
             setRefreshTokenStorage(REFRESHTOKEN_KEY, tokenData.refreshToken);
         }
@@ -103,7 +107,15 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
     async function handleCategory() {
         if (userCategoryItems.length === 0) {
-            setSnackbarOpen({ open: true, vertical: 'top', horizontal: 'center', text: 'under' });
+            setSnackbarOpen({ open: true, vertical: 'top', horizontal: 'center', text: msg.under });
+            return;
+        } else {
+            await signupRender();
+            onClose();
+            setIsLogged(true);
+        }
+        if (userCategoryItems.length === 0) {
+            setSnackbarOpen({ open: true, vertical: 'top', horizontal: 'center', text: msg.over });
             return;
         } else {
             await signupRender();

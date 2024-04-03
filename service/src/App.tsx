@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import ItemDetailPage from './pages/ItemDetailPage';
-import CategoryPage from './pages/CategoryPage';
 import SocialCallback from './components/social/SocialCallback';
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
@@ -13,6 +12,7 @@ import TopicPage from './pages/TopicPage';
 import HeaderSearchPage from './pages/HeaderSearchPage';
 import { RecommendedListPage } from './pages/RecommendedListPage';
 import { UserProfileProvider } from './context/UserProfile';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
     const { darkMode } = useDarkMode();
@@ -66,13 +66,13 @@ function App() {
                     <Route element={<LayoutWithAside />}>
                         <Route path="/" element={<MainPage />} />
                         <Route path="/detail/:id" element={<ItemDetailPage />} />
-                        <Route path="/signup/category" element={<CategoryPage />} />
                         <Route path="/category/detail/:id" element={<ItemDetailPage />} />
                         <Route path="/search/:search" element={<HeaderSearchPage />} />
                         <Route path="/topics" element={<TopicPage />} />
                     </Route>
                     <Route element={<LayoutWithOutAside />}>
                         <Route path="/recommend/list" element={<RecommendedListPage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
                     </Route>
                     <Route path="/kakao/auth" element={<SocialCallback />} />
                     <Route path="/github/auth" element={<SocialCallback />} />

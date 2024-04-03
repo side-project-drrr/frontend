@@ -1,27 +1,37 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
 import { getUserInforMationService } from '../service/UserProfileService';
 
-interface IProfileProps {
-    id: number;
-    email: 'string';
-    nickname: 'string';
-    profileImageUrl: 'string';
-    provider: 'string';
-    providerId: 'string';
+interface IUserProfileContext {
+    userData: any; // 사용자 정보의 타입에 따라 수정
+    login: (token: string) => void;
+    token: string | null;
 }
 
-const userProfleContext = createContext({});
+const userProfleContext = createContext<IUserProfileContext>({
+    userData: {},
+    login: () => {},
+    token: '',
+});
 
 export function UserProfileProvider({ children }: PropsWithChildren) {
-    const [userData, setUserData] = useState<IProfileProps | {}>({});
+    const [userData, setUserData] = useState({});
+    const [token, setToken] = useState(localStorage.getItem('accessToken'));
+    const login = (token: string) => {
+        setToken(token);
+    };
     async function userInforMationRender() {
         const userData = await getUserInforMationService();
         setUserData(userData);
     }
     useEffect(() => {
-        userInforMationRender();
-    }, []);
-    return <userProfleContext.Provider value={userData}>{children}</userProfleContext.Provider>;
+        if (token) userInforMationRender();
+    }, [token]);
+
+    return (
+        <userProfleContext.Provider value={{ userData, login, token }}>
+            {children}
+        </userProfleContext.Provider>
+    );
 }
 
 export function useProfileState() {
