@@ -178,6 +178,7 @@ export default function Header() {
         removeAuthStorage('accessToken');
         setProfileOpen(false); // 프로필 메뉴 닫기
         setLoggedIn(false);
+        navigate(`/`);
         await getLogoutRender();
     };
 

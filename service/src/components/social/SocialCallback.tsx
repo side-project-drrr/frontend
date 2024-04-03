@@ -8,6 +8,7 @@ import { providerIdState } from '../../recoil/atom/providerIdState';
 import { setAccessTokenStorage, setRefreshTokenStorage } from '../../repository/AuthRepository';
 import { setProfileImgStorage } from '../../repository/ProfileimgRepository';
 import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
+import { useProfileState } from '../../context/UserProfile';
 
 export default function SocialCallback() {
     const [didMount, setDidMount] = useState(false);
@@ -21,7 +22,7 @@ export default function SocialCallback() {
     const REFRESHTOKEN_KEY = 'refreshToken';
     const navigate = useNavigate();
     const setLoggedIn = useSetRecoilState(isLoggedInState);
-
+    const { login } = useProfileState();
     async function socialLoginRender(
         isRegistered: string,
         providerId: string,
@@ -32,6 +33,7 @@ export default function SocialCallback() {
 
             setAccessTokenStorage(ACCESSTOKEN_KEY, authData.accessToken);
             setRefreshTokenStorage(REFRESHTOKEN_KEY, authData.refreshToken);
+            login(authData.refreshToken);
             setProviderIdState(providerId);
             setProfileImgStorage(profileImageUrl);
             setLoggedIn(true);
