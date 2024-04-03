@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import { selectedCategoryState } from '../../recoil/atom/selectedCategoryState';
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
+import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
 
 function PrivateCategoryItems({
     categoryId,
@@ -14,6 +15,8 @@ function PrivateCategoryItems({
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
     const setSelectedCategoryState = useSetRecoilState(selectedCategoryState);
     const categoryItem = useRecoilValue(categoryItemsState);
+    const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
+
     const someUserSelectedCategories = () => {
         if (userCategoryItems.length > 0) {
             const userCategory = userCategoryItems.some(item => item.name === title);
@@ -34,7 +37,6 @@ function PrivateCategoryItems({
             const filterActiveCategoiesData = userCategoryItems.filter(
                 categoryitem => String(categoryitem.id) !== clickedCategoryId,
             );
-
             setUserCategoryItems(filterActiveCategoiesData);
         } else {
             if (userCategoryItems.length < 10) {
@@ -43,6 +45,14 @@ function PrivateCategoryItems({
                 );
 
                 setUserCategoryItems(prev => [...prev, ...someCategoryData]);
+            } else {
+                setSnackbarOpen({
+                    open: true,
+                    vertical: 'top',
+                    horizontal: 'center',
+                    text: 'over',
+                });
+                return;
             }
         }
     };

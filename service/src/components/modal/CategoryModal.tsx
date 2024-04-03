@@ -23,6 +23,8 @@ import { categorySearchValueState } from '../../recoil/atom/categorySearchValueS
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import SelectedCategoryDisplay from '../category/SelectedCategoryDisplay';
+import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
+import { loginSuccessState } from '../../recoil/atom/loginSuccessState';
 import { useProfileState } from '../../context/UserProfile';
 
 const style = {
@@ -54,10 +56,11 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const profileImageUrl = getProfileImgStorage(KEY);
     const [timer, setTimer] = useState<NodeJS.Timeout>();
     const [isSearching, setIsSearching] = useState(false); // 검색value
-    const { login } = useProfileState();
+    const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
     const size = 20;
     const setIsLogged = useSetRecoilState(isLoggedInState);
-
+    const setLoginSucess = useSetRecoilState(loginSuccessState);
+    const { login } = useProfileState();
     const buttonStyle = {
         backgroundImage: `linear-gradient(to right, #FFA471 ${userCategoryItems.length}0%, #F0F0F0 20%)`,
         color: 'black', // Set the text color if needed
@@ -80,11 +83,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     }
 
     async function signupRender() {
-        if (userCategoryItems.length === 0) {
-            alert('선호 카테고리는 무조건 1개 이상 선택해야 합니다.');
-            return;
-        }
-
         const tokenData = await SignUpService({
             email: profileValue.email,
             categoryIds: userCategoryItems.map(item => +item.id),
@@ -93,9 +91,13 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             providerId,
             profileImageUrl,
         });
-        login(tokenData.accessToken);
-        setAccessTokenStorage(ACCESSTOKEN_KEY, tokenData.accessToken);
-        setRefreshTokenStorage(REFRESHTOKEN_KEY, tokenData.refreshToken);
+        if (tokenData.accessToken.length > 0) {
+            setLoginSucess(true);
+            login(tokenData.accessToken);
+
+            setAccessTokenStorage(ACCESSTOKEN_KEY, tokenData.accessToken);
+            setRefreshTokenStorage(REFRESHTOKEN_KEY, tokenData.refreshToken);
+        }
     }
 
     const fetchMoreIssue = useCallback(() => {
@@ -103,10 +105,14 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     }, [categoryItems]);
 
     async function handleCategory() {
-        await signupRender();
-        onClose();
-        setIsLogged(true);
-        alert('drrr에 오신것을 환영합니다.');
+        if (userCategoryItems.length === 0) {
+            setSnackbarOpen({ open: true, vertical: 'top', horizontal: 'center', text: 'under' });
+            return;
+        } else {
+            await signupRender();
+            onClose();
+            setIsLogged(true);
+        }
     }
 
     const searchDataDebouce = (value: string) => {
