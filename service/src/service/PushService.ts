@@ -14,7 +14,7 @@ export async function subscribePush(subscription: any) {
 }
 
 export async function unSubscribePush() {
-    const res = await axios.delete('api/v1/members/me/web-push/subscription');
+    const res = await HttpClient.delete('api/v1/members/me/web-push/subscription');
     const data = res.data;
     return data;
 }
