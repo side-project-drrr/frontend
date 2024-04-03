@@ -54,7 +54,7 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                 providerId,
                 verificationCode: emailCodeValue,
             });
-            console.log(emailStatusData);
+
             if (emailStatusData !== undefined) {
                 if (emailStatusData.data.isVerified) {
                     setErrorMsg(prevErrorMsg => ({

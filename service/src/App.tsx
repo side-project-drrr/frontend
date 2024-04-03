@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import ItemDetailPage from './pages/ItemDetailPage';
-import CategoryPage from './pages/CategoryPage';
 import SocialCallback from './components/social/SocialCallback';
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
@@ -67,7 +66,6 @@ function App() {
                     <Route element={<LayoutWithAside />}>
                         <Route path="/" element={<MainPage />} />
                         <Route path="/detail/:id" element={<ItemDetailPage />} />
-                        <Route path="/signup/category" element={<CategoryPage />} />
                         <Route path="/category/detail/:id" element={<ItemDetailPage />} />
                         <Route path="/search/:search" element={<HeaderSearchPage />} />
                         <Route path="/topics" element={<TopicPage />} />

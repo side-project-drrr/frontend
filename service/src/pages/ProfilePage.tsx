@@ -12,6 +12,8 @@ import { useProfileState } from '../context/UserProfile';
 import { updateMemberProfle } from '../service/ProfileService';
 import { msg } from '../constants/message';
 import { SignUpEmail, SignUpEmailValidation } from '../service/auth/SocialService';
+import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
+import UserSnackbar from '../components/snackbar/UserSnackbar';
 
 const ProfilePage = () => {
     const [open, setOpen] = useState(false);
@@ -28,16 +30,30 @@ const ProfilePage = () => {
     const [userSeceesionModal, setUserSecessionModal] = useRecoilState(userSecession);
     const [buttonState, setButtonState] = useState(false);
     const { userData } = useProfileState();
+    const [snackbarOpen, setSnackbarOpen] = useRecoilState(snackbarOpenState);
+
     async function updateProfileInformationRender() {
         const data = await updateMemberProfle(profileValue.email, profileValue.nickname);
         if (data !== undefined) {
             if (data.status === 200) {
-                alert('snackbar를 통한 닉네임 변경 알림 보여주기');
+                setSnackbarOpen({
+                    open: true,
+                    vertical: 'top',
+                    horizontal: 'center',
+                    text: msg.nickNameUpdateSuccess,
+                });
                 setOpen(false);
+                setEmailOpen(false);
             }
         } else {
-            alert('이미 사용중인 이메일이거나 닉네임입니다.');
+            setSnackbarOpen({
+                open: true,
+                vertical: 'top',
+                horizontal: 'center',
+                text: msg.nickNameEmailUpdateFalied,
+            });
             setOpen(false);
+            setEmailOpen(false);
             setButtonState(false);
         }
     }
@@ -81,14 +97,12 @@ const ProfilePage = () => {
                         ...prevErrorMsg,
                         email: msg.emailSuccess,
                     }));
-                    setEmailOpen(false);
                     setButtonState(true);
                 } else {
                     setErrorMsg(prevErrorMsg => ({
                         ...prevErrorMsg,
                         email: msg.emailFailed,
                     }));
-                    setEmailOpen(false);
                     setButtonState(false);
                 }
             }
@@ -240,6 +254,7 @@ const ProfilePage = () => {
                     </div>
                 </div>
             </div>
+            {snackbarOpen && <UserSnackbar />}
         </>
     );
 };

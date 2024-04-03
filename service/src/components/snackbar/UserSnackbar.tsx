@@ -5,11 +5,6 @@ import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
 import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-const message = {
-    over: '카테고리는 10개 이상 선택할 수 없습니다.',
-    under: '카테고리는 1개 이상 무조건 선택해야합니다.',
-};
-
 export default function UserSnackbar() {
     const [state, setState] = useRecoilState(snackbarOpenState);
     const { vertical, horizontal, open, text } = state;
@@ -31,7 +26,7 @@ export default function UserSnackbar() {
                 anchorOrigin={{ vertical, horizontal }}
                 open={open}
                 onClose={handleClose}
-                message={text === 'over' ? message.over : message.under}
+                message={text}
                 key={vertical + horizontal}
                 action={action}
             />

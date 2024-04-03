@@ -6,4 +6,8 @@ export const msg = {
     emailDuplicate: '중복된 이메일이 있습니다.',
     nickNameDuplicate: '중복된 닉네임이 있습니다.',
     nickNameSuccess: '사용 가능한 닉네임입니다.',
+    over: '카테고리는 10개 이상 선택할 수 없습니다.',
+    under: '카테고리는 1개 이상 무조건 선택해야합니다.',
+    nickNameUpdateSuccess: '닉네임과 이메일이 변경되었습니다.',
+    nickNameEmailUpdateFalied: '이미 사용중인 이메일이거나 닉네임입니다.',
 };
