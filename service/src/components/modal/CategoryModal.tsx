@@ -26,6 +26,7 @@ import SelectedCategoryDisplay from '../category/SelectedCategoryDisplay';
 import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
 import { loginSuccessState } from '../../recoil/atom/loginSuccessState';
 import { useProfileState } from '../../context/UserProfile';
+import { msg } from '../../constants/message';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -106,7 +107,15 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
     async function handleCategory() {
         if (userCategoryItems.length === 0) {
-            setSnackbarOpen({ open: true, vertical: 'top', horizontal: 'center', text: 'under' });
+            setSnackbarOpen({ open: true, vertical: 'top', horizontal: 'center', text: msg.under });
+            return;
+        } else {
+            await signupRender();
+            onClose();
+            setIsLogged(true);
+        }
+        if (userCategoryItems.length === 0) {
+            setSnackbarOpen({ open: true, vertical: 'top', horizontal: 'center', text: msg.over });
             return;
         } else {
             await signupRender();

@@ -5,6 +5,7 @@ import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import { selectedCategoryState } from '../../recoil/atom/selectedCategoryState';
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
+import { msg } from '../../constants/message';
 
 function PrivateCategoryItems({
     categoryId,
@@ -50,7 +51,7 @@ function PrivateCategoryItems({
                     open: true,
                     vertical: 'top',
                     horizontal: 'center',
-                    text: 'over',
+                    text: msg.over,
                 });
                 return;
             }
