@@ -1,8 +1,8 @@
 import { Avatar, Box, Button, Chip, Typography, styled } from '@mui/material';
 import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
-import HttpClient from '../apis/HttpClient';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { getPostApi, readPostApi } from '../apis/view';
 
 type postType = {
     id: number;
@@ -25,31 +25,17 @@ export const ViewPage = () => {
 
     useEffect(() => {
         const getPost = async () => {
-            try {
-                const res = await HttpClient.get(`/api/v1/posts/${postId}`);
+            if (postId) {
+                const res = await getPostApi(postId);
 
                 if (res.status === 200) {
                     setPost(res.data);
                 }
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        const readPost = async () => {
-            try {
-                const res = await HttpClient.get(`/api/v1/members/me/past/read-post/${postId}`);
-
-                if (!res.data.isRead) {
-                    HttpClient.post(`/api/v1/members/me/read-post/${postId}`);
-                }
-            } catch (error) {
-                console.error(error);
             }
         };
 
         getPost();
-        readPost();
+        postId && readPostApi(postId);
     }, []);
 
     return (
