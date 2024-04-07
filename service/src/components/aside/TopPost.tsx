@@ -7,7 +7,7 @@ const TopPost = ({ item }: ITopPostProps) => {
         <div className="flex h-[103px]" aria-label="탑 게시글">
             <div id={item.techBlogPostBasicInfoDto.id} key={item.techBlogPostBasicInfoDto.id}>
                 <Link
-                    to={`/category/detail/${item.techBlogPostBasicInfoDto.id}`}
+                    to={`/view/${item.techBlogPostBasicInfoDto.id}`}
                     className="text-black dark:text-white hover:text-black"
                 >
                     <div className="flex justify-center items-center w-full h-full gap-4">

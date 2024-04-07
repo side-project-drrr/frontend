@@ -2,18 +2,16 @@ import { useEffect, useState } from 'react';
 
 import { getRecommendTechBlogService } from '../../service/TechBlogService';
 import { IRandomDataProps } from './type';
-import { BiSolidLike } from 'react-icons/bi';
-import { FaEye } from 'react-icons/fa';
 import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
 import { getAuthStorage } from '../../repository/AuthRepository';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../errors/ErrorFallback';
-import { Link } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
 
 export default function Recommend() {
     const [recommendData, setRecommendData] = useState([]);
     const token = getAuthStorage('accessToken');
-    const [randomRecommendData, setRandomRecommendData] = useState<IRandomDataProps[]>([]);
+    const [randomRecommendData, setRandomRecommendData] = useState<IRandomDataProps>();
 
     if (!token) throw new Error('재시도');
 
@@ -30,14 +28,22 @@ export default function Recommend() {
     useEffect(() => {
         if (recommendData.length > 0) {
             const randomIndex = Math.floor(Math.random() * recommendData.length);
-            setRandomRecommendData([recommendData[randomIndex]]);
+            setRandomRecommendData(recommendData[randomIndex].techBlogPostBasicInfoDto);
         }
     }, [recommendData]);
+
     return (
         <ErrorBoundary fallbackRender={ErrorFallback}>
-            <div className="flex flex-col justify-around gap-2 pb-8 border-b dark:border-[#444444] border-[#f0f0f0]">
-                <div className="flex items-center justify-between w-full mb-4">
-                    <h1 className="text-base font-bold">추천 게시글</h1>
+            <div className="flex flex-col justify-around">
+                <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    marginBottom="10px"
+                >
+                    <Typography variant="h6" fontWeight="bold">
+                        추천 게시글
+                    </Typography>
                     <p className="text-xs bg-transparent">
                         <Link
                             href="/recommend/list"
@@ -52,43 +58,44 @@ export default function Recommend() {
                             더보기
                         </Link>
                     </p>
-                </div>
-                {randomRecommendData.length > 0 ? (
-                    randomRecommendData.map(data => (
-                        <div key={data.techBlogPostBasicInfoDto.id}>
-                            <div className="relative flex items-center w-full">
-                                <div className="w-[100px] h-[100px] flex justify-center items-center rounded-[20px]  bg-slate-300">
-                                    {data.techBlogPostBasicInfoDto.thumbnailUrl ? (
-                                        <img
-                                            src={data.techBlogPostBasicInfoDto.thumbnailUrl}
-                                            alt="썸네일"
-                                            className="block w-20 h-20 rounded-xl"
-                                        />
-                                    ) : (
-                                        <img
-                                            src={darkLogo}
-                                            alt="썸네일"
-                                            className="block w-15 h-15 rounded-xl "
-                                        />
-                                    )}
-                                </div>
-                                <div className="flex flex-col gap-2 pl-4">
-                                    <h1 className="text-sm">
-                                        {data.techBlogPostBasicInfoDto.title}
-                                    </h1>
-                                    <ul className="flex gap-2">
-                                        <li className="flex items-center gap-2 text-sm">
-                                            <BiSolidLike />
-                                            {data.techBlogPostBasicInfoDto.postLike}
-                                        </li>
-                                        <li className="flex items-center gap-2 text-sm">
-                                            <FaEye /> {data.techBlogPostBasicInfoDto.viewCount}
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    ))
+                </Box>
+                {randomRecommendData ? (
+                    <div className="relative flex items-center w-full" key={randomRecommendData.id}>
+                        <Box
+                            minWidth="80px"
+                            minHeight="80px"
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            borderRadius="20px"
+                            bgcolor="background.paper"
+                            sx={{
+                                backgroundImage: `url(${
+                                    randomRecommendData.thumbnailUrl
+                                        ? randomRecommendData.thumbnailUrl
+                                        : darkLogo
+                                })`,
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'center center',
+                                backgroundSize: randomRecommendData.thumbnailUrl ? 'cover' : '50%',
+                            }}
+                        />
+
+                        <Typography variant="body2" paddingLeft="10px">
+                            <Link
+                                href={`/view/${randomRecommendData.id}`}
+                                color="text.primary"
+                                underline="none"
+                                sx={{
+                                    '&:hover': {
+                                        color: 'text.primary',
+                                    },
+                                }}
+                            >
+                                {randomRecommendData.title}
+                            </Link>
+                        </Typography>
+                    </div>
                 ) : (
                     <>
                         <p>추천 게시글이 없습니다.</p>
