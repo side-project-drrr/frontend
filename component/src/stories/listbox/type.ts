@@ -26,4 +26,5 @@ export interface ItemProps {
         };
         categoryDto: { id: string; name: string }[];
     };
+    index: number;
 }

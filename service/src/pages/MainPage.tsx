@@ -17,17 +17,23 @@ import CategoryModal from '../components/modal/CategoryModal';
 import UserSnackbar from '../components/snackbar/UserSnackbar';
 import { LoginSuccess } from '../components/modal/LoginSuccess';
 import { Box } from '@mui/material';
+import { loginSuccessState } from '../recoil/atom/loginSuccessState';
+import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
 
 export default function MainPage() {
-    const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
-    const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState(false);
+    const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
+    const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
     const [techBlogData, setTechBlogData] = useState<any[]>([]);
+    const [didMount, setDidMount] = useState<boolean>(false);
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
     const displayMode = useRecoilValue(DisplayModeState);
-    const [page, setPage] = useState(0);
-    const [categoryId, setCategoryId] = useState(0);
+    const [page, setPage] = useState<number>(0);
+    const [categoryId, setCategoryId] = useState<number>(0);
     const loggedIn = useRecoilValue(isLoggedInState);
+    const singupSuccessModal = useRecoilValue(loginSuccessState);
     const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
+    const snackbarOpen = useRecoilValue(snackbarOpenState);
+
     const size = 10;
     const setCategoryItems = useSetRecoilState(categoryItemsState);
     const setHandleModalOpen = useSetRecoilState(modalOpenState);
@@ -81,21 +87,23 @@ export default function MainPage() {
     }, [techBlogData]);
 
     useEffect(() => {
-        if (categoryId === 0) {
+        if (categoryId === 0 && didMount) {
             userTechBlogRender();
         }
         userFilterTechBlogRender(categoryId);
     }, [page]);
 
+    useEffect(() => {
+        setDidMount(true);
+    }, []);
+
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
-            <div className="flex flex-col w-full gap-6">
-                <div className="mt-14">
-                    <DisplayModeSwitch />
-                </div>
-                <div className="flex w-full pr-4 mt-8">
+            <div className="flex flex-col w-full">
+                <DisplayModeSwitch />
+                <div className="flex w-full pr-4 mt-8 ">
                     {loggedIn ? (
                         <CategorySlide
                             onClose={handleCategoryModalClose}
@@ -110,7 +118,7 @@ export default function MainPage() {
                             onSetFilterTechBlogData={setFilterTechBlogData}
                         />
                     ) : (
-                        <Box bgcolor="background.paper" className="flex w-full justify-center p-4 ">
+                        <Box bgcolor="background.paper" className="flex justify-center w-full p-4 ">
                             더 많은 정보를 원한다면{' '}
                             <span className="mx-2 border-b" onClick={handleLoginModal}>
                                 로그인
@@ -121,7 +129,7 @@ export default function MainPage() {
                 </div>
                 <div
                     className={`${
-                        displayMode ? 'flex w-full gap-6 flex-col' : 'flex w-full gap-6 flex-wrap'
+                        displayMode ? 'flex w-full gap-6 flex-col ' : 'flex w-full gap-6 flex-wrap'
                     }`}
                 >
                     <ConditionalRenderer
@@ -139,8 +147,8 @@ export default function MainPage() {
                     onClose={handleCategoryModalClose}
                 />
             )}
-            <UserSnackbar />;
-            <LoginSuccess />
+            {snackbarOpen && <UserSnackbar />}
+            {singupSuccessModal && <LoginSuccess />}
         </div>
     );
 }

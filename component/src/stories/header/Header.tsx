@@ -27,6 +27,7 @@ import lightLogo from '@monorepo/service/src/assets/lightLogo.webp';
 import { getAuthStorage } from '@monorepo/service/src/repository/AuthRepository';
 import { LogoutService } from '@monorepo/service/src/service/auth/SocialService';
 import { AlarmComponent } from './Alarm';
+import { useProfileState } from '@monorepo/service/src/context/UserProfile';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -122,7 +123,7 @@ export default function Header() {
     const REFRESHTOKEN_KEY = 'refreshToken';
     const token = getAuthStorage(TOKEN_KEY);
     const refresh_Token = getAuthStorage(REFRESHTOKEN_KEY);
-
+    const { login } = useProfileState();
     const searchItem = getSearchListStorage(KEY);
 
     async function getKeywordSearchRender() {
@@ -178,6 +179,7 @@ export default function Header() {
         removeAuthStorage('accessToken');
         setProfileOpen(false); // 프로필 메뉴 닫기
         setLoggedIn(false);
+        login('');
         navigate(`/`);
         await getLogoutRender();
     };
@@ -232,6 +234,9 @@ export default function Header() {
                             autoComplete="off"
                             value={searchValue}
                             placeholder="검색"
+                            sx={theme => ({
+                                [theme.breakpoints.down('sm')]: { width: '200px' },
+                            })}
                         />
                         {isSearchFocused && (
                             <HeaderSearchMenu
@@ -247,9 +252,19 @@ export default function Header() {
                     <div className="flex items-center gap-1">
                         <IconButton onClick={toggleDarkMode} size="large" color="inherit">
                             {darkMode === 'dark' ? (
-                                <LightModeOutlined />
+                                <LightModeOutlined
+                                    color="action"
+                                    sx={theme => ({
+                                        [theme.breakpoints.down('sm')]: { display: 'none' },
+                                    })}
+                                />
                             ) : (
-                                <DarkModeOutlined color="action" />
+                                <DarkModeOutlined
+                                    color="action"
+                                    sx={theme => ({
+                                        [theme.breakpoints.down('sm')]: { display: 'none' },
+                                    })}
+                                />
                             )}
                         </IconButton>
                         <AlarmComponent />

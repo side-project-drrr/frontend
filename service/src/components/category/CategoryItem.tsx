@@ -44,11 +44,11 @@ function CategoryItem({ categoryId, title, onSetObservationTarget }: CategoryIte
             <li
                 key={categoryId}
                 id={String(categoryId)}
-                className={` h-10 p-5 whitespace-nowrap text-center flex justify-center items-center rounded-lg  flex-1 ${
+                className={` h-10 p-5 whitespace-nowrap text-center flex justify-center items-center rounded-lg  flex-1 max-[600px]:text-xs max-[600px]:h-5 ${
                     userCategoryItems.some(categoryItem => categoryItem.id === categoryId)
                         ? 'bg-[#2C2C2C] text-white'
                         : 'bg-[#F2F2F2]  text-black '
-                } hover:bg-red-500 cursor-pointer `}
+                } hover:bg-[#D16E37] cursor-pointer `}
                 onClick={handleActiveCategoryItem}
             >
                 {title}

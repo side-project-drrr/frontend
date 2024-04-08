@@ -60,7 +60,7 @@ export default function HeaderSearchMenu({
     }, []);
 
     return (
-        <div className="absolute z-10 mt-2 w-80" ref={searchBoxRef}>
+        <div className="absolute z-10 mt-2 w-80 max-[600px]:w-60" ref={searchBoxRef}>
             <div className="relative flex-1 p-2 mb-2 text-black bg-white rounded-lg">
                 <div className="flex flex-col items-center justify-center">
                     <div className="flex flex-col w-full p-2">
@@ -97,8 +97,9 @@ export default function HeaderSearchMenu({
                             ))}
 
                         <Link
-                            to="/Exploretopics"
+                            to="/topics"
                             className={`flex items-center gap-2 p-4 text-black hover:text-black `}
+                            onClick={() => setIsSearchClicked(false)}
                         >
                             <p className="flex items-center w-full gap-4 text-sm">
                                 <LanguageIcon />

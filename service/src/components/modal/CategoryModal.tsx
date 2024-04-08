@@ -28,19 +28,6 @@ import { loginSuccessState } from '../../recoil/atom/loginSuccessState';
 import { useProfileState } from '../../context/UserProfile';
 import { msg } from '../../constants/message';
 
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '40%',
-    height: '70%',
-    bgcolor: '#FFFFFF',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: '10px',
-};
-
 function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [categoryItems, setCategoryItems] = useRecoilState(categoryItemsState); //전체 카테고리 리스트
     const [didMount, setDidMount] = useState(false); //전체 카테고리 리스트
@@ -176,7 +163,23 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
-                <Box sx={style} className="flex flex-col items-center justify-around ">
+                <Box
+                    sx={theme => ({
+                        position: 'absolute' as 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '600px',
+                        height: '70%',
+                        bgcolor: '#FFFFFF',
+                        boxShadow: 24,
+                        p: 4,
+                        borderRadius: '10px',
+
+                        [theme.breakpoints.down('sm')]: { width: '350px' },
+                    })}
+                    className="flex flex-col items-center justify-around "
+                >
                     <ModalTitle onHangleCloseClick={onClose} state="signup" />
                     <div className="flex items-center justify-center w-full">
                         <InputTextField
@@ -184,10 +187,13 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                             variant="outlined"
                             onChange={handleCategorySearchItem}
                             aria-label="검색창"
-                            sx={{ width: '67%' }}
+                            sx={theme => ({
+                                width: '67%',
+                                [theme.breakpoints.down('sm')]: { width: '100%' },
+                            })}
                         />
                     </div>
-                    <ul className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2">
+                    <ul className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full">
                         {categoryItems?.map(categoryitem => (
                             <CategoryItem
                                 key={categoryitem.id}
@@ -204,6 +210,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         style={buttonStyle}
                         role="Button"
                         aria-label="카테고리 선택 완료"
+                        sx={theme => ({ [theme.breakpoints.down('sm')]: { width: '100%' } })}
                     >
                         <p>선택({userCategoryItems.length}/10)</p>
                     </Button>
