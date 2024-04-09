@@ -152,7 +152,10 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
             setIsSearching(false);
         }
     }, [categorySearchValue]);
-
+    useEffect(() => {
+        const a = document.getElementById('CategoryModal-Scroll');
+        console.log(a);
+    }, []);
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
@@ -187,7 +190,10 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                             autoComplete="off"
                         />
                     </div>
-                    <ul className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full">
+                    <ul
+                        className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full"
+                        id="CategoryModal-Scroll"
+                    >
                         {categoryItems?.map(categoryitem => (
                             <>
                                 <PrivateCategoryItems

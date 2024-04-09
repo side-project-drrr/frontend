@@ -46,6 +46,9 @@ export default function ListboxItem({ item, index }: ItemProps) {
                             },
                         })}
                     >
+                        <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap pl-4 text-ellipsis max-[600px]:text-xs max-[600px]:hidden">
+                            {item.techBlogPostBasicInfoDto.title}
+                        </h1>
                         <div className="flex items-center justify-between w-full pt-2 pb-2 max-[600px]:flex-col max-[600px]:w-full">
                             {item.techBlogPostBasicInfoDto.thumbnailUrl ? (
                                 <Box
@@ -83,7 +86,7 @@ export default function ListboxItem({ item, index }: ItemProps) {
                                 />
                             )}
                             <div className=" flex flex-col w-full overflow-hidden">
-                                <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap pl-4 text-ellipsis max-[600px]:text-xs">
+                                <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap pl-4 text-ellipsis max-[600px]:text-xs sm:hidden">
                                     {item.techBlogPostBasicInfoDto.title}
                                 </h1>
                                 <p className="text-base overflow-hidden text-ellipsis h-[130px] max-h-[140px] pl-4 pt-[10px] pb-[10px] max-[600px]:text-xs">

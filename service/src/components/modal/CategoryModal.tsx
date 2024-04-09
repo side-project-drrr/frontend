@@ -193,7 +193,10 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                             })}
                         />
                     </div>
-                    <ul className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full">
+                    <ul
+                        className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full "
+                        id="CategoryModal-Scroll"
+                    >
                         {categoryItems?.map(categoryitem => (
                             <CategoryItem
                                 key={categoryitem.id}

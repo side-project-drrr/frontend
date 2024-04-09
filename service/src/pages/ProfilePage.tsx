@@ -131,10 +131,9 @@ const ProfilePage = () => {
                 <div className="flex flex-col items-center justify-center w-full gap-4 max-[600px]:text-xs ">
                     <h1>프로필 수정</h1>
                     <div className="flex flex-col items-center justify-center w-[50%] border border-[#f0f0f0] mt-10 rounded-[20px] max-[600px]:w-full">
-                        <div className="flex justify-center w-full p-10">
-                            <div className="flex items-center justify-between w-full">
-                                <h3>닉네임 정보</h3>
-
+                        <div className="flex justify-center w-full pt-10">
+                            <div className="flex items-center justify-between w-full mr-10">
+                                <h3 className="ml-10">닉네임 정보</h3>
                                 <ProfileInputText
                                     placeholder="닉네임 변경"
                                     autoComplete="off"
@@ -161,9 +160,10 @@ const ProfilePage = () => {
                                 />
                             </div>
                         </div>
-                        <div className="flex items-center justify-center w-full p-10 ">
-                            <h3>이메일 정보</h3>
-                            <div className="flex flex-col items-end justify-end flex-1 w-full gap-4 mt-10">
+                        <div className="flex items-center justify-around w-full pb-10 ">
+                            <h3 className="w-[120px] ml-10">이메일 정보</h3>
+
+                            <div className="flex flex-col items-end justify-end w-full gap-4 mt-10 mr-10">
                                 <ProfileEmailInputText
                                     placeholder="이메일 변경"
                                     autoComplete="off"
@@ -216,18 +216,19 @@ const ProfilePage = () => {
                                     }}
                                 />
                                 <p>{errorMsg.email}</p>
-                                <Button
-                                    sx={buttonStyle}
-                                    onClick={updateProfileInformationRender}
-                                    disabled={!buttonState}
-                                >
-                                    저장하기
-                                </Button>
+                                {buttonState && (
+                                    <Button
+                                        sx={buttonStyle}
+                                        onClick={updateProfileInformationRender}
+                                    >
+                                        저장하기
+                                    </Button>
+                                )}
                             </div>
                         </div>
                         <div className="flex items-center justify-center w-full">
                             <div className="flex items-center justify-between w-[88%] mb-10 max-[600px]:w-[280px]">
-                                <p className="flex items-center w-full ">
+                                <p className="flex items-center w-full">
                                     구독 끊기
                                     <Switch
                                         {...label}

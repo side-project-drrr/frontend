@@ -253,7 +253,6 @@ export default function Header() {
                         <IconButton onClick={toggleDarkMode} size="large" color="inherit">
                             {darkMode === 'dark' ? (
                                 <LightModeOutlined
-                                    color="action"
                                     sx={theme => ({
                                         [theme.breakpoints.down('sm')]: { display: 'none' },
                                     })}
