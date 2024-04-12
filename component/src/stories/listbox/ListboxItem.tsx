@@ -1,30 +1,101 @@
 import { Box, Chip, Link } from '@mui/material';
 import { ItemProps } from './type';
 import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import {
+    deletePostLikedService,
+    getPostLikedService,
+    postIncreasedViewsService,
+    postTechBlogLikeService,
+} from '@monorepo/service/src/service/TechBlogService';
+
+import { useEffect, useState } from 'react';
 
 export default function ListboxItem({ item }: ItemProps) {
+    const [uniqueValues, setUniqueValues] = useState(new Set());
+
+    async function deleteTechBlogLikedRender(postId: number) {
+        await deletePostLikedService(postId);
+    }
+
+    async function getPostLikedRender() {
+        const postLiked = await getPostLikedService();
+        const postIds = new Set<String>(postLiked.postIds);
+        setUniqueValues(postIds);
+    }
+
+    async function postIncreasedViewsRender(postId: number) {
+        await postIncreasedViewsService(postId);
+    }
+
+    async function postTechBlogLike(postId: number) {
+        if (uniqueValues.has(postId)) {
+            await deleteTechBlogLikedRender(postId);
+            setUniqueValues((prevUniqueValues: any) => {
+                const newUniqueValues = new Set(prevUniqueValues);
+                newUniqueValues.delete(postId);
+                return newUniqueValues;
+            });
+        } else {
+            const postLikeClickData = await postTechBlogLikeService(postId);
+            if (postLikeClickData !== undefined) {
+                if (postLikeClickData.status === 200) {
+                    setUniqueValues((prevUniqueValues: any) => {
+                        const newUniqueValues = new Set(prevUniqueValues);
+                        newUniqueValues.add(postId);
+                        return newUniqueValues;
+                    });
+                }
+            }
+        }
+    }
+
+    const handlePostLike = (id: number) => {
+        postTechBlogLike(id);
+    };
+
+    useEffect(() => {
+        getPostLikedRender();
+    }, []);
+
     return (
         <>
-            <Link
-                href={`/view/${item.techBlogPostBasicInfoDto.id}`}
-                color="text.primary"
-                underline="none"
-                sx={{
-                    '&:hover': {
-                        color: 'text.primary',
-                    },
-                }}
+            <Box
+                key={item.techBlogPostBasicInfoDto.id}
+                borderBottom={1}
+                borderColor="primary.main"
+                padding="30px 20px"
+                className="relative flex flex-col justify-around"
             >
-                <Box
-                    key={item.techBlogPostBasicInfoDto.id}
-                    borderBottom={1}
-                    borderColor="primary.main"
-                    padding="30px 20px"
-                    className="relative flex flex-col justify-around"
+                <Link
+                    href={`${item.techBlogPostBasicInfoDto.url}`}
+                    target="_blank"
+                    color="text.primary"
+                    underline="none"
+                    sx={{
+                        '&:hover': {
+                            color: 'text.primary',
+                        },
+                    }}
+                    onClick={() =>
+                        postIncreasedViewsRender(Number(item.techBlogPostBasicInfoDto.id))
+                    }
                 >
                     <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap text-ellipsis mb-[20px]">
                         {item.techBlogPostBasicInfoDto.title}
                     </h1>
+                </Link>
+                <Link
+                    href={`/view/${item.techBlogPostBasicInfoDto.id}`}
+                    color="text.primary"
+                    underline="none"
+                    sx={{
+                        '&:hover': {
+                            color: 'text.primary',
+                        },
+                    }}
+                >
                     <div className="flex items-center justify-between w-full">
                         <p className="text-base overflow-hidden text-ellipsis h-[140px] max-h-[140px] mr-[20px]">
                             {item.techBlogPostBasicInfoDto.summary}
@@ -63,20 +134,30 @@ export default function ListboxItem({ item }: ItemProps) {
                                 id={item.id}
                                 label={`#${item.name}`}
                                 color="primary"
-                                className="text-sm rounded-xl px-4 py-1"
+                                className="px-4 py-1 text-sm rounded-xl"
                             />
                         ))}
                     </Box>
-                    <div className="flex justify-between w-3/12 mt-[10px]">
-                        <span className="flex items-center justify-around text-xs text-center">
-                            좋아요: {item.techBlogPostBasicInfoDto.postLike}
+                </Link>
+                <ul className="flex justify-between w-2/12 mt-[10px] items-center">
+                    <li className="flex items-center justify-center text-xs ">
+                        <ThumbUpIcon
+                            onClick={() => handlePostLike(Number(item.techBlogPostBasicInfoDto.id))}
+                            sx={
+                                uniqueValues.has(item.techBlogPostBasicInfoDto.id)
+                                    ? { color: '#E6783A', fontSize: '18px' }
+                                    : { color: '', fontSize: '18px' }
+                            }
+                        />
+                        <span className="flex items-center ml-2">
+                            {item.techBlogPostBasicInfoDto.postLike}
                         </span>
-                        <span className="text-xs">
-                            조회수: {item.techBlogPostBasicInfoDto.viewCount}
-                        </span>
-                    </div>
-                </Box>
-            </Link>
+                    </li>
+                    <li className="text-xs ">
+                        <RemoveRedEyeIcon /> {item.techBlogPostBasicInfoDto.viewCount}
+                    </li>
+                </ul>
+            </Box>
         </>
     );
 }

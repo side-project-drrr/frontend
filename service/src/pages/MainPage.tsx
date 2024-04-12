@@ -23,9 +23,11 @@ export default function MainPage() {
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState(false);
     const [techBlogData, setTechBlogData] = useState<any[]>([]);
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
+    const [didMount, setDidMount] = useState(false);
     const displayMode = useRecoilValue(DisplayModeState);
     const [page, setPage] = useState(0);
     const [categoryId, setCategoryId] = useState(0);
+
     const loggedIn = useRecoilValue(isLoggedInState);
     const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
     const size = 10;
@@ -81,11 +83,15 @@ export default function MainPage() {
     }, [techBlogData]);
 
     useEffect(() => {
-        if (categoryId === 0) {
+        setDidMount(true);
+    }, []);
+
+    useEffect(() => {
+        if (categoryId === 0 && didMount) {
             userTechBlogRender();
         }
         userFilterTechBlogRender(categoryId);
-    }, [page]);
+    }, [page, didMount]);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 
@@ -95,6 +101,7 @@ export default function MainPage() {
                 <div className="mt-14">
                     <DisplayModeSwitch />
                 </div>
+
                 <div className="flex w-full pr-4 mt-8">
                     {loggedIn ? (
                         <CategorySlide
@@ -110,7 +117,7 @@ export default function MainPage() {
                             onSetFilterTechBlogData={setFilterTechBlogData}
                         />
                     ) : (
-                        <Box bgcolor="background.paper" className="flex w-full justify-center p-4 ">
+                        <Box bgcolor="background.paper" className="flex justify-center w-full p-4 ">
                             더 많은 정보를 원한다면{' '}
                             <span className="mx-2 border-b" onClick={handleLoginModal}>
                                 로그인

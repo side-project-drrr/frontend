@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Chip, Typography, styled } from '@mui/material';
+import { Box, Button, Chip, Typography, styled } from '@mui/material';
 import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
 import HttpClient from '../apis/HttpClient';
 import { useEffect, useState } from 'react';
