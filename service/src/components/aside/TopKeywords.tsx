@@ -23,12 +23,11 @@ export default function TopKeywords() {
 
     return (
         <Box
-            borderTop={1}
             borderBottom={1}
             borderColor="primary.main"
             width="100%"
-            padding="30px 0"
-            margin="30px 0"
+            paddingBottom="30px"
+            marginBottom="30px"
         >
             <Typography variant="h6" fontWeight="bold">
                 가장 많이 검색된 기술

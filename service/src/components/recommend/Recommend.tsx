@@ -28,13 +28,19 @@ export default function Recommend() {
     useEffect(() => {
         if (recommendData.length > 0) {
             const randomIndex = Math.floor(Math.random() * recommendData.length);
-            setRandomRecommendData(recommendData[randomIndex].techBlogPostBasicInfoDto);
+            setRandomRecommendData(recommendData[randomIndex]?.techBlogPostBasicInfoDto);
         }
     }, [recommendData]);
 
     return (
         <ErrorBoundary fallbackRender={ErrorFallback}>
-            <div className="flex flex-col justify-around">
+            <Box
+                className="flex flex-col justify-around"
+                borderBottom={1}
+                borderColor="primary.main"
+                paddingBottom="30px"
+                marginBottom="30px"
+            >
                 <Box
                     display="flex"
                     alignItems="center"
@@ -101,7 +107,7 @@ export default function Recommend() {
                         <p>추천 게시글이 없습니다.</p>
                     </>
                 )}
-            </div>
+            </Box>
         </ErrorBoundary>
     );
 }
