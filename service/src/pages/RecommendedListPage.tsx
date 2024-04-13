@@ -13,6 +13,7 @@ type recommendedItem = {
         viewCount: number;
         title: string;
         summary: string;
+        url: string;
     };
 };
 
@@ -58,26 +59,30 @@ export const RecommendedListPage = () => {
                                 padding: '20px',
                             }}
                         >
-                            <Link
-                                href={`/view/${data.postInfo.id}`}
-                                color="text.primary"
-                                underline="none"
-                                sx={{
-                                    '&:hover': {
-                                        color: 'text.primary',
-                                    },
-                                }}
-                            >
-                                <Box marginBottom="10px">
-                                    <Box marginBottom="10px">
-                                        <Typography
-                                            variant="h5"
-                                            className="line-clamp-1"
-                                            color="text.primary"
-                                        >
-                                            {data.postInfo.title}
-                                        </Typography>
-                                    </Box>
+                            <Box marginBottom="10px">
+                                <Box
+                                    marginBottom="10px"
+                                    onClick={() => window.open(`${data.postInfo.url}`, '_blank')}
+                                    sx={{ cursor: 'pointer' }}
+                                >
+                                    <Typography
+                                        variant="h5"
+                                        className="line-clamp-1"
+                                        color="text.primary"
+                                    >
+                                        {data.postInfo.title}
+                                    </Typography>
+                                </Box>
+                                <Link
+                                    href={`/view/${data.postInfo.id}`}
+                                    color="text.primary"
+                                    underline="none"
+                                    sx={{
+                                        '&:hover': {
+                                            color: 'text.primary',
+                                        },
+                                    }}
+                                >
                                     <Typography
                                         variant="body2"
                                         color="text.primary"
@@ -85,8 +90,8 @@ export const RecommendedListPage = () => {
                                     >
                                         {data.postInfo.summary}
                                     </Typography>
-                                </Box>
-                            </Link>
+                                </Link>
+                            </Box>
                             <Box>
                                 <div className="flex flex-wrap mt-3 max-h-[70px] overflow-y-hidden">
                                     {data.category.map(item => (
