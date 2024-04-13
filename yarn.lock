@@ -2693,6 +2693,7 @@ __metadata:
     "@monorepo/service": "workspace:^"
     "@testing-library/jest-dom": ^6.1.3
     "@testing-library/react": ^14.0.0
+    "@types/path-browserify": ^1.0.2
     "@types/react": ^18.2.15
     "@types/react-datepicker": ^4.15.0
     "@types/react-dom": ^18.2.7
@@ -2701,6 +2702,7 @@ __metadata:
     "@vitejs/plugin-react": ^4.0.4
     "@vitejs/plugin-vue": latest
     "@vitest/ui": ^0.34.4
+    dotenv: ^16.4.5
     eslint: ^8.45.0
     eslint-config-prettier: ^9.0.0
     eslint-config-react-app: ^7.0.1
@@ -2716,6 +2718,7 @@ __metadata:
     identity-obj-proxy: ^3.0.0
     jsdom: ^22.1.0
     lint-staged: ^14.0.0
+    path-browserify: ^1.0.1
     prettier: 3.0.2
     react: ^18.2.0
     react-datepicker: ^4.18.0
@@ -5516,6 +5519,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/path-browserify@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@types/path-browserify@npm:1.0.2"
+  checksum: 7b26df1a32827f7e588009386f62e0f900e8d349722b1b8b8c100cd2c4cc1e95c64099f5ec879cd131e69869088f336998a3ddb17085b68312414431a4eace01
+  languageName: node
+  linkType: hard
+
 "@types/pretty-hrtime@npm:^1.0.0":
   version: 1.0.3
   resolution: "@types/pretty-hrtime@npm:1.0.3"
@@ -7979,6 +7989,13 @@ __metadata:
   version: 16.3.1
   resolution: "dotenv@npm:16.3.1"
   checksum: 15d75e7279018f4bafd0ee9706593dd14455ddb71b3bcba9c52574460b7ccaf67d5cf8b2c08a5af1a9da6db36c956a04a1192b101ee102a3e0cf8817bbcf3dfd
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^16.4.5":
+  version: 16.4.5
+  resolution: "dotenv@npm:16.4.5"
+  checksum: 301a12c3d44fd49888b74eb9ccf9f07a1f5df43f489e7fcb89647a2edcd84c42d6bc349dc8df099cd18f07c35c7b04685c1a4f3e6a6a9e6b30f8d48c15b7f49c
   languageName: node
   linkType: hard
 
@@ -12261,6 +12278,13 @@ __metadata:
   version: 1.3.3
   resolution: "parseurl@npm:1.3.3"
   checksum: 407cee8e0a3a4c5cd472559bca8b6a45b82c124e9a4703302326e9ab60fc1081442ada4e02628efef1eb16197ddc7f8822f5a91fd7d7c86b51f530aedb17dfa2
+  languageName: node
+  linkType: hard
+
+"path-browserify@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "path-browserify@npm:1.0.1"
+  checksum: c6d7fa376423fe35b95b2d67990060c3ee304fc815ff0a2dc1c6c3cfaff2bd0d572ee67e18f19d0ea3bbe32e8add2a05021132ac40509416459fffee35200699
   languageName: node
   linkType: hard
 
