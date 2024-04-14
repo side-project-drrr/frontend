@@ -31,7 +31,6 @@ dist-ssr
 !.yarn/versions
 .yarn/cache
 
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

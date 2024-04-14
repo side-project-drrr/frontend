@@ -36,15 +36,16 @@ export default function TopKeywords() {
             </h1>
             <div className="flex items-center w-full">
                 <ul className="flex mt-3 gap-2 flex-wrap max-h-[130px] overflow-y-hidden">
-                    {topkeywordsData?.map(topkeyword => (
-                        <li
-                            key={topkeyword.id}
-                            aria-label="top keyword item"
-                            className=" whitespace-nowrap bg-[#F0F0F0] text-black dark:bg-[#444444] dark:text-white py-2 px-4 rounded-xl text-sm"
-                        >
-                            {topkeyword.name}
-                        </li>
-                    ))}
+                    {topkeywordsData &&
+                        topkeywordsData?.map(topkeyword => (
+                            <li
+                                key={topkeyword.id}
+                                aria-label="top keyword item"
+                                className=" whitespace-nowrap bg-[#F0F0F0] text-black dark:bg-[#444444] dark:text-white py-2 px-4 rounded-xl text-sm"
+                            >
+                                {topkeyword.name}
+                            </li>
+                        ))}
                 </ul>
             </div>
         </Box>

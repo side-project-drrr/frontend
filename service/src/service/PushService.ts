@@ -2,6 +2,7 @@ import HttpClient from '../apis/HttpClient';
 
 export async function subscribePush(subscription: any) {
     const jsonString = subscription.toJSON();
+
     const res = await HttpClient.post('api/v1/members/me/web-push/subscription', {
         endpoint: `${jsonString.endpoint}`,
         expirationTime: `${jsonString.expirationTime}`,

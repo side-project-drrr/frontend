@@ -42,3 +42,39 @@ export async function getRecommendTechBlogService() {
         console.error(error);
     }
 }
+
+export async function postTechBlogLikeService(postId: number) {
+    try {
+        const res = await HttpClient.post(`/api/v1/posts/${postId}/like`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function postIncreasedViewsService(postId: number) {
+    try {
+        const res = await HttpClient.post(`/api/v1/view-post/${postId}`);
+        return res;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function getPostLikedService() {
+    try {
+        const res = await HttpClient.get(`/api/v1/members/me/posts/liked`);
+        return res.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function deletePostLikedService(postId: number) {
+    try {
+        const res = await HttpClient.delete(`/api/v1/posts/${postId}/like`);
+        return res.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
