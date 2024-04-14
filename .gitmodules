@@ -1,0 +1,3 @@
+[submodule "security/security-storage-front"]
+	path = security/security-storage-front
+	url = https://github.com/side-project-drrr/security-storage-front.git
