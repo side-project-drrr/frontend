@@ -21,15 +21,21 @@ export default function UserSnackbar() {
     );
 
     return (
-        <Box sx={{ width: 600 }}>
-            <Snackbar
-                anchorOrigin={{ vertical, horizontal }}
-                open={open}
-                onClose={handleClose}
-                message={text}
-                key={vertical + horizontal}
-                action={action}
-            />
-        </Box>
+        <>
+            {open ? (
+                <Box sx={{ width: 600 }}>
+                    <Snackbar
+                        anchorOrigin={{ vertical, horizontal }}
+                        open={open}
+                        onClose={handleClose}
+                        message={text}
+                        key={vertical + horizontal}
+                        action={action}
+                    />
+                </Box>
+            ) : (
+                <></>
+            )}
+        </>
     );
 }

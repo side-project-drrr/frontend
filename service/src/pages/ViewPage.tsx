@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Chip, Typography, styled } from '@mui/material';
+import { Box, Button, Chip, Typography, styled } from '@mui/material';
 import darkLogo from '@monorepo/service/src/assets/darkLogo.webp';
 import HttpClient from '../apis/HttpClient';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ type postType = {
     author: String;
     url: String;
 };
+
 export const ViewPage = () => {
     const { postId } = useParams();
     const [post, setPost] = useState<postType>({});
@@ -27,6 +28,7 @@ export const ViewPage = () => {
         const getPost = async () => {
             try {
                 const res = await HttpClient.get(`/api/v1/posts/${postId}`);
+                console.log(res);
 
                 if (res.status === 200) {
                     setPost(res.data);
@@ -64,8 +66,19 @@ export const ViewPage = () => {
             </Box>
             <Box>
                 {post.thumbnailUrl ? (
-                    <Box bgcolor="background.paper" height="400px" borderRadius="20px">
-                        <img src={`${post.thumbnailUrl}`} alt={`${post.techBlogCode}`} />
+                    <Box
+                        bgcolor="background.paper"
+                        height="600px"
+                        borderRadius="20px"
+                        display={'flex'}
+                        justifyContent={'center'}
+                        overflow={'hidden'}
+                    >
+                        <img
+                            src={`${post.thumbnailUrl}`}
+                            alt={`${post.techBlogCode}`}
+                            className="w-full h-auto"
+                        />
                     </Box>
                 ) : (
                     <Box

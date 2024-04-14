@@ -26,19 +26,6 @@ import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
 import { msg } from '../../constants/message';
 
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '40%',
-    height: '70%',
-    bgcolor: '#FFFFFF',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: '10px',
-};
-
 export interface IActiveDataProps {
     id: number;
     name: string;
@@ -165,11 +152,29 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
             setIsSearching(false);
         }
     }, [categorySearchValue]);
-
+    useEffect(() => {
+        const a = document.getElementById('CategoryModal-Scroll');
+        console.log(a);
+    }, []);
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
-                <Box sx={style} className="flex flex-col items-center justify-around w-full">
+                <Box
+                    sx={theme => ({
+                        position: 'absolute' as 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '600px',
+                        height: '70%',
+                        bgcolor: '#FFFFFF',
+                        boxShadow: 24,
+                        p: 4,
+                        borderRadius: '10px',
+                        [theme.breakpoints.down('sm')]: { width: '350px', top: '50%', left: '50%' },
+                    })}
+                    className="flex flex-col items-center justify-around"
+                >
                     <ModalTitle onHangleCloseClick={onClose} state="signup" />
                     <div className="flex items-center justify-center w-full mt-5">
                         <InputTextField
@@ -177,12 +182,18 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                             variant="outlined"
                             onChange={handleCategorySearchItem}
                             aria-label="검색창"
-                            sx={{ width: '67%' }}
+                            sx={theme => ({
+                                width: '67%',
+                                [theme.breakpoints.down('sm')]: { width: '100%' },
+                            })}
                             onKeyDown={e => handleCategorySearchKeyborad(e)}
                             autoComplete="off"
                         />
                     </div>
-                    <ul className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2">
+                    <ul
+                        className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full"
+                        id="CategoryModal-Scroll"
+                    >
                         {categoryItems?.map(categoryitem => (
                             <>
                                 <PrivateCategoryItems
@@ -202,6 +213,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                         onClick={() => handleUserCreateCategory(userCategoryItems)}
                         role="Button"
                         aria-label="카테고리 선택 완료"
+                        sx={theme => ({ [theme.breakpoints.down('sm')]: { width: '100%' } })}
                     >
                         <p>선택({userCategoryItems.length}/10)</p>
                     </Button>

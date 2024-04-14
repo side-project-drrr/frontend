@@ -6,14 +6,14 @@ export default function CardList({ items, onCategoryId, onFilterItems }: IListBo
         <>
             {onCategoryId === 0 || onCategoryId === undefined ? (
                 <div className="flex flex-wrap justify-between pr-10">
-                    {items.map((item: any) => (
-                        <CardComponent key={item.id} item={item} />
+                    {items.map((item: any, index: number) => (
+                        <CardComponent key={index} item={item} index={index} />
                     ))}
                 </div>
             ) : (
                 <div className="flex flex-wrap justify-between pr-10">
-                    {onFilterItems.map((item: any) => (
-                        <CardComponent key={item.id} item={item} />
+                    {onFilterItems.map((item: any, index: number) => (
+                        <CardComponent key={index} item={item} index={index} />
                     ))}
                 </div>
             )}

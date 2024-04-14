@@ -36,7 +36,7 @@ export default function HeaderSearchPage() {
             <div className="flex flex-col w-full gap-6">
                 <div className="flex w-full">
                     <div className="flex justify-around w-full mt-5 ">
-                        <h1 className="w-full">Results for {search}</h1>
+                        <h1 className="w-full max-[600px]:text-2xl">Results for {search}</h1>
                         <DisplayModeSwitch />
                     </div>
                 </div>
@@ -50,7 +50,7 @@ export default function HeaderSearchPage() {
                     ) : (
                         <div className="flex justify-center w-full h-[80vh] items-center flex-col">
                             <QuestionMarkIcon sx={{ fontSize: '100px' }} />
-                            <p className="">검색된 결과가 없습니다.</p>
+                            <p>검색된 결과가 없습니다.</p>
                         </div>
                     )}
                 </div>

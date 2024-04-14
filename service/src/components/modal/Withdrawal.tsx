@@ -12,23 +12,6 @@ import { deleteUserService } from '../../service/ProfileService';
 import { removeAuthStorage } from '../../repository/AuthRepository';
 import { useNavigate } from 'react-router-dom';
 
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '22.6%',
-    height: '438px',
-    bgcolor: '#FFFFFF',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: '20px',
-    dispaly: 'flex',
-    justifyContent: 'space-around',
-    flexdirection: 'column',
-};
-
 const buttonStyle = {
     color: '#2c2c2c',
     padding: '4px',
@@ -85,7 +68,24 @@ export const Withdrawal = () => {
                 aria-labelledby="Login"
                 className="flex items-center justify-center "
             >
-                <Box sx={style}>
+                <Box
+                    sx={{
+                        position: 'absolute' as 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '350px',
+                        height: '438px',
+                        bgcolor: '#FFFFFF',
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        p: 4,
+                        borderRadius: '20px',
+                        dispaly: 'flex',
+                        justifyContent: 'space-around',
+                        flexdirection: 'column',
+                    }}
+                >
                     <div className="flex flex-col items-center justify-between gap-8">
                         <ModalTitle onHangleCloseClick={handleClose} state="profile" />
                         <ProfileUserInputText

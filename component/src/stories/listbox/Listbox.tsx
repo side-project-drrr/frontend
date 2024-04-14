@@ -7,14 +7,14 @@ export default function ListBox({ items, onCategoryId, onFilterItems }: IListBox
         <>
             {onCategoryId === 0 || onCategoryId === undefined ? (
                 <Box>
-                    {items.map((item: any) => (
-                        <ListboxItem key={item.id} item={item} />
+                    {items.map((item: any, index: number) => (
+                        <ListboxItem key={index} item={item} index={index} />
                     ))}
                 </Box>
             ) : (
                 <Box>
-                    {onFilterItems.map((item: any) => (
-                        <ListboxItem key={item.id} item={item} />
+                    {onFilterItems.map((item: any, index: number) => (
+                        <ListboxItem key={index} item={item} index={index} />
                     ))}
                 </Box>
             )}

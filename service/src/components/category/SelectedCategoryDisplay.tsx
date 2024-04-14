@@ -38,13 +38,13 @@ export default function SelectedCategoryDisplay() {
     }, []);
 
     return (
-        <ul className="flex whitespace-nowrap pt-4 pb-4 gap-2 items-center flex-wrap w-[65%]">
+        <ul className="flex whitespace-nowrap pt-4 pb-4 gap-2 items-center flex-wrap w-[65%] max-[600px]:w-full">
             {userCategoryItems &&
                 userCategoryItems.map(categoryItem => (
                     <li
                         key={categoryItem.id}
                         id={String(categoryItem.id)}
-                        className="flex bg-[#f0f0f0] text-black gap-2 text-sm pr-2 pl-2 rounded-lg items-center justify-center"
+                        className="flex bg-[#f0f0f0] text-black gap-2 text-sm pr-2 pl-2 rounded-lg items-center justify-center max-[600px]:text-xs"
                         onClick={() => handleUserCategoryItem(String(categoryItem.id))}
                     >
                         <CloseIcon sx={{ width: '20px' }} />

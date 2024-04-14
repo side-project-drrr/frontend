@@ -37,6 +37,9 @@ function App() {
                 main: '#D16E37', // 포인트 색상 (액센트 색상)
             },
         },
+        typography: {
+            fontFamily: "'Nanum Gothic', 'sans-serif'",
+        },
     });
 
     // Dark Mode에서의 배경색
@@ -57,6 +60,9 @@ function App() {
             secondary: {
                 main: '#E6783A', // 포인트 색상 (액센트 색상)
             },
+        },
+        typography: {
+            fontFamily: "'Nanum Gothic', 'sans-serif'",
         },
     });
 

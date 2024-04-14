@@ -10,4 +10,5 @@ export interface ICardItemsProps {
         };
         categoryDto: { id: string; name: string }[];
     };
+    index: number;
 }
