@@ -23,7 +23,7 @@ export default function Aside() {
     }, []);
 
     return (
-        <div className="flex flex-col justify-around w-full">
+        <div className="flex flex-col justify-around w-full ">
             {loggedIn && <Recommend />}
             <TopKeywords />
             <Box>

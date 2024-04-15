@@ -67,11 +67,11 @@ function PrivateCategoryItems({
             <li
                 key={categoryId}
                 id={String(categoryId)}
-                className={`p-2 whitespace-nowrap text-center flex justify-center items-center rounded-lg flex-warp overflow-x-hidden ${
+                className={`p-2 whitespace-nowrap text-center flex justify-center items-center rounded-lg flex-warp overflow-x-hidden  ${
                     userCategoryItems.some(categoryItem => categoryItem.id === categoryId)
                         ? 'bg-[#2C2C2C] text-white'
                         : 'bg-[#F2F2F2]  text-black '
-                } hover:bg-red-500 cursor-pointer `}
+                } hover:bg-[#D16E37] cursor-pointer `}
                 onClick={() => handleActiveCategoryItem(String(categoryId))}
                 aria-label="카테고리"
             >

@@ -7,16 +7,16 @@ interface ISingupProps {
 export default function ModalTitle({ onHangleCloseClick, state = 'signup' }: ISingupProps) {
     return (
         <>
-            <div className="flex items-center justify-between w-full ">
+            <div className="flex items-center justify-between w-full">
                 <h1>
-                    <img src={loginLogo} alt="logo" />
+                    <img src={loginLogo} alt="logo" className="max-[600px]:w-10" />
                 </h1>
                 <div className="text-black">
                     <CloseIcon onClick={onHangleCloseClick} />
                 </div>
             </div>
             <div
-                className="flex flex-wrap items-center justify-center w-full text-base font-bold text-center text-black"
+                className="flex flex-wrap items-center justify-center w-full text-base font-bold text-center text-black max-[600px]:text-xs max-[600px]:mt-5"
                 aria-label="이용 약관"
             >
                 {state === 'signup' ? (

@@ -1,8 +1,8 @@
-import axios from 'axios';
 import HttpClient from '../apis/HttpClient';
 
 export async function subscribePush(subscription: any) {
     const jsonString = subscription.toJSON();
+
     const res = await HttpClient.post('api/v1/members/me/web-push/subscription', {
         endpoint: `${jsonString.endpoint}`,
         expirationTime: `${jsonString.expirationTime}`,
@@ -15,6 +15,14 @@ export async function subscribePush(subscription: any) {
 
 export async function unSubscribePush() {
     const res = await HttpClient.delete('api/v1/members/me/web-push/subscription');
+    const data = res.data;
+    return data;
+}
+
+export async function subscribeTestService() {
+    const date = '2024-04-03';
+
+    const res = await HttpClient.post(`api/v1/members/me/web-push/test?date=${date}`, [1, 2]);
     const data = res.data;
     return data;
 }

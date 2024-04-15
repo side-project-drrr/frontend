@@ -63,7 +63,7 @@ export default function ListboxItem({ item }: ItemProps) {
                                 id={item.id}
                                 label={`#${item.name}`}
                                 color="primary"
-                                className="text-sm rounded-xl px-4 py-1"
+                                className="px-4 py-1 text-sm rounded-xl"
                             />
                         ))}
                     </Box>

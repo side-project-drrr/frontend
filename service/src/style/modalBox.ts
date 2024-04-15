@@ -5,7 +5,6 @@ export const style = {
     transform: 'translate(-50%, -50%)',
     color: 'black',
     bgcolor: 'white',
-    border: '2px solid #000',
     boxShadow: 24,
     p: 4,
     borderRadius: '20px',

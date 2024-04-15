@@ -15,6 +15,21 @@ input:-webkit-autofill:active {
     -webkit-text-fill-color: #000 !important;
 }
 
+#CategoryModal-Scroll::-webkit-scrollbar {
+    width: 10px;
+}
+
+#CategoryModal-Scroll::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 5px;
+}
+
+#CategoryModal-Scroll::-webkit-scrollbar-thumb {
+    background-color: #d3d3d3;
+    border-radius: 14px;
+    border: 3px solid var(--primary);
+}
+
 input:autofill,
 input:autofill:hover,
 input:autofill:focus,
@@ -97,4 +112,9 @@ button:focus-visible {
 
 #root {
     width: 100%;
+}
+
+#root header img {
+    width: 56px;
+    min-width: 40px;
 }

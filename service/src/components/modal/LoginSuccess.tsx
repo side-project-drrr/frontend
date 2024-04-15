@@ -9,10 +9,9 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '18%',
+    width: '350px',
     height: '380px',
     bgcolor: 'white',
-    border: '2px solid #000',
     boxShadow: 24,
     p: 4,
     borderRadius: '20px',
@@ -30,12 +29,7 @@ export const LoginSuccess = () => {
 
     return (
         <>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="Login"
-                className="flex items-center justify-center "
-            >
+            <Modal open={open} onClose={handleClose} aria-labelledby="Login">
                 <Box sx={style}>
                     <div className="flex flex-col items-center justify-between gap-8">
                         <FaCheckCircle size={80} color="green" />
@@ -44,7 +38,7 @@ export const LoginSuccess = () => {
                         <div className="flex flex-wrap items-center justify-center w-10/12">
                             <p>
                                 매일 새로운 기술블로그 소식을{' '}
-                                <p className="flex w-full justify-center">전달받아보세요</p>
+                                <p className="flex justify-center w-full">전달받아보세요</p>
                             </p>
                         </div>
                         <Button

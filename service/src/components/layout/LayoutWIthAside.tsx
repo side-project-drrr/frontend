@@ -7,7 +7,7 @@ export default function LayoutWithAside() {
     return (
         <Layout>
             <main className="lg:w-[70%] w-full">
-                <section className="w-full pt-10 px-[10px] lg:pr-10" aria-label="메인 콘텐츠">
+                <section className="w-full pt-10 lg\:pr-10" aria-label="메인 콘텐츠">
                     <Outlet />
                 </section>
             </main>

@@ -23,7 +23,9 @@ export interface ItemProps {
             thumbnailUrl: string;
             postLike: number;
             viewCount: number;
+            url: string;
         };
         categoryDto: { id: string; name: string }[];
     };
+    index: number;
 }
