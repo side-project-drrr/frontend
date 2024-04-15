@@ -97,12 +97,12 @@ export default function MainPage() {
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
-            <div className="flex flex-col w-full gap-6">
-                <div className="mt-14">
+            <div className="flex flex-col w-full gap-5">
+                <div>
                     <DisplayModeSwitch />
                 </div>
 
-                <div className="flex w-full pr-4 mt-8">
+                <div className="flex w-full pr-4">
                     {loggedIn ? (
                         <CategorySlide
                             onClose={handleCategoryModalClose}
@@ -146,7 +146,7 @@ export default function MainPage() {
                     onClose={handleCategoryModalClose}
                 />
             )}
-            <UserSnackbar />;
+            <UserSnackbar />
             <LoginSuccess />
         </div>
     );
