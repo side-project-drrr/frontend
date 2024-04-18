@@ -7,7 +7,6 @@
         "skipLibCheck": true,
         "baseUrl": "src",
         "esModuleInterop": true,
-
         /* Bundler mode */
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
@@ -22,16 +21,6 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true
     },
-    "include": ["src", "jest.setup.ts"],
-    "references": [
-        {
-            "path": "service"
-        },
-        {
-            "path": "component"
-        },
-        {
-            "path": "admin"
-        }
-    ]
+    "include": ["./src/**/*", "../webpush", "src", "tests"],
+    "types": ["vite/client"]
 }
