@@ -13,7 +13,7 @@
         "test": "vitest --run --reporter verbose --globals",
         "test:ui": "vitest --ui",
         "test:watch": "vitest",
-        "cp-env": "cp service/secret/.env.development.local service/.env.development.local",
+        "cp-env": "cp security/security-storage-front/.env ./.env.production ",
         "start": "vite",
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build"
@@ -98,6 +98,5 @@
     },
     "msw": {
         "workerDirectory": "public"
-    },
-    "packageManager": "yarn@3.6.3"
+    }
 }
