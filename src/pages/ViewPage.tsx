@@ -33,6 +33,14 @@ export const ViewPage = () => {
                     const text = res.data.aiSummary;
                     const newText = text.replaceAll(regex, '.\r\n');
                     res.data.aiSummary = newText;
+
+                    const regexThumb = /\s+/g;
+                    const url = res.data.thumbnailUrl;
+                    const newUrl = url.replace(regexThumb, '%20');
+
+                    if (url) {
+                        res.data.thumbnailUrl = newUrl;
+                    }
                     setPost(res.data);
                 }
             }
@@ -40,7 +48,7 @@ export const ViewPage = () => {
         getPost();
         postId && readPostApi(postId);
     }, [postId]);
-    console.log(post);
+
     return (
         post && (
             <Box>
