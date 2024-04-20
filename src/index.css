@@ -1,8 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
 
 /* 자동 완성 시  배경색 없애기 */
 input:-webkit-autofill,
@@ -41,7 +40,7 @@ input:autofill:active {
 }
 
 :root {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Nanum Gothic', sans-serif;
     line-height: 1.5;
     font-weight: 400;
 

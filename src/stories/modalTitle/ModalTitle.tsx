@@ -15,17 +15,16 @@ export default function ModalTitle({ onHangleCloseClick, state = 'signup' }: ISi
                     <CloseIcon onClick={onHangleCloseClick} />
                 </div>
             </div>
-            <div
-                className="flex flex-wrap items-center justify-center w-full text-base font-bold text-center text-black max-[600px]:text-xs max-[600px]:mt-5"
-                aria-label="이용 약관"
-            >
+            <div className="flex flex-wrap items-center justify-center w-full text-base font-bold text-center text-black max-[600px]:text-xs max-[600px]:mt-5">
                 {state === 'signup' ? (
                     <p>
-                        지금 로그인하고 매일 새로운 <p>기술블로그 소식을 전달받아보세요</p>
+                        지금 로그인하고 매일 새로운 <br />
+                        기술블로그 소식을 전달받아보세요.
                     </p>
                 ) : (
                     <p>
-                        탈퇴하시겠습니까? <p>구독했던 카테고리들이 사라집니다.</p>
+                        탈퇴하시겠습니까? <br />
+                        구독했던 카테고리들이 사라집니다.
                     </p>
                 )}
             </div>

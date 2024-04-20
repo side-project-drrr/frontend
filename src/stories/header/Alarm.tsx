@@ -13,6 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { getAuthStorage } from '../../repository/AuthRepository';
 import { useTokenDecode } from '../../hooks/useTokenDecode';
 import { useNavigate } from 'react-router-dom';
+import { useProfileState } from '../../context/UserProfile';
 import { alarmOpenApi, alarmReadApi, getPushDataApi } from '../../apis/alarm';
 
 type alarmType = {
@@ -51,6 +52,7 @@ export const AlarmComponent = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [alarmList, setAlarmList] = useState<alarmType[]>([]);
     const [mark, setMark] = useState(false);
+    const { userData } = useProfileState();
 
     const readMore = () => {
         navigate(`/alarm/list`, { state: { from: getSevenDaysAgoDate(), to: getCurrentDate() } });
@@ -83,25 +85,26 @@ export const AlarmComponent = () => {
         if (res.status === 200) {
             navigate(`/alarm/list`, { state: { from: date, to: date } });
             setOpen(false);
+            getAlarmList();
+        }
+    }
+
+    async function getAlarmList() {
+        const res = await getPushDataApi(memberId);
+
+        if (res.status === 200) {
+            if (res.data.length > 0) {
+                setAlarmList(res.data);
+
+                // 가장 최근 날짜를 오픈한 기록이 없다면
+                if (!res.data[0].openStatus) {
+                    setMark(true);
+                }
+            }
         }
     }
 
     useEffect(() => {
-        async function getAlarmList() {
-            const res = await getPushDataApi(memberId);
-
-            if (res.status === 200) {
-                if (res.data.length > 0) {
-                    setAlarmList(res.data);
-
-                    // 가장 최근 날짜를 오픈한 기록이 없다면
-                    if (!res.data[0].openStatus) {
-                        setMark(true);
-                    }
-                }
-            }
-        }
-
         memberId && getAlarmList();
     }, []);
 
@@ -170,7 +173,8 @@ export const AlarmComponent = () => {
                                         >
                                             <Box display="flex" flexDirection="column" py="10px">
                                                 <Typography variant="body1" mb="2px">
-                                                    ...님이 좋아하실만한 기술 블로그!
+                                                    {userData.nickname}님이 좋아하실만한 기술
+                                                    블로그!
                                                 </Typography>
                                                 <Typography variant="body2" color="#ABABAB">
                                                     {data.pushDate}

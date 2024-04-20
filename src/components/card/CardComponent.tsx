@@ -20,9 +20,11 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
             return;
         }
     };
+
     useEffect(() => {
         if (token === null || token === '') setIsLogin(true);
     }, [token]);
+
     return (
         <>
             {!isLogin ? (

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
@@ -17,25 +17,28 @@ import CategoryModal from '../components/modal/CategoryModal';
 import UserSnackbar from '../components/snackbar/UserSnackbar';
 import { LoginSuccess } from '../components/modal/LoginSuccess';
 import { Box } from '@mui/material';
+import { loginSuccessState } from '../recoil/atom/loginSuccessState';
+import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
 
 export default function MainPage() {
-    const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
-    const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState(false);
+    const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
+    const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
     const [techBlogData, setTechBlogData] = useState<any[]>([]);
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
-    const [didMount, setDidMount] = useState(false);
+    const [didMount, setDidMount] = useState<boolean>(false);
     const displayMode = useRecoilValue(DisplayModeState);
-    const [page, setPage] = useState(0);
-    const [categoryId, setCategoryId] = useState(0);
+    const [page, setPage] = useState<number>(0);
+    const [categoryId, setCategoryId] = useState<number>(0);
 
     const loggedIn = useRecoilValue(isLoggedInState);
     const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
     const size = 10;
     const setCategoryItems = useSetRecoilState(categoryItemsState);
-    const setHandleModalOpen = useSetRecoilState(modalOpenState);
+    const [handleModalOpen, setHandleModalOpen] = useRecoilState(modalOpenState);
     const setLoginModalOpen = useSetRecoilState(loginModalState);
     const setProfileHeaderMenu = useSetRecoilState(profileHeaderMenu);
-
+    const singupSuccessModal = useRecoilValue(loginSuccessState);
+    const snackbarOpen = useRecoilValue(snackbarOpenState);
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
 
@@ -98,11 +101,11 @@ export default function MainPage() {
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
             <div className="flex flex-col w-full gap-6">
-                <div className="mt-14">
+                <div>
                     <DisplayModeSwitch />
                 </div>
 
-                <div className="flex w-full pr-4 mt-8">
+                <div className="flex w-full pr-4">
                     {loggedIn ? (
                         <CategorySlide
                             onClose={handleCategoryModalClose}
@@ -139,15 +142,15 @@ export default function MainPage() {
                 </div>
                 <div ref={setObservationTarget}></div>
             </div>
-            <SignUpModal onSignupNext={handleSignupNext} />
+            {handleModalOpen && <SignUpModal onSignupNext={handleSignupNext} />}
             {isCategoryModalOpen && (
                 <CategoryModal
                     onModalOpen={isCategoryModalOpen}
                     onClose={handleCategoryModalClose}
                 />
             )}
-            <UserSnackbar />;
-            <LoginSuccess />
+            {snackbarOpen && <UserSnackbar />}
+            {singupSuccessModal && <LoginSuccess />}
         </div>
     );
 }

@@ -1,9 +1,9 @@
-import { Box, Card, Typography } from '@mui/material';
+import { Box, Card, Link, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { BiSolidLike } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
 import { recommendedListApi } from '../apis/recommended';
-
+import { useProfileState } from '../context/UserProfile';
 type recommendedItem = {
     category: { id: number; name: string }[];
     postInfo: {
@@ -17,10 +17,7 @@ type recommendedItem = {
 
 export const RecommendedListPage = () => {
     const [list, setList] = useState<recommendedItem[]>([]);
-    // async function onClick(id: number) {
-    //     // const res = await readPostApi(id);
-    //     // 뷰 작업 후 페이지 이동 로직 추가
-    // }
+    const { userData } = useProfileState();
 
     useEffect(() => {
         async function recommendedList() {
@@ -41,7 +38,7 @@ export const RecommendedListPage = () => {
 
     return (
         <div>
-            <h1 className="py-10 text-center">...님을 위한 추천 리스트</h1>
+            <h1 className="py-10 text-center">{userData.nickname}님을 위한 추천 리스트</h1>
             <div
                 className={`grid gap-3 ${
                     list.length > 5 ? 'lg:grid-cols-3 sm:grid-cols-2 grid-cols-1' : ''
@@ -59,10 +56,13 @@ export const RecommendedListPage = () => {
                                 boxShadow: '4',
                                 padding: '20px',
                             }}
-                            //onClick={() => onClick(data.postInfo.id)}
                         >
                             <Box marginBottom="10px">
-                                <Box marginBottom="10px">
+                                <Box
+                                    marginBottom="10px"
+                                    onClick={() => window.open(`${data.postInfo.url}`, '_blank')}
+                                    sx={{ cursor: 'pointer' }}
+                                >
                                     <Typography
                                         variant="h5"
                                         className="line-clamp-1"
@@ -71,13 +71,24 @@ export const RecommendedListPage = () => {
                                         {data.postInfo.title}
                                     </Typography>
                                 </Box>
-                                <Typography
-                                    variant="body2"
+                                <Link
+                                    href={`/view/${data.postInfo.id}`}
                                     color="text.primary"
-                                    className="line-clamp-3"
+                                    underline="none"
+                                    sx={{
+                                        '&:hover': {
+                                            color: 'text.primary',
+                                        },
+                                    }}
                                 >
-                                    {data.postInfo.summary}
-                                </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.primary"
+                                        className="line-clamp-3"
+                                    >
+                                        {data.postInfo.summary}
+                                    </Typography>
+                                </Link>
                             </Box>
                             <Box>
                                 <div className="flex flex-wrap mt-3 max-h-[70px] overflow-y-hidden">

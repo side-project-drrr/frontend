@@ -36,9 +36,9 @@ export const LoginSuccess = () => {
 
                         <h3>회원가입 완료</h3>
                         <div className="flex flex-wrap items-center justify-center w-10/12">
-                            <p>
-                                매일 새로운 기술블로그 소식을{' '}
-                                <p className="flex justify-center w-full">전달받아보세요</p>
+                            <p className="text-center">
+                                매일 새로운 기술블로그 소식을 <br />
+                                전달 받아보세요.
                             </p>
                         </div>
                         <Button

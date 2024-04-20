@@ -70,7 +70,7 @@ const KeywordPage = forwardRef(function Autocomplete(
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center justify-around">
+            <div className="flex flex-col items-center justify-around">
                 <h1 className="mb-[2rem] text-[4rem]">Keywords</h1>
                 <div
                     {...getRootProps(other)}

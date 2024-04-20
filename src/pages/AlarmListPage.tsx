@@ -78,8 +78,12 @@ export const AlarmListPage = () => {
             </Box>
             <Box>
                 {list &&
-                    list.map((data: any) => (
-                        <ListboxItem key={data.techBlogPostBasicInfoDto.id} item={data} />
+                    list.map((data: any, index: number) => (
+                        <ListboxItem
+                            key={data.techBlogPostBasicInfoDto.id}
+                            item={data}
+                            index={index}
+                        />
                     ))}
             </Box>
         </Box>

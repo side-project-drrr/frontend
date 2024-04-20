@@ -80,7 +80,7 @@ function AuthHeader({ onLogout }: IHandleProps) {
     return (
         <div className="relative">
             {img ? (
-                <Avatar alt="Avatar" src={imgUrl} onClick={e => handleToggleOpen(e)} />
+                <Avatar alt="Avatar" src={imgUrl} onClick={(e: any) => handleToggleOpen(e)} />
             ) : (
                 <Login />
             )}

@@ -84,7 +84,7 @@ export default function HeaderSearchMenu({
                                         <CloseIcon
                                             sx={{ opacity: '50%' }}
                                             key={index}
-                                            onClick={e => {
+                                            onClick={(e: any) => {
                                                 e.preventDefault();
                                                 handleCloseSearchResult(index);
                                             }}

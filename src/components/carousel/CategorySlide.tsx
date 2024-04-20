@@ -131,7 +131,7 @@ export default function CategorySlide({
                                     } `}
                                     id={item.id}
                                     aria-label="카테고리"
-                                    onClick={(e: any) => handleUserCategoryId(e.target.id)}
+                                    onClick={() => handleUserCategoryId(item.id)}
                                 >
                                     {item.name}
                                 </p>

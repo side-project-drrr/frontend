@@ -8,13 +8,13 @@ export default function ListBox({ items, onCategoryId, onFilterItems }: IListBox
             {onCategoryId === 0 || onCategoryId === undefined ? (
                 <Box>
                     {items.map((item: any, index: number) => (
-                        <ListboxItem key={index} item={item} />
+                        <ListboxItem key={index} item={item} index={index} />
                     ))}
                 </Box>
             ) : (
                 <Box>
                     {onFilterItems.map((item: any, index: number) => (
-                        <ListboxItem key={index} item={item} />
+                        <ListboxItem key={index} item={item} index={index} />
                     ))}
                 </Box>
             )}

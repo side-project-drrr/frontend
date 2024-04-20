@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { styled } from '@mui/material';
 import { IndexingComponent } from '../components/topics/Indexing';
 import { ListComponent } from '../components/topics/List';
 import { getEtcIndexTopicsApi, getIndexTopicsApi, getSearchTopicsApi } from '../apis/topics';
@@ -7,6 +6,7 @@ import { useRecoilState } from 'recoil';
 import { searchValueState, topicIndexState, topicState } from '../recoil/atom/topicsState';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { Input } from '@mui/base';
+import { inputEl } from '../style/style';
 
 export default function TopicPage() {
     const [, setTopics] = useRecoilState(topicState);
@@ -31,19 +31,22 @@ export default function TopicPage() {
             clearTimeout(timer);
         }
 
-        const newTimer = setTimeout(async () => {
-            setSearchVal(value);
+        setSearchVal(value);
+        const newTimer = setTimeout(() => {
             setPage(0);
             setTopicIndex('');
 
-            const res = await getSearchTopicsApi(page, value);
-
-            if (res.status === 200) {
-                setTopics(res.data.content);
-            }
-        }, 1000);
+            callApi(value);
+        }, 500);
 
         setTimer(newTimer);
+    }
+    async function callApi(value: string) {
+        const res = await getSearchTopicsApi(page, value);
+
+        if (res.status === 200) {
+            setTopics(res.data.content);
+        }
     }
 
     // 인덱스 topic 무한 스크롤
@@ -86,16 +89,6 @@ export default function TopicPage() {
             topicIndex !== 'all' && topicIndex !== '' && infiniteIndexTopics(topicIndex);
         }
     }, [page]);
-
-    const inputEl = styled('input')(
-        ({ theme }) => `
-        width: 100%;
-        padding: 15px 0 15px 20px;
-        background: ${theme.palette.primary.main};
-        border-radius: 30px;
-        outline: none;
-    `,
-    );
 
     return (
         <div className="w-full p-10">

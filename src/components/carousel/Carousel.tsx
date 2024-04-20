@@ -104,9 +104,7 @@ export default function Carousel({ data }: CarouselProps) {
                             index === current ? 'bg-white' : 'bg-[#005FEE]'
                         } `}
                         key={data.id}
-                        onClick={() => {
-                            setCurrent(index);
-                        }}
+                        onClick={() => setCurrent(index)}
                     ></div>
                 ))}
             </div>

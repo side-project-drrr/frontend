@@ -37,7 +37,6 @@ export default function useHandleKeyPress({
                         : newSelectedOption;
                 });
             }
-
             break;
         case 'Escape':
             setSelectedSearchIndex(-1);

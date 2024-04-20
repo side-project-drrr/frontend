@@ -42,7 +42,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     const [isSearching, setIsSearching] = useState(false); // 검색value
     const [page, setPage] = useState(0);
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
-
     const buttonStyle = {
         backgroundImage: `linear-gradient(to right, #FFA471 ${userCategoryItems.length}0%, #F0F0F0 20%)`,
         color: 'black', // Set the text color if needed
@@ -152,15 +151,12 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
             setIsSearching(false);
         }
     }, [categorySearchValue]);
-    useEffect(() => {
-        const a = document.getElementById('CategoryModal-Scroll');
-        console.log(a);
-    }, []);
+
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
                 <Box
-                    sx={theme => ({
+                    sx={(theme: any) => ({
                         position: 'absolute' as 'absolute',
                         top: '50%',
                         left: '50%',
@@ -182,11 +178,11 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                             variant="outlined"
                             onChange={handleCategorySearchItem}
                             aria-label="검색창"
-                            sx={theme => ({
+                            sx={(theme: any) => ({
                                 width: '67%',
                                 [theme.breakpoints.down('sm')]: { width: '100%' },
                             })}
-                            onKeyDown={e => handleCategorySearchKeyborad(e)}
+                            onKeyDown={(e: any) => handleCategorySearchKeyborad(e)}
                             autoComplete="off"
                         />
                     </div>
@@ -195,14 +191,12 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                         id="CategoryModal-Scroll"
                     >
                         {categoryItems?.map(categoryitem => (
-                            <>
-                                <PrivateCategoryItems
-                                    key={categoryitem.id}
-                                    categoryId={categoryitem.id}
-                                    title={categoryitem.name}
-                                    onSetObservationTarget={setObservationTarget}
-                                />
-                            </>
+                            <PrivateCategoryItems
+                                key={categoryitem.id}
+                                categoryId={categoryitem.id}
+                                title={categoryitem.name}
+                                onSetObservationTarget={setObservationTarget}
+                            />
                         ))}
                     </ul>
 
@@ -213,7 +207,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                         onClick={() => handleUserCreateCategory(userCategoryItems)}
                         role="Button"
                         aria-label="카테고리 선택 완료"
-                        sx={theme => ({ [theme.breakpoints.down('sm')]: { width: '100%' } })}
+                        sx={(theme: any) => ({ [theme.breakpoints.down('sm')]: { width: '100%' } })}
                     >
                         <p>선택({userCategoryItems.length}/10)</p>
                     </Button>
