@@ -29,7 +29,7 @@ export default function Recommend() {
     useEffect(() => {
         if (recommendData.length > 0) {
             const randomIndex = Math.floor(Math.random() * recommendData.length);
-            setRandomRecommendData(recommendData[randomIndex]?.techBlogPostBasicInfoDto);
+            setRandomRecommendData(recommendData[randomIndex]);
         }
     }, [recommendData]);
 
@@ -67,7 +67,10 @@ export default function Recommend() {
                     </p>
                 </Box>
                 {randomRecommendData ? (
-                    <div className="relative flex items-center w-full" key={randomRecommendData.id}>
+                    <div
+                        className="relative flex items-center w-full"
+                        key={randomRecommendData?.techBlogPostStaticDataDto?.id}
+                    >
                         <Box
                             minWidth="80px"
                             minHeight="80px"
@@ -78,19 +81,22 @@ export default function Recommend() {
                             bgcolor="background.paper"
                             sx={{
                                 backgroundImage: `url(${
-                                    randomRecommendData.thumbnailUrl
-                                        ? randomRecommendData.thumbnailUrl
+                                    randomRecommendData?.techBlogPostStaticDataDto?.thumbnailUrl
+                                        ? randomRecommendData.techBlogPostStaticDataDto.thumbnailUrl
                                         : darkLogo
                                 })`,
                                 backgroundRepeat: 'no-repeat',
                                 backgroundPosition: 'center center',
-                                backgroundSize: randomRecommendData.thumbnailUrl ? 'cover' : '50%',
+                                backgroundSize: randomRecommendData?.techBlogPostStaticDataDto
+                                    ?.thumbnailUrl
+                                    ? 'cover'
+                                    : '50%',
                             }}
                         />
 
                         <Typography variant="body2" paddingLeft="10px">
                             <Link
-                                href={`/view/${randomRecommendData.id}`}
+                                href={`/view/${randomRecommendData?.techBlogPostStaticDataDto?.id}`}
                                 color="text.primary"
                                 underline="none"
                                 sx={{
@@ -99,7 +105,7 @@ export default function Recommend() {
                                     },
                                 }}
                             >
-                                {randomRecommendData.title}
+                                {randomRecommendData?.techBlogPostStaticDataDto?.title}
                             </Link>
                         </Typography>
                     </div>

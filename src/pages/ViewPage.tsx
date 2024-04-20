@@ -40,7 +40,7 @@ export const ViewPage = () => {
         getPost();
         postId && readPostApi(postId);
     }, [postId]);
-
+    console.log(post);
     return (
         post && (
             <Box>
@@ -67,7 +67,7 @@ export const ViewPage = () => {
                                 md: '400px',
                             },
                             backgroundImage: `url(${
-                                post.thumbnailUrl ? post.thumbnailUrl : darkLogo
+                                post?.thumbnailUrl ? post.thumbnailUrl : darkLogo
                             })`,
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'center center',
@@ -75,7 +75,7 @@ export const ViewPage = () => {
                         }}
                     ></Box>
 
-                    <Typography variant="body1" paddingY="20px">
+                    <Typography variant="body1" padding="20px">
                         {post.aiSummary.split('\r\n').map((line, idx) => (
                             <Fragment key={idx}>
                                 {line}

@@ -12,6 +12,7 @@ type recommendedItem = {
         viewCount: number;
         title: string;
         summary: string;
+        url: string;
     };
 };
 
