@@ -15,7 +15,6 @@ export default function Aside() {
 
     async function getTopContentRender() {
         const topContentData = await getTopPostItemService();
-
         setTopContent(topContentData);
     }
     useEffect(() => {

@@ -1,5 +1,5 @@
 export interface IRandomDataProps {
-    techBlogPostStaticDataDto: {
+    techBlogPostBasicInfoDto: {
         id: string;
         title: string;
         summary: string;

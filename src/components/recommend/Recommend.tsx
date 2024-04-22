@@ -32,6 +32,7 @@ export default function Recommend() {
             setRandomRecommendData(recommendData[randomIndex]);
         }
     }, [recommendData]);
+    console.log(recommendData);
 
     return (
         <ErrorBoundary fallbackRender={ErrorFallback}>
@@ -69,7 +70,7 @@ export default function Recommend() {
                 {randomRecommendData ? (
                     <div
                         className="relative flex items-center w-full"
-                        key={randomRecommendData?.techBlogPostStaticDataDto?.id}
+                        key={randomRecommendData?.techBlogPostBasicInfoDto?.id}
                     >
                         <Box
                             minWidth="80px"
@@ -81,13 +82,13 @@ export default function Recommend() {
                             bgcolor="background.paper"
                             sx={{
                                 backgroundImage: `url(${
-                                    randomRecommendData?.techBlogPostStaticDataDto?.thumbnailUrl
-                                        ? randomRecommendData.techBlogPostStaticDataDto.thumbnailUrl
+                                    randomRecommendData?.techBlogPostBasicInfoDto?.thumbnailUrl
+                                        ? randomRecommendData.techBlogPostBasicInfoDto.thumbnailUrl
                                         : darkLogo
                                 })`,
                                 backgroundRepeat: 'no-repeat',
                                 backgroundPosition: 'center center',
-                                backgroundSize: randomRecommendData?.techBlogPostStaticDataDto
+                                backgroundSize: randomRecommendData?.techBlogPostBasicInfoDto
                                     ?.thumbnailUrl
                                     ? 'cover'
                                     : '50%',
@@ -96,7 +97,7 @@ export default function Recommend() {
 
                         <Typography variant="body2" paddingLeft="10px">
                             <Link
-                                href={`/view/${randomRecommendData?.techBlogPostStaticDataDto?.id}`}
+                                href={`/view/${randomRecommendData?.techBlogPostBasicInfoDto?.id}`}
                                 color="text.primary"
                                 underline="none"
                                 sx={{
@@ -105,7 +106,7 @@ export default function Recommend() {
                                     },
                                 }}
                             >
-                                {randomRecommendData?.techBlogPostStaticDataDto?.title}
+                                {randomRecommendData?.techBlogPostBasicInfoDto?.title}
                             </Link>
                         </Typography>
                     </div>
