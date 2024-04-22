@@ -32,7 +32,6 @@ export default function Recommend() {
             setRandomRecommendData(recommendData[randomIndex]);
         }
     }, [recommendData]);
-    console.log(recommendData);
 
     return (
         <ErrorBoundary fallbackRender={ErrorFallback}>

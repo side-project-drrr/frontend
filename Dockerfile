@@ -1,6 +1,5 @@
 FROM node:18.10.0
 
-
 WORKDIR /app
 
 COPY dist /app/dist

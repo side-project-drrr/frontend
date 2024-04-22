@@ -2,13 +2,10 @@
 // <reference lib="webworker" />
 
 self.addEventListener('push', event => {
-    // 보내는 데이터 타입
-    const data = event.data.json();
-    console.log(data);
     // 여기에 푸시 알림 처리 로직을 추가합니다.
     event.waitUntil(
         self.registration.showNotification('drrr', {
-            body: '테스트 내용',
+            body: '추천 게시글이 도착했습니다.',
         }),
     );
 });
