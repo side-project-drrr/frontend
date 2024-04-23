@@ -4,12 +4,67 @@ import darkLogo from '../../assets/darkLogo.webp';
 import { useProfileState } from '../../context/UserProfile';
 import { loginModalState } from '../../recoil/atom/loginModalState';
 import { useSetRecoilState } from 'recoil';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import {
+    deletePostLikedService,
+    getPostLikedService,
+    postIncreasedViewsService,
+    postTechBlogLikeService,
+} from '../../service/TechBlogService';
 import { useEffect, useState } from 'react';
 
 export default function ListboxItem({ item, index }: ItemProps) {
     const { token } = useProfileState();
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const setModalOpen = useSetRecoilState(loginModalState);
+
+    const [uniqueValues, setUniqueValues] = useState(new Set());
+
+    async function deleteTechBlogLikedRender(postId: number) {
+        await deletePostLikedService(postId);
+    }
+
+    async function getPostLikedRender() {
+        const postLiked = await getPostLikedService();
+        const postIds = new Set<String>(postLiked.postIds);
+        setUniqueValues(postIds);
+    }
+
+    async function postIncreasedViewsRender(postId: number) {
+        await postIncreasedViewsService(postId);
+    }
+
+    async function postTechBlogLike(postId: number) {
+        if (uniqueValues.has(postId)) {
+            await deleteTechBlogLikedRender(postId);
+            setUniqueValues((prevUniqueValues: any) => {
+                const newUniqueValues = new Set(prevUniqueValues);
+                newUniqueValues.delete(postId);
+                return newUniqueValues;
+            });
+        } else {
+            const postLikeClickData = await postTechBlogLikeService(postId);
+            if (postLikeClickData !== undefined) {
+                if (postLikeClickData.status === 200) {
+                    setUniqueValues((prevUniqueValues: any) => {
+                        const newUniqueValues = new Set(prevUniqueValues);
+                        newUniqueValues.add(postId);
+                        return newUniqueValues;
+                    });
+                }
+            }
+        }
+    }
+
+    const handlePostLike = (id: number) => {
+        postTechBlogLike(id);
+    };
+
+    useEffect(() => {
+        getPostLikedRender();
+    }, []);
+
     const handleLinkClick = () => {
         if (token === null || token === '') {
             setModalOpen(true);
@@ -19,39 +74,55 @@ export default function ListboxItem({ item, index }: ItemProps) {
     useEffect(() => {
         if (token === null || token === '') setIsLogin(true);
     }, [token]);
+
     return (
         <>
             {!isLogin ? (
-                <Link
-                    href={`/view/${item.techBlogPostBasicInfoDto.id}`}
-                    color="text.primary"
-                    underline="none"
-                    sx={{
-                        '&:hover': {
-                            color: 'text.primary',
+                <Box
+                    key={index}
+                    borderBottom={1}
+                    borderColor="primary.main"
+                    padding="30px 20px"
+                    width="97%"
+                    sx={(theme: any) => ({
+                        [theme.breakpoints.down('sm')]: {
+                            display: 'flex',
+                            flexDirection: 'column',
                         },
-                    }}
+                    })}
                 >
-                    <Box
-                        key={index}
-                        borderBottom={1}
-                        borderColor="primary.main"
-                        padding="30px 20px"
-                        width="97%"
-                        sx={theme => ({
-                            [theme.breakpoints.down('sm')]: {
-                                display: 'flex',
-                                flexDirection: 'column',
+                    <Link
+                        href={`${item.techBlogPostBasicInfoDto.url}`}
+                        target="_blank"
+                        color="text.primary"
+                        underline="none"
+                        sx={{
+                            '&:hover': {
+                                color: 'text.primary',
                             },
-                        })}
+                        }}
+                        onClick={() =>
+                            postIncreasedViewsRender(Number(item.techBlogPostBasicInfoDto.id))
+                        }
                     >
                         <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap pl-4 text-ellipsis max-[600px]:text-xs max-[600px]:hidden">
                             {item.techBlogPostBasicInfoDto.title}
                         </h1>
+                    </Link>
+                    <Link
+                        href={`/view/${item.techBlogPostBasicInfoDto.id}`}
+                        color="text.primary"
+                        underline="none"
+                        sx={{
+                            '&:hover': {
+                                color: 'text.primary',
+                            },
+                        }}
+                    >
                         <div className="flex items-center justify-between w-full pt-2 pb-2 max-[600px]:flex-col max-[600px]:w-full">
                             {item.techBlogPostBasicInfoDto.thumbnailUrl ? (
                                 <Box
-                                    sx={theme => ({
+                                    sx={(theme: any) => ({
                                         minWidth: '140px',
                                         height: '140px',
 
@@ -101,22 +172,34 @@ export default function ListboxItem({ item, index }: ItemProps) {
                                     label={`#${item.name}`}
                                     color="primary"
                                     className="px-4 py-1 text-sm rounded-xl"
-                                    sx={theme => ({
+                                    sx={(theme: any) => ({
                                         [theme.breakpoints.down('sm')]: { fontSize: '10px' },
                                     })}
                                 />
                             ))}
                         </Box>
-                        <div className="flex justify-between w-[150px] mt-[10px]">
-                            <span className="flex items-center justify-around text-xs text-center">
-                                좋아요: {item.techBlogPostBasicInfoDto.postLike}
+                    </Link>
+                    <ul className="flex justify-between w-2/12 mt-[10px] items-center">
+                        <li className="flex items-center justify-center text-xs ">
+                            <ThumbUpIcon
+                                onClick={() =>
+                                    handlePostLike(Number(item.techBlogPostBasicInfoDto.id))
+                                }
+                                sx={
+                                    uniqueValues.has(item.techBlogPostBasicInfoDto.id)
+                                        ? { color: '#E6783A', fontSize: '18px' }
+                                        : { color: '', fontSize: '18px' }
+                                }
+                            />
+                            <span className="flex items-center ml-2">
+                                {item.techBlogPostBasicInfoDto.likeCount}
                             </span>
-                            <span className="text-xs">
-                                조회수: {item.techBlogPostBasicInfoDto.viewCount}
-                            </span>
-                        </div>
-                    </Box>
-                </Link>
+                        </li>
+                        <li className="text-xs ">
+                            <RemoveRedEyeIcon /> {item.techBlogPostBasicInfoDto.viewCount}
+                        </li>
+                    </ul>
+                </Box>
             ) : (
                 <Link
                     color="text.primary"
@@ -166,7 +249,7 @@ export default function ListboxItem({ item, index }: ItemProps) {
                                         backgroundPosition: 'center center',
                                         backgroundSize: '30%',
                                     }}
-                                ></Box>
+                                />
                             )}
                         </div>
                         <Box className="flex gap-2 w-full flex-wrap overflow-y-hidden h-[40px] mt-[20px]">
@@ -180,14 +263,26 @@ export default function ListboxItem({ item, index }: ItemProps) {
                                 />
                             ))}
                         </Box>
-                        <div className="flex mt-[10px] w-[150px] justify-between">
-                            <span className="flex items-center justify-around text-xs text-center">
-                                좋아요: {item.techBlogPostBasicInfoDto.postLike}
-                            </span>
-                            <span className="text-xs">
-                                조회수: {item.techBlogPostBasicInfoDto.viewCount}
-                            </span>
-                        </div>
+                        <ul className="flex justify-between w-2/12 mt-[10px] items-center">
+                            <li className="flex items-center justify-center text-xs ">
+                                <ThumbUpIcon
+                                    onClick={() =>
+                                        handlePostLike(Number(item.techBlogPostBasicInfoDto.id))
+                                    }
+                                    sx={
+                                        uniqueValues.has(item.techBlogPostBasicInfoDto.id)
+                                            ? { color: '#E6783A', fontSize: '18px' }
+                                            : { color: '', fontSize: '18px' }
+                                    }
+                                />
+                                <span className="flex items-center ml-2">
+                                    {item.techBlogPostBasicInfoDto.likeCount}
+                                </span>
+                            </li>
+                            <li className="text-xs ">
+                                <RemoveRedEyeIcon /> {item.techBlogPostBasicInfoDto.viewCount}
+                            </li>
+                        </ul>
                     </Box>
                 </Link>
             )}

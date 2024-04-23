@@ -5,7 +5,7 @@ export interface IListBoxProps {
             title: string;
             summary: string;
             thumbnailUrl: string;
-            postLike: number;
+            likeCount: number;
             viewCount: number;
         };
         categoryDto: { id: string; name: string }[];
@@ -21,7 +21,7 @@ export interface ItemProps {
             title: string;
             summary: string;
             thumbnailUrl: string;
-            postLike: number;
+            likeCount: number;
             viewCount: number;
             url: string;
         };

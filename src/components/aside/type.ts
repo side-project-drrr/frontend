@@ -12,7 +12,7 @@ export interface ITopPostProps {
             techBlogCode: string;
             thumbnailUrl: string;
             viewCount: number;
-            postLike: number;
+            likeCount: number;
             writtenAt: Date;
             url: string;
         };

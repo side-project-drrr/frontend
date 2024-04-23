@@ -7,7 +7,7 @@ const items = [
             title: 'Sample Tech Blog Post',
             summary: 'This is a sample summary of the tech blog post.',
             thumbnailUrl: 'https://example.com/thumbnail.jpg',
-            postLike: 10,
+            likeCount: 10,
             viewCount: 100,
         },
         categoryDto: [

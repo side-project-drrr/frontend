@@ -5,7 +5,7 @@ export interface ICardItemsProps {
             title: string;
             summary: string;
             thumbnailUrl: string;
-            postLike: number;
+            likeCount: number;
             viewCount: number;
         };
         categoryDto: { id: string; name: string }[];

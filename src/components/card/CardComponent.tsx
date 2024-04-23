@@ -114,7 +114,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
                                     <span className="mr-2 text-xs">
-                                        좋아요: {item.techBlogPostBasicInfoDto.postLike}
+                                        좋아요: {item.techBlogPostBasicInfoDto.likeCount}
                                     </span>
                                     <span>조회수: {item.techBlogPostBasicInfoDto.viewCount}</span>
                                 </Typography>
@@ -209,7 +209,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
                                     <span className="mr-2 text-xs">
-                                        좋아요: {item.techBlogPostBasicInfoDto.postLike}
+                                        좋아요: {item.techBlogPostBasicInfoDto.likeCount}
                                     </span>
                                     <span>조회수: {item.techBlogPostBasicInfoDto.viewCount}</span>
                                 </Typography>
