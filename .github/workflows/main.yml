@@ -1,0 +1,40 @@
+name: Build and Push Docker Image
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 서브 모듈 체크아웃
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      # 서브 모듈 업데이트
+      - name: Update Submodules
+        run: git submodule update --recursive
+
+      # 노드 설치
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '21'
+
+      # 의존성 패키지 설치
+      - name: Install Dependencies
+        run: yarn install
+
+      # 빌드
+      - name: Build
+        run: yarn build
+
+      # 도커 이미지 생성
+      # - name: Build Docker Image
+      # run: docker build -t my-react-app .
+
+      
