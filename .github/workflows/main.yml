@@ -1,51 +1,51 @@
 name: Build and Push Docker Image
 on:
-  push:
-    branches:
-      - dev
-
-  workflow_dispatch:
-    inputs:
-         logLevel:
-            description: 'Log level'     
-            required: true
-            default: 'warning'
-         tags:
-            description: 'Test scenario tags'
+    push:
+        branches:
+            - main
+    pull_request:
+        branches: [main]
 
 jobs:
-  build:
-  
-    runs-on: ubuntu-latest
-    
-    steps:
-      # 서브 모듈 체크아웃
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          submodules: 'recursive'
-          token: ${{ secrets.TOKEN }}
+    build:
+        runs-on: ubuntu-latest
 
-      # 서브 모듈 업데이트
-      - name: Update Submodules
-        run: git submodule update --recursive
+        steps:
+            # 서브 모듈 체크아웃
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+              with:
+                  submodules: 'recursive'
 
-      # 노드 설치
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '21'
+            # 서브 모듈 업데이트
+            - name: Update Submodules
+              run: git submodule update --recursive
 
-      # 의존성 패키지 설치
-      - name: Install Dependencies
-        run: yarn install
+            # 노드 설치
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '21'
 
-      # 빌드
-      - name: Build
-        run: yarn build
+            # 의존성 패키지 설치
+            - name: Install Dependencies
+              run: yarn install
+            # 빌드
+            - name: Build
+              run: yarn build
+            # Docker에 연결하여 이미지를 빌드하고 hub에 푸시
+            - name: Login to Docker Hub
+              uses: docker/login-action@v2
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
 
-      # 도커 이미지 생성
-      # - name: Build Docker Image
-      # run: docker build -t my-react-app .
-
-      
+            - name: Build and push
+              uses: docker/build-push-action@v4
+              with:
+                  context: .
+                  file: ./Dockerfile
+                  push: true
+                  tags: qweiop3334/drrr-frontend:latest
