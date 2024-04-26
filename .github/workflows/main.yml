@@ -50,7 +50,7 @@ jobs:
                   file: ./Dockerfile
                   push: true
                   tags: qweiop3334/drrr-frontend:latest
-
+    # build
     deploy:
         needs: build
         name: Deploy
