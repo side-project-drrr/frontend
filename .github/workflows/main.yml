@@ -24,6 +24,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: 'recursive'
+          token: ${{ secrets.TOKEN }}
 
       # 서브 모듈 업데이트
       - name: Update Submodules
