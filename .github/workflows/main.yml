@@ -34,13 +34,6 @@ jobs:
             - name: Build
               run: yarn build
 
-              # Docker 및 Docker 빌드 도구 설치
-            - name: Set up Docker
-              run: |
-                  sudo apt-get update
-                  sudo apt-get install -y docker.io
-                  sudo apt-get install -y build-essential
-
             # Docker에 연결하여 이미지를 빌드하고 hub에 푸시
             - name: Login to Docker Hub
               uses: docker/login-action@v2
@@ -63,6 +56,26 @@ jobs:
         name: Deploy
         runs-on: [self-hosted, drrr-label]
         steps:
+            # Spring 어플리케이션 Docker Image 빌드
+            # - name: Build Docker Image For Spring
+            #   run: |
+            #       docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            #       docker build -t ${{ secrets.DOCKER_USERNAME }}/도커 레파지토리 이름 .
+            #       docker push ${{ secrets.DOCKER_USERNAME }}/도커 레파지토리 이름
+
+            # # 서버에서 Docker 이미지 실행
+            # - name: EC2 Docker Run
+            #   uses: appleboy/ssh-action@master
+            #   with:
+            #       host: ${{ secrets.EC2_HOST }}
+            #       username: ubuntu
+            #       key: ${{ secrets.EC2_KEY }}
+            #       script: |
+            #           docker stop
+            #           docker rm -f $(docker ps -qa)
+            #           docker rmi ${{ secrets.DOCKER_USERNAME }}/도커 레파지토리 이름
+            #           docker pull ${{ secrets.DOCKER_USERNAME }}/도커 레파지토리 이름
+            #           docker-compose up -d
             - name: Login to ghcr
               uses: actions/checkout@v3
 
@@ -79,5 +92,5 @@ jobs:
 
             - name: Docker run
               run: |
-                  docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
-                  docker run -d -p 3000:3000 --name superman --restart always ${{ env.DOCKER_IMAGE }}:latest
+                  docker stop ${{ env.CONTAINER_NAME }} && docker rm ${{ env.CONTAINER_NAME }} && docker rmi ${{ env.DOCKER_IMAGE_NAME }}:latest
+                  docker run -d -p 3000:3000 --name superman --restart always ${{ env.DOCKER_IMAGE_NAME }}:latest
