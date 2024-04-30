@@ -1,20 +1,21 @@
+import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import MainPage from './pages/MainPage';
 
-import SocialCallback from './components/social/SocialCallback';
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { useDarkMode } from './ThemeContext/ThemeProvider';
-import LayoutWithAside from './components/layout/LayoutWIthAside';
-import LayoutWithOutAside from './components/layout/LayoutWithOutAside';
-import TopicPage from './pages/TopicPage';
-import HeaderSearchPage from './pages/HeaderSearchPage';
-import { RecommendedListPage } from './pages/RecommendedListPage';
 import { UserProfileProvider } from './context/UserProfile';
-import ProfilePage from './pages/ProfilePage';
-import { AlarmListPage } from './pages/AlarmListPage';
-import { ViewPage } from './pages/ViewPage';
+const RecommendedListPage = lazy(() => import('./pages/RecommendedListPage'));
+const MainPage = lazy(() => import('./pages/MainPage'));
+const HeaderSearchPage = lazy(() => import('./pages/HeaderSearchPage'));
+const TopicPage = lazy(() => import('./pages/TopicPage'));
+const LayoutWithOutAside = lazy(() => import('./components/layout/LayoutWithOutAside'));
+const LayoutWithAside = lazy(() => import('./components/layout/LayoutWIthAside'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const AlarmListPage = lazy(() => import('./pages/AlarmListPage'));
+const ViewPageComponent = lazy(() => import('./pages/ViewPage'));
+const SocialComponent = lazy(() => import('./components/social/SocialCallback'));
 
 function App() {
     const { darkMode } = useDarkMode();
@@ -67,26 +68,28 @@ function App() {
     });
 
     return (
-        <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
-            <CssBaseline />
-            <UserProfileProvider>
-                <Routes>
-                    <Route element={<LayoutWithAside />}>
-                        <Route path="/" element={<MainPage />} />
-                        <Route path="/search/:search" element={<HeaderSearchPage />} />
-                        <Route path="/topics" element={<TopicPage />} />
-                        <Route path="/alarm/list" element={<AlarmListPage />} />
-                    </Route>
-                    <Route element={<LayoutWithOutAside />}>
-                        <Route path="/recommend/list" element={<RecommendedListPage />} />
-                        <Route path="/view/:postId" element={<ViewPage />} />
-                        <Route path="/profile" element={<ProfilePage />} />
-                    </Route>
-                    <Route path="/kakao/auth" element={<SocialCallback />} />
-                    <Route path="/github/auth" element={<SocialCallback />} />
-                </Routes>
-            </UserProfileProvider>
-        </ThemeProvider>
+        <Suspense fallback={<div>로딩 중.....</div>}>
+            <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
+                <CssBaseline />
+                <UserProfileProvider>
+                    <Routes>
+                        <Route element={<LayoutWithAside />}>
+                            <Route path="/" element={<MainPage />} />
+                            <Route path="/search/:search" element={<HeaderSearchPage />} />
+                            <Route path="/topics" element={<TopicPage />} />
+                            <Route path="/alarm/list" element={<AlarmListPage />} />
+                        </Route>
+                        <Route element={<LayoutWithOutAside />}>
+                            <Route path="/recommend/list" element={<RecommendedListPage />} />
+                            <Route path="/view/:postId" element={<ViewPageComponent />} />
+                            <Route path="/profile" element={<ProfilePage />} />
+                        </Route>
+                        <Route path="/kakao/auth" element={<SocialComponent />} />
+                        <Route path="/github/auth" element={<SocialComponent />} />
+                    </Routes>
+                </UserProfileProvider>
+            </ThemeProvider>
+        </Suspense>
     );
 }
 

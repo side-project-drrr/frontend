@@ -35,7 +35,7 @@ function getSevenDaysAgoDate() {
     return `${year}-${month}-${day}`;
 }
 
-export const AlarmListPage = () => {
+const AlarmListPage = () => {
     const { from, to } = useLocation().state;
     const [stDate, setStDate] = useState<string>(getSevenDaysAgoDate());
     const [enDate, setEnDate] = useState<string>(getCurrentDate());
@@ -89,3 +89,5 @@ export const AlarmListPage = () => {
         </Box>
     );
 };
+
+export default AlarmListPage;
