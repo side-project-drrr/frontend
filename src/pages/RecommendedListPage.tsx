@@ -18,7 +18,7 @@ type recommendedItem = {
     };
 };
 
-export const RecommendedListPage = () => {
+const RecommendedListPage = () => {
     const [list, setList] = useState<recommendedItem[]>([]);
     const { userData } = useProfileState();
 
@@ -140,3 +140,5 @@ export const RecommendedListPage = () => {
         </div>
     );
 };
+
+export default RecommendedListPage;
