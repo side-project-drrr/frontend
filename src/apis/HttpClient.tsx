@@ -2,7 +2,11 @@ import axios from 'axios';
 import { reissuanceTokenService } from '../service/auth/SocialService';
 import { getAuthStorage, setAccessTokenStorage } from '../repository/AuthRepository';
 
-const baseURL = import.meta.env.VITE_APP_BACK_END_LOCAL;
+let baseURL = import.meta.env.VITE_APP_API_URL_DEV;
+
+if (process.env.NODE_ENV === 'production') {
+    baseURL = import.meta.env.VITE_APP_API_URL_PROD;
+}
 
 const HttpClient = axios.create({
     baseURL: baseURL,
