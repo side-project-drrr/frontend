@@ -15,6 +15,7 @@ import { UserProfileProvider } from './context/UserProfile';
 import ProfilePage from './pages/ProfilePage';
 import { AlarmListPage } from './pages/AlarmListPage';
 import { ViewPage } from './pages/ViewPage';
+import HealthCheck from './pages/HealthCheck';
 
 function App() {
     const { darkMode } = useDarkMode();
@@ -69,6 +70,9 @@ function App() {
     return (
         <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
             <CssBaseline />
+            <Routes>
+                <Route path="/healthcheck" element={<HealthCheck />} />
+            </Routes>
             <UserProfileProvider>
                 <Routes>
                     <Route element={<LayoutWithAside />}>
