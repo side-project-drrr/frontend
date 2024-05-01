@@ -32,6 +32,9 @@ jobs:
             - name: Install Dependencies
               run: yarn install
 
+            - name: env production
+              run: yarn cp-env
+
             # cypress test 실행
             - name: Run Cypress tests
               uses: cypress-io/github-action@v4
