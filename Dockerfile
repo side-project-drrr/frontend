@@ -22,7 +22,7 @@ RUN yarn build
 COPY dist /app/dist
 
 # prod environment
-FROM nginx:stable-alpine as drrr
+FROM nginx:stable-alpine
 
 # 이전 빌드 단계에서 빌드한 결과물을 /usr/share/nginx/html 으로 복사한다.
 COPY --from=build /app/dist /usr/share/nginx/html
