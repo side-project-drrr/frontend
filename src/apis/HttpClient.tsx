@@ -2,7 +2,6 @@ import axios from 'axios';
 import { reissuanceTokenService } from '../service/auth/SocialService';
 import { getAuthStorage, setAccessTokenStorage } from '../repository/AuthRepository';
 
-
 let baseURL = import.meta.env.VITE_APP_API_URL_DEV;
 
 if (process.env.NODE_ENV === 'production') {
