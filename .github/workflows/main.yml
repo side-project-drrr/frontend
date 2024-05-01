@@ -30,6 +30,16 @@ jobs:
             - name: Install Dependencies
               run: yarn install
 
+            # cypress test 실행
+            - name: Run Cypress tests
+              uses: cypress-io/github-action@v4
+              with:
+                  start: yarn start
+                  wait-on: 'http://localhost:5173'
+
+            - name: Run Cypress Test Runner
+              run: yarn cypress run
+
             # 빌드
             - name: Build
               run: yarn build
@@ -56,26 +66,6 @@ jobs:
         name: Deploy
         runs-on: [self-hosted, drrr-label]
         steps:
-            # Spring 어플리케이션 Docker Image 빌드
-            # - name: Build Docker Image For Spring
-            #   run: |
-            #       docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            #       docker build -t ${{ secrets.DOCKER_USERNAME }}/도커 레파지토리 이름 .
-            #       docker push ${{ secrets.DOCKER_USERNAME }}/도커 레파지토리 이름
-
-            # # 서버에서 Docker 이미지 실행
-            # - name: EC2 Docker Run
-            #   uses: appleboy/ssh-action@master
-            #   with:
-            #       host: ${{ secrets.EC2_HOST }}
-            #       username: ubuntu
-            #       key: ${{ secrets.EC2_KEY }}
-            #       script: |
-            #           docker stop
-            #           docker rm -f $(docker ps -qa)
-            #           docker rmi ${{ secrets.DOCKER_USERNAME }}/도커 레파지토리 이름
-            #           docker pull ${{ secrets.DOCKER_USERNAME }}/도커 레파지토리 이름
-            #           docker-compose up -d
             - name: Login to ghcr
               uses: actions/checkout@v3
 
