@@ -7,7 +7,6 @@ let baseURL = import.meta.env.VITE_APP_API_URL_DEV;
 if (process.env.NODE_ENV === 'production') {
     baseURL = import.meta.env.VITE_APP_API_URL_PROD;
 }
-console.log(baseURL);
 
 const HttpClient = axios.create({
     baseURL: baseURL,
