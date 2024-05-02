@@ -9,7 +9,6 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-
         steps:
             # 서브 모듈 체크아웃
             - name: Checkout Repository
@@ -68,8 +67,8 @@ jobs:
                   file: ./Dockerfile
                   push: true
                   tags: qweiop3334/drrr-frontend:latest
-                  cache-from: type=gha
-                  cache-to: type=gha,mode=max
+                  # cache-from: type=gha
+                  # cache-to: type=gha,mode=max
 
     # build
     deploy:
