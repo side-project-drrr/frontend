@@ -29,11 +29,16 @@ jobs:
                   node-version: '21'
 
             # 의존성 패키지 설치
-            - name: Install Dependencies
-              run: yarn install
+            - name: Cache node modules
+              uses: actions/cache@v2
+              id: cache
+              width:
+                  path: node_modules
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
 
-            - name: env production
-              run: yarn cp-env
+              run: yarn install
 
             # cypress test 실행
             - name: Run Cypress tests
@@ -61,6 +66,9 @@ jobs:
                   file: ./Dockerfile
                   push: true
                   tags: qweiop3334/drrr-frontend:latest
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
+
     # build
     deploy:
         needs: build
