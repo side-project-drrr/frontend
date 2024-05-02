@@ -29,7 +29,7 @@ jobs:
 
             # 의존성 패키지 설치
             - name: Cache node modules
-              uses: actions/cache@v2
+              uses: actions/cache@v3
               id: yarn-cache
               with:
                   path: node_modules
@@ -39,7 +39,7 @@ jobs:
 
             - name: Install Dependencies
               if: steps.yarn-cache.outputs.cache-hit != 'true'
-              run: yarn install
+              run: yarn install --frozen-lockfile
 
             # 빌드
             - name: Build
@@ -50,6 +50,7 @@ jobs:
               uses: cypress-io/github-action@v4
               with:
                   start: yarn start
+                  command: yarn cypress run
 
             # Docker에 연결하여 이미지를 빌드하고 hub에 푸시
             - name: Login to Docker Hub
