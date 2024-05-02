@@ -41,15 +41,15 @@ jobs:
               if: steps.yarn-cache.outputs.cache-hit != 'true'
               run: yarn install
 
-            # cypress test 실행
-            # - name: Run Cypress tests
-            #   uses: cypress-io/github-action@v4
-            #   with:
-            #       start: yarn start
-
             # 빌드
             - name: Build
               run: yarn build
+
+            # cypress test 실행
+            - name: Run Cypress tests
+              uses: cypress-io/github-action@v4
+              with:
+                  start: yarn start
 
             # Docker에 연결하여 이미지를 빌드하고 hub에 푸시
             - name: Login to Docker Hub
