@@ -25,14 +25,14 @@ jobs:
             - name: Set up Node.js
               uses: actions/setup-node@v4
               with:
-                  node-version: '21'
+                  node-version: '20'
 
             # 의존성 패키지 설치
             - name: Cache node modules
               uses: actions/cache@v2
               id: yarn-cache
               with:
-                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                  path: node_modules
                   key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: |
                       ${{ runner.os }}-yarn-
