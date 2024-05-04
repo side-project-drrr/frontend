@@ -8,7 +8,6 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import {
     deletePostLikedService,
-    getPostLikedService,
     postIncreasedViewsService,
     postTechBlogLikeService,
 } from '../../service/TechBlogService';
@@ -23,12 +22,6 @@ export default function ListboxItem({ item, index }: ItemProps) {
 
     async function deleteTechBlogLikedRender(postId: number) {
         await deletePostLikedService(postId);
-    }
-
-    async function getPostLikedRender() {
-        const postLiked = await getPostLikedService();
-        const postIds = new Set<String>(postLiked.postIds);
-        setUniqueValues(postIds);
     }
 
     async function postIncreasedViewsRender(postId: number) {
@@ -60,10 +53,6 @@ export default function ListboxItem({ item, index }: ItemProps) {
     const handlePostLike = (id: number) => {
         postTechBlogLike(id);
     };
-
-    useEffect(() => {
-        getPostLikedRender();
-    }, []);
 
     const handleLinkClick = () => {
         if (token === null || token === '') {

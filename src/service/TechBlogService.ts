@@ -26,6 +26,8 @@ export async function getUserTechBlogService({
         const res = await HttpClient.get(
             `/api/v1/posts/categories/${id}?page=${page}&size=${size}`,
         );
+        console.log(res);
+
         return res.data;
     } catch (error) {
         console.error(error);
@@ -56,15 +58,6 @@ export async function postIncreasedViewsService(postId: number) {
     try {
         const res = await HttpClient.post(`/api/v1/view-post/${postId}`);
         return res;
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-export async function getPostLikedService() {
-    try {
-        const res = await HttpClient.get(`/api/v1/members/me/posts/liked`);
-        return res.data;
     } catch (error) {
         console.error(error);
     }
