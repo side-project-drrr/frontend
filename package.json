@@ -13,7 +13,7 @@
         "test": "vitest --run --reporter verbose --globals",
         "test:ui": "vitest --ui",
         "test:watch": "vitest",
-        "cp-env": "cp security/security-storage-front/.env ./.env.production ",
+        "cp-env": "cp security/security-storage-front/.env.production ./.env.production ",
         "start": "vite",
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build",
