@@ -29,10 +29,6 @@ export default function MainPage() {
     const displayMode = useRecoilValue(DisplayModeState);
     const [page, setPage] = useState<number>(0);
     const [categoryId, setCategoryId] = useState<number>(0);
-    const userAgent = window.navigator.userAgent;
-
-    console.log(userAgent);
-
     const loggedIn = useRecoilValue(isLoggedInState);
     const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
     const size = 10;
@@ -54,7 +50,6 @@ export default function MainPage() {
             size,
             id,
         });
-        console.log(userFilterTechBlogData);
 
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
     }
