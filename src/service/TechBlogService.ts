@@ -26,8 +26,6 @@ export async function getUserTechBlogService({
         const res = await HttpClient.get(
             `/api/v1/posts/categories/${id}?page=${page}&size=${size}`,
         );
-        console.log(res);
-
         return res.data;
     } catch (error) {
         console.error(error);
