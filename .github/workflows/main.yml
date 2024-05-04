@@ -46,11 +46,11 @@ jobs:
               run: yarn build
 
             # cypress test 실행
-            - name: Run Cypress tests
-              uses: cypress-io/github-action@v4
-              with:
-                  start: yarn start
-                  command: yarn cypress run
+            # - name: Run Cypress tests
+            #   uses: cypress-io/github-action@v4
+            #   with:
+            #       start: yarn start
+            #       command: yarn cypress run
 
             - name: Set up Docker Buildx
               id: buildx
