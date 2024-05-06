@@ -9,6 +9,7 @@ interface Props {
         likeCount: number;
         viewCount: number;
     };
+    hasMemberLikedPost: boolean;
     categoryDto: { id: string; name: string }[];
 }
 

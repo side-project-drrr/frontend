@@ -1,15 +1,4 @@
 export interface IListBoxProps {
-    items: {
-        techBlogPostBasicInfoDto: {
-            id: string;
-            title: string;
-            summary: string;
-            thumbnailUrl: string;
-            likeCount: number;
-            viewCount: number;
-        };
-        categoryDto: { id: string; name: string }[];
-    }[];
     onCategoryId?: number;
     onFilterItems?: any;
 }
@@ -25,6 +14,7 @@ export interface ItemProps {
             viewCount: number;
             url: string;
         };
+        hasMemberLikedPost: boolean;
         categoryDto: { id: string; name: string }[];
     };
     index: number;

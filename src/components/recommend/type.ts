@@ -4,7 +4,9 @@ export interface IRandomDataProps {
         title: string;
         summary: string;
         thumbnailUrl: string;
-        postLike: number;
+        likeCount: number;
         viewCount: number;
+        url: string;
     };
+    hasMemberLikedPost: boolean;
 }

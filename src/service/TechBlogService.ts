@@ -43,7 +43,7 @@ export async function getRecommendTechBlogService() {
     }
 }
 
-export async function postTechBlogLikeService(postId: number) {
+export async function postTechBlogLikeIncreasedService(postId: number) {
     try {
         const res = await HttpClient.post(`/api/v1/posts/${postId}/like`);
         return res;
