@@ -46,7 +46,7 @@ export default function HeaderSearchPage() {
                     } `}
                 >
                     {techBlogSearchData.length !== 0 ? (
-                        <ConditionalRenderer items={techBlogSearchData} />
+                        <ConditionalRenderer />
                     ) : (
                         <div className="flex justify-center w-full h-[80vh] items-center flex-col">
                             <QuestionMarkIcon sx={{ fontSize: '100px' }} />
