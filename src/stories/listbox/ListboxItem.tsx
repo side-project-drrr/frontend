@@ -9,51 +9,52 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import {
     deletePostLikedService,
     postIncreasedViewsService,
-    postTechBlogLikeService,
+    postTechBlogLikeIncreasedService,
 } from '../../service/TechBlogService';
 import { useEffect, useState } from 'react';
+import { techBlogDataState } from '../../recoil/atom/techBlogDataState';
 
 export default function ListboxItem({ item, index }: ItemProps) {
     const { token } = useProfileState();
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const setModalOpen = useSetRecoilState(loginModalState);
-
-    const [uniqueValues, setUniqueValues] = useState(new Set());
-
-    async function deleteTechBlogLikedRender(postId: number) {
-        await deletePostLikedService(postId);
-    }
-
+    const setTechBlogData = useSetRecoilState(techBlogDataState);
     async function postIncreasedViewsRender(postId: number) {
         await postIncreasedViewsService(postId);
     }
 
-    async function postTechBlogLike(postId: number) {
-        if (uniqueValues.has(postId)) {
-            await deleteTechBlogLikedRender(postId);
-            setUniqueValues((prevUniqueValues: any) => {
-                const newUniqueValues = new Set(prevUniqueValues);
-                newUniqueValues.delete(postId);
-                return newUniqueValues;
+    async function deleteTechBlogLikedRender(postId: number) {
+        await deletePostLikedService(postId);
+    }
+    const handlePostLike = async (id: number) => {
+        if (!item.hasMemberLikedPost) {
+            await postTechBlogLikeIncreasedService(id);
+            setTechBlogData(prev => {
+                return prev.map(item => {
+                    if (item.techBlogPostBasicInfoDto.id === id) {
+                        return {
+                            ...item,
+                            hasMemberLikedPost: true,
+                        };
+                    }
+                    return item;
+                });
             });
         } else {
-            const postLikeClickData = await postTechBlogLikeService(postId);
-            if (postLikeClickData !== undefined) {
-                if (postLikeClickData.status === 200) {
-                    setUniqueValues((prevUniqueValues: any) => {
-                        const newUniqueValues = new Set(prevUniqueValues);
-                        newUniqueValues.add(postId);
-                        return newUniqueValues;
-                    });
-                }
-            }
+            await deleteTechBlogLikedRender(id);
+            setTechBlogData(prev => {
+                return prev.map(item => {
+                    if (item.techBlogPostBasicInfoDto.id === id) {
+                        return {
+                            ...item,
+                            hasMemberLikedPost: false,
+                        };
+                    }
+                    return item;
+                });
+            });
         }
-    }
-
-    const handlePostLike = (id: number) => {
-        postTechBlogLike(id);
     };
-
     const handleLinkClick = () => {
         if (token === null || token === '') {
             setModalOpen(true);
@@ -175,7 +176,7 @@ export default function ListboxItem({ item, index }: ItemProps) {
                                     handlePostLike(Number(item.techBlogPostBasicInfoDto.id))
                                 }
                                 sx={
-                                    uniqueValues.has(item.techBlogPostBasicInfoDto.id)
+                                    item.hasMemberLikedPost
                                         ? { color: '#E6783A', fontSize: '18px' }
                                         : { color: '', fontSize: '18px' }
                                 }
@@ -254,16 +255,7 @@ export default function ListboxItem({ item, index }: ItemProps) {
                         </Box>
                         <ul className="flex justify-between w-2/12 mt-[10px] items-center">
                             <li className="flex items-center justify-center text-xs ">
-                                <ThumbUpIcon
-                                    onClick={() =>
-                                        handlePostLike(Number(item.techBlogPostBasicInfoDto.id))
-                                    }
-                                    sx={
-                                        uniqueValues.has(item.techBlogPostBasicInfoDto.id)
-                                            ? { color: '#E6783A', fontSize: '18px' }
-                                            : { color: '', fontSize: '18px' }
-                                    }
-                                />
+                                <ThumbUpIcon />
                                 <span className="flex items-center ml-2">
                                     {item.techBlogPostBasicInfoDto.likeCount}
                                 </span>

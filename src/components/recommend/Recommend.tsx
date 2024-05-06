@@ -8,6 +8,8 @@ import { getAuthStorage } from '../../repository/AuthRepository';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../components/errors/ErrorFallback';
 import { Box, Link, Typography } from '@mui/material';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 export default function Recommend() {
     const [recommendData, setRecommendData] = useState([]);
@@ -107,6 +109,22 @@ export default function Recommend() {
                             >
                                 {randomRecommendData?.techBlogPostBasicInfoDto?.title}
                             </Link>
+                            <Typography variant="body2" color="text.secondary">
+                                <ul className="flex items-center gap-4">
+                                    <li className="flex text-xs gap-1">
+                                        <ThumbUpIcon />
+                                        <span className="flex items-center text-xs">
+                                            {randomRecommendData.techBlogPostBasicInfoDto.likeCount}
+                                        </span>
+                                    </li>
+                                    <li className="text-xs flex items-center gap-1">
+                                        <RemoveRedEyeIcon />
+                                        <span>
+                                            {randomRecommendData.techBlogPostBasicInfoDto.viewCount}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </Typography>
                         </Typography>
                     </div>
                 ) : (

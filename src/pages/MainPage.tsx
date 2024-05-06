@@ -19,11 +19,12 @@ import { LoginSuccess } from '../components/modal/LoginSuccess';
 import { Box } from '@mui/material';
 import { loginSuccessState } from '../recoil/atom/loginSuccessState';
 import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
+import { techBlogDataState } from '../recoil/atom/techBlogDataState';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
-    const [techBlogData, setTechBlogData] = useState<any[]>([]);
+    const [techBlogData, setTechBlogData] = useRecoilState(techBlogDataState);
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
     const [didMount, setDidMount] = useState<boolean>(false);
     const displayMode = useRecoilValue(DisplayModeState);
@@ -103,7 +104,6 @@ export default function MainPage() {
                 <div>
                     <DisplayModeSwitch />
                 </div>
-
                 <div className="flex w-full pr-4">
                     {loggedIn ? (
                         <CategorySlide
@@ -134,7 +134,6 @@ export default function MainPage() {
                     }`}
                 >
                     <ConditionalRenderer
-                        items={techBlogData}
                         onCategoryId={categoryId}
                         onFilterItems={filterTechBlogData}
                     />

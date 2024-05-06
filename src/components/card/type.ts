@@ -7,8 +7,10 @@ export interface ICardItemsProps {
             thumbnailUrl: string;
             likeCount: number;
             viewCount: number;
+            url: string;
         };
         categoryDto: { id: string; name: string }[];
+        hasMemberLikedPost: boolean;
     };
     index: number;
 }
