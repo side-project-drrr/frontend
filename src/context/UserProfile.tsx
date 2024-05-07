@@ -27,13 +27,9 @@ export function UserProfileProvider({ children }: PropsWithChildren) {
         setUserData(userData);
     }
 
-    // useEffect(() => {
-    //     if (token) userInforMationRender();
-    // }, [token]);
-
     useEffect(() => {
-        userInforMationRender();
-    }, []);
+        if (token) userInforMationRender();
+    }, [token]);
 
     return (
         <userProfleContext.Provider value={{ userData, login, token }}>
