@@ -36,9 +36,9 @@ export const ViewPage = () => {
 
                     const regexThumb = /\s+/g;
                     const url = res.data.thumbnailUrl;
-                    const newUrl = url.replace(regexThumb, '%20');
 
                     if (url) {
+                        const newUrl = url.replace(regexThumb, '%20');
                         res.data.thumbnailUrl = newUrl;
                     }
                     setPost(res.data);

@@ -67,8 +67,6 @@ function App() {
         },
     });
 
-    console.log(81818282837162);
-
     return (
         <>
             <Routes>
