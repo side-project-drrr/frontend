@@ -20,15 +20,20 @@ export function UserProfileProvider({ children }: PropsWithChildren) {
     const login = (token: string) => {
         setToken(token);
     };
+
     async function userInforMationRender() {
         const userData = await getUserInforMationService();
 
         setUserData(userData);
     }
 
+    // useEffect(() => {
+    //     if (token) userInforMationRender();
+    // }, [token]);
+
     useEffect(() => {
-        if (token) userInforMationRender();
-    }, [token]);
+        userInforMationRender();
+    }, []);
 
     return (
         <userProfleContext.Provider value={{ userData, login, token }}>

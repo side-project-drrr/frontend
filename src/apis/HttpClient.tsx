@@ -68,7 +68,7 @@ HttpClient.interceptors.response.use(
                 }
             }
         } else if (status === 429) {
-            window.location.assign('http://localhost:5173/error');
+            window.location.replace('http://localhost:5173/error');
         }
     },
 );

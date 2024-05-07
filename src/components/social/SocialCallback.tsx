@@ -23,6 +23,7 @@ export default function SocialCallback() {
     const navigate = useNavigate();
     const setLoggedIn = useSetRecoilState(isLoggedInState);
     const { login } = useProfileState();
+
     async function socialLoginRender(
         isRegistered: string,
         providerId: string,
