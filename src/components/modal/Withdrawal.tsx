@@ -31,7 +31,6 @@ export const Withdrawal = () => {
     const [open, setOpen] = useRecoilState(userSecession);
     const [buttonState, setButtonState] = useState(false);
     const { userData } = useProfileState();
-
     const navigate = useNavigate();
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         const value = e.target.value;

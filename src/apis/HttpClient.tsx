@@ -45,6 +45,7 @@ HttpClient.interceptors.response.use(
         const REFRESHTOKEN_TOKEN = 'refreshToken';
         const accessToken = getAuthStorage(INITIAL_TOKEN);
         const refreshToken = getAuthStorage(REFRESHTOKEN_TOKEN);
+
         //토큰이 만료되을 때
         if (status === 401) {
             if (error.response.data.message === 'Unauthorized') {
@@ -66,6 +67,8 @@ HttpClient.interceptors.response.use(
                     }
                 }
             }
+        } else if (status === 429) {
+            window.location.replace('http://localhost:5173/error');
         }
     },
 );

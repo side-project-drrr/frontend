@@ -42,6 +42,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     const [isSearching, setIsSearching] = useState(false); // 검색value
     const [page, setPage] = useState(0);
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
+
     const buttonStyle = {
         backgroundImage: `linear-gradient(to right, #FFA471 ${userCategoryItems.length}0%, #F0F0F0 20%)`,
         color: 'black', // Set the text color if needed
@@ -62,7 +63,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
 
     async function getCategoryListRender() {
         const categoryData = await getCategoryItem({ page, size });
-
         setCategoryItems(prev => [...prev, ...categoryData.content]);
     }
 
@@ -70,6 +70,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         const stringConvertNumberActiveData = activeCategoriesData.map(data => +data.id);
         return await putUserCategoryItem(stringConvertNumberActiveData);
     }
+
     const searchDataDebouce = (value: string) => {
         if (timer) {
             clearTimeout(timer);
@@ -92,6 +93,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
 
         setCategorySearchValue(value);
     };
+
     const handleCategorySearchKeyborad = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.keyCode === 8 && categorySearchValue.length > 0) {
             setPage(0);

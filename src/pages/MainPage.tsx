@@ -93,8 +93,11 @@ export default function MainPage() {
         if (categoryId === 0 && didMount) {
             userTechBlogRender();
         }
-        userFilterTechBlogRender(categoryId);
     }, [page, didMount]);
+
+    useEffect(() => {
+        if (didMount) userFilterTechBlogRender(categoryId);
+    }, [didMount]);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 

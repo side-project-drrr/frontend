@@ -11,11 +11,11 @@ import LayoutWithOutAside from './components/layout/LayoutWithOutAside';
 import TopicPage from './pages/TopicPage';
 import HeaderSearchPage from './pages/HeaderSearchPage';
 import { RecommendedListPage } from './pages/RecommendedListPage';
-import { UserProfileProvider } from './context/UserProfile';
 import ProfilePage from './pages/ProfilePage';
 import { AlarmListPage } from './pages/AlarmListPage';
 import { ViewPage } from './pages/ViewPage';
 import HealthCheck from './pages/HealthCheck';
+import ToManyRequestError from './components/errors/ToManyRequestError';
 
 function App() {
     const { darkMode } = useDarkMode();
@@ -67,13 +67,17 @@ function App() {
         },
     });
 
+    console.log(81818282837162);
+
     return (
-        <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
-            <CssBaseline />
+        <>
             <Routes>
                 <Route path="/healthcheck" element={<HealthCheck />} />
+                <Route path="/error" element={<ToManyRequestError />} />
             </Routes>
-            <UserProfileProvider>
+            <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
+                <CssBaseline />
+                {/* <UserProfileProvider> */}
                 <Routes>
                     <Route element={<LayoutWithAside />}>
                         <Route path="/" element={<MainPage />} />
@@ -89,8 +93,9 @@ function App() {
                     <Route path="/kakao/auth" element={<SocialCallback />} />
                     <Route path="/github/auth" element={<SocialCallback />} />
                 </Routes>
-            </UserProfileProvider>
-        </ThemeProvider>
+                {/* </UserProfileProvider> */}
+            </ThemeProvider>
+        </>
     );
 }
 
