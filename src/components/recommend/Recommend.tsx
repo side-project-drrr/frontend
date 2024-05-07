@@ -53,20 +53,18 @@ export default function Recommend() {
                     <Typography variant="h6" fontWeight="bold">
                         추천 게시글
                     </Typography>
-                    <p className="text-xs bg-transparent">
-                        <Link
-                            href="/recommend/list"
-                            color="text.primary"
-                            underline="none"
-                            sx={{
-                                '&:hover': {
-                                    color: 'text.primary', // hover 시 변경할 색상 설정
-                                },
-                            }}
-                        >
-                            더보기
-                        </Link>
-                    </p>
+                    <Link
+                        href="/recommend/list"
+                        color="text.primary"
+                        underline="none"
+                        sx={{
+                            '&:hover': {
+                                color: 'text.primary', // hover 시 변경할 색상 설정
+                            },
+                        }}
+                    >
+                        <p className="text-xs bg-transparent">더보기</p>
+                    </Link>
                 </Box>
                 {randomRecommendData ? (
                     <div
@@ -96,7 +94,7 @@ export default function Recommend() {
                             }}
                         />
 
-                        <Typography variant="body2" paddingLeft="10px">
+                        <div>
                             <Link
                                 href={`/view/${randomRecommendData?.techBlogPostBasicInfoDto?.id}`}
                                 color="text.primary"
@@ -110,22 +108,14 @@ export default function Recommend() {
                                 {randomRecommendData?.techBlogPostBasicInfoDto?.title}
                             </Link>
                             <Typography variant="body2" color="text.secondary">
-                                <ul className="flex items-center gap-4">
-                                    <li className="flex text-xs gap-1">
-                                        <ThumbUpIcon />
-                                        <span className="flex items-center text-xs">
-                                            {randomRecommendData.techBlogPostBasicInfoDto.likeCount}
-                                        </span>
-                                    </li>
-                                    <li className="text-xs flex items-center gap-1">
-                                        <RemoveRedEyeIcon />
-                                        <span>
-                                            {randomRecommendData.techBlogPostBasicInfoDto.viewCount}
-                                        </span>
-                                    </li>
-                                </ul>
+                                <span className="flex items-center gap-2">
+                                    <ThumbUpIcon sx={{ fontSize: '15px' }} />
+                                    {randomRecommendData.techBlogPostBasicInfoDto.likeCount}
+                                    <RemoveRedEyeIcon sx={{ fontSize: '15px' }} />
+                                    {randomRecommendData.techBlogPostBasicInfoDto.viewCount}
+                                </span>
                             </Typography>
-                        </Typography>
+                        </div>
                     </div>
                 ) : (
                     <>

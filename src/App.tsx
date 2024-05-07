@@ -68,32 +68,27 @@ function App() {
     });
 
     return (
-        <>
+        <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
+            <CssBaseline />
+
             <Routes>
                 <Route path="/healthcheck" element={<HealthCheck />} />
                 <Route path="/error" element={<ToManyRequestError />} />
+                <Route element={<LayoutWithAside />}>
+                    <Route path="/" element={<MainPage />} />
+                    <Route path="/search/:search" element={<HeaderSearchPage />} />
+                    <Route path="/topics" element={<TopicPage />} />
+                    <Route path="/alarm/list" element={<AlarmListPage />} />
+                </Route>
+                <Route element={<LayoutWithOutAside />}>
+                    <Route path="/recommend/list" element={<RecommendedListPage />} />
+                    <Route path="/view/:postId" element={<ViewPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                </Route>
+                <Route path="/kakao/auth" element={<SocialCallback />} />
+                <Route path="/github/auth" element={<SocialCallback />} />
             </Routes>
-            <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
-                <CssBaseline />
-                {/* <UserProfileProvider> */}
-                <Routes>
-                    <Route element={<LayoutWithAside />}>
-                        <Route path="/" element={<MainPage />} />
-                        <Route path="/search/:search" element={<HeaderSearchPage />} />
-                        <Route path="/topics" element={<TopicPage />} />
-                        <Route path="/alarm/list" element={<AlarmListPage />} />
-                    </Route>
-                    <Route element={<LayoutWithOutAside />}>
-                        <Route path="/recommend/list" element={<RecommendedListPage />} />
-                        <Route path="/view/:postId" element={<ViewPage />} />
-                        <Route path="/profile" element={<ProfilePage />} />
-                    </Route>
-                    <Route path="/kakao/auth" element={<SocialCallback />} />
-                    <Route path="/github/auth" element={<SocialCallback />} />
-                </Routes>
-                {/* </UserProfileProvider> */}
-            </ThemeProvider>
-        </>
+        </ThemeProvider>
     );
 }
 

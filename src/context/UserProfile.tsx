@@ -23,7 +23,6 @@ export function UserProfileProvider({ children }: PropsWithChildren) {
 
     async function userInforMationRender() {
         const userData = await getUserInforMationService();
-
         setUserData(userData);
     }
 
