@@ -42,7 +42,7 @@ jobs:
               run: yarn install
 
             - name: git submodule env create
-              run: yarn cp-env
+              run: yarn cp-env:production
 
             # 빌드
             - name: Build
