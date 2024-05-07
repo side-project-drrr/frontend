@@ -16,6 +16,7 @@ import ProfilePage from './pages/ProfilePage';
 import { AlarmListPage } from './pages/AlarmListPage';
 import { ViewPage } from './pages/ViewPage';
 import HealthCheck from './pages/HealthCheck';
+import ToManyRequestError from './components/errors/ToManyRequestError';
 
 function App() {
     const { darkMode } = useDarkMode();
@@ -88,6 +89,7 @@ function App() {
                     </Route>
                     <Route path="/kakao/auth" element={<SocialCallback />} />
                     <Route path="/github/auth" element={<SocialCallback />} />
+                    <Route path="/error" element={<ToManyRequestError />} />
                 </Routes>
             </UserProfileProvider>
         </ThemeProvider>

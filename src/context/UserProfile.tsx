@@ -16,13 +16,16 @@ const userProfleContext = createContext<IUserProfileContext>({
 export function UserProfileProvider({ children }: PropsWithChildren) {
     const [userData, setUserData] = useState({});
     const [token, setToken] = useState(localStorage.getItem('accessToken'));
+
     const login = (token: string) => {
         setToken(token);
     };
     async function userInforMationRender() {
         const userData = await getUserInforMationService();
+
         setUserData(userData);
     }
+
     useEffect(() => {
         if (token) userInforMationRender();
     }, [token]);
