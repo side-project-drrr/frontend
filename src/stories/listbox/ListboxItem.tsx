@@ -181,9 +181,9 @@ export default function ListboxItem({ item, index }: ItemProps) {
                                         : { color: '', fontSize: '18px' }
                                 }
                             />
-                            <span className="flex items-center ml-2">
-                                {item.techBlogPostBasicInfoDto.likeCount}
-                            </span>
+                            {/* <span className="flex items-center ml-2"> */}
+                            {item.techBlogPostBasicInfoDto.likeCount}
+                            {/* </span> */}
                         </li>
                         <li className="text-xs ">
                             <RemoveRedEyeIcon /> {item.techBlogPostBasicInfoDto.viewCount}
@@ -256,9 +256,9 @@ export default function ListboxItem({ item, index }: ItemProps) {
                         <ul className="flex justify-between w-2/12 mt-[10px] items-center">
                             <li className="flex items-center justify-center text-xs ">
                                 <ThumbUpIcon />
-                                <span className="flex items-center ml-2">
-                                    {item.techBlogPostBasicInfoDto.likeCount}
-                                </span>
+                                {/* <span className="flex items-center ml-2"> */}
+                                {item.techBlogPostBasicInfoDto.likeCount}
+                                {/* </span> */}
                             </li>
                             <li className="text-xs ">
                                 <RemoveRedEyeIcon /> {item.techBlogPostBasicInfoDto.viewCount}

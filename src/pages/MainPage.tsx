@@ -123,11 +123,9 @@ export default function MainPage() {
                         />
                     ) : (
                         <Box bgcolor="background.paper" className="flex justify-center w-full p-4 ">
-                            더 많은 정보를 원한다면{' '}
                             <span className="mx-2 border-b" onClick={handleLoginModal}>
-                                로그인
+                                더 많은 정보를 원한다면 로그인 해주세요.
                             </span>
-                            해주세요.
                         </Box>
                     )}
                 </div>
