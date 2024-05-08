@@ -4,6 +4,8 @@ import { BiSolidLike } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
 import { recommendedListApi } from '../apis/recommended';
 import { useProfileState } from '../context/UserProfile';
+import { readPostApi } from '../apis/view';
+
 type recommendedItem = {
     category: { id: number; name: string }[];
     postInfo: {
@@ -19,6 +21,12 @@ type recommendedItem = {
 export const RecommendedListPage = () => {
     const [list, setList] = useState<recommendedItem[]>([]);
     const { userData } = useProfileState();
+
+    // 사용자 읽음 처리
+    const handleOnClickTitle = (id: number, url: string) => {
+        readPostApi(String(id));
+        window.open(url, '_blank');
+    };
 
     useEffect(() => {
         async function recommendedList() {
@@ -61,7 +69,10 @@ export const RecommendedListPage = () => {
                             <Box marginBottom="10px">
                                 <Box
                                     marginBottom="10px"
-                                    onClick={() => window.open(`${data.postInfo.url}`, '_blank')}
+                                    onClick={handleOnClickTitle(
+                                        data.postInfo.id,
+                                        data.postInfo.url,
+                                    )}
                                     sx={{ cursor: 'pointer' }}
                                 >
                                     <Typography
