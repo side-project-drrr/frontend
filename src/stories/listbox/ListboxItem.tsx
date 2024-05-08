@@ -34,6 +34,10 @@ export default function ListboxItem({ item, index }: ItemProps) {
                     if (item.techBlogPostBasicInfoDto.id === id) {
                         return {
                             ...item,
+                            techBlogPostBasicInfoDto: {
+                                ...item.techBlogPostBasicInfoDto,
+                                likeCount: item.techBlogPostBasicInfoDto.likeCount + 1, // 좋아요 수 증가
+                            },
                             hasMemberLikedPost: true,
                         };
                     }
@@ -47,6 +51,10 @@ export default function ListboxItem({ item, index }: ItemProps) {
                     if (item.techBlogPostBasicInfoDto.id === id) {
                         return {
                             ...item,
+                            techBlogPostBasicInfoDto: {
+                                ...item.techBlogPostBasicInfoDto,
+                                likeCount: item.techBlogPostBasicInfoDto.likeCount - 1, // 좋아요 수 증가
+                            },
                             hasMemberLikedPost: false,
                         };
                     }
@@ -169,8 +177,8 @@ export default function ListboxItem({ item, index }: ItemProps) {
                             ))}
                         </Box>
                     </Link>
-                    <ul className="flex justify-between w-2/12 mt-[10px] items-center">
-                        <li className="flex items-center justify-center text-xs ">
+                    <ul className="flex justify-around w-2/12 mt-[10px] items-center ">
+                        <li className="flex items-center justify-center text-xs gap-2">
                             <ThumbUpIcon
                                 onClick={() =>
                                     handlePostLike(Number(item.techBlogPostBasicInfoDto.id))
@@ -183,7 +191,7 @@ export default function ListboxItem({ item, index }: ItemProps) {
                             />
                             {item.techBlogPostBasicInfoDto.likeCount}
                         </li>
-                        <li className="text-xs ">
+                        <li className="text-xs flex items-center gap-2">
                             <RemoveRedEyeIcon /> {item.techBlogPostBasicInfoDto.viewCount}
                         </li>
                     </ul>
@@ -252,11 +260,11 @@ export default function ListboxItem({ item, index }: ItemProps) {
                             ))}
                         </Box>
                         <ul className="flex justify-between w-2/12 mt-[10px] items-center">
-                            <li className="flex items-center justify-center text-xs ">
+                            <li className="flex items-center justify-center text-xs gap-2">
                                 <ThumbUpIcon />
                                 {item.techBlogPostBasicInfoDto.likeCount}
                             </li>
-                            <li className="text-xs ">
+                            <li className="text-xs flex items-center gap-2">
                                 <RemoveRedEyeIcon /> {item.techBlogPostBasicInfoDto.viewCount}
                             </li>
                         </ul>
