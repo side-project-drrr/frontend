@@ -14,7 +14,3 @@ self.addEventListener('notificationclick', function (event) {
     event.notification.close();
     event.waitUntil(self.clients.openWindow('https://github.com'));
 });
-
-self.addEventListener('fetch', e => {
-    console.log('[Service Worker] Fetched resource ' + e.request.url);
-});
