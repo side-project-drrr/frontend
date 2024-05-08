@@ -21,6 +21,6 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true
     },
-    "include": ["./src/**/*", "../webpush", "src", "tests"],
+    "include": ["./src/**/*", "../webpush/main.ts", "src", "tests"],
     "types": ["vite/client"]
 }
