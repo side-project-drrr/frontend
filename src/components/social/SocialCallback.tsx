@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
@@ -11,8 +11,6 @@ import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 import { useProfileState } from '../../context/UserProfile';
 
 export default function SocialCallback() {
-    const [didMount, setDidMount] = useState(false);
-
     const setProviderIdState = useSetRecoilState(providerIdState);
     const code = new URL(document.location.toString()).searchParams.get('code');
     const setModalOpen = useSetRecoilState(modalOpenState);
@@ -54,14 +52,8 @@ export default function SocialCallback() {
     };
 
     useEffect(() => {
-        setDidMount(true);
+        handleKakaoLogin();
     }, []);
-
-    useEffect(() => {
-        if (didMount) {
-            handleKakaoLogin();
-        }
-    }, [didMount]);
 
     return <div>로그인 중...</div>;
 }

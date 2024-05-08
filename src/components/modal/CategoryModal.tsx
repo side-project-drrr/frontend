@@ -31,7 +31,6 @@ import { subscribeUser } from '../../webpush/main';
 
 function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [categoryItems, setCategoryItems] = useRecoilState(categoryItemsState); //전체 카테고리 리스트
-    const [didMount, setDidMount] = useState(false); //전체 카테고리 리스트
     const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [page, setPage] = useState(0);
@@ -129,20 +128,16 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 
     useEffect(() => {
-        if (onModalOpen && didMount && !isSearching) {
+        if (onModalOpen && !isSearching) {
             getCategoryList();
         }
-    }, [page, onModalOpen, didMount]);
+    }, [page, onModalOpen]);
 
     useEffect(() => {
-        if (onModalOpen && isSearching && didMount) {
+        if (onModalOpen && isSearching) {
             getCategorySearchRender(categorySearchValue);
         }
-    }, [page, onModalOpen, didMount]);
-
-    useEffect(() => {
-        setDidMount(true);
-    }, []);
+    }, [page, onModalOpen]);
 
     useEffect(() => {
         if (categorySearchValue.length > 0) {

@@ -26,7 +26,6 @@ export default function MainPage() {
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
     const [techBlogData, setTechBlogData] = useRecoilState(techBlogDataState);
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
-    const [didMount, setDidMount] = useState<boolean>(false);
     const displayMode = useRecoilValue(DisplayModeState);
     const [page, setPage] = useState<number>(0);
     const [categoryId, setCategoryId] = useState<number>(0);
@@ -61,9 +60,6 @@ export default function MainPage() {
 
     const handleSignupNext = () => {
         setCategoryModalOpen(true);
-
-        setHandleModalOpen(false);
-
         setHandleModalOpen(false);
     };
 
@@ -86,18 +82,14 @@ export default function MainPage() {
     }, [techBlogData]);
 
     useEffect(() => {
-        setDidMount(true);
-    }, []);
-
-    useEffect(() => {
-        if (categoryId === 0 && didMount) {
+        if (categoryId === 0 && page >= 0) {
             userTechBlogRender();
         }
-    }, [page, didMount]);
+    }, [page]);
 
     useEffect(() => {
-        if (didMount) userFilterTechBlogRender(categoryId);
-    }, [didMount]);
+        userFilterTechBlogRender(categoryId);
+    }, []);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 
