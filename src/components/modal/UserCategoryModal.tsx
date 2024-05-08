@@ -33,7 +33,6 @@ export interface IActiveDataProps {
 
 function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: UserCategoryProps) {
     const [categoryItems, setCategoryItems] = useRecoilState(categoryItemsState); //전체 카테고리 리스트
-    const [didMount, setDidMount] = useState(false); //전체 카테고리 리스트
     const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [timer, setTimer] = useState<NodeJS.Timeout>();
@@ -126,20 +125,16 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
 
     useEffect(() => {
-        if (onModalOpen && !isSearching && didMount) {
+        if (onModalOpen && !isSearching) {
             getCategoryListRender();
         }
-    }, [page, onModalOpen, didMount]);
+    }, [page, onModalOpen]);
 
     useEffect(() => {
-        if (onModalOpen && isSearching && didMount) {
+        if (onModalOpen && isSearching) {
             getCategorySearchRender(categorySearchValue);
         }
-    }, [page, onModalOpen, didMount]);
-
-    useEffect(() => {
-        setDidMount(true);
-    }, []);
+    }, [page, onModalOpen]);
 
     useEffect(() => {
         setUserCategoryItems(prev => [...prev]);

@@ -5,7 +5,6 @@ import { Box, Typography } from '@mui/material';
 
 export default function TopKeywords() {
     const [topkeywordsData, setTopkeywordsData] = useState<TopKeywordProps[]>([]);
-    const [didMount, setDidMount] = useState<boolean>(false);
 
     async function getTopkeyDatas() {
         const topKeywordData = await getTopkeyword();
@@ -13,13 +12,8 @@ export default function TopKeywords() {
     }
 
     useEffect(() => {
-        setDidMount(true);
+        getTopkeyDatas();
     }, []);
-    useEffect(() => {
-        if (didMount) {
-            getTopkeyDatas();
-        }
-    }, [didMount]);
 
     return (
         <Box
