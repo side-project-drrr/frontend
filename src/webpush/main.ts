@@ -55,7 +55,7 @@ export function registerServiceWorker() {
     // 기기에 service worker 등록
     if ('serviceWorker' in navigator && 'PushManager' in window) {
         navigator.serviceWorker
-            .register('./src/webpush/sw.js')
+            .register('./sw.js')
             .then(reg => {
                 swRegistration = reg;
             })
