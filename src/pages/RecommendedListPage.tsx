@@ -69,10 +69,9 @@ export const RecommendedListPage = () => {
                             <Box marginBottom="10px">
                                 <Box
                                     marginBottom="10px"
-                                    onClick={handleOnClickTitle(
-                                        data.postInfo.id,
-                                        data.postInfo.url,
-                                    )}
+                                    onClick={() =>
+                                        handleOnClickTitle(data.postInfo.id, data.postInfo.url)
+                                    }
                                     sx={{ cursor: 'pointer' }}
                                 >
                                     <Typography
