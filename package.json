@@ -5,8 +5,9 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "tsc && vite build",
+        "build": "tsc && vite build && yarn run copy-sw",
         "preview": "vite preview",
+        "copy-sw": "cp ./src/webpush/sw.js dist/sw.js",
         "postinstall": "husky install",
         "lint:fix": "eslint --cache --fix './src/**/*.{ts,tsx}'",
         "prettier:fix": "prettier --cache --write './src/**/*.{ts,tsx}'",
