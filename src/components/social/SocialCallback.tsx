@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
@@ -21,7 +21,7 @@ export default function SocialCallback() {
     const navigate = useNavigate();
     const setLoggedIn = useSetRecoilState(isLoggedInState);
     const { login } = useProfileState();
-
+    const [didMount, setDidMount] = useState(false);
     async function socialLoginRender(
         isRegistered: string,
         providerId: string,
@@ -29,7 +29,6 @@ export default function SocialCallback() {
     ) {
         if (isRegistered) {
             const authData = await SignInService(providerId);
-
             setAccessTokenStorage(ACCESSTOKEN_KEY, authData.accessToken);
             setRefreshTokenStorage(REFRESHTOKEN_KEY, authData.refreshToken);
             login(authData.refreshToken);
@@ -52,8 +51,11 @@ export default function SocialCallback() {
     };
 
     useEffect(() => {
-        handleKakaoLogin();
+        setDidMount(true);
     }, []);
+    useEffect(() => {
+        if (didMount) handleKakaoLogin();
+    }, [didMount]);
 
     return <div>로그인 중...</div>;
 }

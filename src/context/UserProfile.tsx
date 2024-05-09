@@ -1,5 +1,7 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
 import { getUserInforMationService } from '../service/UserProfileService';
+import { useSetRecoilState } from 'recoil';
+import { isLoggedInState } from '../recoil/atom/isLoggedInState';
 
 interface IUserProfileContext {
     userData: any; // 사용자 정보의 타입에 따라 수정
@@ -16,7 +18,7 @@ const userProfleContext = createContext<IUserProfileContext>({
 export function UserProfileProvider({ children }: PropsWithChildren) {
     const [userData, setUserData] = useState({});
     const [token, setToken] = useState(localStorage.getItem('accessToken'));
-
+    const setLoggin = useSetRecoilState(isLoggedInState);
     const login = (token: string) => {
         setToken(token);
     };
@@ -27,7 +29,11 @@ export function UserProfileProvider({ children }: PropsWithChildren) {
     }
 
     useEffect(() => {
-        if (token) userInforMationRender();
+        if (token) {
+            userInforMationRender();
+        } else {
+            setLoggin(false);
+        }
     }, [token]);
 
     return (

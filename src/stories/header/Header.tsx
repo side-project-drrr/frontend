@@ -64,6 +64,7 @@ function AuthHeader({ onLogout }: IHandleProps) {
     const setIsSearchClicked = useSetRecoilState(isSearchFocusedState);
     const KEY = 'imgUrl';
     const img = getProfileImgStorage(KEY);
+
     const navigate = useNavigate();
     let imgUrl;
     if (img !== null) {

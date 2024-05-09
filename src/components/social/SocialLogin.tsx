@@ -12,6 +12,7 @@ export default function SocialLogin({ state }: IProps) {
     const KAKAO_REDIRECT_URL = import.meta.env.VITE_APP_KAKAO_REDIRECT_URL; //현 프로젝트에서는 백엔드에서 REDIRECT_URL 처리
 
     const setLoggedIn = useSetRecoilState(isLoggedInState);
+
     const handleLogin = () => {
         if (state === 'github') {
             const url = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_url=${GITHUB_REDIRECT_URL}`;
@@ -29,6 +30,7 @@ export default function SocialLogin({ state }: IProps) {
     const locationUrl = (url: string) => {
         window.location.assign(url);
     };
+
     const imgState = state === 'github' ? github : kakao;
 
     return (
