@@ -91,11 +91,8 @@ export const ViewPage = () => {
                             </Fragment>
                         ))}
                     </Typography>
-                    <Box display="flex" justifyContent="center">
-                        <Chip label="1" />
-                    </Box>
                 </Box>
-                <Box textAlign="center" marginTop="20px">
+                <Box textAlign="center" marginTop="20px" paddingBottom="40px">
                     <StyledButton
                         variant="contained"
                         onClick={() => window.open(`${post.url}`, '_blank')}
