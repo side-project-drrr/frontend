@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Typography, styled } from '@mui/material';
+import { Box, Button, Typography, styled } from '@mui/material';
 import darkLogo from '../assets/darkLogo.webp';
 import { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
