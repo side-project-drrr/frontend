@@ -9,11 +9,7 @@ import React, {
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import {
-    setDarkModeSotrage,
-    getDarkModeStorage,
-    removeDarkModeStorage,
-} from '../repository/DarkRepository';
+import { setDarkModeSotrage, getDarkModeStorage } from '../repository/DarkRepository';
 import createCustomTheme from './theme';
 
 interface ThemeContextProps {
@@ -28,16 +24,20 @@ interface ThemeProviderProps {
 }
 
 const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-    const [darkMode, setDarkMode] = useState('light');
+    const [darkMode, setDarkMode] = useState(() => {
+        const savedTheme = getDarkModeStorage('theme');
+        return savedTheme ? savedTheme : 'light';
+    });
 
     const GET_LOCAL_DARK_KEY = 'theme';
 
     const toggleDarkMode = () => {
-        setDarkMode(prev => (prev === 'light' ? 'dark' : 'light'));
+        const newMode = darkMode === 'light' ? 'dark' : 'light';
+        setDarkMode(newMode);
+        setDarkModeSotrage(newMode);
     };
 
     useEffect(() => {
-        removeDarkModeStorage();
         setDarkModeSotrage(darkMode);
     }, [darkMode]);
 
@@ -62,14 +62,6 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
         }
     }, [darkMode]);
 
-    useLayoutEffect(() => {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setDarkMode('dark');
-        } else {
-            setDarkMode('light');
-        }
-    }, []);
-
     const theme = createCustomTheme(darkMode);
 
     return (
@@ -79,7 +71,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
                     ...theme,
                     palette: {
                         ...theme.palette,
-                        mode: darkMode ? 'dark' : 'light',
+                        mode: darkMode === 'dark' ? 'dark' : 'light',
                     },
                 }}
             >
