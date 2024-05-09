@@ -92,7 +92,6 @@ export default function MainPage() {
     }, []);
 
     const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
-    console.log(loggedIn);
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
