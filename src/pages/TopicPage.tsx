@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IndexingComponent } from '../components/topics/Indexing';
 import { ListComponent } from '../components/topics/List';
 import {
@@ -8,7 +8,7 @@ import {
 } from '../service/TopicService';
 import { useRecoilState } from 'recoil';
 import { searchValueState, topicIndexState, topicState } from '../recoil/atom/topicsState';
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+// import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { Input } from '@mui/base';
 import { inputEl } from '../style/style';
 
@@ -18,7 +18,22 @@ export default function TopicPage() {
     const [topicIndex, setTopicIndex] = useRecoilState(topicIndexState);
     const [searchVal, setSearchVal] = useRecoilState(searchValueState);
     const [timer, setTimer] = useState<NodeJS.Timeout>();
-    const obsRef = useIntersectionObserver(() => setPage(prev => prev + 1));
+    const observationTarget = useRef(null);
+
+    const onIntersect = async (entries: any, observer: any) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+            observer.unobserve(entry.target);
+            setPage(prev => prev + 1);
+            setTimeout(() => {
+                observer.observe(entry.target);
+            }, 800);
+        }
+    };
+
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
+
+    // const { pageEnd, updateInitial } = useIntersectionObserver(() => setPage(prev => prev + 1));
 
     // 검색 topic 무한 스크롤
     async function infiniteSearchTopics(value: string) {
@@ -85,6 +100,8 @@ export default function TopicPage() {
         if (res.status === 200) {
             setTopics(res.data.content);
         }
+
+        if (observationTarget.current) observer.observe(observationTarget.current);
     }
 
     useEffect(() => {
@@ -113,7 +130,7 @@ export default function TopicPage() {
             <div className="w-full mt-10">
                 <ListComponent onHandleIndex={handleIndex} />
             </div>
-            <div ref={obsRef} />
+            <div ref={observationTarget} />
         </div>
     );
 }
