@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { CategoryItemsProps } from './type';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
@@ -6,7 +5,7 @@ import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
 import { msg } from '../../constants/message';
 
-function CategoryItem({ categoryId, title, onSetObservationTarget }: CategoryItemsProps) {
+function CategoryItem({ categoryId, title, onIndex }: CategoryItemsProps) {
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
     const categoryItem = useRecoilValue(categoryItemsState);
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
@@ -38,11 +37,10 @@ function CategoryItem({ categoryId, title, onSetObservationTarget }: CategoryIte
             }
         }
     };
-
     return (
         <>
             <li
-                key={categoryId}
+                key={onIndex}
                 id={String(categoryId)}
                 className={` h-10 p-5 whitespace-nowrap text-center flex justify-center items-center rounded-lg  flex-1 max-[600px]:text-xs max-[600px]:h-5 ${
                     userCategoryItems.some(categoryItem => categoryItem.id === categoryId)
@@ -53,9 +51,8 @@ function CategoryItem({ categoryId, title, onSetObservationTarget }: CategoryIte
             >
                 {title}
             </li>
-            <div ref={onSetObservationTarget}></div>
         </>
     );
 }
 
-export default memo(CategoryItem);
+export default CategoryItem;

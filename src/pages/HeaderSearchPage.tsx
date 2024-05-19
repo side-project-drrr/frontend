@@ -1,26 +1,48 @@
-import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { HeaderSearchDataState } from '../recoil/atom/HeaderSearchDataState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 
-import { useCallback, useEffect } from 'react';
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { PageState } from '../recoil/atom/PageState';
+import { useEffect, useRef, useState } from 'react';
+
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { useParams } from 'react-router-dom';
 import { getSearchListStorage, saveSearchListStorage } from '../repository/SearchListRepository';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
-import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
+import { headerSearchValue } from '../recoil/atom/headerSearchValue';
+import { getHeaderKeywordSearch } from '../service/HeaderSearchService';
+import SearchListBox from '../stories/listbox/SearchListBox';
 
 export default function HeaderSearchPage() {
     const techBlogSearchData = useRecoilValue(HeaderSearchDataState);
     const { search } = useParams();
     const displayMode = useRecoilValue(DisplayModeState);
-
-    const setPage = useSetRecoilState(PageState);
+    const [page, setPage] = useState(0);
+    const searchValue = useRecoilValue(headerSearchValue);
     const KEY = 'search';
-    const fetchMoreIssue = useCallback(() => {
-        setPage(prev => prev + 1);
-    }, [techBlogSearchData]);
+    const size = 10;
+    const observationTarget = useRef(null);
+    const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
+
+    const onIntersect = async (entries: any, observer: any) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+            observer.unobserve(entry.target);
+            setPage(prev => prev + 1);
+        }
+    };
+
+    async function getKeywordSearchRender() {
+        const keywordSearchData = await getHeaderKeywordSearch({
+            page,
+            size,
+            searchValue,
+        });
+
+        setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+        }
+    }
 
     useEffect(() => {
         let searchItem = getSearchListStorage(KEY);
@@ -29,7 +51,11 @@ export default function HeaderSearchPage() {
         saveSearchListStorage(KEY, uniqueSearch);
     }, [search]);
 
-    const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
+
+    useEffect(() => {
+        if (searchValue.length > 0) getKeywordSearchRender();
+    }, [page, searchValue]);
 
     return (
         <div className="flex justify-between w-full">
@@ -46,7 +72,7 @@ export default function HeaderSearchPage() {
                     } `}
                 >
                     {techBlogSearchData.length !== 0 ? (
-                        <ConditionalRenderer />
+                        <SearchListBox />
                     ) : (
                         <div className="flex justify-center w-full h-[80vh] items-center flex-col">
                             <QuestionMarkIcon sx={{ fontSize: '100px' }} />
@@ -54,7 +80,7 @@ export default function HeaderSearchPage() {
                         </div>
                     )}
                 </div>
-                <div ref={setObservationTarget} />
+                <div ref={observationTarget}>123</div>
             </div>
         </div>
     );

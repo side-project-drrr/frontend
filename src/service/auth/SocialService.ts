@@ -54,7 +54,6 @@ export async function SignUpEmail({ providerId, email }: IAuthEmailProps) {
 
         return res;
     } catch (error) {
-        console.error(error);
         if (error instanceof AxiosError) {
             console.log(error.response?.data);
         }

@@ -1,8 +1,7 @@
 export interface CategoryItemsProps {
     categoryId: number;
     title: string;
-
-    onSetObservationTarget: any;
+    onIndex: number;
 }
 
 export interface ICategoryProps {

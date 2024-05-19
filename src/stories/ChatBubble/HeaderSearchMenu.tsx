@@ -73,7 +73,10 @@ export default function HeaderSearchMenu({
                                     <Link
                                         to={`/search/${value}`}
                                         className="flex items-center w-full gap-2 p-4 text-black hover:text-black"
-                                        onClick={() => onSetSearchValue(value)}
+                                        onClick={() => {
+                                            onSetSearchValue(value);
+                                            setIsSearchClicked(false);
+                                        }}
                                     >
                                         <p className="flex items-center w-full gap-4">
                                             <SearchIcon />

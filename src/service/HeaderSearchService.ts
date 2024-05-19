@@ -3,7 +3,6 @@ import HttpClient from '../apis/HttpClient';
 interface Props {
     page: number;
     size: number;
-
     searchValue: string;
 }
 

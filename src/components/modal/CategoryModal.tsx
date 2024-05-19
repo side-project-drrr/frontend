@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Box from '@mui/material/Box';
@@ -14,7 +14,6 @@ import { SignUpService } from '../../service/auth/SocialService';
 import { setAccessTokenStorage, setRefreshTokenStorage } from '../../repository/AuthRepository';
 import { getProvider } from '../../repository/ProviderRepository';
 import { getProfileImgStorage } from '../../repository/ProfileimgRepository';
-import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 import ModalTitle from '../../stories/modalTitle/ModalTitle';
 import { InputTextField } from '../../style/inputText';
@@ -49,25 +48,41 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const setIsLogged = useSetRecoilState(isLoggedInState);
     const setLoginSucess = useSetRecoilState(loginSuccessState);
     const { login } = useProfileState();
+    const observationTarget = useRef(null);
+
     const buttonStyle = {
         backgroundImage: `linear-gradient(to right, #FFA471 ${userCategoryItems.length}0%, #F0F0F0 20%)`,
         color: 'black', // Set the text color if needed
         borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
     };
 
+    const onIntersect = async (entries: any, observer: any) => {
+        const entry = entries[0];
+
+        if (entry.isIntersecting) {
+            observer.unobserve(entry.target);
+            setPage(prev => prev + 1);
+        }
+    };
+
     async function getCategoryList() {
         const categoryData = await getCategoryItem({ page, size });
-
         setCategoryItems(prev => [...prev, ...categoryData.content]);
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+        }
     }
+
     async function getCategorySearchRender(value: string) {
         const categorySearchData = await categorySearchService({
             keyword: value,
             page,
             size,
         });
-
         setCategoryItems(prev => [...prev, ...categorySearchData.content]);
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+        }
     }
 
     async function signupRender() {
@@ -87,10 +102,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             setRefreshTokenStorage(REFRESHTOKEN_KEY, tokenData.refreshToken);
         }
     }
-
-    const fetchMoreIssue = useCallback(() => {
-        setPage(prev => prev + 1);
-    }, [categoryItems]);
 
     async function handleCategory() {
         if (userCategoryItems.length === 0) {
@@ -125,29 +136,24 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
         setCategorySearchValue(value);
     };
 
-    const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
-
     useEffect(() => {
         if (onModalOpen && !isSearching) {
             getCategoryList();
         }
-    }, [page, onModalOpen]);
-
-    useEffect(() => {
-        if (onModalOpen && isSearching) {
-            getCategorySearchRender(categorySearchValue);
-        }
-    }, [page, onModalOpen]);
+    }, [onModalOpen]);
 
     useEffect(() => {
         if (categorySearchValue.length > 0) {
             setCategoryItems([]);
             setIsSearching(true);
+            setPage(0);
         } else {
             setIsSearching(false);
+            setPage(0);
         }
     }, [categorySearchValue]);
 
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
@@ -169,14 +175,14 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                     className="flex flex-col items-center justify-around "
                 >
                     <ModalTitle onHangleCloseClick={onClose} state="signup" />
-                    <div className="flex items-center justify-center w-full">
+                    <div className="flex items-center justify-center w-11/12">
                         <InputTextField
                             placeholder="검색"
                             variant="outlined"
                             onChange={handleCategorySearchItem}
                             aria-label="검색창"
                             sx={theme => ({
-                                width: '67%',
+                                width: '50%',
                                 [theme.breakpoints.down('sm')]: { width: '100%' },
                             })}
                         />
@@ -185,15 +191,17 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full "
                         id="CategoryModal-Scroll"
                     >
-                        {categoryItems?.map(categoryitem => (
+                        {categoryItems?.map((categoryitem, index) => (
                             <CategoryItem
                                 key={categoryitem.id}
                                 categoryId={categoryitem.id}
                                 title={categoryitem.name}
-                                onSetObservationTarget={setObservationTarget}
+                                onIndex={index}
                             />
                         ))}
                     </ul>
+                    <div ref={observationTarget}></div>
+
                     <SelectedCategoryDisplay />
                     <Button
                         className="w-[65%]"

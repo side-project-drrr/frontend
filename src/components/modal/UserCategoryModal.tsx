@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, memo } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -12,7 +12,6 @@ import {
 } from '../../service/CategoryService';
 
 import PrivateCategoryItems from '../../components/category/PrivateCategoryItems';
-import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
 import ModalTitle from '../../stories/modalTitle/ModalTitle';
 import { InputTextField } from '../../style/inputText';
@@ -41,6 +40,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     const [isSearching, setIsSearching] = useState(false); // 검색value
     const [page, setPage] = useState(0);
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
+    const observationTarget = useRef(null);
 
     const buttonStyle = {
         backgroundImage: `linear-gradient(to right, #FFA471 ${userCategoryItems.length}0%, #F0F0F0 20%)`,
@@ -50,6 +50,15 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
 
     const size = 20;
 
+    const onIntersect = async (entries: any, observer: any) => {
+        const entry = entries[0];
+
+        if (entry.isIntersecting) {
+            observer.unobserve(entry.target);
+            setPage(prev => prev + 1);
+        }
+    };
+
     async function getCategorySearchRender(categorySearchValue: string) {
         const categorySearchData = await categorySearchService({
             keyword: categorySearchValue,
@@ -58,11 +67,18 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         });
 
         setCategoryItems(prev => [...prev, ...categorySearchData.content]);
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+        }
     }
 
     async function getCategoryListRender() {
         const categoryData = await getCategoryItem({ page, size });
+
         setCategoryItems(prev => [...prev, ...categoryData.content]);
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+        }
     }
 
     async function userUpdateCategoryRender(activeCategoriesData: { id: number; name: string }[]) {
@@ -77,10 +93,8 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         const newTimer = setTimeout(async () => {
             setPage(0);
             setCategoryItems([]);
-
             await getCategorySearchRender(value);
         }, 1000);
-
         setTimer(newTimer);
     };
 
@@ -118,23 +132,9 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         onClose();
     };
 
-    const fetchMoreIssue = useCallback(() => {
-        setPage(prev => prev + 1);
-    }, [categoryItems]);
-
-    const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
-
     useEffect(() => {
-        if (onModalOpen && !isSearching) {
-            getCategoryListRender();
-        }
-    }, [page, onModalOpen]);
-
-    useEffect(() => {
-        if (onModalOpen && isSearching) {
-            getCategorySearchRender(categorySearchValue);
-        }
-    }, [page, onModalOpen]);
+        if (onModalOpen && !isSearching) getCategoryListRender();
+    }, [onModalOpen, page]);
 
     useEffect(() => {
         setUserCategoryItems(prev => [...prev]);
@@ -144,10 +144,14 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         if (categorySearchValue.length > 0) {
             setCategoryItems([]);
             setIsSearching(true);
+            setPage(0);
         } else {
             setIsSearching(false);
+            setPage(0);
         }
     }, [categorySearchValue]);
+
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
 
     return (
         <>
@@ -184,17 +188,18 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                         />
                     </div>
                     <ul
-                        className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full"
+                        className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full bg-red-500"
                         id="CategoryModal-Scroll"
                     >
-                        {categoryItems?.map(categoryitem => (
+                        {categoryItems?.map((categoryitem, index) => (
                             <PrivateCategoryItems
                                 key={categoryitem.id}
                                 categoryId={categoryitem.id}
                                 title={categoryitem.name}
-                                onSetObservationTarget={setObservationTarget}
+                                onIndex={index}
                             />
                         ))}
+                        <div ref={observationTarget} style={{ backgroundColor: 'blue' }}></div>
                     </ul>
 
                     <SelectedCategoryDisplay />
@@ -214,4 +219,4 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     );
 }
 
-export default memo(UserCategoryModal);
+export default UserCategoryModal;

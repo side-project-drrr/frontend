@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
@@ -6,7 +6,6 @@ import SignUpModal from '../components/signup/SignUpModal';
 import { profileHeaderMenu } from '../recoil/atom/profileHeaderMenu';
 import CategorySlide from '../components/carousel/CategorySlide';
 import { getTechBlogService, getUserTechBlogService } from '../service/TechBlogService';
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
@@ -24,7 +23,7 @@ import { techBlogDataState } from '../recoil/atom/techBlogDataState';
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
-    const [techBlogData, setTechBlogData] = useRecoilState(techBlogDataState);
+    const setTechBlogData = useSetRecoilState(techBlogDataState);
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
     const displayMode = useRecoilValue(DisplayModeState);
     const [page, setPage] = useState<number>(0);
@@ -38,10 +37,23 @@ export default function MainPage() {
     const setProfileHeaderMenu = useSetRecoilState(profileHeaderMenu);
     const singupSuccessModal = useRecoilValue(loginSuccessState);
     const snackbarOpen = useRecoilValue(snackbarOpenState);
+    const observationTarget = useRef(null);
+
+    const onIntersect = async (entries: any, observer: any) => {
+        const entry = entries[0];
+
+        if (entry.isIntersecting) {
+            observer.unobserve(entry.target);
+            setPage(prev => prev + 1);
+        }
+    };
+
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
-
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+        }
     }
 
     async function userFilterTechBlogRender(id: number) {
@@ -50,8 +62,11 @@ export default function MainPage() {
             size,
             id,
         });
-
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
+
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+        }
     }
 
     const handleUserCategoryModal = () => {
@@ -72,26 +87,35 @@ export default function MainPage() {
         setCategorySearchValue('');
         setCategoryItems([]);
     };
+
+    const userHandleCategoryModalClose = () => {
+        setCategoryModalOpen(false);
+        setUserIsCategoryModalOpen(false);
+        setCategorySearchValue('');
+        setCategoryItems([]);
+    };
+
     const handleLoginModal = () => {
         setLoginModalOpen(true);
         setUserIsCategoryModalOpen(false);
     };
 
-    const fetchMoreIssue = useCallback(() => {
-        setPage(prev => prev + 1);
-    }, [techBlogData]);
+    const handleUserCategoryId = (id: string) => {
+        const numberId = parseInt(id, 10);
+
+        setCategoryId(numberId);
+        setFilterTechBlogData([]);
+    };
 
     useEffect(() => {
-        if (categoryId === 0 && page >= 0) {
+        if (categoryId === 0) {
             userTechBlogRender();
+        } else {
+            userFilterTechBlogRender(categoryId);
         }
     }, [page]);
 
-    useEffect(() => {
-        userFilterTechBlogRender(categoryId);
-    }, []);
-
-    const setObservationTarget = useIntersectionObserver(fetchMoreIssue);
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
@@ -102,16 +126,11 @@ export default function MainPage() {
                 <div className="flex w-full pr-4">
                     {loggedIn ? (
                         <CategorySlide
-                            onClose={handleCategoryModalClose}
+                            onClose={userHandleCategoryModalClose}
                             onModalOpen={userIsCategoryModalOpen}
                             onHandleModalOpen={handleUserCategoryModal}
-                            onUserFilterTechBlogRender={userFilterTechBlogRender}
-                            onSetCategoryId={setCategoryId}
                             onCategoryId={categoryId}
-                            onUserTechBlogRender={userTechBlogRender}
-                            onSetPage={setPage}
-                            onSetObservationTarget={setObservationTarget}
-                            onSetFilterTechBlogData={setFilterTechBlogData}
+                            onHandleUserCategoryId={handleUserCategoryId}
                         />
                     ) : (
                         <Box bgcolor="background.paper" className="flex justify-center w-full p-4 ">
@@ -131,7 +150,7 @@ export default function MainPage() {
                         onFilterItems={filterTechBlogData}
                     />
                 </div>
-                <div ref={setObservationTarget}></div>
+                <div ref={observationTarget}></div>
             </div>
             {handleModalOpen && <SignUpModal onSignupNext={handleSignupNext} />}
             {isCategoryModalOpen && (

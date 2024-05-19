@@ -1,4 +1,4 @@
-import { useRef, useState, SetStateAction, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'react-icons/ri';
 import { Button } from '@mui/base/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -12,25 +12,16 @@ interface CarouselProps {
     onModalOpen: boolean;
     onClose: () => void;
     onHandleModalOpen?: () => void;
-    onUserFilterTechBlogRender: any;
-    onSetCategoryId: React.Dispatch<SetStateAction<number>>;
     onCategoryId: number;
-    onUserTechBlogRender: () => void;
-    onSetPage: React.Dispatch<SetStateAction<number>>;
-    onSetObservationTarget: any;
-    onSetFilterTechBlogData: any;
+    onHandleUserCategoryId: (id: string) => void;
 }
 
 export default function CategorySlide({
     onHandleModalOpen,
     onModalOpen,
     onClose,
-    onUserFilterTechBlogRender,
-    onSetCategoryId,
     onCategoryId,
-    onUserTechBlogRender,
-    onSetPage,
-    onSetFilterTechBlogData,
+    onHandleUserCategoryId,
 }: CarouselProps) {
     const [current, setCurrent] = useState<number>(0);
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
@@ -51,6 +42,7 @@ export default function CategorySlide({
 
     async function userGetCategoryRender() {
         const userCategoryData = await AuthCategoryService();
+
         setUserCategoryItems(userCategoryData);
     }
 
@@ -59,21 +51,6 @@ export default function CategorySlide({
             userGetCategoryRender();
         }
     }, []);
-
-    const handleUserCategoryId = (id: string) => {
-        const numberId = parseInt(id, 10);
-        if (Number(numberId !== 0)) {
-            onUserFilterTechBlogRender(id);
-            onSetCategoryId(numberId);
-            onSetPage(0);
-            onSetFilterTechBlogData([]);
-        } else {
-            onUserTechBlogRender();
-            onSetCategoryId(numberId);
-            onSetPage(0);
-            onSetFilterTechBlogData([]);
-        }
-    };
 
     const ALLCATEGORYNUM = '0';
 
@@ -111,7 +88,7 @@ export default function CategorySlide({
                                         : 'dark:bg-[#444444] bg-[#f0f0f0]'
                                 } `}
                                 aria-label="카테고리추가 버튼"
-                                onClick={(e: any) => handleUserCategoryId(e.target.id)}
+                                onClick={(e: any) => onHandleUserCategoryId(e.target.id)}
                             >
                                 전체 게시글
                             </p>
@@ -131,7 +108,7 @@ export default function CategorySlide({
                                     } `}
                                     id={item.id}
                                     aria-label="카테고리"
-                                    onClick={() => handleUserCategoryId(item.id)}
+                                    onClick={() => onHandleUserCategoryId(item.id)}
                                 >
                                     {item.name}
                                 </p>
