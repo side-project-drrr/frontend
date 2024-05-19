@@ -68,7 +68,11 @@ HttpClient.interceptors.response.use(
                 }
             }
         } else if (status === 429) {
+<<<<<<< HEAD
             window.location.replace('/error');
+=======
+            window.location.replace('https:drrr.kr/error');
+>>>>>>> 188e022 ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
         }
     },
 );
