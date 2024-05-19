@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 import { techBlogDataState } from '../../recoil/atom/techBlogDataState';
 
-export default function ListboxItem({ item, index }: ItemProps) {
+export default function SearchListBoxItem({ item, index }: ItemProps) {
     const { token } = useProfileState();
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const setModalOpen = useSetRecoilState(loginModalState);

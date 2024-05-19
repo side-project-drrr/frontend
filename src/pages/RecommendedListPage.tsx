@@ -45,7 +45,6 @@ const RecommendedListPage = () => {
         recommendedList();
     }, []);
 
-    console.log(list);
     return (
         <div>
             <h1 className="py-10 text-center">{userData.nickname}님을 위한 추천 리스트</h1>

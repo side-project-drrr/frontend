@@ -10,14 +10,14 @@ import {
     getProfileImgStorage,
     removeProfileImgStorage,
 } from '../../repository/ProfileimgRepository';
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { profileHeaderMenu } from '../../recoil/atom/profileHeaderMenu';
 import HeaderSearchMenu from '../ChatBubble/HeaderSearchMenu';
 import { isSearchFocusedState } from '../../recoil/atom/isSearchFocusedState';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getHeaderKeywordSearch } from '../../service/HeaderSearchService';
 import { HeaderSearchDataState } from '../../recoil/atom/HeaderSearchDataState';
-import { PageState } from '../../recoil/atom/PageState';
+//import { PageState } from '../../recoil/atom/PageState';
 import { Link, useNavigate } from 'react-router-dom';
 import { getSearchListStorage } from '../../repository/SearchListRepository';
 import useHandleKeyPress from '../../hooks/useHandleKeyPress';
@@ -28,6 +28,7 @@ import { getAuthStorage } from '../../repository/AuthRepository';
 import { LogoutService } from '../../service/auth/SocialService';
 import { AlarmComponent } from './Alarm';
 import { useProfileState } from '../../context/UserProfile';
+import { headerSearchValue } from '../../recoil/atom/headerSearchValue';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -108,14 +109,13 @@ function AuthHeader({ onLogout }: IHandleProps) {
 
 export default function Header() {
     const [isSearchFocused, setIsSearchfouced] = useRecoilState(isSearchFocusedState);
-    const [searchValue, setSearchValue] = useState('');
+    const [searchValue, setSearchValue] = useRecoilState(headerSearchValue);
     const [getSearchLocalResult, setGetSearchLocalResult] = useState<any[]>([]);
     const [selectedSearchIndex, setSelectedSearchIndex] = useState<number>(-1);
     const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
     const [loggedIn, setLoggedIn] = useRecoilState(isLoggedInState);
-
+    const [page, setPage] = useState(0);
     const { darkMode, toggleDarkMode } = useDarkMode();
-    const page = useRecoilValue(PageState);
     const setProfileOpen = useSetRecoilState(profileHeaderMenu);
     const KEY = 'search';
     const navigate = useNavigate();
@@ -126,7 +126,15 @@ export default function Header() {
     const refresh_Token = getAuthStorage(REFRESHTOKEN_KEY);
     const { login } = useProfileState();
     const searchItem = getSearchListStorage(KEY);
+    const observationTarget = useRef(null);
 
+    const onIntersect = async (entries: any, observer: any) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+            observer.unobserve(entry.target);
+            setPage(prev => prev + 1);
+        }
+    };
     async function getKeywordSearchRender() {
         const keywordSearchData = await getHeaderKeywordSearch({
             page,
@@ -134,12 +142,16 @@ export default function Header() {
             searchValue,
         });
         setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+        }
     }
     async function getLogoutRender() {
         if (token && refresh_Token) {
             await LogoutService(token, refresh_Token);
         }
     }
+
     const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
         const value = (e.target as HTMLInputElement).value;
         const key = e.key;
@@ -190,9 +202,9 @@ export default function Header() {
         setSearchValue(value);
     };
 
-    useEffect(() => {
-        getKeywordSearchRender();
-    }, [page]);
+    // useEffect(() => {
+    //     if (searchValue.length !== 0) getKeywordSearchRender();
+    // }, []);
 
     useEffect(() => {
         setGetSearchLocalResult(searchItem);
@@ -207,6 +219,7 @@ export default function Header() {
             setLoggedIn(true);
         }
     }, [token]);
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
 
     return (
         <header className={`w-full flex justify-center px-[10px]`}>
