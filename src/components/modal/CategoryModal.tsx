@@ -59,10 +59,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
     const onIntersect = async (entries: any, observer: any) => {
         const entry = entries[0];
-<<<<<<< HEAD
-=======
-
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
         if (entry.isIntersecting) {
             observer.unobserve(entry.target);
             setPage(prev => prev + 1);
@@ -71,18 +67,12 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
     async function getCategoryList() {
         const categoryData = await getCategoryItem({ page, size });
-
         setCategoryItems(prev => [...prev, ...categoryData.content]);
-<<<<<<< HEAD
 
         if (categoryData.content.length > 0) {
             if (observationTarget.current) {
                 observer.observe(observationTarget.current);
             }
-=======
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
         }
     }
 
@@ -92,17 +82,11 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             page,
             size,
         });
-
         setCategoryItems(prev => [...prev, ...categorySearchData.content]);
-<<<<<<< HEAD
         if (categorySearchData.content.length > 0) {
             if (observationTarget.current) {
                 observer.observe(observationTarget.current);
             }
-=======
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
         }
     }
 
@@ -161,11 +145,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
         if (onModalOpen && !isSearching) {
             getCategoryList();
         }
-<<<<<<< HEAD
     }, [onModalOpen, page]);
-=======
-    }, [onModalOpen]);
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
 
     useEffect(() => {
         if (categorySearchValue.length > 0) {
@@ -179,10 +159,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     }, [categorySearchValue]);
 
     const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
-<<<<<<< HEAD
-
-=======
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
@@ -232,10 +208,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
                         <div ref={observationTarget}>Loading...</div>
                     </ul>
-<<<<<<< HEAD
-=======
-                    <div ref={observationTarget}></div>
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
 
                     <SelectedCategoryDisplay />
                     <Button
