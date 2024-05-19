@@ -51,12 +51,16 @@ export default function MainPage() {
 
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
-
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
+<<<<<<< HEAD
         if (userTechBlogData.content.length > 0) {
             if (observationTarget.current) {
                 observer.observe(observationTarget.current);
             }
+=======
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+>>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
         }
     }
 
@@ -66,13 +70,17 @@ export default function MainPage() {
             size,
             id,
         });
-
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
 
+<<<<<<< HEAD
         if (userFilterTechBlogData.content.length > 0) {
             if (observationTarget.current) {
                 observer.observe(observationTarget.current);
             }
+=======
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+>>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
         }
     }
 
@@ -109,6 +117,10 @@ export default function MainPage() {
 
     const handleUserCategoryId = (id: string) => {
         const numberId = parseInt(id, 10);
+<<<<<<< HEAD
+=======
+
+>>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
         setCategoryId(numberId);
         setFilterTechBlogData([]);
     };
@@ -156,10 +168,14 @@ export default function MainPage() {
                         onFilterItems={filterTechBlogData}
                     />
                 </div>
+<<<<<<< HEAD
 
                 <>
                     <div ref={observationTarget}>Loading..</div>
                 </>
+=======
+                <div ref={observationTarget}></div>
+>>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
             </div>
             {handleModalOpen && <SignUpModal onSignupNext={handleSignupNext} />}
             {isCategoryModalOpen && (
