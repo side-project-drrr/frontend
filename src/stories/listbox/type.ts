@@ -1,6 +1,7 @@
 export interface IListBoxProps {
     onCategoryId?: number;
     onFilterItems?: any;
+    onSearchData?: any;
 }
 
 export interface ItemProps {

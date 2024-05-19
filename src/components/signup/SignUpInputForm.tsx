@@ -47,7 +47,7 @@ export default function SignUpInputForm({
                                     className="w-10 h-10"
                                     onClick={onNickNameValidationRender}
                                 >
-                                    <BsSend className="hover:text-[#E6783A]" />
+                                    <BsSend className="hover:text-[#E6783A] text-black dark:text-white" />
                                 </IconButton>
                             ),
                         }}
@@ -68,7 +68,7 @@ export default function SignUpInputForm({
                                     className="w-10 h-10"
                                     onClick={onEmailCertificationButton}
                                 >
-                                    <BsSend className="hover:text-[#E6783A]" />
+                                    <BsSend className="hover:text-[#E6783A] text-black dark:text-white" />
                                 </IconButton>
                             ),
                         }}

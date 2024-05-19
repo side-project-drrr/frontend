@@ -4,7 +4,6 @@ import { ListComponent } from '../components/topics/List';
 import { getEtcIndexTopicsApi, getIndexTopicsApi, getSearchTopicsApi } from '../apis/topics';
 import { useRecoilState } from 'recoil';
 import { searchValueState, topicIndexState, topicState } from '../recoil/atom/topicsState';
-// import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { Input } from '@mui/base';
 import { inputEl } from '../style/style';
 
@@ -28,8 +27,6 @@ export default function TopicPage() {
     };
 
     const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
-
-    // const { pageEnd, updateInitial } = useIntersectionObserver(() => setPage(prev => prev + 1));
 
     // 검색 topic 무한 스크롤
     async function infiniteSearchTopics(value: string) {
