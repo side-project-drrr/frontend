@@ -37,12 +37,19 @@ export default function HeaderSearchPage() {
             size,
             searchValue,
         });
+<<<<<<< HEAD
         setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
 
         if (keywordSearchData.content.length > 0) {
             if (observationTarget.current) {
                 observer.observe(observationTarget.current);
             }
+=======
+
+        setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+>>>>>>> 188e022 ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
         }
     }
 
@@ -82,8 +89,12 @@ export default function HeaderSearchPage() {
                         </div>
                     )}
                 </div>
+<<<<<<< HEAD
 
                 <div ref={observationTarget}>Loading...</div>
+=======
+                <div ref={observationTarget}>123</div>
+>>>>>>> 188e022 ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
             </div>
         </div>
     );
