@@ -51,8 +51,8 @@ export default function MainPage() {
 
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
-
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
+
         if (userTechBlogData.content.length > 0) {
             if (observationTarget.current) {
                 observer.observe(observationTarget.current);
@@ -66,7 +66,6 @@ export default function MainPage() {
             size,
             id,
         });
-
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
 
         if (userFilterTechBlogData.content.length > 0) {
@@ -109,6 +108,7 @@ export default function MainPage() {
 
     const handleUserCategoryId = (id: string) => {
         const numberId = parseInt(id, 10);
+
         setCategoryId(numberId);
         setFilterTechBlogData([]);
     };

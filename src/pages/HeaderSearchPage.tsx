@@ -36,6 +36,7 @@ export default function HeaderSearchPage() {
             size,
             searchValue: state,
         });
+
         setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
 
         if (keywordSearchData.content.length > 0) {
@@ -83,7 +84,6 @@ export default function HeaderSearchPage() {
                         </div>
                     )}
                 </div>
-
                 <div ref={observationTarget}>Loading...</div>
             </div>
         </div>
