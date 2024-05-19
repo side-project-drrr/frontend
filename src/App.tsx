@@ -68,6 +68,7 @@ function App() {
     });
 
     return (
+<<<<<<< HEAD
         <Suspense fallback={<div>로딩 중.....</div>}>
             <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
                 <CssBaseline />
@@ -90,6 +91,31 @@ function App() {
                 </UserProfileProvider>
             </ThemeProvider>
         </Suspense>
+=======
+        <>
+            <ThemeProvider theme={darkMode === 'dark' ? darkTheme : lightTheme}>
+                <CssBaseline />
+                <Routes>
+                    <Route path="/healthcheck" element={<HealthCheck />} />
+                    <Route path="/error" element={<ToManyRequestError />} />
+                    <Route element={<LayoutWithAside />}>
+                        <Route path="/search/:search" element={<HeaderSearchPage />} />
+                        <Route path="/topics" element={<TopicPage />} />
+                        <Route path="/alarm/list" element={<AlarmListPage />} />
+                        <Route path="/" element={<MainPage />} />
+                    </Route>
+                    <Route element={<LayoutWithOutAside />}>
+                        <Route path="/recommend/list" element={<RecommendedListPage />} />
+                        <Route path="/view/:postId" element={<ViewPage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
+                    </Route>
+                    <Route path="/kakao/auth" element={<SocialCallback />} />
+                    <Route path="/github/auth" element={<SocialCallback />} />
+                </Routes>
+            </ThemeProvider>
+            {/* <MainPage /> */}
+        </>
+>>>>>>> 188e022 ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
     );
 }
 
