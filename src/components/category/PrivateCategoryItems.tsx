@@ -72,7 +72,6 @@ function PrivateCategoryItems({ categoryId, title, onIndex }: CategoryItemsProps
             >
                 {title}
             </li>
-            {/* <div ref={onRef}></div> */}
         </>
     );
 }

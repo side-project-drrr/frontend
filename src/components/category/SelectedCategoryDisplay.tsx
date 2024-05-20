@@ -17,7 +17,6 @@ export default function SelectedCategoryDisplay() {
     // 카테고리 아이템을 클릭했을 때 해당 아이템의 ID를 state에 설정
     const handleUserCategoryItem = (id: string) => {
         const selectedCategoryId = id;
-
         setSelectedCategoryId(selectedCategoryId);
         const set = new Set(userCategoryItems.map(v => String(v.id)));
 

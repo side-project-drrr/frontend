@@ -9,6 +9,7 @@ import { setAccessTokenStorage, setRefreshTokenStorage } from '../../repository/
 import { setProfileImgStorage } from '../../repository/ProfileimgRepository';
 import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 import { useProfileState } from '../../context/UserProfile';
+import { subscribeUser } from '../../webpush/main';
 
 export default function SocialCallback() {
     const setProviderIdState = useSetRecoilState(providerIdState);
@@ -35,10 +36,11 @@ export default function SocialCallback() {
             setProviderIdState(providerId);
             setProfileImgStorage(profileImageUrl);
             setLoggedIn(true);
+            subscribeUser();
             navigate('/');
         } else {
             navigate('/');
-
+            subscribeUser();
             setProviderIdState(providerId);
             setProfileImgStorage(profileImageUrl);
             setModalOpen(true);
