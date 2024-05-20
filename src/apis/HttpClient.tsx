@@ -68,7 +68,7 @@ HttpClient.interceptors.response.use(
                 }
             }
         } else if (status === 429) {
-            window.location.replace('https:drrr.kr/error');
+            window.location.replace('/error');
         }
     },
 );
