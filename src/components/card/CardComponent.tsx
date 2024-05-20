@@ -3,68 +3,29 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { ICardItemsProps } from './type';
-import { Link } from '@mui/material';
+import { Box, Link } from '@mui/material';
 import { loginModalState } from '../../recoil/atom/loginModalState';
 import { useEffect, useState } from 'react';
 import { useProfileState } from '../../context/UserProfile';
 import { useSetRecoilState } from 'recoil';
-import {
-    // deletePostLikedService,
-    postIncreasedViewsService,
-    // postTechBlogLikeIncreasedService,
-} from '../../service/TechBlogService';
-// import { techBlogDataState } from '../../recoil/atom/techBlogDataState';
-// import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-// import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import { postIncreasedViewsService } from '../../service/TechBlogService';
+import darkLogo from '../../assets/darkLogo.webp';
 
 export default function CardComponent({ item, index }: ICardItemsProps) {
     const { token } = useProfileState();
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const setModalOpen = useSetRecoilState(loginModalState);
-    // const setTechBlogData = useSetRecoilState(techBlogDataState);
 
     async function postIncreasedViewsRender(postId: number) {
         await postIncreasedViewsService(postId);
     }
 
-    // async function deleteTechBlogLikedRender(postId: number) {
-    //     await deletePostLikedService(postId);
-    // }
     const handleLinkClick = () => {
         if (token === null || token === '') {
             setModalOpen(true);
             return;
         }
     };
-    // const handlePostLike = async (id: number) => {
-    //     if (!item.hasMemberLikedPost) {
-    //         await postTechBlogLikeIncreasedService(id);
-    //         setTechBlogData(prev => {
-    //             return prev.map(item => {
-    //                 if (item.techBlogPostBasicInfoDto.id === id) {
-    //                     return {
-    //                         ...item,
-    //                         hasMemberLikedPost: true,
-    //                     };
-    //                 }
-    //                 return item;
-    //             });
-    //         });
-    //     } else {
-    //         await deleteTechBlogLikedRender(id);
-    //         setTechBlogData(prev => {
-    //             return prev.map(item => {
-    //                 if (item.techBlogPostBasicInfoDto.id === id) {
-    //                     return {
-    //                         ...item,
-    //                         hasMemberLikedPost: false,
-    //                     };
-    //                 }
-    //                 return item;
-    //             });
-    //         });
-    //     }
-    // };
 
     useEffect(() => {
         if (token === null || token === '') setIsLogin(true);
@@ -98,11 +59,20 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                         id={item.techBlogPostBasicInfoDto.id}
                     >
                         <div className="px-6 pt-6">
-                            <CardMedia
-                                component="img"
-                                image={item.techBlogPostBasicInfoDto.thumbnailUrl}
-                                alt="썸네일"
-                                sx={{ height: '175px', width: '100%', borderRadius: '20px' }}
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItem: 'center',
+                                    justifyContent: 'center',
+                                    width: '100%',
+                                    height: '170px',
+                                    backgroundColor: 'rgb(158, 158, 158)',
+                                    borderRadius: '20px',
+                                    backgroundImage: `url(${item.techBlogPostBasicInfoDto.thumbnailUrl ? item.techBlogPostBasicInfoDto.thumbnailUrl : darkLogo})`,
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'center center',
+                                    backgroundSize: `${item.techBlogPostBasicInfoDto.thumbnailUrl ? '100%' : '10%'}`,
+                                }}
                             />
                             <CardContent
                                 sx={{
@@ -191,35 +161,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                                             ))}
                                         </ul>
                                     </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {/* <ul className="flex items-center gap-4">
-                                            <li className="flex text-xs gap-1">
-                                                <ThumbUpIcon
-                                                    onClick={() =>
-                                                        handlePostLike(
-                                                            Number(
-                                                                item.techBlogPostBasicInfoDto.id,
-                                                            ),
-                                                        )
-                                                    }
-                                                    sx={
-                                                        item.hasMemberLikedPost
-                                                            ? { color: '#E6783A', fontSize: '18px' }
-                                                            : { color: '', fontSize: '18px' }
-                                                    }
-                                                />
-                                                {/* <span className="flex items-center"> */}
-                                        {/* {item.techBlogPostBasicInfoDto.likeCount} */}
-                                        {/* </span> */}
-                                        {/* </li> */}
-                                        {/* <li className="text-xs flex items-center gap-1"> */}
-                                        {/* <RemoveRedEyeIcon /> */}
-                                        {/* <span> */}
-                                        {/* {item.techBlogPostBasicInfoDto.viewCount} */}
-                                        {/* </span> */}
-                                        {/* </li> */}
-                                        {/* </ul> */}
-                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary"></Typography>
                                 </Link>
                             </CardContent>
                         </div>
