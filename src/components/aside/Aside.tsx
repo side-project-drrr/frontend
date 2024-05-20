@@ -27,7 +27,7 @@ export default function Aside() {
             <TopKeywords />
             <Box>
                 <Typography variant="h6" fontWeight="bold">
-                    가장 많이 읽는 글
+                    가장 많이 읽은 글
                 </Typography>
                 <Box
                     borderBottom={1}
