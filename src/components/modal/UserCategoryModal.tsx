@@ -162,24 +162,25 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
                         width: '600px',
-                        height: '70%',
+                        height: '620px',
                         bgcolor: '#FFFFFF',
                         boxShadow: 24,
                         p: 4,
                         borderRadius: '10px',
+
                         [theme.breakpoints.down('sm')]: { width: '350px', top: '50%', left: '50%' },
                     })}
                     className="flex flex-col items-center justify-around"
                 >
                     <ModalTitle onHangleCloseClick={onClose} state="signup" />
-                    <div className="flex items-center justify-center w-full mt-5">
+                    <div className="flex items-center justify-center w-11/12 mt-5 ">
                         <InputTextField
                             placeholder="검색"
                             variant="outlined"
                             onChange={handleCategorySearchItem}
                             aria-label="검색창"
                             sx={(theme: any) => ({
-                                width: '67%',
+                                width: '60%',
                                 [theme.breakpoints.down('sm')]: { width: '100%' },
                             })}
                             onKeyDown={(e: any) => handleCategorySearchKeyborad(e)}

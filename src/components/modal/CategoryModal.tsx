@@ -44,7 +44,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [timer, setTimer] = useState<NodeJS.Timeout>();
     const [isSearching, setIsSearching] = useState(false); // 검색value
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
-    const size = 15;
+    const size = 20;
     const setIsLogged = useSetRecoilState(isLoggedInState);
     const setLoginSucess = useSetRecoilState(loginSuccessState);
     const { login } = useProfileState();
@@ -164,7 +164,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
                         width: '600px',
-                        height: '70%',
+                        height: '620px',
                         bgcolor: '#FFFFFF',
                         boxShadow: 24,
                         p: 4,
