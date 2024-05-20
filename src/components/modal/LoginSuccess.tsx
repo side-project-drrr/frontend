@@ -42,7 +42,7 @@ export const LoginSuccess = () => {
                             </p>
                         </div>
                         <Button
-                            sx={{ width: '100%', backgroundColor: '#f0f0f0' }}
+                            sx={{ width: '100%', backgroundColor: '#f0f0f0', color: 'black' }}
                             onClick={handleClose}
                         >
                             확인

@@ -44,7 +44,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [timer, setTimer] = useState<NodeJS.Timeout>();
     const [isSearching, setIsSearching] = useState(false); // 검색value
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
-    const size = 20;
+    const size = 15;
     const setIsLogged = useSetRecoilState(isLoggedInState);
     const setLoginSucess = useSetRecoilState(loginSuccessState);
     const { login } = useProfileState();
@@ -58,7 +58,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
     const onIntersect = async (entries: any, observer: any) => {
         const entry = entries[0];
-
         if (entry.isIntersecting) {
             observer.unobserve(entry.target);
             setPage(prev => prev + 1);
@@ -97,9 +96,9 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
         if (tokenData.accessToken.length > 0) {
             setLoginSucess(true);
             login(tokenData.accessToken);
-            subscribeUser();
             setAccessTokenStorage(ACCESSTOKEN_KEY, tokenData.accessToken);
             setRefreshTokenStorage(REFRESHTOKEN_KEY, tokenData.refreshToken);
+            subscribeUser();
         }
     }
 
@@ -140,7 +139,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
         if (onModalOpen && !isSearching) {
             getCategoryList();
         }
-    }, [onModalOpen]);
+    }, [onModalOpen, page]);
 
     useEffect(() => {
         if (categorySearchValue.length > 0) {
@@ -154,6 +153,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     }, [categorySearchValue]);
 
     const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
+
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
@@ -185,6 +185,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                                 width: '50%',
                                 [theme.breakpoints.down('sm')]: { width: '100%' },
                             })}
+                            autoComplete="off"
                         />
                     </div>
                     <ul
@@ -193,14 +194,14 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                     >
                         {categoryItems?.map((categoryitem, index) => (
                             <CategoryItem
-                                key={categoryitem.id}
+                                key={index}
                                 categoryId={categoryitem.id}
                                 title={categoryitem.name}
                                 onIndex={index}
                             />
                         ))}
+                        <div ref={observationTarget}>Loading..</div>
                     </ul>
-                    <div ref={observationTarget}></div>
 
                     <SelectedCategoryDisplay />
                     <Button

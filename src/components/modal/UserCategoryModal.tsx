@@ -152,7 +152,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     }, [categorySearchValue]);
 
     const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
-
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
@@ -188,18 +187,18 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                         />
                     </div>
                     <ul
-                        className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full bg-red-500"
+                        className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full "
                         id="CategoryModal-Scroll"
                     >
                         {categoryItems?.map((categoryitem, index) => (
                             <PrivateCategoryItems
-                                key={categoryitem.id}
+                                key={index}
                                 categoryId={categoryitem.id}
                                 title={categoryitem.name}
                                 onIndex={index}
                             />
                         ))}
-                        <div ref={observationTarget} style={{ backgroundColor: 'blue' }}></div>
+                        <div ref={observationTarget}>Loading...</div>
                     </ul>
 
                     <SelectedCategoryDisplay />
