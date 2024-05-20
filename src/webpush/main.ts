@@ -56,6 +56,7 @@ export function registerServiceWorker() {
     if ('serviceWorker' in navigator && 'PushManager' in window) {
         navigator.serviceWorker
             .register('/sw.js')
+            //.register('/src/webpush/sw.js')
             .then(reg => {
                 swRegistration = reg;
             })
