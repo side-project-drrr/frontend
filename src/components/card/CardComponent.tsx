@@ -52,7 +52,6 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                     <Card
                         sx={{
                             marginTop: '15px',
-                            backgroundColor: '#444444',
                             borderRadius: '20px',
                         }}
                         key={index}
@@ -102,6 +101,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                                         gutterBottom
                                         variant="h5"
                                         component="div"
+                                        color="text.primary"
                                         sx={{
                                             fontSize: '20px',
                                             width: '100%',
@@ -127,7 +127,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                                 >
                                     <Typography
                                         variant="body2"
-                                        color="text.secondary"
+                                        color="text.primary"
                                         sx={{
                                             width: '100%',
                                             display: 'block',
@@ -141,7 +141,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                                     </Typography>
                                     <Typography
                                         variant="body2"
-                                        color="text.secondary"
+                                        color="text.primary"
                                         sx={{
                                             paddingBottom: '1rem',
                                             textOverflow: 'ellipsis',
@@ -183,18 +183,26 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                     <Card
                         sx={{
                             marginTop: '15px',
-                            backgroundColor: '#444444',
                             borderRadius: '20px',
                         }}
                         key={index}
                         id={item.techBlogPostBasicInfoDto.id}
                     >
                         <div className="px-6 pt-6">
-                            <CardMedia
-                                component="img"
-                                image={item.techBlogPostBasicInfoDto.thumbnailUrl}
-                                alt="썸네일"
-                                sx={{ height: '175px', width: '100%', borderRadius: '20px' }}
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItem: 'center',
+                                    justifyContent: 'center',
+                                    width: '100%',
+                                    height: '170px',
+                                    backgroundColor: 'rgb(158, 158, 158)',
+                                    borderRadius: '20px',
+                                    backgroundImage: `url(${item.techBlogPostBasicInfoDto.thumbnailUrl ? item.techBlogPostBasicInfoDto.thumbnailUrl : darkLogo})`,
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'center center',
+                                    backgroundSize: `${item.techBlogPostBasicInfoDto.thumbnailUrl ? '100%' : '10%'}`,
+                                }}
                             />
                             <CardContent
                                 sx={{
@@ -208,6 +216,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                                     gutterBottom
                                     variant="h5"
                                     component="div"
+                                    color="text.primary"
                                     sx={{
                                         fontSize: '20px',
                                         width: '100%',
@@ -222,7 +231,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                                 </Typography>
                                 <Typography
                                     variant="body2"
-                                    color="text.secondary"
+                                    color="text.primary"
                                     sx={{
                                         width: '100%',
                                         display: 'block',
@@ -236,7 +245,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                                 </Typography>
                                 <Typography
                                     variant="body2"
-                                    color="text.secondary"
+                                    color="text.primary"
                                     sx={{
                                         paddingBottom: '1rem',
                                         textOverflow: 'ellipsis',
@@ -252,20 +261,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                                         ))}
                                     </ul>
                                 </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    {/* <ul className="flex items-center "> */}
-                                    {/* <li className="flex text-xs gap-1"> */}
-                                    {/* <ThumbUpIcon /> */}
-                                    {/* <span className="flex items-center"> */}
-                                    {/* {item.techBlogPostBasicInfoDto.likeCount} */}
-                                    {/* </span> */}
-                                    {/* </li> */}
-                                    {/* <li className="text-xs flex items-center gap-1"> */}
-                                    {/* <RemoveRedEyeIcon /> */}
-                                    {/* {item.techBlogPostBasicInfoDto.viewCount} */}
-                                    {/* </li> */}
-                                    {/* </ul> */}
-                                </Typography>
+                                <Typography variant="body2" color="text.secondary"></Typography>
                             </CardContent>
                         </div>
                     </Card>
