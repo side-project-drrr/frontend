@@ -6,17 +6,22 @@ import { BrowserRouter } from 'react-router-dom';
 import { registerServiceWorker } from './webpush/main.ts';
 import { ThemeProvider } from './ThemeContext/ThemeProvider.tsx';
 import { RecoilRoot } from 'recoil';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 registerServiceWorker();
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <RecoilRoot>
-            <BrowserRouter>
-                <ThemeProvider>
-                    <App />
-                </ThemeProvider>
-            </BrowserRouter>
-        </RecoilRoot>
+        <QueryClientProvider client={queryClient}>
+            <RecoilRoot>
+                <BrowserRouter>
+                    <ThemeProvider>
+                        <App />
+                    </ThemeProvider>
+                </BrowserRouter>
+            </RecoilRoot>
+        </QueryClientProvider>
     </React.StrictMode>,
 );
