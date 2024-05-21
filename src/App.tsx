@@ -113,7 +113,6 @@ function App() {
                     <Route path="/github/auth" element={<SocialCallback />} />
                 </Routes>
             </ThemeProvider>
-            {/* <MainPage /> */}
         </>
 >>>>>>> 188e022 ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
     );
