@@ -67,6 +67,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
     async function getCategoryList() {
         const categoryData = await getCategoryItem({ page, size });
+
         setCategoryItems(prev => [...prev, ...categoryData.content]);
 
         if (categoryData.content.length > 0) {
@@ -82,6 +83,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             page,
             size,
         });
+
         setCategoryItems(prev => [...prev, ...categorySearchData.content]);
         if (categorySearchData.content.length > 0) {
             if (observationTarget.current) {
