@@ -12,6 +12,7 @@ module.exports = {
         'plugin:prettier/recommended',
         'react-app',
         'plugin:vitest-globals/recommended',
+        'plugin:@tanstack/eslint-plugin-query/recommended',
     ],
     //parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -22,7 +23,7 @@ module.exports = {
         useJSXTextNode: true,
         ecmaFeatures: { jsx: true },
     },
-    plugins: ['react', 'eslint-plugin-prettier'],
+    plugins: ['react', 'eslint-plugin-prettier', '@tanstack/query'],
     rules: {
         'prettier/prettier': 'error',
         eqeqeq: 'error', // 일치 연산자 사용 필수
