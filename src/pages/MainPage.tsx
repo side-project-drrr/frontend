@@ -28,6 +28,7 @@ export default function MainPage() {
     const displayMode = useRecoilValue(DisplayModeState);
     const [page, setPage] = useState<number>(0);
     const [categoryId, setCategoryId] = useState<number>(0);
+
     const loggedIn = useRecoilValue(isLoggedInState);
     const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
     const size = 10;
@@ -50,9 +51,12 @@ export default function MainPage() {
 
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
+
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
+        if (userTechBlogData.content.length > 0) {
+            if (observationTarget.current) {
+                observer.observe(observationTarget.current);
+            }
         }
     }
 
@@ -62,10 +66,13 @@ export default function MainPage() {
             size,
             id,
         });
+
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
 
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
+        if (userFilterTechBlogData.content.length > 0) {
+            if (observationTarget.current) {
+                observer.observe(observationTarget.current);
+            }
         }
     }
 
@@ -102,7 +109,6 @@ export default function MainPage() {
 
     const handleUserCategoryId = (id: string) => {
         const numberId = parseInt(id, 10);
-
         setCategoryId(numberId);
         setFilterTechBlogData([]);
     };
@@ -150,7 +156,10 @@ export default function MainPage() {
                         onFilterItems={filterTechBlogData}
                     />
                 </div>
-                <div ref={observationTarget}></div>
+
+                <>
+                    <div ref={observationTarget}>Loading..</div>
+                </>
             </div>
             {handleModalOpen && <SignUpModal onSignupNext={handleSignupNext} />}
             {isCategoryModalOpen && (
