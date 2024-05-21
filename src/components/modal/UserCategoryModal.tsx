@@ -76,7 +76,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
 
     async function getCategoryListRender() {
         const categoryData = await getCategoryItem({ page, size });
-
         setCategoryItems(prev => [...prev, ...categoryData.content]);
 
         if (categoryData.content.length > 0) {
