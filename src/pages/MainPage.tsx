@@ -51,6 +51,7 @@ export default function MainPage() {
 
     async function userTechBlogRender() {
         const userTechBlogData = await getTechBlogService({ page, size });
+
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
 <<<<<<< HEAD
         if (userTechBlogData.content.length > 0) {
@@ -70,6 +71,7 @@ export default function MainPage() {
             size,
             id,
         });
+
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
 
 <<<<<<< HEAD

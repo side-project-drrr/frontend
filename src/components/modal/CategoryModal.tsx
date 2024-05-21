@@ -71,6 +71,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
     async function getCategoryList() {
         const categoryData = await getCategoryItem({ page, size });
+
         setCategoryItems(prev => [...prev, ...categoryData.content]);
 <<<<<<< HEAD
 
@@ -91,6 +92,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             page,
             size,
         });
+
         setCategoryItems(prev => [...prev, ...categorySearchData.content]);
 <<<<<<< HEAD
         if (categorySearchData.content.length > 0) {
