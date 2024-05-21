@@ -67,17 +67,21 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         });
 
         setCategoryItems(prev => [...prev, ...categorySearchData.content]);
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
+        if (categorySearchData.content.length > 0) {
+            if (observationTarget.current) {
+                observer.observe(observationTarget.current);
+            }
         }
     }
 
     async function getCategoryListRender() {
         const categoryData = await getCategoryItem({ page, size });
-
         setCategoryItems(prev => [...prev, ...categoryData.content]);
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
+
+        if (categoryData.content.length > 0) {
+            if (observationTarget.current) {
+                observer.observe(observationTarget.current);
+            }
         }
     }
 
@@ -199,7 +203,8 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                                 onIndex={index}
                             />
                         ))}
-                        <div ref={observationTarget}>Loading...</div>
+
+                        <div ref={observationTarget}></div>
                     </ul>
 
                     <SelectedCategoryDisplay />

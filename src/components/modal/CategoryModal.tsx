@@ -33,6 +33,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [page, setPage] = useState(0);
+
     const profileValue = useRecoilValue(userInformationState);
     const providerId = useRecoilValue(providerIdState);
     const provider = getProvider('provider');
@@ -66,9 +67,13 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
     async function getCategoryList() {
         const categoryData = await getCategoryItem({ page, size });
+
         setCategoryItems(prev => [...prev, ...categoryData.content]);
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
+
+        if (categoryData.content.length > 0) {
+            if (observationTarget.current) {
+                observer.observe(observationTarget.current);
+            }
         }
     }
 
@@ -78,9 +83,12 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             page,
             size,
         });
+
         setCategoryItems(prev => [...prev, ...categorySearchData.content]);
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
+        if (categorySearchData.content.length > 0) {
+            if (observationTarget.current) {
+                observer.observe(observationTarget.current);
+            }
         }
     }
 
@@ -200,7 +208,8 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                                 onIndex={index}
                             />
                         ))}
-                        <div ref={observationTarget}>Loading..</div>
+
+                        <div ref={observationTarget}>Loading...</div>
                     </ul>
 
                     <SelectedCategoryDisplay />

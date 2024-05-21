@@ -89,7 +89,6 @@ function App() {
                     <Route path="/github/auth" element={<SocialCallback />} />
                 </Routes>
             </ThemeProvider>
-            {/* <MainPage /> */}
         </>
     );
 }
