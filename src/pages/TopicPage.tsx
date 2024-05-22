@@ -10,6 +10,7 @@ import { useRecoilState } from 'recoil';
 import { searchValueState, topicIndexState, topicState } from '../recoil/atom/topicsState';
 import { Input } from '@mui/base';
 import { inputEl } from '../style/style';
+import { useMutation } from '@tanstack/react-query';
 
 export default function TopicPage() {
     const [, setTopics] = useRecoilState(topicState);
@@ -31,6 +32,37 @@ export default function TopicPage() {
     };
 
     const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
+
+    const { mutate: indexMutate, isError: indexError } = useMutation({
+        mutationFn: ({ page, index }: { page: number; index: string }) =>
+            getIndexTopicsApi(page, index),
+        onSuccess: res => {
+            if (res.first) {
+                setTopics(res.content);
+            } else {
+                setTopics(prev => [...prev, ...res.content]);
+            }
+
+            if (!res.last) {
+                if (observationTarget.current) observer.observe(observationTarget.current);
+            }
+        },
+    });
+
+    const { mutate: etcIndexMutate, isError: etcIndexError } = useMutation({
+        mutationFn: (page: number) => getEtcIndexTopicsApi(page),
+        onSuccess: res => {
+            if (res.first) {
+                setTopics(res.content);
+            } else {
+                setTopics(prev => [...prev, ...res.content]);
+            }
+
+            if (!res.last) {
+                if (observationTarget.current) observer.observe(observationTarget.current);
+            }
+        },
+    });
 
     // 검색 topic 무한 스크롤
     async function infiniteSearchTopics(value: string) {
@@ -67,38 +99,25 @@ export default function TopicPage() {
 
     // 인덱스 topic 무한 스크롤
     async function infiniteIndexTopics(index: string) {
-        let res: any = null;
-
         if (index === '기타') {
-            res = await getEtcIndexTopicsApi(page);
+            etcIndexMutate(0);
         } else {
-            res = await getIndexTopicsApi(page, index);
-        }
-
-        if (res.status === 200) {
-            setTopics(prev => [...prev, ...res.data.content]);
+            indexMutate({ page: 0, index: index });
         }
     }
 
     // 인덱스별 topic 호출
     async function handleIndex(index: string) {
-        let res: any = null;
         setSearchVal('');
         setPage(0);
 
         if (index === '기타') {
             setTopicIndex('기타');
-            res = await getEtcIndexTopicsApi(0);
+            etcIndexMutate(0);
         } else {
             setTopicIndex(index);
-            res = await getIndexTopicsApi(0, index);
+            indexMutate({ page: 0, index: index });
         }
-
-        if (res.status === 200) {
-            setTopics(res.data.content);
-        }
-
-        if (observationTarget.current) observer.observe(observationTarget.current);
     }
 
     useEffect(() => {

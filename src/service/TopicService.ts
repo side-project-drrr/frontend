@@ -15,31 +15,56 @@ export async function getSearchTopicsApi(page: number, value: string) {
     return res;
 }
 
+type indexDataType = {
+    content: {
+        id: number;
+        name: string;
+    }[];
+    first: boolean;
+    last: boolean;
+};
+
 //인덱스 해당하는 리스트를 찾는 api - 무한스크롤
 export async function getIndexTopicsApi(page: number, index: string) {
-    const res = await HttpClient.get('/api/v1/categories/index-search', {
-        params: {
-            page: page,
-            size: 200,
-            sort: 'name',
-            language: 'KOREAN',
-            index: index,
-        },
-    });
+    try {
+        const { data }: AxiosResponse<indexDataType> = await HttpClient.get(
+            '/api/v1/categories/index-search',
+            {
+                params: {
+                    page: page,
+                    size: 200,
+                    sort: 'name',
+                    language: 'KOREAN',
+                    index: index,
+                },
+            },
+        );
 
-    return res;
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
 }
 
 //기타 인덱스 해당하는 리스트를 찾는 api - 무한스크롤
 export async function getEtcIndexTopicsApi(page: number) {
-    const res = await HttpClient.get('/api/v1/categories/search-etc', {
-        params: {
-            page: page,
-            size: 200,
-        },
-    });
+    try {
+        const { data }: AxiosResponse<indexDataType> = await HttpClient.get(
+            '/api/v1/categories/search-etc',
+            {
+                params: {
+                    page: page,
+                    size: 200,
+                },
+            },
+        );
 
-    return res;
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
 }
 
 type indexType = {
