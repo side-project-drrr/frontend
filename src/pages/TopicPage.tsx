@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { IndexingComponent } from '../components/topics/Indexing';
-import { ListComponent } from '../components/topics/List';
+import IndexingComponent from '../components/topics/Indexing';
+import ListComponent from '../components/topics/List';
 import {
     getEtcIndexTopicsApi,
     getIndexTopicsApi,

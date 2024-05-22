@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import HttpClient from '../apis/HttpClient';
 
 // 검색 데이터에 해당하는 리스트를 찾는 api - 무한스크롤
@@ -41,41 +42,72 @@ export async function getEtcIndexTopicsApi(page: number) {
     return res;
 }
 
+type indexType = {
+    content: {
+        category: { id: number; name: string }[];
+        keyIndex: string;
+    }[];
+};
+
 // 마운트 후 한번만 실행되는 api, 가나다 순 토픽 종류 10가지씩을 호출
 export async function getRangeKorApi() {
-    const res = await HttpClient.get('/api/v1/categories/range', {
-        params: {
-            startIdx: '가',
-            endIdx: '하',
-            language: 'KOREAN',
-            size: 10,
-        },
-    });
+    try {
+        const { data }: AxiosResponse<indexType> = await HttpClient.get(
+            '/api/v1/categories/range',
+            {
+                params: {
+                    startIdx: '가',
+                    endIdx: '하',
+                    language: 'KOREAN',
+                    size: 10,
+                },
+            },
+        );
 
-    return res;
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
 }
 
 // 마운트 후 한번만 실행되는 api, ABC 순 토픽 종류 10가지씩을 호출
 export async function getRangeEngApi() {
-    const res = await HttpClient.get('/api/v1/categories/range', {
-        params: {
-            startIdx: 'a',
-            endIdx: 'z',
-            language: 'ENGLISH',
-            size: 10,
-        },
-    });
+    try {
+        const { data }: AxiosResponse<indexType> = await HttpClient.get(
+            '/api/v1/categories/range',
+            {
+                params: {
+                    startIdx: 'a',
+                    endIdx: 'z',
+                    language: 'ENGLISH',
+                    size: 10,
+                },
+            },
+        );
 
-    return res;
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
 }
 
 // 마운트 후 한번만 실행되는 api, ABC 순 토픽 종류 10가지씩을 호출
 export async function getRangeEtcApi() {
-    const res = await HttpClient.get('/api/v1/categories/range/etc', {
-        params: {
-            size: 10,
-        },
-    });
+    try {
+        const { data }: AxiosResponse<indexType> = await HttpClient.get(
+            '/api/v1/categories/range/etc',
+            {
+                params: {
+                    size: 10,
+                },
+            },
+        );
 
-    return res;
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
 }
