@@ -2,26 +2,6 @@ import { AxiosError } from 'axios';
 import HttpClient from '../../apis/HttpClient';
 import { IAuthProps, IAuthEmailProps, IAuthEmailVaildationProps } from './type';
 
-export const SocialService = async (code: string | null, state: string) => {
-    try {
-        const res = await HttpClient.get(`/api/v1/auth/oauth2/profile?code=${code}&state=${state}`);
-        return res.data;
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-export async function SignInService(providerValue: string) {
-    try {
-        const res = await HttpClient.post(`/api/v1/auth/signin`, {
-            providerId: `${providerValue}`,
-        });
-        return res.data;
-    } catch (error) {
-        console.error(error);
-    }
-}
-
 export async function SignUpService({
     email,
     categoryIds,

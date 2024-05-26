@@ -21,7 +21,6 @@ dist-ssr
 .env.local
 .env.production
 
-.yarn/
 .pnp.*
 .yarn/*
 !.yarn/cache
@@ -30,7 +29,11 @@ dist-ssr
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Exclude specific cache folders
 .yarn/cache
+.yarn/unplugged/
+.yarn/build-state.yml
 
 # Editor directories and files
 .vscode/*

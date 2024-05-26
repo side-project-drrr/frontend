@@ -1,4 +1,4 @@
-import HttpClient from './HttpClient';
+import HttpClient from '../apis/HttpClient';
 
 // 추천 게시글 리스트
 export async function recommendedListApi() {

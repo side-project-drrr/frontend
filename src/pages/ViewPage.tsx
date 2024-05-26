@@ -2,7 +2,7 @@ import { Box, Button, Typography, styled } from '@mui/material';
 import darkLogo from '../assets/darkLogo.webp';
 import { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getPostApi, readPostApi } from '../apis/view';
+import { getPostApi, readPostApi } from '../service/view';
 
 type postType = {
     id: number;
@@ -17,7 +17,7 @@ type postType = {
     url: String;
 };
 
-export const ViewPage = () => {
+const ViewPage = () => {
     const { postId } = useParams();
     const [post, setPost] = useState<postType>();
     const StyledButton = styled(Button)({
@@ -106,3 +106,5 @@ export const ViewPage = () => {
         )
     );
 };
+
+export default ViewPage;
