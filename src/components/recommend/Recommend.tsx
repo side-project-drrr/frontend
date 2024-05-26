@@ -13,9 +13,9 @@ export default function Recommend() {
     const [recommendData, setRecommendData] = useState([]);
     const [randomRecommendData, setRandomRecommendData] = useState<IRandomDataProps>();
     const { token } = useProfileState();
+
     async function getRecommenedDataRender() {
         const recommendBlogData = await getRecommendTechBlogService();
-
         if (recommendBlogData?.status === 200) setRecommendData(recommendBlogData.data);
     }
 
@@ -29,7 +29,6 @@ export default function Recommend() {
             setRandomRecommendData(recommendData[randomIndex]);
         }
     }, [recommendData]);
-
     return (
         <Box
             className="flex flex-col justify-around"
@@ -53,7 +52,7 @@ export default function Recommend() {
                     underline="none"
                     sx={{
                         '&:hover': {
-                            color: 'text.primary', // hover 시 변경할 색상 설정
+                            color: 'text.primary',
                         },
                     }}
                 >
@@ -66,8 +65,8 @@ export default function Recommend() {
                     key={randomRecommendData?.techBlogPostBasicInfoDto?.id}
                 >
                     <Box
-                        minWidth="80px"
-                        minHeight="80px"
+                        minWidth="60px"
+                        minHeight="60px"
                         display="flex"
                         justifyContent="center"
                         alignItems="center"
@@ -88,7 +87,7 @@ export default function Recommend() {
                         }}
                     />
 
-                    <div>
+                    <div className="ml-4 ">
                         <Link
                             href={`/view/${randomRecommendData?.techBlogPostBasicInfoDto?.id}`}
                             color="text.primary"
@@ -102,7 +101,7 @@ export default function Recommend() {
                             {randomRecommendData?.techBlogPostBasicInfoDto?.title}
                         </Link>
                         <Typography variant="body2" color="text.secondary">
-                            <span className="flex items-center gap-2">
+                            <span className="flex items-center gap-2 text-black dark:text-white">
                                 <ThumbUpIcon sx={{ fontSize: '15px' }} />
                                 {randomRecommendData.techBlogPostBasicInfoDto.likeCount}
                                 <RemoveRedEyeIcon sx={{ fontSize: '15px' }} />
