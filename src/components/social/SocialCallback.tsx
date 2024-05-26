@@ -37,9 +37,11 @@ export default function SocialCallback() {
             setProfileImgStorage(profileImageUrl);
             setLoggedIn(true);
             subscribeUser();
+            subscribeUser();
             navigate('/');
         } else {
             navigate('/');
+            subscribeUser();
             subscribeUser();
             setProviderIdState(providerId);
             setProfileImgStorage(profileImageUrl);
