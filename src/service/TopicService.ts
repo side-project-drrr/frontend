@@ -1,20 +1,6 @@
 import { AxiosResponse } from 'axios';
 import HttpClient from '../apis/HttpClient';
 
-// 검색 데이터에 해당하는 리스트를 찾는 api - 무한스크롤
-export async function getSearchTopicsApi(page: number, value: string) {
-    const res = await HttpClient.get('/api/v1/categories/keyword-search', {
-        params: {
-            page: page,
-            size: 200,
-            sort: 'name',
-            keyword: value,
-        },
-    });
-
-    return res;
-}
-
 type indexDataType = {
     content: {
         id: number;
@@ -23,6 +9,28 @@ type indexDataType = {
     first: boolean;
     last: boolean;
 };
+
+// 검색 데이터에 해당하는 리스트를 찾는 api - 무한스크롤
+export async function getSearchTopicsApi(page: number, value: string) {
+    try {
+        const { data }: AxiosResponse<indexDataType> = await HttpClient.get(
+            '/api/v1/categories/keyword-search',
+            {
+                params: {
+                    page: page,
+                    size: 200,
+                    sort: 'name',
+                    keyword: value,
+                },
+            },
+        );
+
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
 
 //인덱스 해당하는 리스트를 찾는 api - 무한스크롤
 export async function getIndexTopicsApi(page: number, index: string) {

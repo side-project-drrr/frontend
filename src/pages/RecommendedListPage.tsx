@@ -2,7 +2,7 @@ import { Box, Card, Link, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { BiSolidLike } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
-import { recommendedListApi } from '../service/RecommendedService';
+import { recommendedListApi } from '../service/recommended';
 import { useProfileState } from '../context/UserProfile';
 import { readPostApi } from '../service/view';
 
