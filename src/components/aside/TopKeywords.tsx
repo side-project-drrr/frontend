@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { TopKeywordProps } from './type';
-import { getTopkeyword } from '../../service/TopKeyword';
+import { getTopkeyword } from '../../service/TopKeywordService';
 import { Box, Typography } from '@mui/material';
 
 export default function TopKeywords() {

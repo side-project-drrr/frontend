@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Box from '@mui/material/Box';
@@ -34,6 +35,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [page, setPage] = useState(0);
 
+
     const profileValue = useRecoilValue(userInformationState);
     const providerId = useRecoilValue(providerIdState);
     const provider = getProvider('provider');
@@ -49,6 +51,8 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const setIsLogged = useSetRecoilState(isLoggedInState);
     const setLoginSucess = useSetRecoilState(loginSuccessState);
     const { login } = useProfileState();
+    const observationTarget = useRef(null);
+
     const observationTarget = useRef(null);
 
     const buttonStyle = {
@@ -76,6 +80,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             }
         }
     }
+
 
     async function getCategorySearchRender(value: string) {
         const categorySearchData = await categorySearchService({
@@ -106,6 +111,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             login(tokenData.accessToken);
             setAccessTokenStorage(ACCESSTOKEN_KEY, tokenData.accessToken);
             setRefreshTokenStorage(REFRESHTOKEN_KEY, tokenData.refreshToken);
+            subscribeUser();
             subscribeUser();
         }
     }
@@ -154,8 +160,10 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             setCategoryItems([]);
             setIsSearching(true);
             setPage(0);
+            setPage(0);
         } else {
             setIsSearching(false);
+            setPage(0);
             setPage(0);
         }
     }, [categorySearchValue]);
@@ -173,6 +181,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         transform: 'translate(-50%, -50%)',
                         width: '600px',
                         height: '620px',
+                        height: '620px',
                         bgcolor: '#FFFFFF',
                         boxShadow: 24,
                         p: 4,
@@ -184,6 +193,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                 >
                     <ModalTitle onHangleCloseClick={onClose} state="signup" />
                     <div className="flex items-center justify-center w-11/12">
+                    <div className="flex items-center justify-center w-11/12">
                         <InputTextField
                             placeholder="검색"
                             variant="outlined"
@@ -191,8 +201,10 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                             aria-label="검색창"
                             sx={theme => ({
                                 width: '50%',
+                                width: '50%',
                                 [theme.breakpoints.down('sm')]: { width: '100%' },
                             })}
+                            autoComplete="off"
                             autoComplete="off"
                         />
                     </div>
@@ -201,13 +213,18 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         id="CategoryModal-Scroll"
                     >
                         {categoryItems?.map((categoryitem, index) => (
+                        {categoryItems?.map((categoryitem, index) => (
                             <CategoryItem
+                                key={index}
                                 key={index}
                                 categoryId={categoryitem.id}
                                 title={categoryitem.name}
                                 onIndex={index}
+                                onIndex={index}
                             />
                         ))}
+
+                        <div ref={observationTarget}>Loading...</div>
 
                         <div ref={observationTarget}>Loading...</div>
                     </ul>

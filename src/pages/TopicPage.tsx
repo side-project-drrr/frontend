@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { IndexingComponent } from '../components/topics/Indexing';
 import { ListComponent } from '../components/topics/List';
-import { getEtcIndexTopicsApi, getIndexTopicsApi, getSearchTopicsApi } from '../apis/topics';
+import {
+    getEtcIndexTopicsApi,
+    getIndexTopicsApi,
+    getSearchTopicsApi,
+} from '../service/TopicService';
 import { useRecoilState } from 'recoil';
 import { searchValueState, topicIndexState, topicState } from '../recoil/atom/topicsState';
 import { Input } from '@mui/base';

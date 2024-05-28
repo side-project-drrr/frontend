@@ -1,21 +1,21 @@
+import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import MainPage from './pages/MainPage';
 
-import SocialCallback from './components/social/SocialCallback';
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { useDarkMode } from './ThemeContext/ThemeProvider';
-import LayoutWithAside from './components/layout/LayoutWIthAside';
-import LayoutWithOutAside from './components/layout/LayoutWithOutAside';
-import TopicPage from './pages/TopicPage';
-import HeaderSearchPage from './pages/HeaderSearchPage';
-import { RecommendedListPage } from './pages/RecommendedListPage';
-import ProfilePage from './pages/ProfilePage';
-import { AlarmListPage } from './pages/AlarmListPage';
-import { ViewPage } from './pages/ViewPage';
-import HealthCheck from './pages/HealthCheck';
-import ToManyRequestError from './components/errors/ToManyRequestError';
+import { UserProfileProvider } from './context/UserProfile';
+const RecommendedListPage = lazy(() => import('./pages/RecommendedListPage'));
+const MainPage = lazy(() => import('./pages/MainPage'));
+const HeaderSearchPage = lazy(() => import('./pages/HeaderSearchPage'));
+const TopicPage = lazy(() => import('./pages/TopicPage'));
+const LayoutWithOutAside = lazy(() => import('./components/layout/LayoutWithOutAside'));
+const LayoutWithAside = lazy(() => import('./components/layout/LayoutWIthAside'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const AlarmListPage = lazy(() => import('./pages/AlarmListPage'));
+const ViewPageComponent = lazy(() => import('./pages/ViewPage'));
+const SocialComponent = lazy(() => import('./components/social/SocialCallback'));
 
 function App() {
     const { darkMode } = useDarkMode();
