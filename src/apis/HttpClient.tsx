@@ -48,12 +48,12 @@ HttpClient.interceptors.response.use(
 
         //토큰이 만료되을 때
         if (status === 401) {
-            if (error.response.data.message === 'Unauthorized') {
+            if (error.response.data.message === 'Unauthorized, JWT 토큰이 유효하지 않습니다.') {
                 const originRequest = config;
-                if (accessToken && refreshToken) {
+
+                if (!!accessToken && !!refreshToken) {
                     const newAccessToken = await reissuanceTokenService(accessToken, refreshToken);
                     //리프레시 토큰 요청이 성공할 때
-
                     if (newAccessToken.status === 200) {
                         setAccessTokenStorage(INITIAL_TOKEN, newAccessToken);
                         //진행중이던 요청 이어서하기

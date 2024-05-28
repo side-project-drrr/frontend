@@ -5,10 +5,9 @@ import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import { useEffect, useRef, useState } from 'react';
 
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { getSearchListStorage, saveSearchListStorage } from '../repository/SearchListRepository';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
-import { headerSearchValue } from '../recoil/atom/headerSearchValue';
 import { getHeaderKeywordSearch } from '../service/HeaderSearchService';
 import SearchListBox from '../stories/listbox/SearchListBox';
 
@@ -17,11 +16,11 @@ export default function HeaderSearchPage() {
     const { search } = useParams();
     const displayMode = useRecoilValue(DisplayModeState);
     const [page, setPage] = useState(0);
-    const searchValue = useRecoilValue(headerSearchValue);
     const KEY = 'search';
     const size = 10;
     const observationTarget = useRef(null);
     const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
+    const { state } = useLocation();
 
     const onIntersect = async (entries: any, observer: any) => {
         const entry = entries[0];
@@ -35,7 +34,7 @@ export default function HeaderSearchPage() {
         const keywordSearchData = await getHeaderKeywordSearch({
             page,
             size,
-            searchValue,
+            searchValue: state,
         });
         setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
 
@@ -56,15 +55,17 @@ export default function HeaderSearchPage() {
     const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
 
     useEffect(() => {
-        if (searchValue.length > 0) getKeywordSearchRender();
-    }, [page, searchValue]);
+        if (state.length > 0) getKeywordSearchRender();
+    }, [page, state]);
 
     return (
         <div className="flex justify-between w-full">
             <div className="flex flex-col w-full gap-6">
                 <div className="flex w-full">
                     <div className="flex justify-around w-full mt-5 ">
-                        <h1 className="w-full max-[600px]:text-2xl">Results for {search}</h1>
+                        <h1 className="w-full max-[600px]:text-2xl overflow-hidden text-ellipsis whitespace-nowrap ml-8">
+                            Results for {search}
+                        </h1>
                         <DisplayModeSwitch />
                     </div>
                 </div>

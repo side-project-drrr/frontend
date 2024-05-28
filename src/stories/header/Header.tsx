@@ -14,10 +14,8 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { profileHeaderMenu } from '../../recoil/atom/profileHeaderMenu';
 import HeaderSearchMenu from '../ChatBubble/HeaderSearchMenu';
 import { isSearchFocusedState } from '../../recoil/atom/isSearchFocusedState';
-import { useEffect, useRef, useState } from 'react';
-import { getHeaderKeywordSearch } from '../../service/HeaderSearchService';
+import { useEffect, useState } from 'react';
 import { HeaderSearchDataState } from '../../recoil/atom/HeaderSearchDataState';
-//import { PageState } from '../../recoil/atom/PageState';
 import { Link, useNavigate } from 'react-router-dom';
 import { getSearchListStorage } from '../../repository/SearchListRepository';
 import useHandleKeyPress from '../../hooks/useHandleKeyPress';
@@ -28,7 +26,6 @@ import { getAuthStorage } from '../../repository/AuthRepository';
 import { LogoutService } from '../../service/auth/SocialService';
 import { AlarmComponent } from './Alarm';
 import { useProfileState } from '../../context/UserProfile';
-import { headerSearchValue } from '../../recoil/atom/headerSearchValue';
 
 const InputTextField = styled(TextField)({
     '& label': {
@@ -109,43 +106,22 @@ function AuthHeader({ onLogout }: IHandleProps) {
 
 export default function Header() {
     const [isSearchFocused, setIsSearchfouced] = useRecoilState(isSearchFocusedState);
-    const [searchValue, setSearchValue] = useRecoilState(headerSearchValue);
+    const [searchValue, setSearchValue] = useState<string>('');
     const [getSearchLocalResult, setGetSearchLocalResult] = useState<any[]>([]);
     const [selectedSearchIndex, setSelectedSearchIndex] = useState<number>(-1);
     const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
     const [loggedIn, setLoggedIn] = useRecoilState(isLoggedInState);
-    const [page, setPage] = useState(0);
     const { darkMode, toggleDarkMode } = useDarkMode();
     const setProfileOpen = useSetRecoilState(profileHeaderMenu);
     const KEY = 'search';
     const navigate = useNavigate();
-    const size = 10;
     const TOKEN_KEY = 'accessToken';
     const REFRESHTOKEN_KEY = 'refreshToken';
     const token = getAuthStorage(TOKEN_KEY);
     const refresh_Token = getAuthStorage(REFRESHTOKEN_KEY);
     const { login } = useProfileState();
     const searchItem = getSearchListStorage(KEY);
-    const observationTarget = useRef(null);
 
-    const onIntersect = async (entries: any, observer: any) => {
-        const entry = entries[0];
-        if (entry.isIntersecting) {
-            observer.unobserve(entry.target);
-            setPage(prev => prev + 1);
-        }
-    };
-    async function getKeywordSearchRender() {
-        const keywordSearchData = await getHeaderKeywordSearch({
-            page,
-            size,
-            searchValue,
-        });
-        setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
-        }
-    }
     async function getLogoutRender() {
         if (token && refresh_Token) {
             await LogoutService(token, refresh_Token);
@@ -159,14 +135,13 @@ export default function Header() {
             if (e.key === 'Enter') {
                 // 엔터 키를 눌렀을 때 실행할 동작
                 setTechBlogSearchData([]);
-                getKeywordSearchRender();
                 setGetSearchLocalResult(prev => {
                     const uniqueValuesSet = new Set([...prev, value]);
                     const uniqueValuesArray = Array.from(uniqueValuesSet);
                     return uniqueValuesArray;
                 });
                 setIsSearchfouced(false);
-                navigate(`/search/${searchValue}`);
+                navigate(`/search/${searchValue}`, { state: value });
             }
         }
 
@@ -202,10 +177,6 @@ export default function Header() {
         setSearchValue(value);
     };
 
-    // useEffect(() => {
-    //     if (searchValue.length !== 0) getKeywordSearchRender();
-    // }, []);
-
     useEffect(() => {
         setGetSearchLocalResult(searchItem);
     }, []);
@@ -219,7 +190,6 @@ export default function Header() {
             setLoggedIn(true);
         }
     }, [token]);
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
 
     return (
         <header className={`w-full flex justify-center px-[10px]`}>
