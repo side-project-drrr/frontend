@@ -78,10 +78,12 @@ export default function HeaderSearchMenu({
                                             setIsSearchClicked(false);
                                         }}
                                     >
-                                        <p className="flex items-center w-full gap-4">
+                                        <div className="items-center w-full flex gap-4 whitespace-nowrap">
                                             <SearchIcon />
-                                            {value}
-                                        </p>
+                                            {value.length > 20
+                                                ? value.substring(0, 20) + '...'
+                                                : value}
+                                        </div>
                                     </Link>
                                     <div className="flex justify-end w-full pr-4">
                                         <CloseIcon
