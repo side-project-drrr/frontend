@@ -27,6 +27,7 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
     const [buttonDisabled, setButtonDisabled] = useState(false);
 
     const providerId = useRecoilValue(providerIdState);
+    const regex = new RegExp(/^[가-힣|a-z|A-Z|0-9|]+$/);
 
     async function nickNameValidationRender() {
         if (profileValue.nickname.length !== 0) {
@@ -35,6 +36,13 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                 setErrorMsg(prevErrorMsg => ({
                     ...prevErrorMsg,
                     nickname: msg.nickNameDuplicate,
+                }));
+                setButtonDisabled(false);
+                return;
+            } else if (!regex.test(profileValue.nickname)) {
+                setErrorMsg(prevErrorMsg => ({
+                    ...prevErrorMsg,
+                    nickname: msg.validationNickname,
                 }));
                 setButtonDisabled(false);
                 return;
@@ -71,6 +79,10 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                 }
             }
         }
+        setErrorMsg({
+            nickname: '',
+            email: '',
+        });
     }
 
     const handleNextClick = () => {
@@ -113,7 +125,6 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                 nickname: msg.nickName,
             }));
             setEmailCodeVerified(false);
-
             return;
         }
     };
@@ -164,8 +175,12 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                     onSetCount={setCount}
                     onNickNameValidationRender={nickNameValidationRender}
                 />
-                <p className="text-sm text-red-500">{errorMsg.email && errorMsg.email}</p>
-                <p className="text-sm text-red-500">{errorMsg.nickname && errorMsg.nickname}</p>
+                <p className="text-sm text-red-500 whitespace-nowrap">
+                    {errorMsg.email && errorMsg.email}
+                </p>
+                <p className="text-sm text-red-500 whitespace-nowrap">
+                    {errorMsg.nickname && errorMsg.nickname}
+                </p>
 
                 {emailCodeVerified ? (
                     <Button
