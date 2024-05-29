@@ -180,7 +180,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
 
                         [theme.breakpoints.down('sm')]: { width: '350px' },
                     })}
-                    className="flex flex-col items-center justify-around "
+                    className="flex flex-col items-center justify-around"
                 >
                     <ModalTitle onHangleCloseClick={onClose} state="signup" />
                     <div className="flex items-center justify-center w-11/12">

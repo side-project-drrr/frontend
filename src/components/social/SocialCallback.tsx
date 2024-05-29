@@ -49,12 +49,14 @@ export default function SocialCallback() {
 
     const handleKakaoLogin = async () => {
         const data = await SocialService(code, state);
+        console.log(data);
         socialLoginRender(data.isRegistered, data.providerId, data.profileImageUrl);
     };
 
     useEffect(() => {
         setDidMount(true);
     }, []);
+
     useEffect(() => {
         if (didMount) handleKakaoLogin();
     }, [didMount]);
