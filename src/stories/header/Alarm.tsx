@@ -14,7 +14,7 @@ import { getAuthStorage } from '../../repository/AuthRepository';
 import { useTokenDecode } from '../../hooks/useTokenDecode';
 import { useNavigate } from 'react-router-dom';
 import { useProfileState } from '../../context/UserProfile';
-import { alarmOpenApi, alarmReadApi, getPushDataApi } from '../../service/AlarmService';
+import { alarmOpenApi, alarmReadApi, getPushDataApi } from '../../apis/alarm';
 
 type alarmType = {
     openStatus: Boolean;

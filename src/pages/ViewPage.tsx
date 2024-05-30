@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import { getPostApi, readPostApi } from '../apis/view';
 import { postIncreasedViewsService } from '../service/TechBlogService';
 
-
 type postType = {
     id: number;
     title: String;
@@ -19,7 +18,7 @@ type postType = {
     url: String;
 };
 
-const ViewPage = () => {
+export const ViewPage = () => {
     const { postId } = useParams();
     const [post, setPost] = useState<postType>();
     const StyledButton = styled(Button)({
@@ -110,5 +109,3 @@ const ViewPage = () => {
         )
     );
 };
-
-export default ViewPage;
