@@ -67,21 +67,32 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         });
 
         setCategoryItems(prev => [...prev, ...categorySearchData.content]);
+<<<<<<< HEAD
         if (categorySearchData.content.length > 0) {
             if (observationTarget.current) {
                 observer.observe(observationTarget.current);
             }
+=======
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+>>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
         }
     }
 
     async function getCategoryListRender() {
         const categoryData = await getCategoryItem({ page, size });
+
         setCategoryItems(prev => [...prev, ...categoryData.content]);
+<<<<<<< HEAD
 
         if (categoryData.content.length > 0) {
             if (observationTarget.current) {
                 observer.observe(observationTarget.current);
             }
+=======
+        if (observationTarget.current) {
+            observer.observe(observationTarget.current);
+>>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
         }
     }
 
@@ -192,6 +203,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                         />
                     </div>
                     <ul
+<<<<<<< HEAD
                         className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full "
                         id="CategoryModal-Scroll"
                     >
@@ -203,7 +215,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                                 onIndex={index}
                             />
                         ))}
-
                         <div ref={observationTarget}></div>
                     </ul>
 

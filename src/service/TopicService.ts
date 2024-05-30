@@ -1,4 +1,4 @@
-import HttpClient from './HttpClient';
+import HttpClient from '../apis/HttpClient';
 
 // 검색 데이터에 해당하는 리스트를 찾는 api - 무한스크롤
 export async function getSearchTopicsApi(page: number, value: string) {
