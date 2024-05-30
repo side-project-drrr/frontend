@@ -3,6 +3,7 @@ import darkLogo from '../assets/darkLogo.webp';
 import { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getPostApi, readPostApi } from '../apis/view';
+import { postIncreasedViewsService } from '../service/TechBlogService';
 
 type postType = {
     id: number;
@@ -24,29 +25,31 @@ export const ViewPage = () => {
         borderRadius: '15px',
     });
 
-    useEffect(() => {
-        const getPost = async () => {
-            if (postId) {
-                const res = await getPostApi(postId);
-                if (res.status === 200) {
-                    const regex = /\./g;
-                    const text = res.data.aiSummary;
-                    const newText = text.replaceAll(regex, '.\r\n');
-                    res.data.aiSummary = newText;
+    const getPost = async (postId: string) => {
+        const res = await getPostApi(postId);
+        if (res.status === 200) {
+            const regex = /\./g;
+            const text = res.data.aiSummary;
+            const newText = text.replaceAll(regex, '.\r\n');
+            res.data.aiSummary = newText;
 
-                    const regexThumb = /\s+/g;
-                    const url = res.data.thumbnailUrl;
+            const regexThumb = /\s+/g;
+            const url = res.data.thumbnailUrl;
 
-                    if (url) {
-                        const newUrl = url.replace(regexThumb, '%20');
-                        res.data.thumbnailUrl = newUrl;
-                    }
-                    setPost(res.data);
-                }
+            if (url) {
+                const newUrl = url.replace(regexThumb, '%20');
+                res.data.thumbnailUrl = newUrl;
             }
-        };
-        getPost();
-        postId && readPostApi(postId);
+            setPost(res.data);
+        }
+    };
+
+    useEffect(() => {
+        if (postId) {
+            getPost(postId);
+            readPostApi(postId);
+            postIncreasedViewsService(parseInt(postId));
+        }
     }, [postId]);
 
     return (
