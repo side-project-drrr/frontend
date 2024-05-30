@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { reissuanceTokenService } from '../service/auth/SocialService';
 import { getAuthStorage, setAccessTokenStorage } from '../repository/AuthRepository';
-
 let baseURL = import.meta.env.VITE_APP_API_URL_DEV;
 
 if (process.env.NODE_ENV === 'production') {
@@ -42,20 +41,20 @@ HttpClient.interceptors.response.use(
     async error => {
         const {
             config,
-            response: { status },
+            response: { status, data },
         } = error;
         const INITIAL_TOKEN = 'accessToken';
         const REFRESHTOKEN_TOKEN = 'refreshToken';
         const accessToken = getAuthStorage(INITIAL_TOKEN);
         const refreshToken = getAuthStorage(REFRESHTOKEN_TOKEN);
-
         //토큰이 만료되을 때
-        if (status === 401) {
-            if (error.response.data.message === 'Unauthorized, JWT 토큰이 유효하지 않습니다.') {
+        if (status === 401 && data.code === 6501) {
+            if (data.message === 'Access Token 재발급이 필요합니다.') {
                 const originRequest = config;
 
                 if (!!accessToken && !!refreshToken) {
                     const newAccessToken = await reissuanceTokenService(accessToken, refreshToken);
+
                     //리프레시 토큰 요청이 성공할 때
                     if (newAccessToken.status === 200) {
                         setAccessTokenStorage(INITIAL_TOKEN, newAccessToken);

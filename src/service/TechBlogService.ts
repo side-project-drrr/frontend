@@ -3,7 +3,6 @@ import HttpClient from '../apis/HttpClient';
 interface ITechBlogCategory {
     page: number;
     size: number;
-
     id?: number;
 }
 
@@ -16,12 +15,7 @@ export async function getTechBlogService({ page, size }: ITechBlogCategory) {
     }
 }
 
-export async function getUserTechBlogService({
-    page,
-    size,
-
-    id,
-}: ITechBlogCategory) {
+export async function getUserTechBlogService({ page, size, id }: ITechBlogCategory) {
     try {
         const res = await HttpClient.get(
             `/api/v1/posts/categories/${id}?page=${page}&size=${size}`,
