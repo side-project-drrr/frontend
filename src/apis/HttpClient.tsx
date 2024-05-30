@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { reissuanceTokenService } from '../service/auth/SocialService';
-import { getAuthStorage, setAccessTokenStorage } from '../repository/AuthRepository';
+import {
+    getAuthStorage,
+    removeAuthStorage,
+    setAccessTokenStorage,
+} from '../repository/AuthRepository';
 let baseURL = import.meta.env.VITE_APP_API_URL_DEV;
 
 if (process.env.NODE_ENV === 'production') {
@@ -47,6 +51,8 @@ HttpClient.interceptors.response.use(
         const REFRESHTOKEN_TOKEN = 'refreshToken';
         const accessToken = getAuthStorage(INITIAL_TOKEN);
         const refreshToken = getAuthStorage(REFRESHTOKEN_TOKEN);
+        const IMG_URL = 'imgUrl';
+        const PROVIDER = 'provider';
         //토큰이 만료되을 때
         if (status === 401 && data.code === 6501) {
             if (data.message === 'Access Token 재발급이 필요합니다.') {
@@ -54,13 +60,14 @@ HttpClient.interceptors.response.use(
 
                 if (!!accessToken && !!refreshToken) {
                     const newAccessToken = await reissuanceTokenService(accessToken, refreshToken);
-
                     //리프레시 토큰 요청이 성공할 때
-                    if (newAccessToken.status === 200) {
-                        setAccessTokenStorage(INITIAL_TOKEN, newAccessToken);
+                    if (newAccessToken) {
+                        setAccessTokenStorage(INITIAL_TOKEN, newAccessToken.accessToken);
                         //진행중이던 요청 이어서하기
                         axios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+                        axios.defaults.headers.common['Refresh-Token'] = `Bearer ${refreshToken}`;
                         originRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                        originRequest.headers['Refresh-Token'] = `Bearer ${refreshToken}`;
                         return HttpClient(error.config);
                         //리프레시 토큰 요청이 실패할때(리프레시 토큰도 만료되었을때 = 재로그인 안내)
                     } else if (newAccessToken.status === 404) {
@@ -69,6 +76,12 @@ HttpClient.interceptors.response.use(
                     }
                 }
             }
+        } else if (status === 401 && data.code === 6502) {
+            removeAuthStorage(INITIAL_TOKEN);
+            removeAuthStorage(REFRESHTOKEN_TOKEN);
+            removeAuthStorage(IMG_URL);
+            removeAuthStorage(PROVIDER);
+            window.location.replace('/');
         } else if (status === 429) {
             window.location.replace('/error');
         }
