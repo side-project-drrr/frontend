@@ -1,4 +1,4 @@
-import HttpClient from '../apis/HttpClient';
+import HttpClient from './HttpClient';
 
 export const alarmReadApi = async (dates: String[]) => {
     const res = await HttpClient.post('/api/v1/members/me/web-push/posts/open', {

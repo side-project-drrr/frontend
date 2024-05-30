@@ -17,7 +17,7 @@ type postType = {
     url: String;
 };
 
-const ViewPage = () => {
+export const ViewPage = () => {
     const { postId } = useParams();
     const [post, setPost] = useState<postType>();
     const StyledButton = styled(Button)({
@@ -108,5 +108,3 @@ const ViewPage = () => {
         )
     );
 };
-
-export default ViewPage;

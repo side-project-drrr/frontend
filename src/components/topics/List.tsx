@@ -2,7 +2,7 @@ import { Chip, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { topicIndexState, topicState } from '../../recoil/atom/topicsState';
-import { getRangeEngApi, getRangeEtcApi, getRangeKorApi } from '../../service/TopicService';
+import { getRangeEngApi, getRangeEtcApi, getRangeKorApi } from '../../apis/topics';
 import { allTopicsType } from './type';
 import { useQuery } from '@tanstack/react-query';
 

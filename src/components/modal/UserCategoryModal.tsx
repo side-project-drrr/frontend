@@ -77,7 +77,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
 
     async function getCategoryListRender() {
         const categoryData = await getCategoryItem({ page, size });
-
         setCategoryItems(prev => [...prev, ...categoryData.content]);
         if (categoryData.content.length > 0) {
             if (observationTarget.current) {
@@ -204,6 +203,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                                 onIndex={index}
                             />
                         ))}
+
                         <div ref={observationTarget}></div>
                     </ul>
 
