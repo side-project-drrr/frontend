@@ -20,7 +20,7 @@ export default function SignUpModal({ onSignupNext }: ISignModalProps) {
                 aria-labelledby="Login"
                 className="flex items-center justify-center "
             >
-                <Box sx={{ ...style, width: '350px', height: '400px' }}>
+                <Box sx={{ ...style, width: '350px', minHeight: '400px' }}>
                     <SingUpForm onSignupNext={onSignupNext} onHandleClose={handleClose} />
                 </Box>
             </Modal>
