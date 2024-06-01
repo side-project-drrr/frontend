@@ -93,7 +93,7 @@ export const ViewPage = () => {
                             })`,
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'center center',
-                            backgroundSize: post.thumbnailUrl ? 'cover' : '50%',
+                            backgroundSize: post.thumbnailUrl ? 'cover' : '50px',
                         }}
                     ></Box>
 
