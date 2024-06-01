@@ -117,7 +117,7 @@ export const AlarmComponent = () => {
                 color="secondary"
                 className="mr-[10px]"
                 invisible={!mark}
-                sx={{ cursor: alarmList.length > 0 ? 'pointer' : 'none' }}
+                sx={{ cursor: alarmList.length > 0 ? 'pointer' : 'default' }}
             >
                 <NotificationsActiveIcon />
             </Badge>
