@@ -2,7 +2,13 @@ import { Box, Button, Typography, styled } from '@mui/material';
 import darkLogo from '../assets/darkLogo.webp';
 import { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getPostApi, readPostApi } from '../service/view';
+import { getPostApi, readPostApi } from '../apis/view';
+import {
+    postIncreasedMemberViewsService,
+    postIncreasedViewsService,
+} from '../service/TechBlogService';
+import { useRecoilState } from 'recoil';
+import { isLoggedInState } from '../recoil/atom/isLoggedInState';
 
 type postType = {
     id: number;
@@ -20,6 +26,7 @@ type postType = {
 export const ViewPage = () => {
     const { postId } = useParams();
     const [post, setPost] = useState<postType>();
+    const [loggedIn] = useRecoilState(isLoggedInState);
     const StyledButton = styled(Button)({
         borderRadius: '15px',
     });
@@ -47,7 +54,12 @@ export const ViewPage = () => {
         if (postId) {
             getPost(postId);
             readPostApi(postId);
-            postIncreasedViewsService(parseInt(postId));
+
+            if (loggedIn) {
+                postIncreasedMemberViewsService(postId);
+            } else {
+                postIncreasedViewsService(postId);
+            }
         }
     }, [postId]);
 

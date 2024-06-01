@@ -8,6 +8,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import {
     deletePostLikedService,
+    postIncreasedMemberViewsService,
     postIncreasedViewsService,
     postTechBlogLikeIncreasedService,
 } from '../../service/TechBlogService';
@@ -20,8 +21,12 @@ export default function SearchListBoxItem({ item, index }: ItemProps) {
     const setModalOpen = useSetRecoilState(loginModalState);
     const setTechBlogData = useSetRecoilState(techBlogDataState);
 
-    async function postIncreasedViewsRender(postId: number) {
-        await postIncreasedViewsService(postId);
+    async function postIncreasedViewsRender(postId: string) {
+        if (isLogin) {
+            postIncreasedMemberViewsService(postId);
+        } else {
+            postIncreasedViewsService(postId);
+        }
     }
 
     async function deleteTechBlogLikedRender(postId: number) {
@@ -99,9 +104,7 @@ export default function SearchListBoxItem({ item, index }: ItemProps) {
                                 color: 'text.primary',
                             },
                         }}
-                        onClick={() =>
-                            postIncreasedViewsRender(Number(item.techBlogPostBasicInfoDto.id))
-                        }
+                        onClick={() => postIncreasedViewsRender(item.techBlogPostBasicInfoDto.id)}
                     >
                         <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap pl-4 text-ellipsis max-[600px]:text-xs max-[600px]:hidden">
                             {item.techBlogPostBasicInfoDto.title}
