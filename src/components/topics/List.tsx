@@ -48,7 +48,7 @@ export const ListComponent = ({ onHandleIndex }: { onHandleIndex: (index: string
                             <ul className="flex flex-col gap-1">
                                 {data.category.map((item, idx) => (
                                     <li className="truncate ..." key={idx}>
-                                        <span className="hover:underline">{item.name}</span>
+                                        <span>{item.name}</span>
                                     </li>
                                 ))}
                             </ul>
