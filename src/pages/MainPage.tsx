@@ -27,8 +27,8 @@ export default function MainPage() {
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
     const displayMode = useRecoilValue(DisplayModeState);
     const [page, setPage] = useState<number>(0);
+    const [hasMore, setHasMore] = useState<boolean>(false);
     const [categoryId, setCategoryId] = useState<number>(0);
-
     const loggedIn = useRecoilValue(isLoggedInState);
     const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
     const size = 10;
@@ -43,7 +43,7 @@ export default function MainPage() {
     const onIntersect = async (entries: any, observer: any) => {
         const entry = entries[0];
 
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !hasMore) {
             observer.unobserve(entry.target);
             setPage(prev => prev + 1);
         }
@@ -60,15 +60,19 @@ export default function MainPage() {
         }
     }
 
-    async function userFilterTechBlogRender(id: number) {
+    async function userFilterTechBlogRender(id: number, page: number) {
         const userFilterTechBlogData = await getUserTechBlogService({
             page,
             size,
             id,
         });
 
+        if (userFilterTechBlogData.last) {
+            setHasMore(true);
+        } else {
+            setHasMore(false);
+        }
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
-
         if (userFilterTechBlogData.content.length > 0) {
             if (observationTarget.current) {
                 observer.observe(observationTarget.current);
@@ -114,12 +118,12 @@ export default function MainPage() {
     };
 
     useEffect(() => {
-        if (categoryId === 0) {
+        if (categoryId !== 0 && page > 0) {
+            userFilterTechBlogRender(categoryId, 0);
+        } else if (categoryId === 0) {
             userTechBlogRender();
-        } else {
-            userFilterTechBlogRender(categoryId);
         }
-    }, [page]);
+    }, [categoryId, page]);
 
     const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
 
