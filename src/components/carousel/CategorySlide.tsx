@@ -88,7 +88,9 @@ export default function CategorySlide({
                                         : 'dark:bg-[#444444] bg-[#f0f0f0]'
                                 } `}
                                 aria-label="카테고리추가 버튼"
-                                onClick={(e: any) => onHandleUserCategoryId(e.target.id)}
+                                onClick={(e: any) => {
+                                    onHandleUserCategoryId(e.target.id);
+                                }}
                             >
                                 전체 게시글
                             </p>
@@ -108,7 +110,9 @@ export default function CategorySlide({
                                     } `}
                                     id={item.id}
                                     aria-label="카테고리"
-                                    onClick={() => onHandleUserCategoryId(item.id)}
+                                    onClick={() => {
+                                        onHandleUserCategoryId(item.id);
+                                    }}
                                 >
                                     {item.name}
                                 </p>
