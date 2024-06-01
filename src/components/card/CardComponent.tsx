@@ -48,8 +48,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                         '&:hover': {
                             color: 'text.primary',
                         },
-                        maxWidth: '49%',
-                        minWidth: '49%',
+                        width: '49%',
                     }}
                     onClick={() => postIncreasedViewsRender(item.techBlogPostBasicInfoDto.id)}
                 >
@@ -177,8 +176,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                         '&:hover': {
                             color: 'text.primary',
                         },
-                        maxWidth: '49%',
-                        minWidth: '49%',
+                        width: '49%',
                     }}
                     onClick={handleLinkClick}
                 >
