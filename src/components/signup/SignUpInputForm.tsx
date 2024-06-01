@@ -42,12 +42,11 @@ export default function SignUpInputForm({
                         InputProps={{
                             endAdornment: (
                                 <IconButton
-                                    color="primary"
                                     component="span"
                                     className="w-10 h-10"
                                     onClick={onNickNameValidationRender}
                                 >
-                                    <BsSend className="hover:text-[#E6783A] text-black dark:text-white" />
+                                    <BsSend className="hover:text-[#E6783A] text-[#444]" />
                                 </IconButton>
                             ),
                         }}
@@ -63,12 +62,11 @@ export default function SignUpInputForm({
                         InputProps={{
                             endAdornment: (
                                 <IconButton
-                                    color="primary"
                                     component="span"
                                     className="w-10 h-10"
                                     onClick={onEmailCertificationButton}
                                 >
-                                    <BsSend className="hover:text-[#E6783A] text-black dark:text-white" />
+                                    <BsSend className="hover:text-[#E6783A] text-[#444]" />
                                 </IconButton>
                             ),
                         }}
