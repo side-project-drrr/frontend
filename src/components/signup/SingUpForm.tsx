@@ -22,12 +22,12 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
         nickname: '',
         email: '',
     });
-
-    const [count, setCount] = useState(0);
-    const [buttonDisabled, setButtonDisabled] = useState(false);
+    const [timeValidation, setTimeValidation] = useState<boolean>(false);
+    const [count, setCount] = useState<number>(0);
+    const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
 
     const providerId = useRecoilValue(providerIdState);
-    const regex = new RegExp(/^[가-힣|a-z|A-Z|0-9|]+$/);
+    const regex = new RegExp(/^[가-힣|a-z|A-Z|]+$/);
 
     async function nickNameValidationRender() {
         if (profileValue.nickname.length !== 0) {
@@ -97,6 +97,7 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                 email: '',
             });
             setCount(180);
+            setTimeValidation(true);
             emailCodeRender();
         } else {
             setErrorMsg(prevErrorMsg => ({
@@ -162,6 +163,16 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
     useEffect(() => {
         setEmailCodeVerified(false);
     }, [emailCodeValue]);
+
+    useEffect(() => {
+        if (timeValidation) {
+            if (count === 0)
+                setErrorMsg(prevErrorMsg => ({
+                    ...prevErrorMsg,
+                    email: msg.timeFalied,
+                }));
+        }
+    }, [count]);
 
     return (
         <>

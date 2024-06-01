@@ -221,6 +221,7 @@ export default function Header() {
                             sx={theme => ({
                                 [theme.breakpoints.down('sm')]: { width: '200px' },
                             })}
+                            inputProps={{ maxLength: 10 }}
                         />
                         {isSearchFocused && (
                             <HeaderSearchMenu
