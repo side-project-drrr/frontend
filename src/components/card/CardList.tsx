@@ -8,13 +8,13 @@ export default function CardList({ onCategoryId, onFilterItems }: IListBoxProps)
     return (
         <>
             {onCategoryId === 0 || onCategoryId === undefined ? (
-                <div className="flex flex-wrap justify-between pr-10">
+                <div className="flex flex-wrap justify-between pr-[15px] pl-[15px] w-full">
                     {techBlogData.map((item: any, index: number) => (
                         <CardComponent key={index} item={item} index={index} />
                     ))}
                 </div>
             ) : (
-                <div className="flex flex-wrap justify-between pr-10">
+                <div className="flex flex-wrap justify-between pr-[15px] pl-[15px] w-full">
                     {onFilterItems.map((item: any, index: number) => (
                         <CardComponent key={index} item={item} index={index} />
                     ))}
