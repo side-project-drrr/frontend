@@ -50,6 +50,7 @@ export default function SignUpInputForm({
                                 </IconButton>
                             ),
                         }}
+                        inputProps={{ maxLength: 10 }}
                     />
                 </div>
 
@@ -70,6 +71,7 @@ export default function SignUpInputForm({
                                 </IconButton>
                             ),
                         }}
+                        inputProps={{ maxLength: 30 }}
                         autoComplete="off"
                         name="email"
                     />
@@ -84,6 +86,7 @@ export default function SignUpInputForm({
                             aria-label="인증 코드"
                             sx={{ width: '75%' }}
                             autoComplete="off"
+                            inputProps={{ maxLength: 6 }}
                         />
                         <p className="text-black top-2.5 absolute right-0 mr-14">
                             {formatTime(onCount)}
