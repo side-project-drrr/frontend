@@ -73,6 +73,7 @@ export default function ListboxItem({ item, index }: ItemProps) {
     useEffect(() => {
         if (token === null || token === '') setIsLogin(true);
     }, [token]);
+
     return (
         <>
             {!isLogin ? (
@@ -158,8 +159,8 @@ export default function ListboxItem({ item, index }: ItemProps) {
                                     {item.techBlogPostBasicInfoDto.title}
                                 </h1>
                                 <p className="text-base overflow-hidden text-ellipsis h-[130px] max-h-[140px] pl-4 pt-[10px] pb-[10px] max-[600px]:text-xs">
-                                    {item.techBlogPostBasicInfoDto.summary.length > 0
-                                        ? item.techBlogPostBasicInfoDto.summary
+                                    {item.techBlogPostBasicInfoDto.summary
+                                        ? item.techBlogPostBasicInfoDto?.summary
                                         : '해당 게시글은 설명이 없어요'}
                                 </p>
                             </div>
@@ -258,8 +259,8 @@ export default function ListboxItem({ item, index }: ItemProps) {
 
                             <div className=" flex flex-col w-full overflow-hidden">
                                 <p className="text-base overflow-hidden text-ellipsis h-[130px] max-h-[140px] pl-4 pt-[10px] pb-[10px] max-[600px]:text-xs">
-                                    {item.techBlogPostBasicInfoDto.summary.length > 0
-                                        ? item.techBlogPostBasicInfoDto.summary
+                                    {item.techBlogPostBasicInfoDto.summary
+                                        ? item.techBlogPostBasicInfoDto?.summary
                                         : '해당 게시글은 설명이 없어요'}
                                 </p>
                             </div>
