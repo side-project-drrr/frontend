@@ -47,7 +47,7 @@ export const ListComponent = ({ onHandleIndex }: { onHandleIndex: (index: string
                             </h2>
                             <ul className="flex flex-col gap-1">
                                 {data.category.map((item, idx) => (
-                                    <li className="cursor-pointer truncate ..." key={idx}>
+                                    <li className="truncate ..." key={idx}>
                                         <span className="hover:underline">{item.name}</span>
                                     </li>
                                 ))}
@@ -58,7 +58,7 @@ export const ListComponent = ({ onHandleIndex }: { onHandleIndex: (index: string
             ) : (
                 <Stack spacing={{ sm: 1 }} direction="row" useFlexGap flexWrap="wrap">
                     {topics.map((data, index) => (
-                        <Chip key={index} label={data.name} sx={{ cursor: 'pointer' }} />
+                        <Chip key={index} label={data.name} />
                     ))}
                 </Stack>
             )}
