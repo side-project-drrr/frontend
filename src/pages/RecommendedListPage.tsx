@@ -46,10 +46,10 @@ export const RecommendedListPage = () => {
     }, []);
 
     return (
-        <div>
+        <Box sx={{ paddingBottom: '40px' }}>
             <h1 className="py-10 text-center">{userData.nickname}님을 위한 추천 리스트</h1>
             <div
-                className={`grid gap-3 ${
+                className={`grid gap-5 ${
                     list.length > 5 ? 'lg:grid-cols-3 sm:grid-cols-2 grid-cols-1' : ''
                 }`}
             >
@@ -136,6 +136,6 @@ export const RecommendedListPage = () => {
                     </Box>
                 )}
             </div>
-        </div>
+        </Box>
     );
 };
