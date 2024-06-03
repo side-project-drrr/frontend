@@ -2,42 +2,30 @@ import LanguageIcon from '@mui/icons-material/Language';
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import { isSearchFocusedState } from '../../recoil/atom/isSearchFocusedState';
 import { useSetRecoilState } from 'recoil';
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import { getSearchListStorage, saveSearchListStorage } from '../../repository/SearchListRepository';
 
 interface ISearchProps {
-    onSearchResult: any;
-    onSetSearchResult: React.Dispatch<React.SetStateAction<string[]>>;
-
     onSetSearchValue: React.Dispatch<React.SetStateAction<string>>;
     onSelectedSearchIndex: number;
 }
 
 export default function HeaderSearchMenu({
-    onSearchResult,
-    onSetSearchResult,
     onSelectedSearchIndex,
     onSetSearchValue,
 }: ISearchProps) {
     const setIsSearchClicked = useSetRecoilState(isSearchFocusedState);
     const searchBoxRef = useRef<HTMLDivElement>(null);
     const KEY = 'search';
-
-    const handleCloseSearchResult = (num: number) => {
-        const getRecentSearchesData = getSearchListStorage(KEY);
-        onSetSearchValue('');
-        const filterRecentSearchesData = getRecentSearchesData.filter(
-            (_: string, index: number) => index !== num,
-        );
-        onSetSearchResult(filterRecentSearchesData);
-        saveSearchListStorage(KEY, filterRecentSearchesData);
-    };
+    const navigate = useNavigate();
+    const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
     useEffect(() => {
-        // 검색 상자가 표시되면 외부 클릭을 감지하여 상자를 숨깁니다.
+        setRecentSearches(getSearchListStorage(KEY));
+
         const handleClickOutside = (event: MouseEvent) => {
             if (
                 searchBoxRef.current &&
@@ -47,14 +35,18 @@ export default function HeaderSearchMenu({
             }
         };
 
-        // 페이지가 로드될 때 이벤트 리스너를 추가합니다.
         document.addEventListener('mousedown', handleClickOutside);
 
-        // 컴포넌트가 언마운트될 때 이벤트 리스너를 제거합니다.
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    const handleCloseSearchResult = (index: number) => {
+        const updatedSearches = recentSearches.filter((_, i) => i !== index);
+        setRecentSearches(updatedSearches);
+        saveSearchListStorage(KEY, updatedSearches);
+    };
 
     return (
         <div className="absolute z-10 mt-2 w-80 max-[600px]:w-60" ref={searchBoxRef}>
@@ -63,19 +55,21 @@ export default function HeaderSearchMenu({
                     <div className="flex flex-col w-full p-2">
                         <h1 className="p-2 text-sm text-[#6B6B6B]">RECENT SEARCHES</h1>
                         <hr />
-                        {onSearchResult.length !== 0 &&
-                            onSearchResult?.map((value: string, index: number) => (
+                        {recentSearches.length > 0 &&
+                            recentSearches?.map((value: string, index: number) => (
                                 <div
                                     key={index}
                                     className={`flex items-center w-full gap-4 bg-opacity-20  border-b-2 
                                         ${index === onSelectedSearchIndex ? 'bg-gray-400' : ''}`}
                                 >
-                                    <Link
-                                        to={`/search/${value}`}
+                                    <div
                                         className="flex items-center w-full gap-2 p-4 text-black hover:text-black"
                                         onClick={() => {
                                             onSetSearchValue(value);
                                             setIsSearchClicked(false);
+                                            navigate(`/search?keyword=${value}`, {
+                                                state: value,
+                                            });
                                         }}
                                     >
                                         <div className="items-center w-full flex gap-4 whitespace-nowrap">
@@ -84,7 +78,7 @@ export default function HeaderSearchMenu({
                                                 ? value.substring(0, 20) + '...'
                                                 : value}
                                         </div>
-                                    </Link>
+                                    </div>
                                     <div className="flex justify-end w-full pr-4">
                                         <CloseIcon
                                             sx={{ opacity: '50%' }}
