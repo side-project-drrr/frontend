@@ -21,8 +21,6 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const headerSearchMenu: Story = {
     args: {
-        onSearchResult: () => {},
-        onSetSearchResult: () => {},
         onSelectedSearchIndex: 0, // 초기값 설정
         onSetSearchValue: () => {},
     },
