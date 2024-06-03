@@ -75,7 +75,7 @@ function App() {
                     <Route path="/healthcheck" element={<HealthCheck />} />
                     <Route path="/error" element={<ToManyRequestError />} />
                     <Route element={<LayoutWithAside />}>
-                        <Route path="/search/:search" element={<HeaderSearchPage />} />
+                        <Route path="/search" element={<HeaderSearchPage />} />
                         <Route path="/topics" element={<TopicPage />} />
                         <Route path="/alarm/list" element={<AlarmListPage />} />
                         <Route path="/" element={<MainPage />} />

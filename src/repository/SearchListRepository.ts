@@ -16,3 +16,17 @@ export function getSearchListStorage(key: string) {
 export function removeSearchListStorage(key: string) {
     localStorage.removeItem(key);
 }
+
+export const addSearchTerm = (term: string) => {
+    const KEY = 'search';
+    let searches = getSearchListStorage(KEY);
+
+    searches = searches.filter((search: string) => search !== term);
+
+    searches.unshift(term);
+
+    if (searches.length > 5) {
+        searches = searches.slice(0, 5);
+    }
+    saveSearchListStorage(KEY, searches);
+};
