@@ -60,9 +60,11 @@ const TopPost = ({ item }: ITopPostProps) => {
                                 <li
                                     key={data.id}
                                     id={data.id}
-                                    className="text-[10px] dark:bg-[#444444] rounded-lg py-1 px-4 bg-[#F0F0F0] text-black dark:text-white"
+                                    className="text-[10px] dark:bg-[#444444] rounded-lg py-1 px-4 bg-[#F0F0F0] text-black dark:text-white whitespace-nowrap"
                                 >
-                                    {data.name}
+                                    {data.name.length < 20
+                                        ? data.name
+                                        : data.name.slice(0, 21) + '...'}
                                 </li>
                             ))}
                         </ul>
