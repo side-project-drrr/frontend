@@ -49,7 +49,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
     };
 
-    const size = 20;
+    const size = 10;
 
     const onIntersect = async (entries: any, observer: any) => {
         const entry = entries[0];

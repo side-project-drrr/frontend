@@ -46,7 +46,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [timer, setTimer] = useState<NodeJS.Timeout>();
     const [isSearching, setIsSearching] = useState(false); // 검색value
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
-    const size = 20;
+    const size = 10;
     const setIsLogged = useSetRecoilState(isLoggedInState);
     const setLoginSucess = useSetRecoilState(loginSuccessState);
     const { login } = useProfileState();
@@ -182,7 +182,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                     className="flex flex-col items-center justify-around"
                 >
                     <ModalTitle onHangleCloseClick={onClose} state="signup" />
-                    <div className="flex items-center justify-center w-11/12">
+                    <div className="flex items-center justify-center w-[80%]">
                         <InputTextField
                             placeholder="검색"
                             variant="outlined"
