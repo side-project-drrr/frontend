@@ -9,6 +9,7 @@ export async function subscribePush(subscription: any) {
         p256dh: `${jsonString.keys.p256dh}`,
         auth: `${jsonString.keys.auth}`,
     });
+
     const data = res.data;
     return data;
 }
