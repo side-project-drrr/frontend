@@ -14,11 +14,9 @@ export const alarmOpenApi = async (date: String) => {
     return res;
 };
 
-export const getPushDataApi = async (memberId: string) => {
+export const getPushDataApi = async () => {
     const num = 7;
-    const res = await HttpClient.get(
-        `/api/v1/members/me/web-push/posts/count/${num}?memberId=${memberId}`,
-    );
+    const res = await HttpClient.get(`/api/v1/members/me/web-push/posts/count/${num}`);
 
     return res;
 };
