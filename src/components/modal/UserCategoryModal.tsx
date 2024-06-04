@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, memo } from 'react';
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -35,10 +35,11 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [timer, setTimer] = useState<NodeJS.Timeout>();
+    const [hasMore, setHasMore] = useState<boolean>(false);
     const setUserCategoryItems = useSetRecoilState(userCategoryState); //선호 카테고리
 
-    const [isSearching, setIsSearching] = useState(false); // 검색value
-    const [page, setPage] = useState(0);
+    const [isSearching, setIsSearching] = useState<boolean>(false); // 검색value
+    const [page, setPage] = useState<number>(0);
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
     const observationTarget = useRef(null);
 
@@ -65,22 +66,29 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
             page,
             size,
         });
-
-        setCategoryItems(prev => [...prev, ...categorySearchData.content]);
-
-        if (categorySearchData.content.length > 0) {
-            if (observationTarget.current) {
-                observer.observe(observationTarget.current);
+        if (categorySearchData.last) {
+            setHasMore(true);
+        } else {
+            setCategoryItems(prev => [...prev, ...categorySearchData.content]);
+            if (categorySearchData.content.length > 0) {
+                if (observationTarget.current) {
+                    observer.observe(observationTarget.current);
+                }
             }
         }
     }
 
     async function getCategoryListRender() {
         const categoryData = await getCategoryItem({ page, size });
+
         setCategoryItems(prev => [...prev, ...categoryData.content]);
-        if (categoryData.content.length > 0) {
-            if (observationTarget.current) {
-                observer.observe(observationTarget.current);
+        if (categoryData.last) {
+            setHasMore(true);
+        } else {
+            if (categoryData.content.length > 0) {
+                if (observationTarget.current) {
+                    observer.observe(observationTarget.current);
+                }
             }
         }
     }
@@ -90,23 +98,17 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         return await putUserCategoryItem(stringConvertNumberActiveData);
     }
 
-    const searchDataDebouce = (value: string) => {
+    const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
         if (timer) {
             clearTimeout(timer);
         }
-        const newTimer = setTimeout(async () => {
+        const newTimer = setTimeout(() => {
             setPage(0);
             setCategoryItems([]);
-            await getCategorySearchRender(value);
-        }, 1000);
+            getCategorySearchRender(value);
+        }, 500);
         setTimer(newTimer);
-    };
-
-    const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        if (value.length > 0) {
-            searchDataDebouce(value);
-        }
 
         setCategorySearchValue(value);
     };
@@ -155,7 +157,8 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
         }
     }, [categorySearchValue]);
 
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
+
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
@@ -203,8 +206,11 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                                 onIndex={index}
                             />
                         ))}
-
-                        <div ref={observationTarget}></div>
+                        {hasMore ? (
+                            <div>데이터가 없습니다.</div>
+                        ) : (
+                            <div ref={observationTarget}>Loading..</div>
+                        )}
                     </ul>
 
                     <SelectedCategoryDisplay />
@@ -224,4 +230,4 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     );
 }
 
-export default UserCategoryModal;
+export default memo(UserCategoryModal);

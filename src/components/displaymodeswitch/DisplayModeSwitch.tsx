@@ -2,8 +2,9 @@ import FormGroup from '@mui/material/FormGroup';
 import Switch from '@mui/material/Switch';
 import { useSetRecoilState } from 'recoil';
 import { DisplayModeState } from '../../recoil/atom/DisplayModeState';
+import { memo } from 'react';
 
-export default function DisplayModeSwitch() {
+function DisplayModeSwitch() {
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
     const setDisplayMode = useSetRecoilState(DisplayModeState);
 
@@ -20,3 +21,5 @@ export default function DisplayModeSwitch() {
         </div>
     );
 }
+
+export default memo(DisplayModeSwitch);
