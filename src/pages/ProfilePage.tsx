@@ -14,6 +14,7 @@ import { msg } from '../constants/message';
 import { SignUpEmail, SignUpEmailValidation } from '../service/auth/SocialService';
 import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
 import UserSnackbar from '../components/snackbar/UserSnackbar';
+import { unSubscribeUser } from '../webpush/main';
 
 const ProfilePage = () => {
     const [profileValue, setProfileValue] = useState({
@@ -112,7 +113,9 @@ const ProfilePage = () => {
             return false;
         }
     };
-
+    const unHandlePushed = async () => {
+        await unSubscribeUser();
+    };
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setProfileValue(prevData => ({
@@ -234,6 +237,7 @@ const ProfilePage = () => {
                                         {...label}
                                         defaultChecked
                                         aria-label="DisplayMode Switch"
+                                        onClick={unHandlePushed}
                                     />
                                 </p>
                                 <Button
