@@ -11,7 +11,7 @@ export const InputTextField = styled(TextField)({
         display: 'flex',
         justifyContent: 'center',
         outline: 'none',
-        borderRadius: '20px',
+        borderRadius: '10px',
         height: '43px',
     },
 });
