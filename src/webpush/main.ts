@@ -44,7 +44,6 @@ export function subscribeUser() {
 // api 구독취소
 export async function unSubscribeUser() {
     const res = await unSubscribePush();
-
     if (res.status === 200) {
         console.log('구독취소');
     }
