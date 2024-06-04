@@ -10,8 +10,6 @@ import {
 } from '@mui/material';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import React, { useEffect, useState } from 'react';
-import { getAuthStorage } from '../../repository/AuthRepository';
-import { useTokenDecode } from '../../hooks/useTokenDecode';
 import { useNavigate } from 'react-router-dom';
 import { useProfileState } from '../../context/UserProfile';
 import { alarmOpenApi, alarmReadApi, getPushDataApi } from '../../apis/alarm';
@@ -43,9 +41,6 @@ function getSevenDaysAgoDate() {
 }
 
 export const AlarmComponent = () => {
-    const TOKEN_KEY = 'accessToken';
-    const getToken = getAuthStorage(TOKEN_KEY);
-    const memberId = useTokenDecode(getToken);
     const navigate = useNavigate();
 
     const [open, setOpen] = useState(false);
@@ -90,7 +85,7 @@ export const AlarmComponent = () => {
     }
 
     async function getAlarmList() {
-        const res = await getPushDataApi(memberId);
+        const res = await getPushDataApi();
 
         if (res.status === 200) {
             if (res.data.length > 0) {
@@ -105,7 +100,7 @@ export const AlarmComponent = () => {
     }
 
     useEffect(() => {
-        memberId && getAlarmList();
+        getAlarmList();
     }, []);
 
     return (
