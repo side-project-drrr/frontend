@@ -42,7 +42,7 @@ function getSevenDaysAgoDate() {
 
 export const AlarmComponent = () => {
     const navigate = useNavigate();
-
+    const { token } = useProfileState();
     const [open, setOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [alarmList, setAlarmList] = useState<alarmType[]>([]);
@@ -100,7 +100,7 @@ export const AlarmComponent = () => {
     }
 
     useEffect(() => {
-        getAlarmList();
+        token && getAlarmList();
     }, []);
 
     return (
