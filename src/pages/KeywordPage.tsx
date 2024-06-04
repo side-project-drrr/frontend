@@ -7,7 +7,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClearIcon from '@mui/icons-material/Clear';
 import clsx from 'clsx';
 import { getTopkeyword } from '../service/TopKeyword';
-import useDebounce from 'hooks/useDebounce';
+import useDebounce from '../hooks/useDebounce';
 
 interface topKeyword {
     id: number;
