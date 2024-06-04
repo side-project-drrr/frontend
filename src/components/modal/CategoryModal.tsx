@@ -33,6 +33,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState<boolean>(false);
 
     const profileValue = useRecoilValue(userInformationState);
     const providerId = useRecoilValue(providerIdState);
@@ -68,11 +69,14 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     async function getCategoryList() {
         const categoryData = await getCategoryItem({ page, size });
 
-        setCategoryItems(prev => [...prev, ...categoryData.content]);
-
-        if (categoryData.content.length > 0) {
-            if (observationTarget.current) {
-                observer.observe(observationTarget.current);
+        if (categoryData.last) {
+            setHasMore(true);
+        } else {
+            setCategoryItems(prev => [...prev, ...categoryData.content]);
+            if (categoryData.content.length > 0) {
+                if (observationTarget.current) {
+                    observer.observe(observationTarget.current);
+                }
             }
         }
     }
@@ -83,11 +87,14 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             page,
             size,
         });
-
-        setCategoryItems(prev => [...prev, ...categorySearchData.content]);
-        if (categorySearchData.content.length > 0) {
-            if (observationTarget.current) {
-                observer.observe(observationTarget.current);
+        if (categorySearchData.last) {
+            setHasMore(true);
+        } else {
+            setCategoryItems(prev => [...prev, ...categorySearchData.content]);
+            if (categorySearchData.content.length > 0) {
+                if (observationTarget.current) {
+                    observer.observe(observationTarget.current);
+                }
             }
         }
     }
@@ -121,25 +128,18 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
         }
     }
 
-    const searchDataDebouce = (value: string) => {
+    const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+
         if (timer) {
             clearTimeout(timer);
         }
-        const newTimer = setTimeout(async () => {
+        const newTimer = setTimeout(() => {
             setPage(0);
             setCategoryItems([]);
-
-            await getCategorySearchRender(value);
-        }, 1000);
-
+            getCategorySearchRender(value);
+        }, 500);
         setTimer(newTimer);
-    };
-
-    const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        if (value.length > 0) {
-            searchDataDebouce(value);
-        }
         setCategorySearchValue(value);
     };
 
@@ -208,8 +208,11 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                                 onIndex={index}
                             />
                         ))}
-
-                        <div ref={observationTarget}>Loading...</div>
+                        {hasMore ? (
+                            <div>데이터가 존재하지 않습니다.</div>
+                        ) : (
+                            <div ref={observationTarget}>Loading...</div>
+                        )}
                     </ul>
 
                     <SelectedCategoryDisplay />

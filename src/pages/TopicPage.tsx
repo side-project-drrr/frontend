@@ -55,7 +55,6 @@ export default function TopicPage() {
     }
     async function callApi(value: string) {
         const res = await getSearchTopicsApi(page, value);
-
         if (res.status === 200) {
             setTopics(res.data.content);
         }
