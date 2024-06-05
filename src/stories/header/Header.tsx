@@ -237,7 +237,18 @@ export default function Header() {
                 </div>
                 <div className="flex items-center gap-1">
                     <div className="flex items-center gap-1">
-                        <IconButton onClick={toggleDarkMode} size="large" color="inherit">
+                        <IconButton
+                            onClick={toggleDarkMode}
+                            size="large"
+                            color="inherit"
+                            sx={{
+                                '&:focus': {
+                                    backgroundColor: 'transparent',
+                                    border: 'none',
+                                    outline: 'none',
+                                },
+                            }}
+                        >
                             {darkMode === 'dark' ? (
                                 <LightModeOutlined
                                     sx={theme => ({
