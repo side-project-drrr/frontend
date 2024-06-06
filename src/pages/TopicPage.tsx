@@ -4,7 +4,6 @@ import { ListComponent } from '../components/topics/List';
 import { getEtcIndexTopicsApi, getIndexTopicsApi, getSearchTopicsApi } from '../apis/topics';
 import { useRecoilState } from 'recoil';
 import { searchValueState, topicIndexState, topicState } from '../recoil/atom/topicsState';
-import { Input } from '@mui/base';
 import { inputEl } from '../style/style';
 import { InputBase } from '@mui/material';
 
