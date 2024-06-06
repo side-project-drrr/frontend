@@ -139,13 +139,14 @@ export default function TopicPage() {
         <div className="w-full p-10">
             <div className="flex flex-col mb-10 item-center">
                 <h1 className="mb-8 text-center">Explore topics</h1>
-                <Input
+                <InputBase
                     type="text"
                     value={searchVal}
                     placeholder="Enter topic..."
                     onChange={e => handleSearch(e.target.value)}
                     style={{ width: '100%' }}
                     slots={{ input: inputEl }}
+                    inputProps={{ maxLength: 20 }}
                 />
             </div>
             <div className="flex justify-between items-center w-full h-[32px]">
