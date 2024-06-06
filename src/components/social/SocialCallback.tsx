@@ -50,7 +50,9 @@ export default function SocialCallback() {
 
     const handleKakaoLogin = async () => {
         const data = await SocialService(code, state);
-        socialLoginRender(data.isRegistered, data.providerId, data.profileImageUrl);
+
+        if (data === undefined) navigate('/');
+        else socialLoginRender(data.isRegistered, data.providerId, data.profileImageUrl);
     };
 
     useEffect(() => {

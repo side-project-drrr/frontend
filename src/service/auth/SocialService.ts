@@ -4,8 +4,12 @@ import { IAuthProps, IAuthEmailProps, IAuthEmailVaildationProps } from './type';
 
 export const SocialService = async (code: string | null, state: string) => {
     try {
-        const res = await HttpClient.get(`/api/v1/auth/oauth2/profile?code=${code}&state=${state}`);
-        return res.data;
+        if (code !== null) {
+            const res = await HttpClient.get(
+                `/api/v1/auth/oauth2/profile?code=${code}&state=${state}`,
+            );
+            return res.data;
+        }
     } catch (error) {
         console.error(error);
     }
