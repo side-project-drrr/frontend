@@ -112,6 +112,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             return;
         } else {
             await signupRender();
+            subscribeUser();
             onClose();
             setIsLogged(true);
         }

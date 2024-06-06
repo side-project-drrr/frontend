@@ -17,11 +17,13 @@ export default function SocialLogin({ state }: IProps) {
         if (state === 'github') {
             const url = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_url=${GITHUB_REDIRECT_URL}`;
             setProvider('github');
+
             setLoggedIn(true);
             locationUrl(url);
         } else {
             const url = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URL}&response_type=code`;
             setProvider('kakao');
+
             setLoggedIn(true);
             locationUrl(url);
         }
