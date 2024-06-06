@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Box from '@mui/material/Box';
@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 
 import CategoryItem from '../../components/category/CategoryItem';
 import { CategoryProps } from './type';
-import { categorySearchService, getCategoryItem } from '../../service/CategoryService';
+import { categorySearchService } from '../../service/CategoryService';
 import { userInformationState } from '../../recoil/atom/userInformationState';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { SignUpService } from '../../service/auth/SocialService';
@@ -27,13 +27,21 @@ import { loginSuccessState } from '../../recoil/atom/loginSuccessState';
 import { useProfileState } from '../../context/UserProfile';
 import { msg } from '../../constants/message';
 import { subscribeUser } from '../../webpush/main';
+import useIntersectionObserver from '../../hooks/useIntersectionObserver';
+
+const debounce = (func: Function, wait: number) => {
+    let timeout: NodeJS.Timeout;
+    return (...args: any[]) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+};
 
 function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [categoryItems, setCategoryItems] = useRecoilState(categoryItemsState); //전체 카테고리 리스트
     const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [page, setPage] = useState(0);
-    const [hasMore, setHasMore] = useState<boolean>(false);
 
     const profileValue = useRecoilValue(userInformationState);
     const providerId = useRecoilValue(providerIdState);
@@ -43,60 +51,41 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const stringConvert = provider?.toString();
     const KEY = 'imgUrl';
     const profileImageUrl = getProfileImgStorage(KEY);
-    const [timer, setTimer] = useState<NodeJS.Timeout>();
-    const [isSearching, setIsSearching] = useState(false); // 검색value
+
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
     const size = 10;
     const setIsLogged = useSetRecoilState(isLoggedInState);
     const setLoginSucess = useSetRecoilState(loginSuccessState);
     const { login } = useProfileState();
-    const observationTarget = useRef(null);
-
+    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [isFetching, setIsFetching] = useState<boolean>(false);
+    const debouncedSearch = useRef(
+        debounce(async (value: string) => {
+            setPage(0);
+            await getCategorySearchRender(value, 0);
+        }, 500),
+    ).current;
     const buttonStyle = {
         backgroundImage: `linear-gradient(to right, #FFA471 ${userCategoryItems.length}0%, #F0F0F0 20%)`,
         color: 'black', // Set the text color if needed
         borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
     };
 
-    const onIntersect = async (entries: any, observer: any) => {
-        const entry = entries[0];
-        if (entry.isIntersecting) {
-            observer.unobserve(entry.target);
-            setPage(prev => prev + 1);
-        }
-    };
-
-    async function getCategoryList() {
-        const categoryData = await getCategoryItem({ page, size });
-
-        if (categoryData.last) {
-            setHasMore(true);
-        } else {
-            setCategoryItems(prev => [...prev, ...categoryData.content]);
-            if (categoryData.content.length > 0) {
-                if (observationTarget.current) {
-                    observer.observe(observationTarget.current);
-                }
-            }
-        }
-    }
-
-    async function getCategorySearchRender(value: string) {
+    async function getCategorySearchRender(value: string, page: number) {
+        setIsFetching(true);
         const categorySearchData = await categorySearchService({
             keyword: value,
             page,
             size,
         });
-        if (categorySearchData.last) {
-            setHasMore(true);
+        if (page === 0) {
+            setCategoryItems(categorySearchData.content);
         } else {
             setCategoryItems(prev => [...prev, ...categorySearchData.content]);
-            if (categorySearchData.content.length > 0) {
-                if (observationTarget.current) {
-                    observer.observe(observationTarget.current);
-                }
-            }
         }
+        setHasMore(!categorySearchData.last);
+
+        setIsFetching(false);
     }
 
     async function signupRender() {
@@ -128,39 +117,25 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
         }
     }
 
-    const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-
-        if (timer) {
-            clearTimeout(timer);
-        }
-        const newTimer = setTimeout(() => {
-            setPage(0);
-            setCategoryItems([]);
-            getCategorySearchRender(value);
-        }, 500);
-        setTimer(newTimer);
-        setCategorySearchValue(value);
-    };
+    const handleSearch = useCallback(
+        (searchQuery: string) => {
+            setCategorySearchValue(searchQuery);
+            debouncedSearch(searchQuery);
+        },
+        [debouncedSearch],
+    );
 
     useEffect(() => {
-        if (onModalOpen && !isSearching) {
-            getCategoryList();
+        if (onModalOpen) {
+            getCategorySearchRender(categorySearchValue, page);
         }
     }, [onModalOpen, page]);
 
-    useEffect(() => {
-        if (categorySearchValue.length > 0) {
-            setCategoryItems([]);
-            setIsSearching(true);
-            setPage(0);
-        } else {
-            setIsSearching(false);
-            setPage(0);
+    const loaderRef = useIntersectionObserver(entries => {
+        if (entries[0].isIntersecting && !isFetching && hasMore) {
+            setPage(prevPage => prevPage + 1);
         }
-    }, [categorySearchValue]);
-
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
+    });
 
     return (
         <>
@@ -187,7 +162,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         <InputTextField
                             placeholder="검색"
                             variant="outlined"
-                            onChange={handleCategorySearchItem}
+                            onChange={e => handleSearch(e.target.value)}
                             aria-label="검색창"
                             sx={theme => ({
                                 width: '50%',
@@ -208,11 +183,11 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                                 onIndex={index}
                             />
                         ))}
-                        {hasMore ? (
-                            <div>데이터가 존재하지 않습니다.</div>
-                        ) : (
-                            <div ref={observationTarget}>Loading...</div>
-                        )}
+
+                        <div ref={loaderRef} style={{ height: '50px' }}>
+                            {isFetching && 'Loading more items...'}
+                            {!hasMore && 'No more items to load'}
+                        </div>
                     </ul>
 
                     <SelectedCategoryDisplay />
