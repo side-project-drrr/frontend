@@ -8,7 +8,6 @@ import {
 } from '../service/TopicService';
 import { useRecoilState } from 'recoil';
 import { searchValueState, topicIndexState, topicState } from '../recoil/atom/topicsState';
-import { Input } from '@mui/base';
 import { inputEl } from '../style/style';
 import { useMutation } from '@tanstack/react-query';
 
