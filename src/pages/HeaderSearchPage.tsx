@@ -2,7 +2,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { HeaderSearchDataState } from '../recoil/atom/HeaderSearchDataState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { useLocation } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { getSearchListStorage, saveSearchListStorage } from '../repository/Searc
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
 import { getHeaderKeywordSearch } from '../service/HeaderSearchService';
 import SearchListBox from '../stories/listbox/SearchListBox';
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 export default function HeaderSearchPage() {
     const techBlogSearchData = useRecoilValue(HeaderSearchDataState);
@@ -17,19 +18,13 @@ export default function HeaderSearchPage() {
     const [page, setPage] = useState(0);
     const KEY = 'search';
     const size = 10;
-    const observationTarget = useRef(null);
     const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
     const { state } = useLocation();
-
-    const onIntersect = async (entries: any, observer: any) => {
-        const entry = entries[0];
-        if (entry.isIntersecting) {
-            observer.unobserve(entry.target);
-            setPage(prev => prev + 1);
-        }
-    };
+    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [isFetching, setIsFetching] = useState<boolean>(false);
 
     async function getKeywordSearchRender() {
+        setIsFetching(true);
         const keywordSearchData = await getHeaderKeywordSearch({
             page,
             size,
@@ -37,12 +32,9 @@ export default function HeaderSearchPage() {
         });
 
         setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
+        setHasMore(!keywordSearchData.last);
 
-        if (keywordSearchData.content.length > 0) {
-            if (observationTarget.current) {
-                observer.observe(observationTarget.current);
-            }
-        }
+        setIsFetching(false);
     }
 
     useEffect(() => {
@@ -52,11 +44,15 @@ export default function HeaderSearchPage() {
         saveSearchListStorage(KEY, uniqueSearch);
     }, [state]);
 
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
-
     useEffect(() => {
         if (state.length > 0) getKeywordSearchRender();
     }, [page, state]);
+
+    const loaderRef = useIntersectionObserver(entries => {
+        if (entries[0].isIntersecting && !isFetching && hasMore) {
+            setPage(prevPage => prevPage + 1);
+        }
+    });
 
     return (
         <div className="flex justify-between w-full">
