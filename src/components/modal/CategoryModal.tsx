@@ -173,7 +173,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         />
                     </div>
                     <ul
-                        className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full "
+                        className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full h-[300px]"
                         id="CategoryModal-Scroll"
                     >
                         {categoryItems?.map((categoryitem, index) => (
@@ -185,7 +185,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                             />
                         ))}
 
-                        <div ref={loaderRef} style={{ height: '50px' }}>
+                        <div ref={loaderRef} style={{ height: '10px', width: '10px' }}>
                             {isFetching && 'Loading more items...'}
                             {!hasMore && 'No more items to load'}
                         </div>

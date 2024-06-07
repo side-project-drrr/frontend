@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 const useIntersectionObserver = (
     callback: IntersectionObserverCallback,
-    options: IntersectionObserverInit = { root: null, rootMargin: '20px', threshold: 0.5 },
+    options: IntersectionObserverInit = { root: null, rootMargin: '10px', threshold: 0 },
 ) => {
     const loaderRef = useRef<HTMLDivElement | null>(null);
 
