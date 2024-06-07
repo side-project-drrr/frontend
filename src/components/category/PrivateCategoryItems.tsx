@@ -62,7 +62,7 @@ function PrivateCategoryItems({ categoryId, title, onIndex }: CategoryItemsProps
             <li
                 key={onIndex}
                 id={String(categoryId)}
-                className={`p-2 whitespace-nowrap text-center flex justify-center items-center rounded-lg flex-warp overflow-x-hidden  ${
+                className={`p-2 whitespace-nowrap text-center flex justify-center items-center rounded-lg flex-warp overflow-x-hidden ${
                     userCategoryItems.some(categoryItem => categoryItem.id === categoryId)
                         ? 'bg-[#2C2C2C] text-white'
                         : 'bg-[#F2F2F2]  text-black '
@@ -70,7 +70,7 @@ function PrivateCategoryItems({ categoryId, title, onIndex }: CategoryItemsProps
                 onClick={() => handleActiveCategoryItem(String(categoryId))}
                 aria-label="카테고리"
             >
-                {title}
+                {title.length < 30 ? title : title.slice(0, 31) + '...'}
             </li>
         </>
     );

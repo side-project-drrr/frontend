@@ -158,7 +158,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                             onIndex={index}
                         />
                     ))}
-                    <div ref={loaderRef}>
+                    <div ref={loaderRef} style={{ height: '10px', width: '10px' }}>
                         {isFetching && 'Loading more items...'}
                         {!hasMore && 'No more items to load'}
                     </div>
