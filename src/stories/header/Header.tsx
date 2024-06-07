@@ -115,11 +115,10 @@ export default function Header() {
     const setProfileOpen = useSetRecoilState(profileHeaderMenu);
     const KEY = 'search';
     const navigate = useNavigate();
-    const TOKEN_KEY = 'accessToken';
+
     const REFRESHTOKEN_KEY = 'refreshToken';
-    const token = getAuthStorage(TOKEN_KEY);
     const refresh_Token = getAuthStorage(REFRESHTOKEN_KEY);
-    const { login } = useProfileState();
+    const { login, token } = useProfileState();
     const searchItem = getSearchListStorage(KEY);
 
     async function getLogoutRender() {
@@ -193,7 +192,7 @@ export default function Header() {
         if (token) {
             setLoggedIn(true);
         }
-    }, [token]);
+    }, [token, login]);
 
     return (
         <header className={`w-full flex justify-center px-[10px]`}>
