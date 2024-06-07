@@ -14,6 +14,7 @@ import { msg } from '../constants/message';
 import { SignUpEmail, SignUpEmailValidation } from '../service/auth/SocialService';
 import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
 import UserSnackbar from '../components/snackbar/UserSnackbar';
+import { unSubscribeUser } from '../webpush/main';
 
 const ProfilePage = () => {
     const [profileValue, setProfileValue] = useState({
@@ -112,7 +113,9 @@ const ProfilePage = () => {
             return false;
         }
     };
-
+    const unHandlePushed = async () => {
+        await unSubscribeUser();
+    };
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setProfileValue(prevData => ({
@@ -127,8 +130,8 @@ const ProfilePage = () => {
 
     return (
         <>
-            <div className="flex items-center justify-center w-full ">
-                <div className="flex flex-col items-center justify-center w-full gap-4 max-[600px]:text-xs ">
+            <div className="flex w-full h-[100vh]">
+                <div className="flex flex-col items-center  w-full gap-4 max-[600px]:text-xs ">
                     <h1>프로필 수정</h1>
                     <div className="flex flex-col items-center justify-center w-[50%] border border-[#f0f0f0] mt-10 rounded-[20px] max-[600px]:w-full">
                         <div className="flex justify-center w-full pt-10">
@@ -234,6 +237,7 @@ const ProfilePage = () => {
                                         {...label}
                                         defaultChecked
                                         aria-label="DisplayMode Switch"
+                                        onClick={unHandlePushed}
                                     />
                                 </p>
                                 <Button

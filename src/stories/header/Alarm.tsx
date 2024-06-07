@@ -10,11 +10,9 @@ import {
 } from '@mui/material';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import React, { useEffect, useState } from 'react';
-import { getAuthStorage } from '../../repository/AuthRepository';
-import { useTokenDecode } from '../../hooks/useTokenDecode';
 import { useNavigate } from 'react-router-dom';
 import { useProfileState } from '../../context/UserProfile';
-import { alarmOpenApi, alarmReadApi, getPushDataApi } from '../../service/AlarmService';
+import { alarmOpenApi, alarmReadApi, getPushDataApi } from '../../apis/alarm';
 
 type alarmType = {
     openStatus: Boolean;
@@ -43,11 +41,8 @@ function getSevenDaysAgoDate() {
 }
 
 export const AlarmComponent = () => {
-    const TOKEN_KEY = 'accessToken';
-    const getToken = getAuthStorage(TOKEN_KEY);
-    const memberId = useTokenDecode(getToken);
     const navigate = useNavigate();
-
+    const { token } = useProfileState();
     const [open, setOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [alarmList, setAlarmList] = useState<alarmType[]>([]);
@@ -90,7 +85,7 @@ export const AlarmComponent = () => {
     }
 
     async function getAlarmList() {
-        const res = await getPushDataApi(memberId);
+        const res = await getPushDataApi();
 
         if (res.status === 200) {
             if (res.data.length > 0) {
@@ -105,7 +100,7 @@ export const AlarmComponent = () => {
     }
 
     useEffect(() => {
-        memberId && getAlarmList();
+        token && getAlarmList();
     }, []);
 
     return (
@@ -117,7 +112,7 @@ export const AlarmComponent = () => {
                 color="secondary"
                 className="mr-[10px]"
                 invisible={!mark}
-                sx={{ cursor: alarmList.length > 0 ? 'pointer' : 'none' }}
+                sx={{ cursor: alarmList.length > 0 ? 'pointer' : 'default' }}
             >
                 <NotificationsActiveIcon />
             </Badge>

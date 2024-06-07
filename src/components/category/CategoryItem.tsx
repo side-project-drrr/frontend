@@ -42,14 +42,14 @@ function CategoryItem({ categoryId, title, onIndex }: CategoryItemsProps) {
             <li
                 key={onIndex}
                 id={String(categoryId)}
-                className={` h-10 p-5 whitespace-nowrap text-center flex justify-center items-center rounded-lg  flex-1 max-[600px]:text-xs max-[600px]:h-5 ${
+                className={` p-2 whitespace-nowrap text-center flex justify-center items-center rounded-lg  flex-1 max-[600px]:text-xs max-[600px]:h-5 ${
                     userCategoryItems.some(categoryItem => categoryItem.id === categoryId)
                         ? 'bg-[#2C2C2C] text-white'
                         : 'bg-[#F2F2F2]  text-black '
                 } hover:bg-[#D16E37] cursor-pointer `}
                 onClick={handleActiveCategoryItem}
             >
-                {title}
+                {title.length < 30 ? title : title.slice(0, 31) + '...'}
             </li>
         </>
     );

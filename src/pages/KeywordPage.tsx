@@ -6,8 +6,8 @@ import { unstable_useForkRef as useForkRef } from '@mui/utils';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClearIcon from '@mui/icons-material/Clear';
 import clsx from 'clsx';
-import { getTopkeyword } from '../service/TopKeywordService';
-import useDebounce from 'hooks/useDebounce';
+import { getTopkeyword } from '../service/TopKeyword';
+import useDebounce from '../hooks/useDebounce';
 
 interface topKeyword {
     id: number;

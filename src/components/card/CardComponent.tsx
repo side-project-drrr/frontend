@@ -7,7 +7,10 @@ import { loginModalState } from '../../recoil/atom/loginModalState';
 import { useEffect, useState } from 'react';
 import { useProfileState } from '../../context/UserProfile';
 import { useSetRecoilState } from 'recoil';
-import { postIncreasedViewsService } from '../../service/TechBlogService';
+import {
+    postIncreasedMemberViewsService,
+    postIncreasedViewsService,
+} from '../../service/TechBlogService';
 import darkLogo from '../../assets/darkLogo.webp';
 
 export default function CardComponent({ item, index }: ICardItemsProps) {
@@ -15,8 +18,12 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const setModalOpen = useSetRecoilState(loginModalState);
 
-    async function postIncreasedViewsRender(postId: number) {
-        await postIncreasedViewsService(postId);
+    async function postIncreasedViewsRender(postId: string) {
+        if (isLogin) {
+            postIncreasedMemberViewsService(postId);
+        } else {
+            postIncreasedViewsService(postId);
+        }
     }
 
     const handleLinkClick = () => {
@@ -41,12 +48,9 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                         '&:hover': {
                             color: 'text.primary',
                         },
-                        maxWidth: '49%',
-                        minWidth: '49%',
+                        width: '49%',
                     }}
-                    onClick={() =>
-                        postIncreasedViewsRender(Number(item.techBlogPostBasicInfoDto.id))
-                    }
+                    onClick={() => postIncreasedViewsRender(item.techBlogPostBasicInfoDto.id)}
                 >
                     <Card
                         sx={{
@@ -91,9 +95,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                                         },
                                     }}
                                     onClick={() =>
-                                        postIncreasedViewsRender(
-                                            Number(item.techBlogPostBasicInfoDto.id),
-                                        )
+                                        postIncreasedViewsRender(item.techBlogPostBasicInfoDto.id)
                                     }
                                 >
                                     <Typography
@@ -174,8 +176,7 @@ export default function CardComponent({ item, index }: ICardItemsProps) {
                         '&:hover': {
                             color: 'text.primary',
                         },
-                        maxWidth: '49%',
-                        minWidth: '49%',
+                        width: '49%',
                     }}
                     onClick={handleLinkClick}
                 >

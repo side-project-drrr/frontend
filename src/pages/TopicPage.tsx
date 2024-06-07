@@ -1,15 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { IndexingComponent } from '../components/topics/Indexing';
 import { ListComponent } from '../components/topics/List';
-import {
-    getEtcIndexTopicsApi,
-    getIndexTopicsApi,
-    getSearchTopicsApi,
-} from '../service/TopicService';
+import { getEtcIndexTopicsApi, getIndexTopicsApi, getSearchTopicsApi } from '../apis/topics';
 import { useRecoilState } from 'recoil';
 import { searchValueState, topicIndexState, topicState } from '../recoil/atom/topicsState';
-import { Input } from '@mui/base';
 import { inputEl } from '../style/style';
+import { InputBase } from '@mui/material';
 
 export default function TopicPage() {
     const [, setTopics] = useRecoilState(topicState);
@@ -24,9 +20,6 @@ export default function TopicPage() {
         if (entry.isIntersecting) {
             observer.unobserve(entry.target);
             setPage(prev => prev + 1);
-            setTimeout(() => {
-                observer.observe(entry.target);
-            }, 800);
         }
     };
 
@@ -59,7 +52,6 @@ export default function TopicPage() {
     }
     async function callApi(value: string) {
         const res = await getSearchTopicsApi(page, value);
-
         if (res.status === 200) {
             setTopics(res.data.content);
         }
@@ -112,13 +104,14 @@ export default function TopicPage() {
         <div className="w-full p-10">
             <div className="flex flex-col mb-10 item-center">
                 <h1 className="mb-8 text-center">Explore topics</h1>
-                <Input
+                <InputBase
                     type="text"
                     value={searchVal}
                     placeholder="Enter topic..."
                     onChange={e => handleSearch(e.target.value)}
                     style={{ width: '100%' }}
                     slots={{ input: inputEl }}
+                    inputProps={{ maxLength: 50 }}
                 />
             </div>
             <div className="flex justify-between items-center w-full h-[32px]">

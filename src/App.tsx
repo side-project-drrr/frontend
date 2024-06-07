@@ -10,10 +10,10 @@ import LayoutWithAside from './components/layout/LayoutWIthAside';
 import LayoutWithOutAside from './components/layout/LayoutWithOutAside';
 import TopicPage from './pages/TopicPage';
 import HeaderSearchPage from './pages/HeaderSearchPage';
-import RecommendedListPage from './pages/RecommendedListPage';
+import { RecommendedListPage } from './pages/RecommendedListPage';
 import ProfilePage from './pages/ProfilePage';
-import AlarmListPage from './pages/AlarmListPage';
-import ViewPage from './pages/ViewPage';
+import { AlarmListPage } from './pages/AlarmListPage';
+import { ViewPage } from './pages/ViewPage';
 import HealthCheck from './pages/HealthCheck';
 import ToManyRequestError from './components/errors/ToManyRequestError';
 
@@ -75,7 +75,7 @@ function App() {
                     <Route path="/healthcheck" element={<HealthCheck />} />
                     <Route path="/error" element={<ToManyRequestError />} />
                     <Route element={<LayoutWithAside />}>
-                        <Route path="/search/:search" element={<HeaderSearchPage />} />
+                        <Route path="/search" element={<HeaderSearchPage />} />
                         <Route path="/topics" element={<TopicPage />} />
                         <Route path="/alarm/list" element={<AlarmListPage />} />
                         <Route path="/" element={<MainPage />} />

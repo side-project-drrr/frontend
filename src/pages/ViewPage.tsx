@@ -2,7 +2,13 @@ import { Box, Button, Typography, styled } from '@mui/material';
 import darkLogo from '../assets/darkLogo.webp';
 import { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getPostApi, readPostApi } from '../service/view';
+import { getPostApi, readPostApi } from '../apis/view';
+import {
+    postIncreasedMemberViewsService,
+    postIncreasedViewsService,
+} from '../service/TechBlogService';
+import { useRecoilState } from 'recoil';
+import { isLoggedInState } from '../recoil/atom/isLoggedInState';
 
 type postType = {
     id: number;
@@ -17,36 +23,44 @@ type postType = {
     url: String;
 };
 
-const ViewPage = () => {
+export const ViewPage = () => {
     const { postId } = useParams();
     const [post, setPost] = useState<postType>();
+    const [loggedIn] = useRecoilState(isLoggedInState);
     const StyledButton = styled(Button)({
         borderRadius: '15px',
     });
 
-    useEffect(() => {
-        const getPost = async () => {
-            if (postId) {
-                const res = await getPostApi(postId);
-                if (res.status === 200) {
-                    const regex = /\./g;
-                    const text = res.data.aiSummary;
-                    const newText = text.replaceAll(regex, '.\r\n');
-                    res.data.aiSummary = newText;
+    const getPost = async (postId: string) => {
+        const res = await getPostApi(postId);
+        if (res.status === 200) {
+            const regex = /\./g;
+            const text = res.data.aiSummary;
+            const newText = text.replaceAll(regex, '.\r\n');
+            res.data.aiSummary = newText;
 
-                    const regexThumb = /\s+/g;
-                    const url = res.data.thumbnailUrl;
+            const regexThumb = /\s+/g;
+            const url = res.data.thumbnailUrl;
 
-                    if (url) {
-                        const newUrl = url.replace(regexThumb, '%20');
-                        res.data.thumbnailUrl = newUrl;
-                    }
-                    setPost(res.data);
-                }
+            if (url) {
+                const newUrl = url.replace(regexThumb, '%20');
+                res.data.thumbnailUrl = newUrl;
             }
-        };
-        getPost();
-        postId && readPostApi(postId);
+            setPost(res.data);
+        }
+    };
+
+    useEffect(() => {
+        if (postId) {
+            getPost(postId);
+            readPostApi(postId);
+
+            if (loggedIn) {
+                postIncreasedMemberViewsService(postId);
+            } else {
+                postIncreasedViewsService(postId);
+            }
+        }
     }, [postId]);
 
     return (
@@ -79,7 +93,7 @@ const ViewPage = () => {
                             })`,
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'center center',
-                            backgroundSize: post.thumbnailUrl ? 'cover' : '50%',
+                            backgroundSize: post.thumbnailUrl ? 'cover' : '50px',
                         }}
                     ></Box>
 
@@ -106,5 +120,3 @@ const ViewPage = () => {
         )
     );
 };
-
-export default ViewPage;

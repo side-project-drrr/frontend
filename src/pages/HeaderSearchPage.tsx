@@ -2,76 +2,64 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { HeaderSearchDataState } from '../recoil/atom/HeaderSearchDataState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { getSearchListStorage, saveSearchListStorage } from '../repository/SearchListRepository';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
 import { getHeaderKeywordSearch } from '../service/HeaderSearchService';
 import SearchListBox from '../stories/listbox/SearchListBox';
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 export default function HeaderSearchPage() {
     const techBlogSearchData = useRecoilValue(HeaderSearchDataState);
-    const { search } = useParams();
     const displayMode = useRecoilValue(DisplayModeState);
     const [page, setPage] = useState(0);
     const KEY = 'search';
     const size = 10;
-    const observationTarget = useRef(null);
     const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
     const { state } = useLocation();
-
-    const onIntersect = async (entries: any, observer: any) => {
-        const entry = entries[0];
-        if (entry.isIntersecting) {
-            observer.unobserve(entry.target);
-            setPage(prev => prev + 1);
-        }
-    };
+    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [isFetching, setIsFetching] = useState<boolean>(false);
 
     async function getKeywordSearchRender() {
+        setIsFetching(true);
         const keywordSearchData = await getHeaderKeywordSearch({
             page,
             size,
             searchValue: state,
         });
-<<<<<<< HEAD
         setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
+        setHasMore(!keywordSearchData.last);
 
-        if (keywordSearchData.content.length > 0) {
-            if (observationTarget.current) {
-                observer.observe(observationTarget.current);
-            }
-=======
-
-        setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
-        }
+        setIsFetching(false);
     }
 
     useEffect(() => {
         let searchItem = getSearchListStorage(KEY);
-        searchItem.push(search);
+        searchItem.push(state);
         const uniqueSearch = Array.from(new Set(searchItem));
         saveSearchListStorage(KEY, uniqueSearch);
-    }, [search]);
-
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
+    }, [state]);
 
     useEffect(() => {
         if (state.length > 0) getKeywordSearchRender();
     }, [page, state]);
 
+    const loaderRef = useIntersectionObserver(entries => {
+        if (entries[0].isIntersecting && !isFetching && hasMore) {
+            setPage(prevPage => prevPage + 1);
+        }
+    });
+
     return (
         <div className="flex justify-between w-full">
             <div className="flex flex-col w-full gap-6">
                 <div className="flex w-full">
-                    <div className="flex justify-around w-full mt-5 ">
-                        <h1 className="w-full max-[600px]:text-2xl overflow-hidden text-ellipsis whitespace-nowrap ml-8">
-                            Results for {search}
+                    <div className="flex justify-around w-full mt-5">
+                        <h1 className="w-full max-[600px]:text-2xl overflow-hidden text-ellipsis whitespace-nowrap ml-8 h-[70px] ">
+                            Results for {state}
                         </h1>
                         <DisplayModeSwitch />
                     </div>
@@ -90,12 +78,11 @@ export default function HeaderSearchPage() {
                         </div>
                     )}
                 </div>
-<<<<<<< HEAD
 
-                <div ref={observationTarget}>Loading...</div>
-=======
-                <div ref={observationTarget}>123</div>
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
+                <div ref={loaderRef}>
+                    {isFetching && 'Loading more items...'}
+                    {!hasMore && 'No more items to load'}
+                </div>
             </div>
         </div>
     );

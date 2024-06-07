@@ -21,8 +21,9 @@ export default function SocialCallback() {
     const REFRESHTOKEN_KEY = 'refreshToken';
     const navigate = useNavigate();
     const setLoggedIn = useSetRecoilState(isLoggedInState);
-    const { login } = useProfileState();
+    const { login, token } = useProfileState();
     const [didMount, setDidMount] = useState(false);
+
     async function socialLoginRender(
         isRegistered: string,
         providerId: string,
@@ -35,12 +36,12 @@ export default function SocialCallback() {
             login(authData.refreshToken);
             setProviderIdState(providerId);
             setProfileImgStorage(profileImageUrl);
-            setLoggedIn(true);
             subscribeUser();
+            setLoggedIn(true);
             navigate('/');
         } else {
             navigate('/');
-            subscribeUser();
+
             setProviderIdState(providerId);
             setProfileImgStorage(profileImageUrl);
             setModalOpen(true);
@@ -49,7 +50,9 @@ export default function SocialCallback() {
 
     const handleKakaoLogin = async () => {
         const data = await SocialService(code, state);
-        socialLoginRender(data.isRegistered, data.providerId, data.profileImageUrl);
+
+        if (data === undefined) navigate('/');
+        else socialLoginRender(data.isRegistered, data.providerId, data.profileImageUrl);
     };
 
     useEffect(() => {
@@ -59,6 +62,9 @@ export default function SocialCallback() {
     useEffect(() => {
         if (didMount) handleKakaoLogin();
     }, [didMount]);
+    useEffect(() => {
+        if (token) subscribeUser();
+    }, [token]);
 
     return <div>로그인 중...</div>;
 }

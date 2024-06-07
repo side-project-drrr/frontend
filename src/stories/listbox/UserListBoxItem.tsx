@@ -15,7 +15,7 @@ import {
 import { useEffect, useState } from 'react';
 import { techBlogDataState } from '../../recoil/atom/techBlogDataState';
 
-export default function SearchListBoxItem({ item, index }: ItemProps) {
+export default function UserListBoxItem({ item, index }: ItemProps) {
     const { token } = useProfileState();
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const setModalOpen = useSetRecoilState(loginModalState);
@@ -161,7 +161,9 @@ export default function SearchListBoxItem({ item, index }: ItemProps) {
                                     {item.techBlogPostBasicInfoDto.title}
                                 </h1>
                                 <p className="text-base overflow-hidden text-ellipsis h-[130px] max-h-[140px] pl-4 pt-[10px] pb-[10px] max-[600px]:text-xs">
-                                    {item.techBlogPostBasicInfoDto.summary}
+                                    {item.techBlogPostBasicInfoDto.summary.length > 0
+                                        ? item.techBlogPostBasicInfoDto.summary
+                                        : '해당 게시글은 설명이 없어요'}
                                 </p>
                             </div>
                         </div>
@@ -217,20 +219,26 @@ export default function SearchListBoxItem({ item, index }: ItemProps) {
                         padding="30px 20px"
                         className="relative flex flex-col justify-around"
                     >
-                        <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap text-ellipsis mb-[20px]">
+                        <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap pl-4 text-ellipsis max-[600px]:text-xs max-[600px]:hidden">
                             {item.techBlogPostBasicInfoDto.title}
                         </h1>
-                        <div className="flex items-center justify-between w-full">
-                            <p className="text-base overflow-hidden text-ellipsis h-[140px] max-h-[140px] mr-[20px]">
-                                {item.techBlogPostBasicInfoDto.summary}
-                            </p>
-
+                        <div className="flex items-center justify-between w-full pt-2 pb-2 max-[600px]:flex-col max-[600px]:w-full">
                             {item.techBlogPostBasicInfoDto.thumbnailUrl ? (
-                                <Box sx={{ minWidth: '140px', height: '140px' }}>
+                                <Box
+                                    sx={(theme: any) => ({
+                                        minWidth: '140px',
+                                        height: '140px',
+
+                                        [theme.breakpoints.down('sm')]: {
+                                            marginBottom: '20px',
+                                            width: '100%',
+                                        },
+                                    })}
+                                >
                                     <img
                                         src={item.techBlogPostBasicInfoDto.thumbnailUrl}
                                         alt="썸네일"
-                                        className="flex justify-center w-40 rounded-2xl right-10 h-36"
+                                        className="flex justify-center w-40 rounded-2xl right-10 h-36 max-[600px]:w-full"
                                     />
                                 </Box>
                             ) : (
@@ -250,6 +258,14 @@ export default function SearchListBoxItem({ item, index }: ItemProps) {
                                     }}
                                 />
                             )}
+
+                            <div className=" flex flex-col w-full overflow-hidden">
+                                <p className="text-base overflow-hidden text-ellipsis h-[130px] max-h-[140px] pl-4 pt-[10px] pb-[10px] max-[600px]:text-xs">
+                                    {item.techBlogPostBasicInfoDto.summary.length > 0
+                                        ? item.techBlogPostBasicInfoDto.summary
+                                        : '해당 게시글은 설명이 없어요'}
+                                </p>
+                            </div>
                         </div>
                         <Box className="flex gap-2 w-full flex-wrap overflow-y-hidden h-[40px] mt-[20px]">
                             {item.categoryDto?.map((item: { id: string; name: string }) => (

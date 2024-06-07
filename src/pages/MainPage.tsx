@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
@@ -19,16 +19,18 @@ import { Box } from '@mui/material';
 import { loginSuccessState } from '../recoil/atom/loginSuccessState';
 import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
 import { techBlogDataState } from '../recoil/atom/techBlogDataState';
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
     const setTechBlogData = useSetRecoilState(techBlogDataState);
+    const [isFetching, setIsFetching] = useState<boolean>(false);
+
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
     const displayMode = useRecoilValue(DisplayModeState);
     const [page, setPage] = useState<number>(0);
     const [categoryId, setCategoryId] = useState<number>(0);
-
     const loggedIn = useRecoilValue(isLoggedInState);
     const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
     const size = 10;
@@ -38,50 +40,29 @@ export default function MainPage() {
     const setProfileHeaderMenu = useSetRecoilState(profileHeaderMenu);
     const singupSuccessModal = useRecoilValue(loginSuccessState);
     const snackbarOpen = useRecoilValue(snackbarOpenState);
-    const observationTarget = useRef(null);
-
-    const onIntersect = async (entries: any, observer: any) => {
-        const entry = entries[0];
-
-        if (entry.isIntersecting) {
-            observer.unobserve(entry.target);
-            setPage(prev => prev + 1);
-        }
-    };
+    const [hasMore, setHasMore] = useState<boolean>(true);
 
     async function userTechBlogRender() {
+        setIsFetching(true);
+
         const userTechBlogData = await getTechBlogService({ page, size });
+
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
-<<<<<<< HEAD
-        if (userTechBlogData.content.length > 0) {
-            if (observationTarget.current) {
-                observer.observe(observationTarget.current);
-            }
-=======
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
-        }
+        setHasMore(!userTechBlogData.last);
+
+        setIsFetching(false);
     }
 
-    async function userFilterTechBlogRender(id: number) {
+    async function userFilterTechBlogRender(id: number, page: number) {
+        setIsFetching(true);
         const userFilterTechBlogData = await getUserTechBlogService({
             page,
             size,
             id,
         });
         setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
-
-<<<<<<< HEAD
-        if (userFilterTechBlogData.content.length > 0) {
-            if (observationTarget.current) {
-                observer.observe(observationTarget.current);
-            }
-=======
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
-        }
+        setHasMore(!userFilterTechBlogData.last);
+        setIsFetching(false);
     }
 
     const handleUserCategoryModal = () => {
@@ -117,23 +98,24 @@ export default function MainPage() {
 
     const handleUserCategoryId = (id: string) => {
         const numberId = parseInt(id, 10);
-<<<<<<< HEAD
-=======
-
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
         setCategoryId(numberId);
         setFilterTechBlogData([]);
+        setPage(0);
     };
 
     useEffect(() => {
-        if (categoryId === 0) {
+        if (categoryId !== 0) {
+            userFilterTechBlogRender(categoryId, page);
+        } else if (categoryId === 0) {
             userTechBlogRender();
-        } else {
-            userFilterTechBlogRender(categoryId);
         }
-    }, [page]);
+    }, [categoryId, page]);
 
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
+    const loaderRef = useIntersectionObserver(entries => {
+        if (entries[0].isIntersecting && !isFetching && hasMore) {
+            setPage(prevPage => prevPage + 1);
+        }
+    });
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
@@ -168,14 +150,10 @@ export default function MainPage() {
                         onFilterItems={filterTechBlogData}
                     />
                 </div>
-<<<<<<< HEAD
-
-                <>
-                    <div ref={observationTarget}>Loading..</div>
-                </>
-=======
-                <div ref={observationTarget}></div>
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
+                <div ref={loaderRef}>
+                    {isFetching && 'Loading more items...'}
+                    {!hasMore && 'No more items to load'}
+                </div>
             </div>
             {handleModalOpen && <SignUpModal onSignupNext={handleSignupNext} />}
             {isCategoryModalOpen && (

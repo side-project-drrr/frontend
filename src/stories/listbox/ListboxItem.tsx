@@ -8,6 +8,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import {
     deletePostLikedService,
+    postIncreasedMemberViewsService,
     postIncreasedViewsService,
     postTechBlogLikeIncreasedService,
 } from '../../service/TechBlogService';
@@ -20,8 +21,12 @@ export default function ListboxItem({ item, index }: ItemProps) {
     const setModalOpen = useSetRecoilState(loginModalState);
     const setTechBlogData = useSetRecoilState(techBlogDataState);
 
-    async function postIncreasedViewsRender(postId: number) {
-        await postIncreasedViewsService(postId);
+    async function postIncreasedViewsRender(postId: string) {
+        if (isLogin) {
+            postIncreasedMemberViewsService(postId);
+        } else {
+            postIncreasedViewsService(postId);
+        }
     }
 
     async function deleteTechBlogLikedRender(postId: number) {
@@ -73,6 +78,7 @@ export default function ListboxItem({ item, index }: ItemProps) {
     useEffect(() => {
         if (token === null || token === '') setIsLogin(true);
     }, [token]);
+
     return (
         <>
             {!isLogin ? (
@@ -99,9 +105,7 @@ export default function ListboxItem({ item, index }: ItemProps) {
                                 color: 'text.primary',
                             },
                         }}
-                        onClick={() =>
-                            postIncreasedViewsRender(Number(item.techBlogPostBasicInfoDto.id))
-                        }
+                        onClick={() => postIncreasedViewsRender(item.techBlogPostBasicInfoDto.id)}
                     >
                         <h1 className="w-full overflow-hidden text-xl font-bold bold whitespace-nowrap pl-4 text-ellipsis max-[600px]:text-xs max-[600px]:hidden">
                             {item.techBlogPostBasicInfoDto.title}
@@ -158,8 +162,8 @@ export default function ListboxItem({ item, index }: ItemProps) {
                                     {item.techBlogPostBasicInfoDto.title}
                                 </h1>
                                 <p className="text-base overflow-hidden text-ellipsis h-[130px] max-h-[140px] pl-4 pt-[10px] pb-[10px] max-[600px]:text-xs">
-                                    {item.techBlogPostBasicInfoDto.summary.length > 0
-                                        ? item.techBlogPostBasicInfoDto.summary
+                                    {item.techBlogPostBasicInfoDto.summary
+                                        ? item.techBlogPostBasicInfoDto?.summary
                                         : '해당 게시글은 설명이 없어요'}
                                 </p>
                             </div>
@@ -258,8 +262,8 @@ export default function ListboxItem({ item, index }: ItemProps) {
 
                             <div className=" flex flex-col w-full overflow-hidden">
                                 <p className="text-base overflow-hidden text-ellipsis h-[130px] max-h-[140px] pl-4 pt-[10px] pb-[10px] max-[600px]:text-xs">
-                                    {item.techBlogPostBasicInfoDto.summary.length > 0
-                                        ? item.techBlogPostBasicInfoDto.summary
+                                    {item.techBlogPostBasicInfoDto.summary
+                                        ? item.techBlogPostBasicInfoDto?.summary
                                         : '해당 게시글은 설명이 없어요'}
                                 </p>
                             </div>

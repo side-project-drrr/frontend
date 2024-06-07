@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Box from '@mui/material/Box';
@@ -8,7 +7,7 @@ import Button from '@mui/material/Button';
 
 import CategoryItem from '../../components/category/CategoryItem';
 import { CategoryProps } from './type';
-import { categorySearchService, getCategoryItem } from '../../service/CategoryService';
+import { categorySearchService } from '../../service/CategoryService';
 import { userInformationState } from '../../recoil/atom/userInformationState';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { SignUpService } from '../../service/auth/SocialService';
@@ -28,13 +27,21 @@ import { loginSuccessState } from '../../recoil/atom/loginSuccessState';
 import { useProfileState } from '../../context/UserProfile';
 import { msg } from '../../constants/message';
 import { subscribeUser } from '../../webpush/main';
+import useIntersectionObserver from '../../hooks/useIntersectionObserver';
+
+const debounce = (func: Function, wait: number) => {
+    let timeout: NodeJS.Timeout;
+    return (...args: any[]) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+};
 
 function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const [categoryItems, setCategoryItems] = useRecoilState(categoryItemsState); //전체 카테고리 리스트
     const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색value
     const [page, setPage] = useState(0);
-
 
     const profileValue = useRecoilValue(userInformationState);
     const providerId = useRecoilValue(providerIdState);
@@ -44,69 +51,41 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const stringConvert = provider?.toString();
     const KEY = 'imgUrl';
     const profileImageUrl = getProfileImgStorage(KEY);
-    const [timer, setTimer] = useState<NodeJS.Timeout>();
-    const [isSearching, setIsSearching] = useState(false); // 검색value
+
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
-    const size = 20;
+    const size = 10;
     const setIsLogged = useSetRecoilState(isLoggedInState);
     const setLoginSucess = useSetRecoilState(loginSuccessState);
     const { login } = useProfileState();
-    const observationTarget = useRef(null);
-
-    const observationTarget = useRef(null);
-
+    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [isFetching, setIsFetching] = useState<boolean>(false);
+    const debouncedSearch = useRef(
+        debounce(async (value: string) => {
+            setPage(0);
+            await getCategorySearchRender(value, 0);
+        }, 500),
+    ).current;
     const buttonStyle = {
         backgroundImage: `linear-gradient(to right, #FFA471 ${userCategoryItems.length}0%, #F0F0F0 20%)`,
         color: 'black', // Set the text color if needed
         borderRadius: '10px 5px 5px 10px', // Specify border radius for each corner
     };
 
-    const onIntersect = async (entries: any, observer: any) => {
-        const entry = entries[0];
-<<<<<<< HEAD
-=======
-
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
-        if (entry.isIntersecting) {
-            observer.unobserve(entry.target);
-            setPage(prev => prev + 1);
-        }
-    };
-
-    async function getCategoryList() {
-        const categoryData = await getCategoryItem({ page, size });
-        setCategoryItems(prev => [...prev, ...categoryData.content]);
-<<<<<<< HEAD
-
-        if (categoryData.content.length > 0) {
-            if (observationTarget.current) {
-                observer.observe(observationTarget.current);
-            }
-=======
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
-        }
-    }
-
-
-    async function getCategorySearchRender(value: string) {
+    async function getCategorySearchRender(value: string, page: number) {
+        setIsFetching(true);
         const categorySearchData = await categorySearchService({
             keyword: value,
             page,
             size,
         });
-        setCategoryItems(prev => [...prev, ...categorySearchData.content]);
-<<<<<<< HEAD
-        if (categorySearchData.content.length > 0) {
-            if (observationTarget.current) {
-                observer.observe(observationTarget.current);
-            }
-=======
-        if (observationTarget.current) {
-            observer.observe(observationTarget.current);
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
+        if (page === 0) {
+            setCategoryItems(categorySearchData.content);
+        } else {
+            setCategoryItems(prev => [...prev, ...categorySearchData.content]);
         }
+        setHasMore(!categorySearchData.last);
+
+        setIsFetching(false);
     }
 
     async function signupRender() {
@@ -124,7 +103,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             setAccessTokenStorage(ACCESSTOKEN_KEY, tokenData.accessToken);
             setRefreshTokenStorage(REFRESHTOKEN_KEY, tokenData.refreshToken);
             subscribeUser();
-            subscribeUser();
         }
     }
 
@@ -134,61 +112,32 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
             return;
         } else {
             await signupRender();
+            subscribeUser();
             onClose();
             setIsLogged(true);
         }
     }
 
-    const searchDataDebouce = (value: string) => {
-        if (timer) {
-            clearTimeout(timer);
-        }
-        const newTimer = setTimeout(async () => {
-            setPage(0);
-            setCategoryItems([]);
-
-            await getCategorySearchRender(value);
-        }, 1000);
-
-        setTimer(newTimer);
-    };
-
-    const handleCategorySearchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        if (value.length > 0) {
-            searchDataDebouce(value);
-        }
-        setCategorySearchValue(value);
-    };
+    const handleSearch = useCallback(
+        (searchQuery: string) => {
+            setCategorySearchValue(searchQuery);
+            debouncedSearch(searchQuery);
+        },
+        [debouncedSearch],
+    );
 
     useEffect(() => {
-        if (onModalOpen && !isSearching) {
-            getCategoryList();
+        if (onModalOpen) {
+            getCategorySearchRender(categorySearchValue, page);
         }
-<<<<<<< HEAD
     }, [onModalOpen, page]);
-=======
-    }, [onModalOpen]);
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
 
-    useEffect(() => {
-        if (categorySearchValue.length > 0) {
-            setCategoryItems([]);
-            setIsSearching(true);
-            setPage(0);
-            setPage(0);
-        } else {
-            setIsSearching(false);
-            setPage(0);
-            setPage(0);
+    const loaderRef = useIntersectionObserver(entries => {
+        if (entries[0].isIntersecting && !isFetching && hasMore) {
+            setPage(prevPage => prevPage + 1);
         }
-    }, [categorySearchValue]);
+    });
 
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
-<<<<<<< HEAD
-
-=======
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
     return (
         <>
             <Modal onClose={onClose} open={onModalOpen}>
@@ -200,7 +149,6 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                         transform: 'translate(-50%, -50%)',
                         width: '600px',
                         height: '620px',
-                        height: '620px',
                         bgcolor: '#FFFFFF',
                         boxShadow: 24,
                         p: 4,
@@ -211,46 +159,37 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
                     className="flex flex-col items-center justify-around"
                 >
                     <ModalTitle onHangleCloseClick={onClose} state="signup" />
-                    <div className="flex items-center justify-center w-11/12">
-                    <div className="flex items-center justify-center w-11/12">
+                    <div className="flex items-center justify-center w-[80%]">
                         <InputTextField
                             placeholder="검색"
                             variant="outlined"
-                            onChange={handleCategorySearchItem}
+                            onChange={e => handleSearch(e.target.value)}
                             aria-label="검색창"
                             sx={theme => ({
-                                width: '50%',
                                 width: '50%',
                                 [theme.breakpoints.down('sm')]: { width: '100%' },
                             })}
                             autoComplete="off"
-                            autoComplete="off"
                         />
                     </div>
                     <ul
-                        className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full "
+                        className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full h-[300px]"
                         id="CategoryModal-Scroll"
                     >
                         {categoryItems?.map((categoryitem, index) => (
-                        {categoryItems?.map((categoryitem, index) => (
                             <CategoryItem
-                                key={index}
                                 key={index}
                                 categoryId={categoryitem.id}
                                 title={categoryitem.name}
                                 onIndex={index}
-                                onIndex={index}
                             />
                         ))}
 
-                        <div ref={observationTarget}>Loading...</div>
-
-                        <div ref={observationTarget}>Loading...</div>
+                        <div ref={loaderRef} style={{ height: '10px', width: '10px' }}>
+                            {isFetching && 'Loading more items...'}
+                            {!hasMore && 'No more items to load'}
+                        </div>
                     </ul>
-<<<<<<< HEAD
-=======
-                    <div ref={observationTarget}></div>
->>>>>>> c5ad5eb ( voc-18: intersection observer 무한 스크롤 관련 버그 해결)
 
                     <SelectedCategoryDisplay />
                     <Button

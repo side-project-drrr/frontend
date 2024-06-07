@@ -1,4 +1,4 @@
-import HttpClient from '../apis/HttpClient';
+import HttpClient from './HttpClient';
 
 // 포스트 호출
 export async function getPostApi(postId: string) {

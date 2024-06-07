@@ -2,7 +2,7 @@ import { Chip, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { topicIndexState, topicState } from '../../recoil/atom/topicsState';
-import { getRangeEngApi, getRangeEtcApi, getRangeKorApi } from '../../service/TopicService';
+import { getRangeEngApi, getRangeEtcApi, getRangeKorApi } from '../../apis/topics';
 import { allTopicsType } from './type';
 
 export const ListComponent = ({ onHandleIndex }: { onHandleIndex: (index: string) => void }) => {
@@ -47,8 +47,8 @@ export const ListComponent = ({ onHandleIndex }: { onHandleIndex: (index: string
                             </h2>
                             <ul className="flex flex-col gap-1">
                                 {data.category.map((item, idx) => (
-                                    <li className="cursor-pointer truncate ..." key={idx}>
-                                        <span className="hover:underline">{item.name}</span>
+                                    <li className="truncate ..." key={idx}>
+                                        <span>{item.name}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -58,7 +58,7 @@ export const ListComponent = ({ onHandleIndex }: { onHandleIndex: (index: string
             ) : (
                 <Stack spacing={{ sm: 1 }} direction="row" useFlexGap flexWrap="wrap">
                     {topics.map((data, index) => (
-                        <Chip key={index} label={data.name} sx={{ cursor: 'pointer' }} />
+                        <Chip key={index} label={data.name} />
                     ))}
                 </Stack>
             )}

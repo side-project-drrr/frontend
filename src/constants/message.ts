@@ -11,4 +11,5 @@ export const msg = {
     nickNameUpdateSuccess: '닉네임과 이메일이 변경되었습니다.',
     nickNameEmailUpdateFalied: '이미 사용중인 이메일이거나 닉네임입니다.',
     validationNickname: '닉네임은 알파벳, 숫자, 한글만 포함할 수 있습니다.',
+    timeFalied: '유효시간이 지났어요',
 };

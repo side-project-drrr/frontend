@@ -17,7 +17,7 @@ import { isSearchFocusedState } from '../../recoil/atom/isSearchFocusedState';
 import { useEffect, useState } from 'react';
 import { HeaderSearchDataState } from '../../recoil/atom/HeaderSearchDataState';
 import { Link, useNavigate } from 'react-router-dom';
-import { getSearchListStorage } from '../../repository/SearchListRepository';
+import { addSearchTerm, getSearchListStorage } from '../../repository/SearchListRepository';
 import useHandleKeyPress from '../../hooks/useHandleKeyPress';
 import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 import darkLogo from '../../assets/darkLogo.webp';
@@ -138,10 +138,14 @@ export default function Header() {
                 setGetSearchLocalResult(prev => {
                     const uniqueValuesSet = new Set([...prev, value]);
                     const uniqueValuesArray = Array.from(uniqueValuesSet);
+                    if (uniqueValuesArray.length > 5) {
+                        addSearchTerm(value);
+                    }
+
                     return uniqueValuesArray;
                 });
                 setIsSearchfouced(false);
-                navigate(`/search/${searchValue}`, { state: value });
+                navigate(`/search?keyword=${searchValue}`, { state: value });
             }
         }
 
@@ -221,11 +225,10 @@ export default function Header() {
                             sx={theme => ({
                                 [theme.breakpoints.down('sm')]: { width: '200px' },
                             })}
+                            inputProps={{ maxLength: 10 }}
                         />
                         {isSearchFocused && (
                             <HeaderSearchMenu
-                                onSearchResult={getSearchLocalResult}
-                                onSetSearchResult={setGetSearchLocalResult}
                                 onSetSearchValue={setSearchValue}
                                 onSelectedSearchIndex={selectedSearchIndex}
                             />
@@ -234,7 +237,18 @@ export default function Header() {
                 </div>
                 <div className="flex items-center gap-1">
                     <div className="flex items-center gap-1">
-                        <IconButton onClick={toggleDarkMode} size="large" color="inherit">
+                        <IconButton
+                            onClick={toggleDarkMode}
+                            size="large"
+                            color="inherit"
+                            sx={{
+                                '&:focus': {
+                                    backgroundColor: 'transparent',
+                                    border: 'none',
+                                    outline: 'none',
+                                },
+                            }}
+                        >
                             {darkMode === 'dark' ? (
                                 <LightModeOutlined
                                     sx={theme => ({

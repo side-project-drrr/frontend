@@ -2,9 +2,9 @@ import { Box, Card, Link, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { BiSolidLike } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
-import { recommendedListApi } from '../service/RecommendedService';
+import { recommendedListApi } from '../apis/recommended';
 import { useProfileState } from '../context/UserProfile';
-import { readPostApi } from '../service/view';
+import { readPostApi } from '../apis/view';
 
 type recommendedItem = {
     category: { id: number; name: string }[];
@@ -18,7 +18,7 @@ type recommendedItem = {
     };
 };
 
-const RecommendedListPage = () => {
+export const RecommendedListPage = () => {
     const [list, setList] = useState<recommendedItem[]>([]);
     const { userData } = useProfileState();
 
@@ -46,10 +46,10 @@ const RecommendedListPage = () => {
     }, []);
 
     return (
-        <div>
+        <Box sx={{ paddingBottom: '40px' }}>
             <h1 className="py-10 text-center">{userData.nickname}님을 위한 추천 리스트</h1>
             <div
-                className={`grid gap-3 ${
+                className={`grid gap-5 ${
                     list.length > 5 ? 'lg:grid-cols-3 sm:grid-cols-2 grid-cols-1' : ''
                 }`}
             >
@@ -136,8 +136,6 @@ const RecommendedListPage = () => {
                     </Box>
                 )}
             </div>
-        </div>
+        </Box>
     );
 };
-
-export default RecommendedListPage;
