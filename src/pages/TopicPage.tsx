@@ -145,7 +145,7 @@ export default function TopicPage() {
                     onChange={e => handleSearch(e.target.value)}
                     style={{ width: '100%' }}
                     slots={{ input: inputEl }}
-                    inputProps={{ maxLength: 20 }}
+                    inputProps={{ maxLength: 50 }}
                 />
             </div>
             <div className="flex justify-between items-center w-full h-[32px]">
