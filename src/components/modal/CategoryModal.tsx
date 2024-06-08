@@ -10,24 +10,22 @@ import { CategoryProps } from './type';
 import { categorySearchService } from '../../service/CategoryService';
 import { userInformationState } from '../../recoil/atom/userInformationState';
 import { providerIdState } from '../../recoil/atom/providerIdState';
-import { SignUpService } from '../../service/auth/SocialService';
-import { setAccessTokenStorage, setRefreshTokenStorage } from '../../repository/AuthRepository';
+
 import { getProvider } from '../../repository/ProviderRepository';
 import { getProfileImgStorage } from '../../repository/ProfileimgRepository';
 import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 import ModalTitle from '../../stories/modalTitle/ModalTitle';
 import { InputTextField } from '../../style/inputText';
-
 import { categorySearchValueState } from '../../recoil/atom/categorySearchValueState';
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import SelectedCategoryDisplay from '../category/SelectedCategoryDisplay';
 import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
-import { loginSuccessState } from '../../recoil/atom/loginSuccessState';
-import { useProfileState } from '../../context/UserProfile';
+
 import { msg } from '../../constants/message';
 import { subscribeUser } from '../../webpush/main';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
+import { useSignUpMutation } from '../../hooks/useSignupMutation';
 
 const debounce = (func: Function, wait: number) => {
     let timeout: NodeJS.Timeout;
@@ -46,8 +44,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const profileValue = useRecoilValue(userInformationState);
     const providerId = useRecoilValue(providerIdState);
     const provider = getProvider('provider');
-    const ACCESSTOKEN_KEY = 'accessToken';
-    const REFRESHTOKEN_KEY = 'refreshToken';
+
     const stringConvert = provider?.toString();
     const KEY = 'imgUrl';
     const profileImageUrl = getProfileImgStorage(KEY);
@@ -55,8 +52,7 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
     const size = 10;
     const setIsLogged = useSetRecoilState(isLoggedInState);
-    const setLoginSucess = useSetRecoilState(loginSuccessState);
-    const { login } = useProfileState();
+
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [isFetching, setIsFetching] = useState<boolean>(false);
     const debouncedSearch = useRef(
@@ -88,30 +84,20 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
         setIsFetching(false);
     }
 
-    async function signupRender() {
-        const tokenData = await SignUpService({
-            email: profileValue.email,
-            categoryIds: userCategoryItems.map(item => +item.id),
-            nickName: profileValue.nickname,
-            provider: stringConvert,
-            providerId,
-            profileImageUrl,
-        });
-        if (tokenData.accessToken.length > 0) {
-            setLoginSucess(true);
-            login(tokenData.accessToken);
-            setAccessTokenStorage(ACCESSTOKEN_KEY, tokenData.accessToken);
-            setRefreshTokenStorage(REFRESHTOKEN_KEY, tokenData.refreshToken);
-            subscribeUser();
-        }
-    }
-
+    const signUpData = useSignUpMutation();
     async function handleCategory() {
         if (userCategoryItems.length === 0) {
             setSnackbarOpen({ open: true, vertical: 'top', horizontal: 'center', text: msg.under });
             return;
         } else {
-            await signupRender();
+            signUpData.mutate({
+                email: profileValue.email,
+                categoryIds: userCategoryItems.map(item => +item.id),
+                nickName: profileValue.nickname,
+                provider: stringConvert,
+                providerId,
+                profileImageUrl,
+            });
             subscribeUser();
             onClose();
             setIsLogged(true);
