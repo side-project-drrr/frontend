@@ -4,22 +4,15 @@ import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 import { useRecoilValue } from 'recoil';
 
 import Recommend from '../../components/recommend/Recommend';
-import { useEffect, useState } from 'react';
-import { getTopPostItemService } from '../../service/TopPostService';
 import { Box, Typography } from '@mui/material';
+import { useTopPostQuery } from '../../hooks/useTopPostQuery';
 
 export default function Aside() {
-    const [topContent, setTopContent] = useState([]);
-
     const loggedIn = useRecoilValue(isLoggedInState);
 
-    async function getTopContentRender() {
-        const topContentData = await getTopPostItemService();
-        setTopContent(topContentData);
-    }
-    useEffect(() => {
-        getTopContentRender();
-    }, []);
+    const { data, isLoading } = useTopPostQuery();
+
+    if (isLoading) <div>loading...</div>;
 
     return (
         <div className="flex flex-col justify-around w-full ">
@@ -34,7 +27,7 @@ export default function Aside() {
                     borderColor="primary.main"
                     className="flex flex-col w-full mb-4"
                 >
-                    {topContent.map((value: any) => (
+                    {data?.map((value: any) => (
                         <TopPost item={value} key={value.techBlogPostBasicInfoDto.id} />
                     ))}
                 </Box>
