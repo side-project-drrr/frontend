@@ -1,19 +1,10 @@
-import { useEffect, useState } from 'react';
-import { TopKeywordProps } from './type';
-import { getTopkeyword } from '../../service/TopKeyword';
 import { Box, Typography } from '@mui/material';
+import { useTopKeyWordQuery } from '../../hooks/useTopKeyWordQuery';
 
 export default function TopKeywords() {
-    const [topkeywordsData, setTopkeywordsData] = useState<TopKeywordProps[]>([]);
+    const { data, isLoading } = useTopKeyWordQuery();
 
-    async function getTopkeyDatas() {
-        const topKeywordData = await getTopkeyword();
-        setTopkeywordsData(topKeywordData);
-    }
-
-    useEffect(() => {
-        getTopkeyDatas();
-    }, []);
+    if (isLoading) <div>loading..</div>;
 
     return (
         <Box
@@ -28,8 +19,8 @@ export default function TopKeywords() {
             </Typography>
             <div className="flex items-center w-full">
                 <ul className="flex mt-3 gap-2 flex-wrap max-h-[130px] overflow-y-hidden">
-                    {topkeywordsData &&
-                        topkeywordsData?.map(topkeyword => (
+                    {data &&
+                        data?.map((topkeyword: { id: string; name: string }) => (
                             <li
                                 key={topkeyword.id}
                                 aria-label="top keyword item"
