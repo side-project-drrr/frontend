@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import HttpClient from '../../apis/HttpClient';
-import { IAuthEmailProps, IAuthEmailVaildationProps } from './type';
+import { IAuthEmailProps, IAuthEmailVaildationProps, IAuthProps } from './type';
 
 export const SocialService = async (code: string | null, state: string) => {
     try {
@@ -14,6 +14,29 @@ export const SocialService = async (code: string | null, state: string) => {
         console.error(error);
     }
 };
+
+export async function SignUpService({
+    email,
+    categoryIds,
+    nickName,
+    provider,
+    providerId,
+    profileImageUrl,
+}: IAuthProps) {
+    try {
+        const res = await HttpClient.post(`/api/v1/auth/signup`, {
+            email: `${email}`,
+            categoryIds: categoryIds.map(Number),
+            nickname: `${nickName}`,
+            provider: `${provider}`,
+            providerId: `${providerId}`,
+            profileImageUrl: `${profileImageUrl}`,
+        });
+        return res.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 export async function SignInService(providerValue: string) {
     try {
