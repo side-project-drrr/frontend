@@ -23,7 +23,7 @@ type postType = {
     url: String;
 };
 
-export const ViewPage = () => {
+const ViewPage = () => {
     const { postId } = useParams();
     const [post, setPost] = useState<postType>();
     const [loggedIn] = useRecoilState(isLoggedInState);
@@ -120,3 +120,5 @@ export const ViewPage = () => {
         )
     );
 };
+
+export default ViewPage;

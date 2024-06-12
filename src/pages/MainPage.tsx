@@ -46,7 +46,6 @@ export default function MainPage() {
         setIsFetching(true);
 
         const userTechBlogData = await getTechBlogService({ page, size });
-
         setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
 
         if (userTechBlogData.content.length > 0) {

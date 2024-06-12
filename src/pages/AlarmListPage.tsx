@@ -7,7 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useLocation } from 'react-router-dom';
 import { ItemProps } from 'stories/listbox/type';
-import { getListApi } from '../apis/alarm';
+import { getListApi } from '../service/AlarmService';
 
 const StyledDatePicker = styled(DatePicker)(({ theme }: { theme: any }) => ({
     '& .MuiInputBase-root': {
@@ -35,7 +35,7 @@ function getSevenDaysAgoDate() {
     return `${year}-${month}-${day}`;
 }
 
-export const AlarmListPage = () => {
+const AlarmListPage = () => {
     const { from, to } = useLocation().state;
     const [stDate, setStDate] = useState<string>(getSevenDaysAgoDate());
     const [enDate, setEnDate] = useState<string>(getCurrentDate());
@@ -89,3 +89,5 @@ export const AlarmListPage = () => {
         </Box>
     );
 };
+
+export default AlarmListPage;

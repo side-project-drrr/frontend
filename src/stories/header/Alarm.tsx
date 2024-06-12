@@ -12,7 +12,7 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProfileState } from '../../context/UserProfile';
-import { alarmOpenApi, alarmReadApi, getPushDataApi } from '../../apis/alarm';
+import { alarmOpenApi, alarmReadApi, getPushDataApi } from '../../service/AlarmService';
 
 type alarmType = {
     openStatus: Boolean;

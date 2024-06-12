@@ -4,7 +4,7 @@ import { BiSolidLike } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
 import { recommendedListApi } from '../service/recommended';
 import { useProfileState } from '../context/UserProfile';
-import { readPostApi } from '../apis/view';
+import { readPostApi } from '../service/view';
 
 type recommendedItem = {
     category: { id: number; name: string }[];
@@ -18,7 +18,7 @@ type recommendedItem = {
     };
 };
 
-export const RecommendedListPage = () => {
+const RecommendedListPage = () => {
     const [list, setList] = useState<recommendedItem[]>([]);
     const { userData } = useProfileState();
 
@@ -139,3 +139,5 @@ export const RecommendedListPage = () => {
         </Box>
     );
 };
+
+export default RecommendedListPage;

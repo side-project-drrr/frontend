@@ -10,10 +10,10 @@ import LayoutWithAside from './components/layout/LayoutWIthAside';
 import LayoutWithOutAside from './components/layout/LayoutWithOutAside';
 import TopicPage from './pages/TopicPage';
 import HeaderSearchPage from './pages/HeaderSearchPage';
-import { RecommendedListPage } from './pages/RecommendedListPage';
+import RecommendedListPage from './pages/RecommendedListPage';
 import ProfilePage from './pages/ProfilePage';
-import { AlarmListPage } from './pages/AlarmListPage';
-import { ViewPage } from './pages/ViewPage';
+import AlarmListPage from './pages/AlarmListPage';
+import ViewPage from './pages/ViewPage';
 import HealthCheck from './pages/HealthCheck';
 import ToManyRequestError from './components/errors/ToManyRequestError';
 
