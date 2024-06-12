@@ -1,6 +1,6 @@
 import HttpClient from '../apis/HttpClient';
 
-interface ITechBlogCategory {
+interface IUserTechBlogCategory {
     page: number;
     size: number;
     id?: number;
@@ -13,7 +13,7 @@ interface IUserTechBlogCategory {
 }
 export async function getTechBlogService({ page, size }: ITechBlogCategory) {
     try {
-        const res = await HttpClient.get(`/api/v1/posts/all?page=${page}&size=${size}`);
+        const res = await HttpClient.get(`/api/v1/posts/all?page=${pageParam}&size=${size}`);
         return res.data;
     } catch (error) {
         console.error(error);
