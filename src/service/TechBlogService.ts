@@ -26,17 +26,6 @@ export async function getUserTechBlogService({ page, size, id }: ITechBlogCatego
     }
 }
 
-export async function getRecommendTechBlogService() {
-    const COUNT = 9;
-
-    try {
-        const res = await HttpClient.get(`/api/v1/members/me/post-recommendation/${COUNT}`);
-        return res;
-    } catch (error) {
-        console.error(error);
-    }
-}
-
 export async function postTechBlogLikeIncreasedService(postId: number) {
     try {
         const res = await HttpClient.post(`/api/v1/posts/${postId}/like`);
