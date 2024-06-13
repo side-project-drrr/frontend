@@ -6,6 +6,11 @@ interface ITechBlogCategory {
     id?: number;
 }
 
+interface IUserTechBlogCategory {
+    pageParam: number;
+    size: number;
+    id?: number;
+}
 export async function getTechBlogService({ page, size }: ITechBlogCategory) {
     try {
         const res = await HttpClient.get(`/api/v1/posts/all?page=${page}&size=${size}`);
@@ -15,10 +20,10 @@ export async function getTechBlogService({ page, size }: ITechBlogCategory) {
     }
 }
 
-export async function getUserTechBlogService({ page, size, id }: ITechBlogCategory) {
+export async function getUserTechBlogService({ pageParam, size, id }: IUserTechBlogCategory) {
     try {
         const res = await HttpClient.get(
-            `/api/v1/posts/categories/${id}?page=${page}&size=${size}`,
+            `/api/v1/posts/categories/${id}?page=${pageParam}&size=${size}`,
         );
         return res.data;
     } catch (error) {
