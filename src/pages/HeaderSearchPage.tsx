@@ -1,40 +1,24 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { HeaderSearchDataState } from '../recoil/atom/HeaderSearchDataState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 
-import { useEffect, useState } from 'react';
-
+import { useEffect, useRef } from 'react';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { useLocation } from 'react-router-dom';
 import { getSearchListStorage, saveSearchListStorage } from '../repository/SearchListRepository';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
-import { getHeaderKeywordSearch } from '../service/HeaderSearchService';
 import SearchListBox from '../stories/listbox/SearchListBox';
-import useIntersectionObserver from '../hooks/useIntersectionObserver';
+import { useHeaderSearchQuery } from '../hooks/useHeaderSearchQuery';
 
 export default function HeaderSearchPage() {
-    const techBlogSearchData = useRecoilValue(HeaderSearchDataState);
     const displayMode = useRecoilValue(DisplayModeState);
-    const [page, setPage] = useState(0);
     const KEY = 'search';
-    const size = 10;
-    const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
+
     const { state } = useLocation();
-    const [hasMore, setHasMore] = useState<boolean>(true);
-    const [isFetching, setIsFetching] = useState<boolean>(false);
+    const [techBlogSearchData, setTechBlogSearchData] = useRecoilState(HeaderSearchDataState);
 
-    async function getKeywordSearchRender() {
-        setIsFetching(true);
-        const keywordSearchData = await getHeaderKeywordSearch({
-            page,
-            size,
-            searchValue: state,
-        });
-        setTechBlogSearchData(prev => [...prev, ...keywordSearchData.content]);
-        setHasMore(!keywordSearchData.last);
-
-        setIsFetching(false);
-    }
+    const observerElem = useRef<HTMLDivElement | null>(null);
+    const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useHeaderSearchQuery(state);
 
     useEffect(() => {
         let searchItem = getSearchListStorage(KEY);
@@ -44,14 +28,34 @@ export default function HeaderSearchPage() {
     }, [state]);
 
     useEffect(() => {
-        if (state.length > 0) getKeywordSearchRender();
-    }, [page, state]);
-
-    const loaderRef = useIntersectionObserver(entries => {
-        if (entries[0].isIntersecting && !isFetching && hasMore) {
-            setPage(prevPage => prevPage + 1);
+        if (state.length > 0 && data) {
+            const allposts = data.pages.flatMap(value => value.content);
+            setTechBlogSearchData(allposts);
         }
-    });
+    }, [state, data]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            entries => {
+                if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+                    fetchNextPage();
+                }
+            },
+            {
+                threshold: 1.0,
+            },
+        );
+
+        if (observerElem.current) {
+            observer.observe(observerElem.current);
+        }
+
+        return () => {
+            if (observerElem.current) {
+                observer.unobserve(observerElem.current);
+            }
+        };
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
     return (
         <div className="flex justify-between w-full">
@@ -78,10 +82,8 @@ export default function HeaderSearchPage() {
                         </div>
                     )}
                 </div>
-
-                <div ref={loaderRef}>
-                    {isFetching && 'Loading more items...'}
-                    {!hasMore && 'No more items to load'}
+                <div ref={observerElem}>
+                    {isFetchingNextPage && hasNextPage ? 'Loading more...' : 'Data does not exist'}
                 </div>
             </div>
         </div>
