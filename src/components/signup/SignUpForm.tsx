@@ -79,10 +79,6 @@ export default function SignUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                 }
             }
         }
-        setErrorMsg({
-            nickname: '',
-            email: '',
-        });
     }
 
     const handleNextClick = () => {
