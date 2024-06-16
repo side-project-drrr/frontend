@@ -5,7 +5,6 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import CategoryItem from '../../components/category/CategoryItem';
 import { CategoryProps } from './type';
-import { categorySearchService } from '../../service/CategoryService';
 import { userInformationState } from '../../recoil/atom/userInformationState';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { getProvider } from '../../repository/ProviderRepository';
@@ -21,7 +20,7 @@ import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
 import { msg } from '../../constants/message';
 import { subscribeUser } from '../../webpush/main';
 import { useSignUpMutation } from '../../hooks/useSignupMutation';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useCategoryQuery } from '../../hooks/useCategoryQuery';
 
 const debounce = (func: Function, wait: number) => {
     let timeout: NodeJS.Timeout;
@@ -46,20 +45,9 @@ function CategoryModal({ onModalOpen, onClose }: CategoryProps) {
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
     const setIsLogged = useSetRecoilState(isLoggedInState);
     const observerElem = useRef<HTMLDivElement | null>(null);
-    const size = 20;
 
-    const { data, isFetchingNextPage, hasNextPage, fetchNextPage } = useInfiniteQuery({
-        queryKey: ['search', size, categorySearchValue],
-        queryFn: ({ pageParam = 0 }) =>
-            categorySearchService({ keyword: categorySearchValue, pageParam, size }),
-        initialPageParam: 0,
-        getNextPageParam: (lastPage, allPages) => {
-            if (!lastPage.last) {
-                return allPages.length;
-            }
-            return undefined;
-        },
-    });
+    const { data, isFetchingNextPage, hasNextPage, fetchNextPage } =
+        useCategoryQuery(categorySearchValue);
 
     const debouncedSearch = useRef(
         debounce(async (value: string) => {
