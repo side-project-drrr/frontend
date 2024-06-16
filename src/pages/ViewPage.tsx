@@ -1,78 +1,35 @@
 import { Box, Button, Typography, styled } from '@mui/material';
 import darkLogo from '../assets/darkLogo.webp';
-import { Fragment, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getPostApi, readPostApi } from '../apis/view';
-import {
-    postIncreasedMemberViewsService,
-    postIncreasedViewsService,
-} from '../service/TechBlogService';
-import { useRecoilState } from 'recoil';
-import { isLoggedInState } from '../recoil/atom/isLoggedInState';
-
-type postType = {
-    id: number;
-    title: String;
-    techBlogCode: String;
-    thumbnailUrl: String;
-    aiSummary: String;
-    writtenDate: String;
-    viewCount: number;
-    postLikeCount: number;
-    author: String;
-    url: String;
-};
+import { Fragment } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useViewQuery } from '../hooks/useViewQuery';
 
 export const ViewPage = () => {
-    const { postId } = useParams();
-    const [post, setPost] = useState<postType>();
-    const [loggedIn] = useRecoilState(isLoggedInState);
+    const navigate = useNavigate();
+    const { postId } = useParams<{ postId: string }>();
     const StyledButton = styled(Button)({
         borderRadius: '15px',
     });
 
-    const getPost = async (postId: string) => {
-        const res = await getPostApi(postId);
-        if (res.status === 200) {
-            const regex = /\./g;
-            const text = res.data.aiSummary;
-            const newText = text.replaceAll(regex, '.\r\n');
-            res.data.aiSummary = newText;
+    if (!postId) {
+        alert('잘못된 접근입니다.');
+        navigate('/');
+    }
 
-            const regexThumb = /\s+/g;
-            const url = res.data.thumbnailUrl;
+    const { data, error } = useViewQuery(postId!);
 
-            if (url) {
-                const newUrl = url.replace(regexThumb, '%20');
-                res.data.thumbnailUrl = newUrl;
-            }
-            setPost(res.data);
-        }
-    };
-
-    useEffect(() => {
-        if (postId) {
-            getPost(postId);
-            readPostApi(postId);
-
-            if (loggedIn) {
-                postIncreasedMemberViewsService(postId);
-            } else {
-                postIncreasedViewsService(postId);
-            }
-        }
-    }, [postId]);
+    if (error) return '에러가 발생했습니다.';
 
     return (
-        post && (
+        data && (
             <Box>
                 <Typography variant="h3" textAlign="center">
-                    {post.title}
+                    {data.title}
                 </Typography>
                 <Box display="flex" justifyContent="center" alignItems="center" paddingY="25px">
-                    <Typography variant="body2">{post.author}</Typography>
+                    <Typography variant="body2">{data.author}</Typography>
                     <span className="px-2">|</span>
-                    <Typography variant="body2">{post.writtenDate}</Typography>
+                    <Typography variant="body2">{data.writtenDate}</Typography>
                 </Box>
                 <Box>
                     <Box
@@ -89,16 +46,16 @@ export const ViewPage = () => {
                                 md: '400px',
                             },
                             backgroundImage: `url(${
-                                post?.thumbnailUrl ? post.thumbnailUrl : darkLogo
+                                data?.thumbnailUrl ? data.thumbnailUrl : darkLogo
                             })`,
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'center center',
-                            backgroundSize: post.thumbnailUrl ? 'cover' : '50px',
+                            backgroundSize: data.thumbnailUrl ? 'cover' : '50px',
                         }}
                     ></Box>
 
                     <Typography variant="body1" padding="20px">
-                        {post.aiSummary.split('\r\n').map((line, idx) => (
+                        {data.aiSummary.split('\r\n').map((line, idx) => (
                             <Fragment key={idx}>
                                 {line}
                                 <br />
@@ -109,7 +66,7 @@ export const ViewPage = () => {
                 <Box textAlign="center" marginTop="20px" paddingBottom="40px">
                     <StyledButton
                         variant="contained"
-                        onClick={() => window.open(`${post.url}`, '_blank')}
+                        onClick={() => window.open(`${data.url}`, '_blank')}
                         rel="noopener noreferrer"
                         size="large"
                     >
