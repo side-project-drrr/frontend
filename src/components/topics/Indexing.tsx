@@ -51,11 +51,7 @@ const indexEn = [
 
 const indexText = indexEn.concat(indexKr);
 
-export const IndexingComponent = ({
-    onHandleIndex,
-}: {
-    onHandleIndex: (index: string) => void;
-}) => {
+const IndexingComponent = ({ onHandleIndex }: { onHandleIndex: (index: string) => void }) => {
     const [topicIndex, setTopicIndex] = useRecoilState(topicIndexState);
     const [, setSearchVal] = useRecoilState(searchValueState);
 
@@ -155,3 +151,5 @@ export const IndexingComponent = ({
         </>
     );
 };
+
+export default IndexingComponent;
