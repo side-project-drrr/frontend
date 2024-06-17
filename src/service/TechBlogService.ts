@@ -1,19 +1,20 @@
 import HttpClient from '../apis/HttpClient';
 
-interface ITechBlogCategory {
-    page: number;
-    size: number;
-    id?: number;
-}
 
 interface IUserTechBlogCategory {
     pageParam: number;
     size: number;
     id?: number;
 }
-export async function getTechBlogService({ page, size }: ITechBlogCategory) {
+
+interface ITechBlogCategory {
+    pageParam?: number;
+    size: number;
+}
+
+export async function getTechBlogService({ pageParam = 0, size }: ITechBlogCategory) {
     try {
-        const res = await HttpClient.get(`/api/v1/posts/all?page=${page}&size=${size}`);
+        const res = await HttpClient.get(`/api/v1/posts/all?page=${pageParam}&size=${size}`);
         return res.data;
     } catch (error) {
         console.error(error);

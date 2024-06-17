@@ -2,33 +2,42 @@ import { Chip, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { topicIndexState, topicState } from '../../recoil/atom/topicsState';
-import { getRangeEngApi, getRangeEtcApi, getRangeKorApi } from '../../apis/topics';
+import { getRangeEngApi, getRangeEtcApi, getRangeKorApi } from '../../service/TopicService';
 import { allTopicsType } from './type';
+import { useQuery } from '@tanstack/react-query';
 
-export const ListComponent = ({ onHandleIndex }: { onHandleIndex: (index: string) => void }) => {
+const ListComponent = ({ onHandleIndex }: { onHandleIndex: (index: string) => void }) => {
     const [topicIndex] = useRecoilState(topicIndexState);
     const [topics] = useRecoilState(topicState);
     const [allTopics, setAllTopics] = useState<allTopicsType[]>([]);
 
+    const { data: koData, isError: koError } = useQuery({
+        queryKey: ['koData'],
+        queryFn: getRangeKorApi,
+    });
+    const { data: enData, isError: enError } = useQuery({
+        queryKey: ['enData'],
+        queryFn: getRangeEngApi,
+    });
+    const { data: etcData, isError: etcError } = useQuery({
+        queryKey: ['etcData'],
+        queryFn: getRangeEtcApi,
+    });
+
+    if (koError || enError || etcError) return '에러가 발생했습니다.';
+
     useEffect(() => {
-        // 전체 카테고리 호출
         async function getAllTopics() {
-            const resKo = await getRangeKorApi();
-            const resEn = await getRangeEngApi();
-            const resEtc = await getRangeEtcApi();
-
-            if (resKo.status === 200 && resEn.status === 200 && resEtc.status === 200) {
-                const resKoData = resKo.data.content;
-                const resEnData = resEn.data.content;
-                const resEtcData = resEtc.data.content;
+            if (koData && enData && etcData) {
+                const resKoData = koData.content;
+                const resEnData = enData.content;
+                const resEtcData = etcData.content;
                 const res = resEnData.concat(resKoData).concat(resEtcData);
-
                 setAllTopics(res);
             }
         }
-
         getAllTopics();
-    }, []);
+    }, [koData, enData, etcData]);
 
     return (
         <>
@@ -65,3 +74,5 @@ export const ListComponent = ({ onHandleIndex }: { onHandleIndex: (index: string
         </>
     );
 };
+
+export default ListComponent;
