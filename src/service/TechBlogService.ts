@@ -1,7 +1,8 @@
 import HttpClient from '../apis/HttpClient';
 
+
 interface IUserTechBlogCategory {
-    page: number;
+    pageParam: number;
     size: number;
     id?: number;
 }
@@ -20,10 +21,10 @@ export async function getTechBlogService({ pageParam = 0, size }: ITechBlogCateg
     }
 }
 
-export async function getUserTechBlogService({ page, size, id }: IUserTechBlogCategory) {
+export async function getUserTechBlogService({ pageParam, size, id }: IUserTechBlogCategory) {
     try {
         const res = await HttpClient.get(
-            `/api/v1/posts/categories/${id}?page=${page}&size=${size}`,
+            `/api/v1/posts/categories/${id}?page=${pageParam}&size=${size}`,
         );
         return res.data;
     } catch (error) {

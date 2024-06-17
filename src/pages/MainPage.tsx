@@ -5,6 +5,7 @@ import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
 import { profileHeaderMenu } from '../recoil/atom/profileHeaderMenu';
 import CategorySlide from '../components/carousel/CategorySlide';
+
 import { getUserTechBlogService } from '../service/TechBlogService';
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
@@ -18,8 +19,8 @@ import { LoginSuccess } from '../components/modal/LoginSuccess';
 import { Box } from '@mui/material';
 import { loginSuccessState } from '../recoil/atom/loginSuccessState';
 import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
+import { useUserTechBlogQuery } from '../hooks/useUserTechBlogQuery';
 import { techBlogDataState } from '../recoil/atom/techBlogDataState';
-
 import { useTechBlogQuery } from '../hooks/useTechBlogQuery';
 
 export default function MainPage() {
@@ -28,11 +29,10 @@ export default function MainPage() {
     const setTechBlogData = useSetRecoilState(techBlogDataState);
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
     const displayMode = useRecoilValue(DisplayModeState);
-    const [page, setPage] = useState<number>(0);
+
     const [categoryId, setCategoryId] = useState<number>(0);
     const loggedIn = useRecoilValue(isLoggedInState);
     const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
-    const size = 10;
     const setCategoryItems = useSetRecoilState(categoryItemsState);
     const [handleModalOpen, setHandleModalOpen] = useRecoilState(modalOpenState);
     const setLoginModalOpen = useSetRecoilState(loginModalState);
@@ -40,16 +40,10 @@ export default function MainPage() {
     const singupSuccessModal = useRecoilValue(loginSuccessState);
     const snackbarOpen = useRecoilValue(snackbarOpenState);
     const observerElem = useRef<HTMLDivElement | null>(null);
-    const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useTechBlogQuery();
 
-    async function userFilterTechBlogRender(id: number, size: number, page: number) {
-        const userFilterTechBlogData = await getUserTechBlogService({
-            page,
-            size,
-            id,
-        });
-        setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
-    }
+    const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
+        useUserTechBlogQuery(categoryId);
+    const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useTechBlogQuery();
 
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
@@ -86,16 +80,17 @@ export default function MainPage() {
         const numberId = parseInt(id, 10);
         setCategoryId(numberId);
         setFilterTechBlogData([]);
-        setPage(0);
     };
 
     useEffect(() => {
-        if (categoryId !== 0) {
-            userFilterTechBlogRender(categoryId, size, page);
-        }
-    }, [categoryId, page]);
+        if (data && categoryId !== 0) {
+            const allPosts = data?.pages.flatMap(page => page.content);
+            setFilterTechBlogData(allPosts);
+
+    }, [categoryId, data]);
 
     useEffect(() => {
+
         if (data) {
             const allPosts = data?.pages.flatMap(page => page.content);
             setTechBlogData(allPosts);
@@ -158,8 +153,10 @@ export default function MainPage() {
                         onFilterItems={filterTechBlogData}
                     />
                 </div>
+                <div ref={observerElem}>
+                    {isFetchingNextPage && hasNextPage ? 'Loading more...' : 'Data does not exist'}
+                </div>
 
-                <div ref={observerElem}>{isFetchingNextPage ? 'Loading more...' : 'Load more'}</div>
             </div>
             {handleModalOpen && <SignUpModal onSignupNext={handleSignupNext} />}
             {isCategoryModalOpen && (
