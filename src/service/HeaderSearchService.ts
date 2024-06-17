@@ -1,15 +1,15 @@
 import HttpClient from '../apis/HttpClient';
 
 interface Props {
-    page: number;
+    pageParam: number;
     size: number;
     searchValue: string;
 }
 
-export async function getHeaderKeywordSearch({ page, size, searchValue }: Props) {
+export async function getHeaderKeywordSearch({ pageParam, size, searchValue }: Props) {
     try {
         const res = await HttpClient.get(
-            `api/v1/posts/title/keyword-search?page=${page}&size=${size}&keyword=${searchValue}`,
+            `api/v1/posts/title/keyword-search?page=${pageParam}&size=${size}&keyword=${searchValue}`,
         );
         return res.data;
     } catch (error) {
