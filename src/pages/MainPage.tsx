@@ -4,7 +4,8 @@ import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
 import { profileHeaderMenu } from '../recoil/atom/profileHeaderMenu';
-import CategorySlide from '../components/carousel/CategorySlide';
+import CategorySlide from '../components/carousel/CategorySlide';]
+import { getUserTechBlogService } from '../service/TechBlogService';
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
@@ -18,11 +19,12 @@ import { Box } from '@mui/material';
 import { loginSuccessState } from '../recoil/atom/loginSuccessState';
 import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
 import { useUserTechBlogQuery } from '../hooks/useUserTechBlogQuery';
-
+import { techBlogDataState } from '../recoil/atom/techBlogDataState';
+import { useTechBlogQuery } from '../hooks/useTechBlogQuery';
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
-
+    const setTechBlogData = useSetRecoilState(techBlogDataState);
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
     const displayMode = useRecoilValue(DisplayModeState);
 
@@ -39,6 +41,7 @@ export default function MainPage() {
 
     const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
         useUserTechBlogQuery(categoryId);
+    const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useTechBlogQuery();
 
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
@@ -81,9 +84,17 @@ export default function MainPage() {
         if (data && categoryId !== 0) {
             const allPosts = data?.pages.flatMap(page => page.content);
             setFilterTechBlogData(allPosts);
-        }
+
     }, [categoryId, data]);
 
+    useEffect(() => {
+
+        if (data) {
+            const allPosts = data?.pages.flatMap(page => page.content);
+            setTechBlogData(allPosts);
+        }
+    }, [data]);
+      
     useEffect(() => {
         const observer = new IntersectionObserver(
             entries => {
@@ -141,8 +152,9 @@ export default function MainPage() {
                     />
                 </div>
                 <div ref={observerElem}>
-                    {isFetchingNextPage && !hasNextPage ? 'Loading more...' : 'Data does not exist'}
+                    {isFetchingNextPage && hasNextPage ? 'Loading more...' : 'Data does not exist'}
                 </div>
+
             </div>
             {handleModalOpen && <SignUpModal onSignupNext={handleSignupNext} />}
             {isCategoryModalOpen && (
