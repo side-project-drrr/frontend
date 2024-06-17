@@ -4,8 +4,7 @@ import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
 import { profileHeaderMenu } from '../recoil/atom/profileHeaderMenu';
-import CategorySlide from '../components/carousel/CategorySlide';
-
+import CategorySlide from '../components/carousel/CategorySlide';]
 import { getUserTechBlogService } from '../service/TechBlogService';
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
@@ -22,7 +21,6 @@ import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
 import { useUserTechBlogQuery } from '../hooks/useUserTechBlogQuery';
 import { techBlogDataState } from '../recoil/atom/techBlogDataState';
 import { useTechBlogQuery } from '../hooks/useTechBlogQuery';
-
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
@@ -96,7 +94,7 @@ export default function MainPage() {
             setTechBlogData(allPosts);
         }
     }, [data]);
-
+      
     useEffect(() => {
         const observer = new IntersectionObserver(
             entries => {
