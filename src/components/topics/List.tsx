@@ -1,43 +1,17 @@
 import { Chip, Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { topicIndexState, topicState } from '../../recoil/atom/topicsState';
-import { getRangeEngApi, getRangeEtcApi, getRangeKorApi } from '../../service/TopicService';
 import { allTopicsType } from './type';
-import { useQuery } from '@tanstack/react-query';
 
-const ListComponent = ({ onHandleIndex }: { onHandleIndex: (index: string) => void }) => {
+const ListComponent = ({
+    onHandleIndex,
+    allTopics,
+}: {
+    onHandleIndex: (index: string) => void;
+    allTopics: allTopicsType[];
+}) => {
     const [topicIndex] = useRecoilState(topicIndexState);
     const [topics] = useRecoilState(topicState);
-    const [allTopics, setAllTopics] = useState<allTopicsType[]>([]);
-
-    const { data: koData, isError: koError } = useQuery({
-        queryKey: ['koData'],
-        queryFn: getRangeKorApi,
-    });
-    const { data: enData, isError: enError } = useQuery({
-        queryKey: ['enData'],
-        queryFn: getRangeEngApi,
-    });
-    const { data: etcData, isError: etcError } = useQuery({
-        queryKey: ['etcData'],
-        queryFn: getRangeEtcApi,
-    });
-
-    if (koError || enError || etcError) return '에러가 발생했습니다.';
-
-    useEffect(() => {
-        async function getAllTopics() {
-            if (koData && enData && etcData) {
-                const resKoData = koData.content;
-                const resEnData = enData.content;
-                const resEtcData = etcData.content;
-                const res = resEnData.concat(resKoData).concat(resEtcData);
-                setAllTopics(res);
-            }
-        }
-        getAllTopics();
-    }, [koData, enData, etcData]);
 
     return (
         <>

@@ -6,102 +6,84 @@ import { searchValueState, topicIndexState } from '../recoil/atom/topicsState';
 import { inputEl } from '../style/style';
 import { InputBase } from '@mui/material';
 import {
-    useEtcIndexTopicMutation,
-    useIndexTopicMutation,
-    useSearchTopicMutation,
+    useAllIndexTopicQuery,
+    useEtcIndexTopicInfinite,
+    useIndexTopicInfinite,
+    useSearchTopicInfinite,
 } from '../hooks/useTopicMutation';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function TopicPage() {
-    const [page, setPage] = useState<number>(0);
     const [topicIndex, setTopicIndex] = useRecoilState(topicIndexState);
     const [searchVal, setSearchVal] = useRecoilState(searchValueState);
-    const [timer, setTimer] = useState<NodeJS.Timeout>();
     const observationTarget = useRef<HTMLDivElement | null>(null);
+    const queryClient = useQueryClient();
+    const [timer, setTimer] = useState<NodeJS.Timeout>();
 
-    const onIntersect = async (entries: any, observer: any) => {
-        const entry = entries[0];
+    // index가 all인 경우
+    const { allTopics, err: allError } = useAllIndexTopicQuery();
 
-        if (entry.isIntersecting) {
-            observer.unobserve(entry.target);
-            setPage(prev => prev + 1);
-        }
-    };
-
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
-
-    const { indexMutate, indexError } = useIndexTopicMutation({
-        page,
+    // index가 선택된 경우 (all 제외)
+    const { error: indexError, refetch: indexRefetch } = useIndexTopicInfinite({
         topicIndex,
         observationTarget,
-        observer,
     });
 
-    const { etcIndexMutate, etcIndexError } = useEtcIndexTopicMutation({
-        page,
+    const { error: etcIndexError, refetch: etcRefetch } = useEtcIndexTopicInfinite({
         observationTarget,
-        observer,
     });
 
-    const { searchMutate, searchError } = useSearchTopicMutation({
-        page,
+    const { error: searchError, refetch: searchRefetch } = useSearchTopicInfinite({
         searchVal,
         observationTarget,
-        observer,
     });
+
+    const resetAndFetchFirstPage = (key: [string, string?]) => {
+        queryClient.removeQueries({ queryKey: key });
+    };
 
     // 검색 기능 디바운스를 사용하여 함수 실행 지연
     function handleSearch(value: string) {
         setSearchVal(value);
-        setPage(0);
         setTopicIndex('');
-    }
-
-    // 인덱스 topic 무한 스크롤
-    async function infiniteIndexTopics() {
-        if (topicIndex === '기타') {
-            etcIndexMutate();
-        } else {
-            indexMutate();
-        }
     }
 
     // 인덱스별 topic 호출
     async function handleIndex(index: string) {
         setSearchVal('');
-        setPage(0);
-
-        if (index === '기타') {
-            setTopicIndex('기타');
-        } else {
-            setTopicIndex(index);
-        }
+        setTopicIndex(index);
     }
 
     useEffect(() => {
-        if (topicIndex !== 'all' && topicIndex !== '') {
-            infiniteIndexTopics();
+        if (searchVal) {
+            if (timer) {
+                clearTimeout(timer);
+            }
+
+            const newTimer = setTimeout(() => {
+                resetAndFetchFirstPage(['searchTopic', searchVal]);
+                searchRefetch();
+            }, 800);
+
+            setTimer(newTimer);
         }
-    }, [page, topicIndex]);
+    }, [searchVal]);
 
     useEffect(() => {
-        if (searchVal) {
-            if (page === 0) {
-                if (timer) {
-                    clearTimeout(timer);
+        if (topicIndex) {
+            if (topicIndex !== 'all') {
+                if (topicIndex === '기타') {
+                    resetAndFetchFirstPage(['etcIndexTopic']);
+                    etcRefetch();
+                } else {
+                    resetAndFetchFirstPage(['indexTopic', topicIndex]);
+                    indexRefetch();
                 }
-
-                const newTimer = setTimeout(() => {
-                    searchMutate();
-                }, 800);
-
-                setTimer(newTimer);
-            } else {
-                searchMutate();
             }
         }
-    }, [page, searchVal]);
+    }, [topicIndex]);
 
-    if (indexError || etcIndexError || searchError) return '에러가 발생했습니다.';
+    if (allError || indexError || etcIndexError || searchError) return '에러가 발생했습니다.';
 
     return (
         <div className="w-full p-10">
@@ -121,7 +103,7 @@ export default function TopicPage() {
                 <IndexingComponent onHandleIndex={handleIndex} />
             </div>
             <div className="w-full mt-10">
-                <ListComponent onHandleIndex={handleIndex} />
+                <ListComponent onHandleIndex={handleIndex} allTopics={allTopics} />
             </div>
             <div ref={observationTarget} />
         </div>
