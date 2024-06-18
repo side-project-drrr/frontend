@@ -1,6 +1,5 @@
 import HttpClient from '../apis/HttpClient';
 
-
 interface IUserTechBlogCategory {
     pageParam: number;
     size: number;

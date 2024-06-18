@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
 import { profileHeaderMenu } from '../recoil/atom/profileHeaderMenu';
-import CategorySlide from '../components/carousel/CategorySlide';]
-import { getUserTechBlogService } from '../service/TechBlogService';
+import CategorySlide from '../components/carousel/CategorySlide';
+
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
@@ -18,14 +18,13 @@ import { LoginSuccess } from '../components/modal/LoginSuccess';
 import { Box } from '@mui/material';
 import { loginSuccessState } from '../recoil/atom/loginSuccessState';
 import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
-import { useUserTechBlogQuery } from '../hooks/useUserTechBlogQuery';
-import { techBlogDataState } from '../recoil/atom/techBlogDataState';
-import { useTechBlogQuery } from '../hooks/useTechBlogQuery';
+
+import { useTechBlogQuery, useUserTechBlogQuery } from '../hooks/useTechBlogQuery';
+import { userFilterTechBlogState } from '../recoil/atom/userFilterTechBlogState';
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
-    const setTechBlogData = useSetRecoilState(techBlogDataState);
-    const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
+    const [filterTechBlogData, setFilterTechBlogData] = useRecoilState(userFilterTechBlogState);
     const displayMode = useRecoilValue(DisplayModeState);
 
     const [categoryId, setCategoryId] = useState<number>(0);
@@ -38,10 +37,8 @@ export default function MainPage() {
     const singupSuccessModal = useRecoilValue(loginSuccessState);
     const snackbarOpen = useRecoilValue(snackbarOpenState);
     const observerElem = useRef<HTMLDivElement | null>(null);
-
-    const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
-        useUserTechBlogQuery(categoryId);
-    const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useTechBlogQuery();
+    const { error } = useTechBlogQuery({ observerElem, categoryId });
+    const { error: userError } = useUserTechBlogQuery({ observerElem, categoryId });
 
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
@@ -55,6 +52,7 @@ export default function MainPage() {
     const handleProfileOpen = () => {
         setProfileHeaderMenu(false);
     };
+
     const handleCategoryModalClose = () => {
         setCategoryModalOpen(false);
         setUserIsCategoryModalOpen(false);
@@ -80,43 +78,7 @@ export default function MainPage() {
         setFilterTechBlogData([]);
     };
 
-    useEffect(() => {
-        if (data && categoryId !== 0) {
-            const allPosts = data?.pages.flatMap(page => page.content);
-            setFilterTechBlogData(allPosts);
-
-    }, [categoryId, data]);
-
-    useEffect(() => {
-
-        if (data) {
-            const allPosts = data?.pages.flatMap(page => page.content);
-            setTechBlogData(allPosts);
-        }
-    }, [data]);
-      
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            entries => {
-                if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-                    fetchNextPage();
-                }
-            },
-            {
-                threshold: 1.0,
-            },
-        );
-
-        if (observerElem.current) {
-            observer.observe(observerElem.current);
-        }
-
-        return () => {
-            if (observerElem.current) {
-                observer.unobserve(observerElem.current);
-            }
-        };
-    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+    if (error || userError) <div>error</div>;
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
@@ -151,10 +113,8 @@ export default function MainPage() {
                         onFilterItems={filterTechBlogData}
                     />
                 </div>
-                <div ref={observerElem}>
-                    {isFetchingNextPage && hasNextPage ? 'Loading more...' : 'Data does not exist'}
-                </div>
 
+                <div ref={observerElem} />
             </div>
             {handleModalOpen && <SignUpModal onSignupNext={handleSignupNext} />}
             {isCategoryModalOpen && (
