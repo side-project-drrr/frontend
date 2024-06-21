@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
@@ -18,16 +18,14 @@ import { LoginSuccess } from '../components/modal/LoginSuccess';
 import { Box } from '@mui/material';
 import { loginSuccessState } from '../recoil/atom/loginSuccessState';
 import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
+import { techBlogDataState } from '../recoil/atom/techBlogDataState';
+import { useTechBlogQuery } from '../hooks/useTechBlogQuery';
+import { categoryIdState } from '../recoil/atom/categoryIdState';
 
-import { useTechBlogQuery, useUserTechBlogQuery } from '../hooks/useTechBlogQuery';
-import { userFilterTechBlogState } from '../recoil/atom/userFilterTechBlogState';
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
-    const [filterTechBlogData, setFilterTechBlogData] = useRecoilState(userFilterTechBlogState);
     const displayMode = useRecoilValue(DisplayModeState);
-
-    const [categoryId, setCategoryId] = useState<number>(0);
     const loggedIn = useRecoilValue(isLoggedInState);
     const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
     const setCategoryItems = useSetRecoilState(categoryItemsState);
@@ -37,8 +35,11 @@ export default function MainPage() {
     const singupSuccessModal = useRecoilValue(loginSuccessState);
     const snackbarOpen = useRecoilValue(snackbarOpenState);
     const observerElem = useRef<HTMLDivElement | null>(null);
-    const { error } = useTechBlogQuery({ observerElem, categoryId });
-    const { error: userError } = useUserTechBlogQuery({ observerElem, categoryId });
+    const setTechBlogData = useSetRecoilState(techBlogDataState);
+    const categoryId = useRecoilValue(categoryIdState);
+    const { data, isFetchingNextPage, hasNextPage, fetchNextPage, error } = useTechBlogQuery({
+        categoryId,
+    });
 
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
@@ -72,13 +73,37 @@ export default function MainPage() {
         setUserIsCategoryModalOpen(false);
     };
 
-    const handleUserCategoryId = (id: string) => {
-        const numberId = parseInt(id, 10);
-        setCategoryId(numberId);
-        setFilterTechBlogData([]);
-    };
+    useEffect(() => {
+        if (data) {
+            const allPosts = data.pages.flatMap(page => page.content);
+            setTechBlogData(allPosts);
+        }
+    }, [data, setTechBlogData]);
 
-    if (error || userError) <div>error</div>;
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            entries => {
+                if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+                    fetchNextPage();
+                }
+            },
+            {
+                threshold: 0.5,
+            },
+        );
+
+        if (observerElem.current) {
+            observer.observe(observerElem.current);
+        }
+
+        return () => {
+            if (observerElem.current) {
+                observer.unobserve(observerElem.current);
+            }
+        };
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+    if (error) <div>에러가 발생했습니다</div>;
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
@@ -92,8 +117,6 @@ export default function MainPage() {
                             onClose={userHandleCategoryModalClose}
                             onModalOpen={userIsCategoryModalOpen}
                             onHandleModalOpen={handleUserCategoryModal}
-                            onCategoryId={categoryId}
-                            onHandleUserCategoryId={handleUserCategoryId}
                         />
                     ) : (
                         <Box bgcolor="background.paper" className="flex justify-center w-full p-4 ">
@@ -108,12 +131,8 @@ export default function MainPage() {
                         displayMode ? 'flex w-full gap-6 flex-col' : 'flex w-full gap-6 flex-wrap'
                     }`}
                 >
-                    <ConditionalRenderer
-                        onCategoryId={categoryId}
-                        onFilterItems={filterTechBlogData}
-                    />
+                    <ConditionalRenderer />
                 </div>
-
                 <div ref={observerElem} />
             </div>
             {handleModalOpen && <SignUpModal onSignupNext={handleSignupNext} />}
