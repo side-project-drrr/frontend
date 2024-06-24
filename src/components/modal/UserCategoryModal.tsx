@@ -1,9 +1,9 @@
-import { useEffect, useState, memo, useCallback, useRef } from 'react';
+import { useEffect, memo, useCallback, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import { UserCategoryProps } from './type';
-import { categorySearchService, putUserCategoryItem } from '../../service/CategoryService';
+import { putUserCategoryItem } from '../../service/CategoryService';
 import PrivateCategoryItems from '../../components/category/PrivateCategoryItems';
 import ModalTitle from '../../stories/modalTitle/ModalTitle';
 import { InputTextField } from '../../style/inputText';
@@ -14,7 +14,7 @@ import SelectedCategoryDisplay from '../../components/category/SelectedCategoryD
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
 import { msg } from '../../constants/message';
-import useIntersectionObserver from '../../hooks/useIntersectionObserver';
+import { useUserCategoryQuery } from '../../hooks/useUserCategoryQuery';
 
 export interface IActiveDataProps {
     id: number;
@@ -33,35 +33,16 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     const [categoryItems, setCategoryItems] = useRecoilState(categoryItemsState); // 전체 카테고리 리스트
     const userCategoryItems = useRecoilValue(userCategoryState); // 카테고리 선택
     const [categorySearchValue, setCategorySearchValue] = useRecoilState(categorySearchValueState); // 검색 value
-
-    const [page, setPage] = useState<number>(0);
     const setSnackbarOpen = useSetRecoilState(snackbarOpenState);
-    const [hasMore, setHasMore] = useState<boolean>(true);
-    const [isFetching, setIsFetching] = useState<boolean>(false);
-
-    const size = 20;
+    const observerElem = useRef<HTMLDivElement | null>(null);
+    const { data, isFetchingNextPage, hasNextPage, fetchNextPage } =
+        useUserCategoryQuery(categorySearchValue);
     const debouncedSearch = useRef(
         debounce(async (value: string) => {
-            setPage(0);
-            await getCategorySearchRender(value, 0);
-        }, 500),
+            setCategoryItems([]);
+            setCategorySearchValue(value);
+        }, 1000),
     ).current;
-
-    const getCategorySearchRender = async (categorySearchValue: string, page: number) => {
-        setIsFetching(true);
-        const categorySearchData = await categorySearchService({
-            keyword: categorySearchValue,
-            page,
-            size,
-        });
-        if (page === 0) {
-            setCategoryItems(categorySearchData.content);
-        } else {
-            setCategoryItems(prev => [...prev, ...categorySearchData.content]);
-        }
-        setHasMore(!categorySearchData.last);
-        setIsFetching(false);
-    };
 
     async function userUpdateCategoryRender(activeCategoriesData: { id: number; name: string }[]) {
         const stringConvertNumberActiveData = activeCategoriesData.map(data => +data.id);
@@ -70,7 +51,6 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
 
     const handleSearch = useCallback(
         (searchQuery: string) => {
-            setCategorySearchValue(searchQuery);
             debouncedSearch(searchQuery);
         },
         [debouncedSearch],
@@ -96,23 +76,34 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
     };
 
     useEffect(() => {
-        if (onModalOpen) {
-            setPage(0);
-            getCategorySearchRender(categorySearchValue, 0);
+        if (onModalOpen && data) {
+            const allPosts = data.pages.flatMap(value => value.content);
+            setCategoryItems(prevItems => [...prevItems, ...allPosts]);
         }
-    }, [onModalOpen]);
+    }, [onModalOpen, data]);
 
     useEffect(() => {
-        if (page > 0) {
-            getCategorySearchRender(categorySearchValue, page);
-        }
-    }, [page]);
+        const observer = new IntersectionObserver(
+            entries => {
+                if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+                    fetchNextPage();
+                }
+            },
+            {
+                threshold: 0.5,
+            },
+        );
 
-    const loaderRef = useIntersectionObserver(entries => {
-        if (entries[0].isIntersecting && !isFetching && hasMore) {
-            setPage(prevPage => prevPage + 1);
+        if (observerElem.current) {
+            observer.observe(observerElem.current);
         }
-    });
+
+        return () => {
+            if (observerElem.current) {
+                observer.unobserve(observerElem.current);
+            }
+        };
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
     return (
         <Modal onClose={onClose} open={onModalOpen}>
@@ -147,7 +138,7 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                     />
                 </div>
                 <ul
-                    className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full h-[300px]"
+                    className="flex w-[65%] gap-2 justify-start flex-wrap overflow-y-scroll mt-2 max-[600px]:w-full"
                     id="CategoryModal-Scroll"
                 >
                     {categoryItems?.map((categoryitem, index) => (
@@ -158,9 +149,10 @@ function UserCategoryModal({ onModalOpen, onClose, userGetCategoryRender }: User
                             onIndex={index}
                         />
                     ))}
-                    <div ref={loaderRef} style={{ height: '10px', width: '10px' }}>
-                        {isFetching && 'Loading more items...'}
-                        {!hasMore && 'No more items to load'}
+                    <div ref={observerElem} style={{ width: '100%', height: '100px' }}>
+                        {isFetchingNextPage && hasNextPage
+                            ? 'Loading more...'
+                            : 'Data does not exist'}
                     </div>
                 </ul>
 
