@@ -4,8 +4,12 @@ import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
 import { profileHeaderMenu } from '../recoil/atom/profileHeaderMenu';
+<<<<<<< query/view
+import CategorySlide from '../components/carousel/CategorySlide';
+=======
 import CategorySlide from '../components/carousel/CategorySlide';]
 import { getUserTechBlogService } from '../service/TechBlogService';
+>>>>>>> refactor/reactQuery
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
@@ -19,12 +23,20 @@ import { Box } from '@mui/material';
 import { loginSuccessState } from '../recoil/atom/loginSuccessState';
 import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
 import { useUserTechBlogQuery } from '../hooks/useUserTechBlogQuery';
+<<<<<<< query/view
+
+export default function MainPage() {
+    const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
+    const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
+
+=======
 import { techBlogDataState } from '../recoil/atom/techBlogDataState';
 import { useTechBlogQuery } from '../hooks/useTechBlogQuery';
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
     const setTechBlogData = useSetRecoilState(techBlogDataState);
+>>>>>>> refactor/reactQuery
     const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
     const displayMode = useRecoilValue(DisplayModeState);
 
@@ -41,7 +53,10 @@ export default function MainPage() {
 
     const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
         useUserTechBlogQuery(categoryId);
+<<<<<<< query/view
+=======
     const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useTechBlogQuery();
+>>>>>>> refactor/reactQuery
 
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
@@ -84,6 +99,26 @@ export default function MainPage() {
         if (data && categoryId !== 0) {
             const allPosts = data?.pages.flatMap(page => page.content);
             setFilterTechBlogData(allPosts);
+<<<<<<< query/view
+        }
+    }, [categoryId, data]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            entries => {
+                if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+                    fetchNextPage();
+                }
+            },
+            {
+                threshold: 1.0,
+            },
+        );
+
+        if (observerElem.current) {
+            observer.observe(observerElem.current);
+        }
+=======
 
     }, [categoryId, data]);
 
@@ -110,6 +145,7 @@ export default function MainPage() {
         if (observerElem.current) {
             observer.observe(observerElem.current);
         }
+>>>>>>> refactor/reactQuery
 
         return () => {
             if (observerElem.current) {
@@ -152,7 +188,11 @@ export default function MainPage() {
                     />
                 </div>
                 <div ref={observerElem}>
+<<<<<<< query/view
+                    {isFetchingNextPage && !hasNextPage ? 'Loading more...' : 'Data does not exist'}
+=======
                     {isFetchingNextPage && hasNextPage ? 'Loading more...' : 'Data does not exist'}
+>>>>>>> refactor/reactQuery
                 </div>
 
             </div>
