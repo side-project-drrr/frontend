@@ -7,7 +7,7 @@ interface IGetCategory {
 
 interface ISearchCategory {
     keyword: string;
-    page: number;
+    pageParam: number;
     size: number;
 }
 
@@ -42,10 +42,10 @@ export async function AuthCategoryService() {
     }
 }
 
-export async function categorySearchService({ keyword, page, size }: ISearchCategory) {
+export async function categorySearchService({ keyword, pageParam, size }: ISearchCategory) {
     try {
         const authCategoryData = await HttpClient.get(
-            `/api/v1/categories/keyword-search?keyword=${keyword}&page=${page}&size=${size}`,
+            `/api/v1/categories/keyword-search?keyword=${keyword}&page=${pageParam}&size=${size}`,
         );
         return authCategoryData.data;
     } catch (error) {
