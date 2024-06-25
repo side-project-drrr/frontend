@@ -12,6 +12,7 @@ export default function SignUpInputForm({
     onCount,
     onSetCount,
     onNickNameValidationRender,
+    onNickNamePassedEmail,
 }: IEmailProps) {
     const formatTime = (time: number) => {
         const minutes = Math.floor(time / 60);
@@ -66,6 +67,7 @@ export default function SignUpInputForm({
                                     component="span"
                                     className="w-10 h-10"
                                     onClick={onEmailCertificationButton}
+                                    //disabled={!onNickNamePassedEmail}
                                 >
                                     <BsSend className="hover:text-[#E6783A] text-[#444]" />
                                 </IconButton>

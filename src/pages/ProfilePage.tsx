@@ -24,38 +24,55 @@ const ProfilePage = () => {
     });
     const [errorMsg, setErrorMsg] = useState({
         email: '',
+        nickName: '',
     });
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
     const [userSeceesionModal, setUserSecessionModal] = useRecoilState(userSecession);
     const [buttonState, setButtonState] = useState(false);
     const { userData } = useProfileState();
     const [snackbarOpen, setSnackbarOpen] = useRecoilState(snackbarOpenState);
-
+    const regex = new RegExp(/^[가-힣|a-zA-Z0-9|]+$/);
+    const onlyDigitsRegex = new RegExp(/^[0-9]+$/);
     async function updateProfileInformationRender() {
-        const data = await updateMemberProfle(profileValue.email, profileValue.nickname);
-        if (data !== undefined) {
-            if (data.status === 200) {
-                setSnackbarOpen({
-                    open: true,
-                    vertical: 'top',
-                    horizontal: 'center',
-                    text: msg.nickNameUpdateSuccess,
-                });
+        if (profileValue.nickname.length !== 0) {
+            if (!regex.test(profileValue.nickname) || onlyDigitsRegex.test(profileValue.nickname)) {
+                setErrorMsg(prevErrorMsg => ({
+                    ...prevErrorMsg,
+                    nickName: msg.validationNickname,
+                }));
+                return;
+            } else {
+                const data = await updateMemberProfle(profileValue.email, profileValue.nickname);
+                if (data !== undefined) {
+                    if (data.status === 200) {
+                        setSnackbarOpen({
+                            open: true,
+                            vertical: 'top',
+                            horizontal: 'center',
+                            text: msg.nickNameUpdateSuccess,
+                        });
+                        setErrorMsg({
+                            email: '',
+                            nickName: '',
+                        });
+                    }
+                } else {
+                    setSnackbarOpen({
+                        open: true,
+                        vertical: 'top',
+                        horizontal: 'center',
+                        text: msg.nickNameEmailUpdateFalied,
+                    });
+                    setButtonState(false);
+                }
             }
-        } else {
-            setSnackbarOpen({
-                open: true,
-                vertical: 'top',
-                horizontal: 'center',
-                text: msg.nickNameEmailUpdateFalied,
-            });
-            setButtonState(false);
         }
     }
     async function emailCodeRender() {
         const validationData = await SignUpEmail({
             email: { email: profileValue.email },
             providerId: userData.providerId,
+            isRegistered: true,
         });
         if (validationData?.status !== 200)
             setErrorMsg(prevErrorMsg => ({
@@ -69,6 +86,7 @@ const ProfilePage = () => {
         if (emailValidationState === undefined) {
             setErrorMsg({
                 email: '',
+                nickName: '',
             });
 
             emailCodeRender();
@@ -135,14 +153,14 @@ const ProfilePage = () => {
                     <h1>프로필 수정</h1>
                     <div className="flex flex-col items-center justify-center w-[50%] border border-[#f0f0f0] mt-10 rounded-[20px] max-[600px]:w-full">
                         <div className="flex justify-center w-full pt-10">
-                            <div className="flex items-center justify-between w-full mr-10">
+                            <div className="flex items-center justify-between w-full mr-10 ">
                                 <h3 className="ml-10">닉네임 정보</h3>
                                 <ProfileInputText
                                     placeholder="닉네임 변경"
                                     autoComplete="off"
                                     name="nickname"
                                     aria-label="닉네임 변경"
-                                    value={profileValue.nickname}
+                                    value={profileValue.nickname || ''}
                                     onChange={e => handleInputChange(e)}
                                     sx={theme => ({
                                         [theme.breakpoints.down('sm')]: {
@@ -156,12 +174,17 @@ const ProfilePage = () => {
                                                 component="span"
                                                 onClick={updateProfileInformationRender}
                                             >
-                                                <BsSend className="hover:text-[#E6783A]" />
+                                                <BsSend className="hover:text-[#E6783A] text-black dark:text-black" />
                                             </IconButton>
                                         ),
                                     }}
                                 />
                             </div>
+                        </div>
+                        <div className=" w-full flex justify-end pt-2">
+                            <span className="text-sm text-red-500 whitespace-nowrap ">
+                                {errorMsg.nickName && errorMsg.nickName}
+                            </span>
                         </div>
                         <div className="flex items-center justify-around w-full pb-10 ">
                             <h3 className="w-[120px] ml-10">이메일 정보</h3>
@@ -172,7 +195,7 @@ const ProfilePage = () => {
                                     autoComplete="off"
                                     name="email"
                                     aria-label="이메일 변경"
-                                    value={profileValue.email}
+                                    value={profileValue.email || ''}
                                     onChange={e => handleInputChange(e)}
                                     sx={theme => ({
                                         [theme.breakpoints.down('sm')]: {
@@ -187,7 +210,7 @@ const ProfilePage = () => {
                                                 className="w-10 h-10"
                                                 onClick={handleEmailCertificationButton}
                                             >
-                                                <BsSend className="hover:text-[#E6783A]" />
+                                                <BsSend className="hover:text-[#E6783A] text-black dark:text-black" />
                                             </IconButton>
                                         ),
                                     }}

@@ -13,6 +13,7 @@ export interface IAuthEmailProps {
         email: string;
         nickname?: string;
     };
+    isRegistered: boolean;
 }
 
 export interface IAuthEmailVaildationProps {

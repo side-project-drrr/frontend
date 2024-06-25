@@ -19,39 +19,48 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
     const [emailCodeValue, setEmailCodeValue] = useState('');
     const [emailCodeVerified, setEmailCodeVerified] = useState(false);
     const [errorMsg, setErrorMsg] = useState({
-        nickname: '',
+        nickName: '',
         email: '',
     });
     const [timeValidation, setTimeValidation] = useState<boolean>(false);
     const [count, setCount] = useState<number>(0);
     const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
-
+    const [nickNamePassedEmail, setNickNamePassedEmail] = useState<boolean>(false);
     const providerId = useRecoilValue(providerIdState);
-    const regex = new RegExp(/^[가-힣|a-z|A-Z|]+$/);
+    const regex = new RegExp(/^[가-힣|a-zA-Z0-9|]+$/);
+    const onlyDigitsRegex = new RegExp(/^[0-9]+$/);
 
     async function nickNameValidationRender() {
         if (profileValue.nickname.length !== 0) {
             const data = await nickNameValidation(profileValue.nickname);
+
             if (data.isDuplicate === true) {
                 setErrorMsg(prevErrorMsg => ({
                     ...prevErrorMsg,
                     nickname: msg.nickNameDuplicate,
                 }));
-                setButtonDisabled(false);
-                return;
-            } else if (!regex.test(profileValue.nickname)) {
-                setErrorMsg(prevErrorMsg => ({
-                    ...prevErrorMsg,
-                    nickname: msg.validationNickname,
-                }));
+
                 setButtonDisabled(false);
                 return;
             } else {
-                setErrorMsg({
-                    email: '',
-                    nickname: msg.nickNameSuccess,
-                });
-                setButtonDisabled(true);
+                if (
+                    !regex.test(profileValue.nickname) ||
+                    onlyDigitsRegex.test(profileValue.nickname)
+                ) {
+                    setErrorMsg(prevErrorMsg => ({
+                        ...prevErrorMsg,
+                        nickname: msg.validationNickname,
+                    }));
+                    setButtonDisabled(false);
+                    return;
+                } else {
+                    setErrorMsg({
+                        email: '',
+                        nickName: msg.nickNameSuccess,
+                    });
+                    setNickNamePassedEmail(true);
+                    setButtonDisabled(true);
+                }
             }
         }
     }
@@ -80,7 +89,7 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
             }
         }
         setErrorMsg({
-            nickname: '',
+            nickName: '',
             email: '',
         });
     }
@@ -91,9 +100,17 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
 
     const handleEmailCertificationButton = () => {
         const emailValidationState = validationEmailChecked(profileValue.email);
+
+        if (!nickNamePassedEmail) {
+            setErrorMsg(prevErrorMsg => ({
+                ...prevErrorMsg,
+                nickname: msg.nickNameVerificationPassed,
+            }));
+            return;
+        }
         if (emailValidationState === undefined) {
             setErrorMsg({
-                nickname: '',
+                nickName: '',
                 email: '',
             });
             setCount(180);
@@ -134,6 +151,7 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
         const validationData = await SignUpEmail({
             providerId,
             email: { email: profileValue.email },
+            isRegistered: false,
         });
         if (validationData?.status !== 200)
             setErrorMsg(prevErrorMsg => ({
@@ -185,12 +203,13 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                     onCount={count}
                     onSetCount={setCount}
                     onNickNameValidationRender={nickNameValidationRender}
+                    onNickNamePassedEmail={nickNamePassedEmail}
                 />
                 <p className="text-sm text-red-500 whitespace-nowrap">
                     {errorMsg.email && errorMsg.email}
                 </p>
                 <p className="text-sm text-red-500 whitespace-nowrap">
-                    {errorMsg.nickname && errorMsg.nickname}
+                    {errorMsg.nickName && errorMsg.nickName}
                 </p>
 
                 {emailCodeVerified ? (
