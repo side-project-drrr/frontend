@@ -1,6 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getTechBlogService } from '../service/TechBlogService';
+import { getUserTechBlogService } from '../service/TechBlogService';
 
+// 공통 인터페이스 정의
 interface INextParamsTechBlogProps {
     content: [];
     empty: boolean;
@@ -22,11 +23,15 @@ interface INextParamsTechBlogProps {
     };
 }
 
-export const useTechBlogQuery = () => {
-    const size = 10;
-    const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery({
-        queryKey: ['techBlog', size],
-        queryFn: ({ pageParam = 0 }) => getTechBlogService({ pageParam, size }),
+// useTechBlogQuery 훅
+export const useTechBlogQuery = ({ categoryId }: { categoryId: number }) => {
+    const { data, hasNextPage, fetchNextPage, isFetchingNextPage, error } = useInfiniteQuery({
+        queryKey: ['techBlog', categoryId],
+        queryFn: async ({ pageParam = 0 }) => {
+            const data = await getUserTechBlogService({ pageParam, size: 10, id: categoryId });
+
+            return data;
+        },
         initialPageParam: 0,
         getNextPageParam: (
             lastPage: INextParamsTechBlogProps,
@@ -38,5 +43,5 @@ export const useTechBlogQuery = () => {
             return undefined;
         },
     });
-    return { data, hasNextPage, isFetchingNextPage, fetchNextPage };
+    return { data, hasNextPage, fetchNextPage, isFetchingNextPage, error };
 };
