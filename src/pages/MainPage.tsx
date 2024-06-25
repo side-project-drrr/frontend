@@ -5,7 +5,6 @@ import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
 import { profileHeaderMenu } from '../recoil/atom/profileHeaderMenu';
 import CategorySlide from '../components/carousel/CategorySlide';
-
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
@@ -40,6 +39,7 @@ export default function MainPage() {
     const { data, isFetchingNextPage, hasNextPage, fetchNextPage, error } = useTechBlogQuery({
         categoryId,
     });
+
 
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
@@ -79,6 +79,7 @@ export default function MainPage() {
             setTechBlogData(allPosts);
         }
     }, [data, setTechBlogData]);
+
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -133,7 +134,9 @@ export default function MainPage() {
                 >
                     <ConditionalRenderer />
                 </div>
-                <div ref={observerElem} />
+                <div ref={observerElem}>
+                    {isFetchingNextPage && !hasNextPage ? 'Loading more...' : 'Data does not exist'}
+                </div>
             </div>
             {handleModalOpen && <SignUpModal onSignupNext={handleSignupNext} />}
             {isCategoryModalOpen && (
