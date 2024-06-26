@@ -50,6 +50,7 @@ export default function TopicPage() {
 
     // 인덱스별 topic 호출
     async function handleIndex(index: string) {
+        observationTarget.current = null;
         setSearchVal('');
         setTopicIndex(index);
     }

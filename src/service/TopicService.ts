@@ -42,7 +42,7 @@ export async function getIndexTopicsApi(page: number, index: string) {
                     page: page,
                     size: 200,
                     sort: 'name',
-                    language: 'KOREAN',
+                    type: 'KOREAN',
                     index: index,
                 },
             },
@@ -91,7 +91,7 @@ export async function getRangeKorApi() {
                 params: {
                     startIdx: '가',
                     endIdx: '하',
-                    language: 'KOREAN',
+                    type: 'KOREAN',
                     size: 10,
                 },
             },
@@ -113,7 +113,7 @@ export async function getRangeEngApi() {
                 params: {
                     startIdx: 'a',
                     endIdx: 'z',
-                    language: 'ENGLISH',
+                    type: 'ENGLISH',
                     size: 10,
                 },
             },
