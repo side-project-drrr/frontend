@@ -40,7 +40,6 @@ export default function MainPage() {
         categoryId,
     });
 
-
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
     };
