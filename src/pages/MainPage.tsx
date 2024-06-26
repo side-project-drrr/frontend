@@ -17,16 +17,14 @@ import { LoginSuccess } from '../components/modal/LoginSuccess';
 import { Box } from '@mui/material';
 import { loginSuccessState } from '../recoil/atom/loginSuccessState';
 import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
-import { useUserTechBlogQuery } from '../hooks/useUserTechBlogQuery';
+import { techBlogDataState } from '../recoil/atom/techBlogDataState';
+import { useTechBlogQuery } from '../hooks/useTechBlogQuery';
+import { categoryIdState } from '../recoil/atom/categoryIdState';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
-
-    const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
     const displayMode = useRecoilValue(DisplayModeState);
-
-    const [categoryId, setCategoryId] = useState<number>(0);
     const loggedIn = useRecoilValue(isLoggedInState);
     const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
     const setCategoryItems = useSetRecoilState(categoryItemsState);
@@ -36,9 +34,11 @@ export default function MainPage() {
     const singupSuccessModal = useRecoilValue(loginSuccessState);
     const snackbarOpen = useRecoilValue(snackbarOpenState);
     const observerElem = useRef<HTMLDivElement | null>(null);
-
-    const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
-        useUserTechBlogQuery(categoryId);
+    const setTechBlogData = useSetRecoilState(techBlogDataState);
+    const categoryId = useRecoilValue(categoryIdState);
+    const { data, isFetchingNextPage, hasNextPage, fetchNextPage, error } = useTechBlogQuery({
+        categoryId,
+    });
 
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
@@ -52,6 +52,7 @@ export default function MainPage() {
     const handleProfileOpen = () => {
         setProfileHeaderMenu(false);
     };
+
     const handleCategoryModalClose = () => {
         setCategoryModalOpen(false);
         setUserIsCategoryModalOpen(false);
@@ -71,18 +72,13 @@ export default function MainPage() {
         setUserIsCategoryModalOpen(false);
     };
 
-    const handleUserCategoryId = (id: string) => {
-        const numberId = parseInt(id, 10);
-        setCategoryId(numberId);
-        setFilterTechBlogData([]);
-    };
-
     useEffect(() => {
-        if (data && categoryId !== 0) {
-            const allPosts = data?.pages.flatMap(page => page.content);
-            setFilterTechBlogData(allPosts);
+        if (data) {
+            const allPosts = data.pages.flatMap(page => page.content);
+            setTechBlogData(allPosts);
         }
-    }, [categoryId, data]);
+    }, [data, setTechBlogData]);
+
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -92,7 +88,7 @@ export default function MainPage() {
                 }
             },
             {
-                threshold: 1.0,
+                threshold: 0.5,
             },
         );
 
@@ -107,6 +103,8 @@ export default function MainPage() {
         };
     }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
+    if (error) <div>에러가 발생했습니다</div>;
+
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
             <div className="flex flex-col w-full gap-6">
@@ -119,8 +117,6 @@ export default function MainPage() {
                             onClose={userHandleCategoryModalClose}
                             onModalOpen={userIsCategoryModalOpen}
                             onHandleModalOpen={handleUserCategoryModal}
-                            onCategoryId={categoryId}
-                            onHandleUserCategoryId={handleUserCategoryId}
                         />
                     ) : (
                         <Box bgcolor="background.paper" className="flex justify-center w-full p-4 ">
@@ -135,10 +131,7 @@ export default function MainPage() {
                         displayMode ? 'flex w-full gap-6 flex-col' : 'flex w-full gap-6 flex-wrap'
                     }`}
                 >
-                    <ConditionalRenderer
-                        onCategoryId={categoryId}
-                        onFilterItems={filterTechBlogData}
-                    />
+                    <ConditionalRenderer />
                 </div>
                 <div ref={observerElem}>
                     {isFetchingNextPage && !hasNextPage ? 'Loading more...' : 'Data does not exist'}

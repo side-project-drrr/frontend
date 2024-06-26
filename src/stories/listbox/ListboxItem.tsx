@@ -7,19 +7,20 @@ import { useSetRecoilState } from 'recoil';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import {
-    deletePostLikedService,
     postIncreasedMemberViewsService,
     postIncreasedViewsService,
-    postTechBlogLikeIncreasedService,
 } from '../../service/TechBlogService';
 import { useEffect, useState } from 'react';
 import { techBlogDataState } from '../../recoil/atom/techBlogDataState';
+import { useLikeCancelMutation, useLikedMutation } from '../../hooks/useLikedMutation';
 
 export default function ListboxItem({ item, index }: ItemProps) {
     const { token } = useProfileState();
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const setModalOpen = useSetRecoilState(loginModalState);
     const setTechBlogData = useSetRecoilState(techBlogDataState);
+    const liked = useLikedMutation();
+    const likedCancel = useLikeCancelMutation();
 
     async function postIncreasedViewsRender(postId: string) {
         if (isLogin) {
@@ -29,12 +30,9 @@ export default function ListboxItem({ item, index }: ItemProps) {
         }
     }
 
-    async function deleteTechBlogLikedRender(postId: number) {
-        await deletePostLikedService(postId);
-    }
     const handlePostLike = async (id: number) => {
         if (!item.hasMemberLikedPost) {
-            await postTechBlogLikeIncreasedService(id);
+            liked.mutate(id);
             setTechBlogData(prev => {
                 return prev.map(item => {
                     if (item.techBlogPostBasicInfoDto.id === id) {
@@ -51,7 +49,7 @@ export default function ListboxItem({ item, index }: ItemProps) {
                 });
             });
         } else {
-            await deleteTechBlogLikedRender(id);
+            likedCancel.mutate(id);
             setTechBlogData(prev => {
                 return prev.map(item => {
                     if (item.techBlogPostBasicInfoDto.id === id) {
@@ -75,6 +73,7 @@ export default function ListboxItem({ item, index }: ItemProps) {
             return;
         }
     };
+
     useEffect(() => {
         if (token === null || token === '') setIsLogin(true);
     }, [token]);
