@@ -79,7 +79,6 @@ export default function MainPage() {
         }
     }, [data, setTechBlogData]);
 
-
     useEffect(() => {
         const observer = new IntersectionObserver(
             entries => {
