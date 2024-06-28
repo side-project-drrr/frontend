@@ -91,7 +91,7 @@ export async function getRangeKorApi() {
                 params: {
                     startIdx: '가',
                     endIdx: '하',
-                    type: 'KOREAN',
+                    language: 'KOREAN',
                     size: 10,
                 },
             },
@@ -113,7 +113,7 @@ export async function getRangeEngApi() {
                 params: {
                     startIdx: 'a',
                     endIdx: 'z',
-                    type: 'ENGLISH',
+                    language: 'ENGLISH',
                     size: 10,
                 },
             },

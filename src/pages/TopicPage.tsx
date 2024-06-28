@@ -24,19 +24,37 @@ export default function TopicPage() {
     const { allTopics, err: allError } = useAllIndexTopicQuery();
 
     // index가 선택된 경우 (all 제외)
-    const { error: indexError, refetch: indexRefetch } = useIndexTopicInfinite({
+    const {
+        error: indexError,
+        refetch: indexRefetch,
+        indexUnobserve,
+    } = useIndexTopicInfinite({
         topicIndex,
         observationTarget,
     });
 
-    const { error: etcIndexError, refetch: etcRefetch } = useEtcIndexTopicInfinite({
+    const {
+        error: etcIndexError,
+        refetch: etcRefetch,
+        indexEtcUnobserve,
+    } = useEtcIndexTopicInfinite({
         observationTarget,
     });
 
-    const { error: searchError, refetch: searchRefetch } = useSearchTopicInfinite({
+    const {
+        error: searchError,
+        refetch: searchRefetch,
+        searchUnobserve,
+    } = useSearchTopicInfinite({
         searchVal,
         observationTarget,
     });
+
+    const unobserveFn = () => {
+        indexUnobserve();
+        indexEtcUnobserve();
+        searchUnobserve();
+    };
 
     const resetAndFetchFirstPage = (key: [string, string?]) => {
         queryClient.removeQueries({ queryKey: key });
@@ -50,12 +68,13 @@ export default function TopicPage() {
 
     // 인덱스별 topic 호출
     async function handleIndex(index: string) {
-        observationTarget.current = null;
         setSearchVal('');
         setTopicIndex(index);
     }
 
     useEffect(() => {
+        unobserveFn();
+
         if (searchVal) {
             if (timer) {
                 clearTimeout(timer);
@@ -71,6 +90,8 @@ export default function TopicPage() {
     }, [searchVal]);
 
     useEffect(() => {
+        unobserveFn();
+
         if (topicIndex) {
             if (topicIndex !== 'all') {
                 if (topicIndex === '기타') {

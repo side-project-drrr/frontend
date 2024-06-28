@@ -75,6 +75,11 @@ export const useIndexTopicInfinite = ({
         enabled: false,
     });
 
+    const indexUnobserve = () => {
+        if (!observationTarget?.current) return;
+        observerIndex?.current?.unobserve(observationTarget.current);
+    };
+
     useEffect(() => {
         let list = data?.pages;
 
@@ -102,7 +107,7 @@ export const useIndexTopicInfinite = ({
         return () => observerIndex.current?.disconnect();
     }, [fetchNextPage, hasNextPage, observationTarget]);
 
-    return { error, refetch };
+    return { error, refetch, indexUnobserve };
 };
 
 // 기타 index를 선택한 경우
@@ -127,6 +132,11 @@ export const useEtcIndexTopicInfinite = ({
         },
         enabled: false,
     });
+
+    const indexEtcUnobserve = () => {
+        if (!observationTarget?.current) return;
+        observerEtcIndex?.current?.unobserve(observationTarget.current);
+    };
 
     useEffect(() => {
         let list = data?.pages;
@@ -155,7 +165,7 @@ export const useEtcIndexTopicInfinite = ({
         return () => observerEtcIndex.current?.disconnect();
     }, [fetchNextPage, hasNextPage, observationTarget]);
 
-    return { error, refetch };
+    return { error, refetch, indexEtcUnobserve };
 };
 
 // 검색으로 topic 검색
@@ -182,6 +192,11 @@ export const useSearchTopicInfinite = ({
         },
         enabled: false,
     });
+
+    const searchUnobserve = () => {
+        if (!observationTarget?.current) return;
+        observerSearchIndex?.current?.unobserve(observationTarget.current);
+    };
 
     useEffect(() => {
         let list = data?.pages;
@@ -210,5 +225,5 @@ export const useSearchTopicInfinite = ({
         return () => observerSearchIndex.current?.disconnect();
     }, [fetchNextPage, hasNextPage, observationTarget]);
 
-    return { error, refetch };
+    return { error, refetch, searchUnobserve };
 };
