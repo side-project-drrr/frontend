@@ -14,7 +14,7 @@ import SignUpInputForm from './SignUpInputForm';
 import ModalTitle from '../../stories/modalTitle/ModalTitle';
 import { msg } from '../../constants/message';
 
-export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormProps) {
+export default function SignUpForm({ onSignupNext, onHandleClose }: ISignFormProps) {
     const [profileValue, setProfileValue] = useRecoilState(userInformationState);
     const [emailCodeValue, setEmailCodeValue] = useState('');
     const [emailCodeVerified, setEmailCodeVerified] = useState(false);
@@ -33,11 +33,10 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
     async function nickNameValidationRender() {
         if (profileValue.nickname.length !== 0) {
             const data = await nickNameValidation(profileValue.nickname);
-
             if (data.isDuplicate === true) {
                 setErrorMsg(prevErrorMsg => ({
                     ...prevErrorMsg,
-                    nickname: msg.nickNameDuplicate,
+                    nickName: msg.nickNameDuplicate,
                 }));
 
                 setButtonDisabled(false);
@@ -49,8 +48,9 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                 ) {
                     setErrorMsg(prevErrorMsg => ({
                         ...prevErrorMsg,
-                        nickname: msg.validationNickname,
+                        nickName: msg.validationNickname,
                     }));
+
                     setButtonDisabled(false);
                     return;
                 } else {
@@ -104,11 +104,16 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
         if (!nickNamePassedEmail) {
             setErrorMsg(prevErrorMsg => ({
                 ...prevErrorMsg,
-                nickname: msg.nickNameVerificationPassed,
+                nickName: msg.nickNameVerificationPassed,
             }));
+            if (emailValidationState)
+                setErrorMsg(prev => ({
+                    ...prev,
+                    email: '',
+                }));
             return;
         }
-        if (emailValidationState === undefined) {
+        if (emailValidationState) {
             setErrorMsg({
                 nickName: '',
                 email: '',
@@ -177,6 +182,7 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
             }));
             return false;
         }
+        return true;
     };
     useEffect(() => {
         setEmailCodeVerified(false);
@@ -203,7 +209,6 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                     onCount={count}
                     onSetCount={setCount}
                     onNickNameValidationRender={nickNameValidationRender}
-                    onNickNamePassedEmail={nickNamePassedEmail}
                 />
                 <p className="text-sm text-red-500 whitespace-nowrap">
                     {errorMsg.email && errorMsg.email}

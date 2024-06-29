@@ -7,27 +7,22 @@ import { getAuthStorage } from '../../repository/AuthRepository';
 import { AuthCategoryService } from '../../service/CategoryService';
 import { useRecoilState } from 'recoil';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
+import { categoryIdState } from '../../recoil/atom/categoryIdState';
 
 interface CarouselProps {
     onModalOpen: boolean;
     onClose: () => void;
     onHandleModalOpen?: () => void;
-    onCategoryId: number;
-    onHandleUserCategoryId: (id: string) => void;
 }
 
-export default function CategorySlide({
-    onHandleModalOpen,
-    onModalOpen,
-    onClose,
-    onCategoryId,
-    onHandleUserCategoryId,
-}: CarouselProps) {
+export default function CategorySlide({ onHandleModalOpen, onModalOpen, onClose }: CarouselProps) {
     const [current, setCurrent] = useState<number>(0);
+    const [categoryId, setCategoryId] = useRecoilState(categoryIdState);
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리
     const TOKEN_KEY = 'accessToken';
     const getToken = getAuthStorage(TOKEN_KEY);
     const scrollRef = useRef<HTMLDivElement | null>(null);
+
     const prevSlider = () => {
         setCurrent(current === 0 ? 0 : current - 1);
         if (current === 0) {
@@ -50,7 +45,7 @@ export default function CategorySlide({
         if (getToken) {
             userGetCategoryRender();
         }
-    }, []);
+    }, [getToken]);
 
     const ALLCATEGORYNUM = '0';
 
@@ -83,13 +78,13 @@ export default function CategorySlide({
                             <p
                                 id={ALLCATEGORYNUM}
                                 className={`flex p-1 rounded-[20px] px-4  h-[29px] items-center w-22 text-center justify-center  whitespace-nowrap ${
-                                    Number(ALLCATEGORYNUM) === onCategoryId
+                                    Number(ALLCATEGORYNUM) === categoryId
                                         ? 'bg-[#D16E37] dark:bg-[#D16E37]  text-white'
                                         : 'dark:bg-[#444444] bg-[#f0f0f0]'
                                 } `}
                                 aria-label="카테고리추가 버튼"
-                                onClick={(e: any) => {
-                                    onHandleUserCategoryId(e.target.id);
+                                onClick={() => {
+                                    setCategoryId(0);
                                 }}
                             >
                                 전체 게시글
@@ -104,14 +99,14 @@ export default function CategorySlide({
                             >
                                 <p
                                     className={`flex  h-[29px] p-1 rounded-[20px] text-center items-center flex-1 whitespace-nowrap px-4 ${
-                                        item.id === onCategoryId
+                                        item.id === categoryId
                                             ? 'bg-[#D16E37] dark:bg-[#D16E37] dark:text-white text-white'
                                             : 'dark:bg-[#444444] bg-[#f0f0f0]'
                                     } `}
                                     id={item.id}
                                     aria-label="카테고리"
                                     onClick={() => {
-                                        onHandleUserCategoryId(item.id);
+                                        setCategoryId(item.id);
                                     }}
                                 >
                                     {item.name}

@@ -26,5 +26,4 @@ export interface IEmailProps {
     onCount: number;
     onSetCount: Dispatch<SetStateAction<number>>;
     onNickNameValidationRender: () => void;
-    onNickNamePassedEmail: boolean;
 }

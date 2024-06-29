@@ -4,7 +4,7 @@ import { BiSolidLike } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
 import { recommendedListApi } from '../apis/recommended';
 import { useProfileState } from '../context/UserProfile';
-import { readPostApi } from '../apis/view';
+import { readPostApi } from '../service/ViewService';
 
 type recommendedItem = {
     category: { id: number; name: string }[];

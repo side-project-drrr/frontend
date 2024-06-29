@@ -5,7 +5,7 @@ import { modalOpenState } from '../../recoil/atom/modalOpenState';
 import { ISignModalProps } from './type';
 import { style } from '../../style/modalBox';
 
-import SingUpForm from './SingUpForm';
+import SingUpForm from './SignUpForm';
 import { useRecoilState } from 'recoil';
 
 export default function SignUpModal({ onSignupNext }: ISignModalProps) {
