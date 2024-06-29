@@ -1,34 +1,34 @@
 import { useEffect, useState } from 'react';
 
-import { getRecommendTechBlogService } from '../../service/TechBlogService';
 import { IRandomDataProps } from './type';
 
 import darkLogo from '../../assets/darkLogo.webp';
 import { Box, Link, Typography } from '@mui/material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { useProfileState } from '../../context/UserProfile';
+import { useRecommendQuery } from '../../hooks/useRecommendQuery';
 
 export default function Recommend() {
     const [recommendData, setRecommendData] = useState([]);
     const [randomRecommendData, setRandomRecommendData] = useState<IRandomDataProps>();
-    const { token } = useProfileState();
-
-    async function getRecommenedDataRender() {
-        const recommendBlogData = await getRecommendTechBlogService();
-        if (recommendBlogData?.status === 200) setRecommendData(recommendBlogData.data);
-    }
-
+    const { data, isLoading } = useRecommendQuery();
     useEffect(() => {
-        if (token) getRecommenedDataRender();
-    }, [token]);
-
-    useEffect(() => {
-        if (recommendData.length > 0) {
+        if (recommendData?.length > 0) {
             const randomIndex = Math.floor(Math.random() * recommendData.length);
             setRandomRecommendData(recommendData[randomIndex]);
         }
     }, [recommendData]);
+
+    useEffect(() => {
+        if (data?.length > 0) {
+            setRecommendData(data);
+        }
+    }, [data]);
+
+    if (isLoading) {
+        return <p>Loading...</p>;
+    }
+
     return (
         <Box
             className="flex flex-col justify-around"

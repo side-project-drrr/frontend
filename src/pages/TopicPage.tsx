@@ -1,104 +1,111 @@
 import { useEffect, useRef, useState } from 'react';
-import { IndexingComponent } from '../components/topics/Indexing';
-import { ListComponent } from '../components/topics/List';
-import { getEtcIndexTopicsApi, getIndexTopicsApi, getSearchTopicsApi } from '../apis/topics';
+import IndexingComponent from '../components/topics/Indexing';
+import ListComponent from '../components/topics/List';
 import { useRecoilState } from 'recoil';
-import { searchValueState, topicIndexState, topicState } from '../recoil/atom/topicsState';
+import { searchValueState, topicIndexState } from '../recoil/atom/topicsState';
 import { inputEl } from '../style/style';
 import { InputBase } from '@mui/material';
+import {
+    useAllIndexTopicQuery,
+    useEtcIndexTopicInfinite,
+    useIndexTopicInfinite,
+    useSearchTopicInfinite,
+} from '../hooks/useTopicMutation';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function TopicPage() {
-    const [, setTopics] = useRecoilState(topicState);
-    const [page, setPage] = useState<number>(0);
     const [topicIndex, setTopicIndex] = useRecoilState(topicIndexState);
     const [searchVal, setSearchVal] = useRecoilState(searchValueState);
+    const observationTarget = useRef<HTMLDivElement | null>(null);
+    const queryClient = useQueryClient();
     const [timer, setTimer] = useState<NodeJS.Timeout>();
-    const observationTarget = useRef(null);
 
-    const onIntersect = async (entries: any, observer: any) => {
-        const entry = entries[0];
-        if (entry.isIntersecting) {
-            observer.unobserve(entry.target);
-            setPage(prev => prev + 1);
-        }
+    // index가 all인 경우
+    const { allTopics, err: allError } = useAllIndexTopicQuery();
+
+    // index가 선택된 경우 (all 제외)
+    const {
+        error: indexError,
+        refetch: indexRefetch,
+        indexUnobserve,
+    } = useIndexTopicInfinite({
+        topicIndex,
+        observationTarget,
+    });
+
+    const {
+        error: etcIndexError,
+        refetch: etcRefetch,
+        indexEtcUnobserve,
+    } = useEtcIndexTopicInfinite({
+        observationTarget,
+    });
+
+    const {
+        error: searchError,
+        refetch: searchRefetch,
+        searchUnobserve,
+    } = useSearchTopicInfinite({
+        searchVal,
+        observationTarget,
+    });
+
+    const unobserveFn = () => {
+        indexUnobserve();
+        indexEtcUnobserve();
+        searchUnobserve();
     };
 
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0 });
-
-    // 검색 topic 무한 스크롤
-    async function infiniteSearchTopics(value: string) {
-        const res = await getSearchTopicsApi(page, value);
-
-        if (res.status === 200) {
-            setTopics(prev => [...prev, ...res.data.content]);
-        }
-    }
+    const resetAndFetchFirstPage = (key: [string, string?]) => {
+        queryClient.removeQueries({ queryKey: key });
+    };
 
     // 검색 기능 디바운스를 사용하여 함수 실행 지연
     function handleSearch(value: string) {
-        if (timer) {
-            clearTimeout(timer);
-        }
-
         setSearchVal(value);
-        const newTimer = setTimeout(() => {
-            setPage(0);
-            setTopicIndex('');
-
-            callApi(value);
-        }, 500);
-
-        setTimer(newTimer);
-    }
-    async function callApi(value: string) {
-        const res = await getSearchTopicsApi(page, value);
-        if (res.status === 200) {
-            setTopics(res.data.content);
-        }
-    }
-
-    // 인덱스 topic 무한 스크롤
-    async function infiniteIndexTopics(index: string) {
-        let res: any = null;
-
-        if (index === '기타') {
-            res = await getEtcIndexTopicsApi(page);
-        } else {
-            res = await getIndexTopicsApi(page, index);
-        }
-
-        if (res.status === 200) {
-            setTopics(prev => [...prev, ...res.data.content]);
-        }
+        setTopicIndex('');
     }
 
     // 인덱스별 topic 호출
     async function handleIndex(index: string) {
-        let res: any = null;
         setSearchVal('');
-        setPage(0);
-
-        if (index === '기타') {
-            setTopicIndex('기타');
-            res = await getEtcIndexTopicsApi(0);
-        } else {
-            setTopicIndex(index);
-            res = await getIndexTopicsApi(0, index);
-        }
-
-        if (res.status === 200) {
-            setTopics(res.data.content);
-        }
-
-        if (observationTarget.current) observer.observe(observationTarget.current);
+        setTopicIndex(index);
     }
 
     useEffect(() => {
-        if (page > 0) {
-            searchVal && infiniteSearchTopics(searchVal);
-            topicIndex !== 'all' && topicIndex !== '' && infiniteIndexTopics(topicIndex);
+        unobserveFn();
+
+        if (searchVal) {
+            if (timer) {
+                clearTimeout(timer);
+            }
+
+            const newTimer = setTimeout(() => {
+                resetAndFetchFirstPage(['searchTopic', searchVal]);
+                searchRefetch();
+            }, 800);
+
+            setTimer(newTimer);
         }
-    }, [page]);
+    }, [searchVal]);
+
+    useEffect(() => {
+        unobserveFn();
+
+        if (topicIndex) {
+            if (topicIndex !== 'all') {
+                if (topicIndex === '기타') {
+                    resetAndFetchFirstPage(['etcIndexTopic']);
+                    etcRefetch();
+                } else {
+                    resetAndFetchFirstPage(['indexTopic', topicIndex]);
+                    indexRefetch();
+                }
+            }
+        }
+    }, [topicIndex]);
+
+    if (allError || indexError || etcIndexError || searchError) return '에러가 발생했습니다.';
 
     return (
         <div className="w-full p-10">
@@ -118,7 +125,7 @@ export default function TopicPage() {
                 <IndexingComponent onHandleIndex={handleIndex} />
             </div>
             <div className="w-full mt-10">
-                <ListComponent onHandleIndex={handleIndex} />
+                <ListComponent onHandleIndex={handleIndex} allTopics={allTopics} />
             </div>
             <div ref={observationTarget} />
         </div>

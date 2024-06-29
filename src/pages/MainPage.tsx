@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import DisplayModeSwitch from '../components/displaymodeswitch/DisplayModeSwitch';
 import { modalOpenState } from '../recoil/atom/modalOpenState';
 import SignUpModal from '../components/signup/SignUpModal';
 import { profileHeaderMenu } from '../recoil/atom/profileHeaderMenu';
 import CategorySlide from '../components/carousel/CategorySlide';
-import { getTechBlogService, getUserTechBlogService } from '../service/TechBlogService';
 import { loginModalState } from '../recoil/atom/loginModalState';
 import { DisplayModeState } from '../recoil/atom/DisplayModeState';
 import ConditionalRenderer from '../components/conditionalrenderer/ConditionalRenderer';
@@ -19,51 +18,27 @@ import { Box } from '@mui/material';
 import { loginSuccessState } from '../recoil/atom/loginSuccessState';
 import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
 import { techBlogDataState } from '../recoil/atom/techBlogDataState';
-import useIntersectionObserver from '../hooks/useIntersectionObserver';
+import { useTechBlogQuery } from '../hooks/useTechBlogQuery';
+import { categoryIdState } from '../recoil/atom/categoryIdState';
 
 export default function MainPage() {
     const [isCategoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
     const [userIsCategoryModalOpen, setUserIsCategoryModalOpen] = useState<boolean>(false);
-    const setTechBlogData = useSetRecoilState(techBlogDataState);
-    const [isFetching, setIsFetching] = useState<boolean>(false);
-
-    const [filterTechBlogData, setFilterTechBlogData] = useState<any[]>([]);
     const displayMode = useRecoilValue(DisplayModeState);
-    const [page, setPage] = useState<number>(0);
-    const [categoryId, setCategoryId] = useState<number>(0);
     const loggedIn = useRecoilValue(isLoggedInState);
     const setCategorySearchValue = useSetRecoilState(categorySearchValueState);
-    const size = 10;
     const setCategoryItems = useSetRecoilState(categoryItemsState);
     const [handleModalOpen, setHandleModalOpen] = useRecoilState(modalOpenState);
     const setLoginModalOpen = useSetRecoilState(loginModalState);
     const setProfileHeaderMenu = useSetRecoilState(profileHeaderMenu);
     const singupSuccessModal = useRecoilValue(loginSuccessState);
     const snackbarOpen = useRecoilValue(snackbarOpenState);
-    const [hasMore, setHasMore] = useState<boolean>(true);
-
-    async function userTechBlogRender() {
-        setIsFetching(true);
-
-        const userTechBlogData = await getTechBlogService({ page, size });
-
-        setTechBlogData(prev => [...prev, ...userTechBlogData.content]);
-        setHasMore(!userTechBlogData.last);
-
-        setIsFetching(false);
-    }
-
-    async function userFilterTechBlogRender(id: number, page: number) {
-        setIsFetching(true);
-        const userFilterTechBlogData = await getUserTechBlogService({
-            page,
-            size,
-            id,
-        });
-        setFilterTechBlogData(prev => [...prev, ...userFilterTechBlogData.content]);
-        setHasMore(!userFilterTechBlogData.last);
-        setIsFetching(false);
-    }
+    const observerElem = useRef<HTMLDivElement | null>(null);
+    const setTechBlogData = useSetRecoilState(techBlogDataState);
+    const categoryId = useRecoilValue(categoryIdState);
+    const { data, isFetchingNextPage, hasNextPage, fetchNextPage, error } = useTechBlogQuery({
+        categoryId,
+    });
 
     const handleUserCategoryModal = () => {
         setUserIsCategoryModalOpen(true);
@@ -77,6 +52,7 @@ export default function MainPage() {
     const handleProfileOpen = () => {
         setProfileHeaderMenu(false);
     };
+
     const handleCategoryModalClose = () => {
         setCategoryModalOpen(false);
         setUserIsCategoryModalOpen(false);
@@ -96,26 +72,37 @@ export default function MainPage() {
         setUserIsCategoryModalOpen(false);
     };
 
-    const handleUserCategoryId = (id: string) => {
-        const numberId = parseInt(id, 10);
-        setCategoryId(numberId);
-        setFilterTechBlogData([]);
-        setPage(0);
-    };
+    useEffect(() => {
+        if (data) {
+            const allPosts = data.pages.flatMap(page => page.content);
+            setTechBlogData(allPosts);
+        }
+    }, [data, setTechBlogData]);
 
     useEffect(() => {
-        if (categoryId !== 0) {
-            userFilterTechBlogRender(categoryId, page);
-        } else if (categoryId === 0) {
-            userTechBlogRender();
-        }
-    }, [categoryId, page]);
+        const observer = new IntersectionObserver(
+            entries => {
+                if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+                    fetchNextPage();
+                }
+            },
+            {
+                threshold: 0.5,
+            },
+        );
 
-    const loaderRef = useIntersectionObserver(entries => {
-        if (entries[0].isIntersecting && !isFetching && hasMore) {
-            setPage(prevPage => prevPage + 1);
+        if (observerElem.current) {
+            observer.observe(observerElem.current);
         }
-    });
+
+        return () => {
+            if (observerElem.current) {
+                observer.unobserve(observerElem.current);
+            }
+        };
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+    if (error) <div>에러가 발생했습니다</div>;
 
     return (
         <div className="flex justify-between" onClick={handleProfileOpen}>
@@ -129,8 +116,6 @@ export default function MainPage() {
                             onClose={userHandleCategoryModalClose}
                             onModalOpen={userIsCategoryModalOpen}
                             onHandleModalOpen={handleUserCategoryModal}
-                            onCategoryId={categoryId}
-                            onHandleUserCategoryId={handleUserCategoryId}
                         />
                     ) : (
                         <Box bgcolor="background.paper" className="flex justify-center w-full p-4 ">
@@ -145,14 +130,10 @@ export default function MainPage() {
                         displayMode ? 'flex w-full gap-6 flex-col' : 'flex w-full gap-6 flex-wrap'
                     }`}
                 >
-                    <ConditionalRenderer
-                        onCategoryId={categoryId}
-                        onFilterItems={filterTechBlogData}
-                    />
+                    <ConditionalRenderer />
                 </div>
-                <div ref={loaderRef}>
-                    {isFetching && 'Loading more items...'}
-                    {!hasMore && 'No more items to load'}
+                <div ref={observerElem}>
+                    {isFetchingNextPage && !hasNextPage ? 'Loading more...' : 'Data does not exist'}
                 </div>
             </div>
             {handleModalOpen && <SignUpModal onSignupNext={handleSignupNext} />}

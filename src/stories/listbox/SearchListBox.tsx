@@ -1,7 +1,8 @@
 import { Box } from '@mui/material';
 import { useRecoilValue } from 'recoil';
 import { HeaderSearchDataState } from '../../recoil/atom/HeaderSearchDataState';
-import SearchListBoxItem from './SearchListBoxItem';
+
+import ListboxItem from './ListboxItem';
 
 export default function SearchListBox() {
     const techBlogSearchData = useRecoilValue(HeaderSearchDataState);
@@ -9,7 +10,7 @@ export default function SearchListBox() {
         <>
             <Box>
                 {techBlogSearchData.map((item: any, index) => (
-                    <SearchListBoxItem item={item} key={index} index={index} />
+                    <ListboxItem item={item} key={index} index={index} />
                 ))}
             </Box>
         </>

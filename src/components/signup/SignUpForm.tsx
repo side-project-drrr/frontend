@@ -14,7 +14,7 @@ import SignUpInputForm from './SignUpInputForm';
 import ModalTitle from '../../stories/modalTitle/ModalTitle';
 import { msg } from '../../constants/message';
 
-export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormProps) {
+export default function SignUpForm({ onSignupNext, onHandleClose }: ISignFormProps) {
     const [profileValue, setProfileValue] = useRecoilState(userInformationState);
     const [emailCodeValue, setEmailCodeValue] = useState('');
     const [emailCodeVerified, setEmailCodeVerified] = useState(false);
@@ -79,10 +79,6 @@ export default function SingUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                 }
             }
         }
-        setErrorMsg({
-            nickname: '',
-            email: '',
-        });
     }
 
     const handleNextClick = () => {
