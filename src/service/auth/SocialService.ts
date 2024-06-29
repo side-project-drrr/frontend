@@ -49,13 +49,13 @@ export async function SignInService(providerValue: string) {
     }
 }
 
-export async function SignUpEmail({ providerId, email }: IAuthEmailProps) {
+export async function SignUpEmail({ providerId, email, isRegistered }: IAuthEmailProps) {
     try {
         const res = await HttpClient.post(`/api/v1/send-verification-email`, {
             email: `${email.email}`,
             providerId: `${providerId}`,
+            isRegistered: isRegistered,
         });
-
         return res;
     } catch (error) {
         if (error instanceof AxiosError) {
