@@ -1,5 +1,6 @@
-![Alt text](<logo 1-1.png>)
-
+<p align="center">
+    <img src="/src/assets/logo.png">
+</p>
 ## ABOUT
 
 <div align='center'>
@@ -26,15 +27,15 @@
 
 ## ✨ 프론트엔드 기술 스택
 
-![Alt text](image-1.png)
+<img src="/src/assets/frontStack.png">
 
 ## 인프라 기술 스택
 
-![Alt text](image-2.png)
+<img src="/src/assets/infraStack.png">
 
 ## 프론트엔드 인프라 구조
 
-![Alt text](image-4.png)
+<img src="/src/assets/allStack.png">
 
 ## 폴더 구조
 
