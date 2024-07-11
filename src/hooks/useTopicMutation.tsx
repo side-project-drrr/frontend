@@ -10,7 +10,7 @@ import {
     getRangeKorApi,
     getSearchTopicsApi,
 } from '../service/TopicService';
-import { allTopicsType } from 'components/topics/type';
+import { allTopicsType } from '../../types/IndexIngType';
 
 // index가 all인 경우
 export const useAllIndexTopicQuery = () => {

@@ -2,7 +2,7 @@ import { useSetRecoilState } from 'recoil';
 import github from '../../assets/github.webp';
 import kakao from '../../assets/kakao.webp';
 import { setProvider } from '../../repository/ProviderRepository';
-import { IProps } from './type';
+import { IProps } from '../../../types/SocialType';
 import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 
 export default function SocialLogin({ state }: IProps) {

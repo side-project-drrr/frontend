@@ -1,4 +1,4 @@
-import { CategoryItemsProps } from './type';
+import { CategoryItemsProps } from '../../../types/CategoryType';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import { categoryItemsState } from '../../recoil/atom/categoryItemsState';

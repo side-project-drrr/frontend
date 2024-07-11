@@ -10,3 +10,8 @@ export interface ICategoryProps {
         name: string;
     };
 }
+
+export interface ICategoryPropsB {
+    id: number;
+    name: string;
+}

@@ -21,6 +21,22 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true
     },
-    "include": ["./src/**/*", "../webpush/main.ts", "src", "tests"],
+    "include": [
+        "./src/**/*",
+        "../webpush/main.ts",
+        "src",
+        "tests",
+        "types/TopPostType.ts",
+        "types/CardType.ts",
+        "types/CarouselType.ts",
+        "types/CategoryType.ts",
+        "types/CategoryModalType.ts",
+        "types/RecommendType.ts",
+        "types/SignUpType.ts",
+        "types/SocialType.ts",
+        "types/IndexIngType.ts",
+        "types/ListBoxType.ts",
+        "types/SocialServiceType.ts"
+    ],
     "types": ["vite/client"]
 }

@@ -1,6 +1,6 @@
 import { useState, useRef, MouseEvent } from 'react';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'react-icons/ri';
-import { CarouselProps } from './type';
+import { CarouselProps } from '../../../types/CarouselType';
 
 export default function Carousel({ data }: CarouselProps) {
     const [current, setCurrent] = useState(0);

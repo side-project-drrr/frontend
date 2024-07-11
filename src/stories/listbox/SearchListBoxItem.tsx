@@ -1,5 +1,5 @@
 import { Box, Chip, Link } from '@mui/material';
-import { ItemProps } from './type';
+import { ItemProps } from '../../../types/ListBoxType';
 import darkLogo from '../../assets/darkLogo.webp';
 import { useProfileState } from '../../context/UserProfile';
 import { loginModalState } from '../../recoil/atom/loginModalState';

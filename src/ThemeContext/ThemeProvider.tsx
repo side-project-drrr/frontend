@@ -11,11 +11,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import { setDarkModeSotrage, getDarkModeStorage } from '../repository/DarkRepository';
 import createCustomTheme from './theme';
-
-interface ThemeContextProps {
-    darkMode: string;
-    toggleDarkMode: () => void;
-}
+import { ThemeContextProps } from '../../types/ThemeContextType';
 
 const DarkModeContext = createContext<ThemeContextProps | undefined>(undefined);
 

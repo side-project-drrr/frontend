@@ -9,7 +9,7 @@ import {
     nickNameValidation,
 } from '../../service/auth/SocialService';
 import { providerIdState } from '../../recoil/atom/providerIdState';
-import { ValueProps, ISignFormProps } from './type';
+import { ValueProps, ISignFormProps } from '../../../types/SignUpType';
 import SignUpInputForm from './SignUpInputForm';
 import ModalTitle from '../../stories/modalTitle/ModalTitle';
 import { msg } from '../../constants/message';

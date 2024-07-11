@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { IRandomDataProps } from './type';
+import { IRandomDataProps } from '../../../types/RecommendType';
 
 import darkLogo from '../../assets/darkLogo.webp';
 import { Box, Link, Typography } from '@mui/material';

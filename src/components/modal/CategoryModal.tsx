@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import CategoryItem from '../../components/category/CategoryItem';
-import { CategoryProps } from './type';
+import { CategoryProps } from '../../../types/CategoryModalType';
 import { userInformationState } from '../../recoil/atom/userInformationState';
 import { providerIdState } from '../../recoil/atom/providerIdState';
 import { getProvider } from '../../repository/ProviderRepository';

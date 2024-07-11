@@ -2,7 +2,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { modalOpenState } from '../../recoil/atom/modalOpenState';
 
-import { ISignModalProps } from './type';
+import { ISignModalProps } from '../../../types/SignUpType';
 import { style } from '../../style/modalBox';
 
 import SingUpForm from './SignUpForm';

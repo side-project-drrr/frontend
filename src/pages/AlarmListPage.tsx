@@ -6,7 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useLocation } from 'react-router-dom';
-import { ItemProps } from 'stories/listbox/type';
+import { ItemProps } from '../../types/ListBoxType';
 import { getListApi } from '../apis/alarm';
 
 const StyledDatePicker = styled(DatePicker)(({ theme }: { theme: any }) => ({

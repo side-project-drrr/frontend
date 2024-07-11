@@ -1,15 +1,5 @@
 import HttpClient from '../apis/HttpClient';
-
-interface IGetCategory {
-    page: number;
-    size: number;
-}
-
-interface ISearchCategory {
-    keyword: string;
-    pageParam: number;
-    size: number;
-}
+import { IGetCategory, ISearchCategory } from '../../types/CategoryService';
 
 export async function getCategoryItem({ page, size }: IGetCategory) {
     try {

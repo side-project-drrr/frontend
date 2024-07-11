@@ -10,3 +10,15 @@ export interface IRandomDataProps {
     };
     hasMemberLikedPost: boolean;
 }
+
+export type RecommendedItem = {
+    category: { id: number; name: string }[];
+    postInfo: {
+        id: number;
+        likeCount: number;
+        viewCount: number;
+        title: string;
+        summary: string;
+        url: string;
+    };
+};

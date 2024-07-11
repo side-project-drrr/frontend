@@ -2,7 +2,7 @@ import { useEffect, memo, useCallback, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import { UserCategoryProps } from './type';
+import { UserCategoryProps } from '../../../types/CategoryModalType';
 import { putUserCategoryItem } from '../../service/CategoryService';
 import PrivateCategoryItems from '../../components/category/PrivateCategoryItems';
 import ModalTitle from '../../stories/modalTitle/ModalTitle';
@@ -15,11 +15,6 @@ import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import { snackbarOpenState } from '../../recoil/atom/snackbarOpenState';
 import { msg } from '../../constants/message';
 import { useUserCategoryQuery } from '../../hooks/useUserCategoryQuery';
-
-export interface IActiveDataProps {
-    id: number;
-    name: string;
-}
 
 const debounce = (func: Function, wait: number) => {
     let timeout: NodeJS.Timeout;

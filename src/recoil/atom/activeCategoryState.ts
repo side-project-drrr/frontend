@@ -1,11 +1,7 @@
 import { atom } from 'recoil';
+import { ActiveProps } from '../../../types/ActiveCategoryState';
 
-interface Props {
-    id: number;
-    name: string;
-}
-
-export const activeCategoryState = atom<Props[]>({
+export const activeCategoryState = atom<ActiveProps[]>({
     key: 'activeCategoryState',
     default: [],
 });

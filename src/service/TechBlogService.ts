@@ -1,15 +1,5 @@
 import HttpClient from '../apis/HttpClient';
-
-interface IUserTechBlogCategory {
-    pageParam: number;
-    size: number;
-    id?: number;
-}
-
-interface ITechBlogCategory {
-    pageParam?: number;
-    size: number;
-}
+import { IUserTechBlogCategory, ITechBlogCategory } from '../../types/TechBlogServiceType';
 
 export async function getTechBlogService({ pageParam = 0, size }: ITechBlogCategory) {
     try {

@@ -6,19 +6,7 @@ import {
     postIncreasedViewsService,
 } from '../service/TechBlogService';
 import { getPostApi, readPostApi } from '../service/ViewService';
-
-type PostType = {
-    id: number;
-    title: String;
-    techBlogCode: String;
-    thumbnailUrl: String;
-    aiSummary: String;
-    writtenDate: String;
-    viewCount: number;
-    postLikeCount: number;
-    author: String;
-    url: String;
-};
+import { PostType } from '../../types/PostType';
 
 export const useViewQuery = (postId: string) => {
     const [loggedIn] = useRecoilState(isLoggedInState);

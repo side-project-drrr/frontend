@@ -1,6 +1,10 @@
 import { AxiosError } from 'axios';
 import HttpClient from '../../apis/HttpClient';
-import { IAuthEmailProps, IAuthEmailVaildationProps, IAuthProps } from './type';
+import {
+    IAuthEmailProps,
+    IAuthEmailVaildationProps,
+    IAuthProps,
+} from '../../../types/SocialServiceType';
 
 export const SocialService = async (code: string | null, state: string) => {
     try {

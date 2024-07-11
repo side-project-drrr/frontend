@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { topicsType } from '../../components/topics/type';
+import { topicsType } from '../../../types/IndexIngType';
 
 export const topicState = atom<topicsType[]>({
     key: 'topic',

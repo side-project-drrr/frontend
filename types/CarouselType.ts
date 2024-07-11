@@ -1,3 +1,9 @@
+export interface CarouselPropsA {
+    onModalOpen: boolean;
+    onClose: () => void;
+    onHandleModalOpen?: () => void;
+}
+
 export type CarouselProps = {
     data: {
         id: number;
