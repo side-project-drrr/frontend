@@ -1,6 +1,7 @@
 <p align="center">
     <img src="/src/assets/logo.png">
 </p>
+
 ## ABOUT
 
 <div align='center'>
