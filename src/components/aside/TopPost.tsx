@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ITopPostProps } from './type';
+import { ITopPostProps } from '../../../types/TopPostType';
 import darkLogo from '../../assets/darkLogo.webp';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isLoggedInState } from '../../recoil/atom/isLoggedInState';

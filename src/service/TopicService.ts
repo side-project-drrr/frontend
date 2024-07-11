@@ -1,14 +1,6 @@
 import { AxiosResponse } from 'axios';
 import HttpClient from '../apis/HttpClient';
-
-type indexDataType = {
-    content: {
-        id: number;
-        name: string;
-    }[];
-    first: boolean;
-    last: boolean;
-};
+import { indexDataType } from '../../types/TopicServiceType';
 
 // 검색 데이터에 해당하는 리스트를 찾는 api - 무한스크롤
 export async function getSearchTopicsApi(page: number, value: string) {

@@ -1,9 +1,5 @@
 import { atom } from 'recoil';
-
-interface ICategoryProps {
-    id: number;
-    name: string;
-}
+import { ICategoryProps } from '../../../types/CategoryStateType';
 
 export const categoryItemsState = atom<ICategoryProps[]>({
     key: 'categoryItemsState',

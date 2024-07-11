@@ -2,14 +2,9 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 import { getUserInforMationService } from '../service/UserProfileService';
 import { useSetRecoilState } from 'recoil';
 import { isLoggedInState } from '../recoil/atom/isLoggedInState';
+import { ProfileType } from '../../types/ProfileType';
 
-interface IUserProfileContext {
-    userData: any; // 사용자 정보의 타입에 따라 수정
-    login: (token: string) => void;
-    token: string | null;
-}
-
-const userProfleContext = createContext<IUserProfileContext>({
+const userProfleContext = createContext<ProfileType>({
     userData: {},
     login: () => {},
     token: '',

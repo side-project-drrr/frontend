@@ -1,10 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { categorySearchService } from '../service/CategoryService';
-
-interface ICategoryProps {
-    id: number;
-    name: string;
-}
+import { ICategoryPropsB } from '../../types/CategoryType';
 
 export const useCategoryQuery = (categorySearchValue: string) => {
     const size = 20;
@@ -13,7 +9,7 @@ export const useCategoryQuery = (categorySearchValue: string) => {
         queryFn: ({ pageParam = 0 }) =>
             categorySearchService({ keyword: categorySearchValue, pageParam, size }),
         initialPageParam: 0,
-        getNextPageParam: (lastPage: any, allPages: ICategoryProps[]) => {
+        getNextPageParam: (lastPage: any, allPages: ICategoryPropsB[]) => {
             if (!lastPage.last) {
                 return allPages.length;
             }

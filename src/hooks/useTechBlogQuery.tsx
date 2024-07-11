@@ -1,27 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getUserTechBlogService } from '../service/TechBlogService';
-
-// 공통 인터페이스 정의
-interface INextParamsTechBlogProps {
-    content: [];
-    empty: boolean;
-    first: boolean;
-    last: boolean;
-    number: number;
-    numberOfElements: number;
-    pageable: {
-        offset: number;
-        pageNumber: number;
-        pageSize: number;
-        paged: boolean;
-        sort: {
-            empty: boolean;
-            sorted: boolean;
-            unsorted: boolean;
-        };
-        unpaged: boolean;
-    };
-}
+import { TechBlogProps } from '../../types/TechBlogType';
 
 // useTechBlogQuery 훅
 export const useTechBlogQuery = ({ categoryId }: { categoryId: number }) => {
@@ -33,10 +12,7 @@ export const useTechBlogQuery = ({ categoryId }: { categoryId: number }) => {
             return data;
         },
         initialPageParam: 0,
-        getNextPageParam: (
-            lastPage: INextParamsTechBlogProps,
-            allPages: INextParamsTechBlogProps[],
-        ) => {
+        getNextPageParam: (lastPage: TechBlogProps, allPages: TechBlogProps[]) => {
             if (!lastPage.last) {
                 return allPages.length;
             }

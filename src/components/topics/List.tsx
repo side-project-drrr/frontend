@@ -1,7 +1,7 @@
 import { Chip, Stack } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import { topicIndexState, topicState } from '../../recoil/atom/topicsState';
-import { allTopicsType } from './type';
+import { allTopicsType } from '../../../types/IndexIngType';
 
 const ListComponent = ({
     onHandleIndex,

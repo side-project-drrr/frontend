@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { CategoryItemsProps } from './type';
+import { CategoryItemsProps } from '../../../types/CategoryType';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import { selectedCategoryState } from '../../recoil/atom/selectedCategoryState';

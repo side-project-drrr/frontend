@@ -8,14 +8,9 @@ import { AuthCategoryService } from '../../service/CategoryService';
 import { useRecoilState } from 'recoil';
 import { userCategoryState } from '../../recoil/atom/userCategoryState';
 import { categoryIdState } from '../../recoil/atom/categoryIdState';
+import { CarouselPropsA } from '../../../types/CarouselType';
 
-interface CarouselProps {
-    onModalOpen: boolean;
-    onClose: () => void;
-    onHandleModalOpen?: () => void;
-}
-
-export default function CategorySlide({ onHandleModalOpen, onModalOpen, onClose }: CarouselProps) {
+export default function CategorySlide({ onHandleModalOpen, onModalOpen, onClose }: CarouselPropsA) {
     const [current, setCurrent] = useState<number>(0);
     const [categoryId, setCategoryId] = useRecoilState(categoryIdState);
     const [userCategoryItems, setUserCategoryItems] = useRecoilState(userCategoryState); //선호 카테고리

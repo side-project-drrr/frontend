@@ -1,7 +1,7 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { ICardItemsProps } from './type';
+import { ICardItemsProps } from '../../../types/CardType';
 import { Box, Link } from '@mui/material';
 import { loginModalState } from '../../recoil/atom/loginModalState';
 import { useEffect, useState } from 'react';

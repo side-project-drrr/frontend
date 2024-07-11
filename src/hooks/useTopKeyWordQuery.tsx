@@ -1,4 +1,4 @@
-import { TopKeywordProps } from '../components/aside/type';
+import { TopKeywordProps } from '../../types/TopPostType';
 import HttpClient from '../apis/HttpClient';
 import { useQuery } from '@tanstack/react-query';
 

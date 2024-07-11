@@ -2,16 +2,12 @@ import LanguageIcon from '@mui/icons-material/Language';
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import { isSearchFocusedState } from '../../recoil/atom/isSearchFocusedState';
 import { useSetRecoilState } from 'recoil';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import { getSearchListStorage, saveSearchListStorage } from '../../repository/SearchListRepository';
-
-interface ISearchProps {
-    onSetSearchValue: React.Dispatch<React.SetStateAction<string>>;
-    onSelectedSearchIndex: number;
-}
+import { ISearchProps } from '../../../types/HeaderSearchType';
 
 export default function HeaderSearchMenu({
     onSelectedSearchIndex,

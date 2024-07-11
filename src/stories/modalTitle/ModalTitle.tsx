@@ -1,9 +1,7 @@
 import loginLogo from '../../assets/loginLogo.webp';
 import CloseIcon from '@mui/icons-material/Close';
-interface ISingupProps {
-    onHangleCloseClick: () => void;
-    state: string;
-}
+import { ISingupProps } from '../../../types/ModalTitleType';
+
 export default function ModalTitle({ onHangleCloseClick, state = 'signup' }: ISingupProps) {
     return (
         <>

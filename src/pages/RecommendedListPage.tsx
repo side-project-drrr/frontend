@@ -5,21 +5,10 @@ import { FaEye } from 'react-icons/fa';
 import { recommendedListApi } from '../apis/recommended';
 import { useProfileState } from '../context/UserProfile';
 import { readPostApi } from '../service/ViewService';
-
-type recommendedItem = {
-    category: { id: number; name: string }[];
-    postInfo: {
-        id: number;
-        likeCount: number;
-        viewCount: number;
-        title: string;
-        summary: string;
-        url: string;
-    };
-};
+import { RecommendedItem } from '../../types/RecommendType';
 
 export const RecommendedListPage = () => {
-    const [list, setList] = useState<recommendedItem[]>([]);
+    const [list, setList] = useState<RecommendedItem[]>([]);
     const { userData } = useProfileState();
 
     // 사용자 읽음 처리
