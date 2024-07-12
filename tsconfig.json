@@ -33,7 +33,7 @@
         "types/CategoryModalType.ts",
         "types/RecommendType.ts",
         "types/SignUpType.ts",
-        "types/SocialType.ts",
+        "types/social/SocialType.ts",
         "types/IndexIngType.ts",
         "types/ListBoxType.ts",
         "types/SocialServiceType.ts"
