@@ -4,7 +4,7 @@ import {
     IAuthEmailProps,
     IAuthEmailVaildationProps,
     IAuthProps,
-} from '../../../types/SocialServiceType';
+} from '../../../types/social/SocialServiceType';
 
 export const SocialService = async (code: string | null, state: string) => {
     try {

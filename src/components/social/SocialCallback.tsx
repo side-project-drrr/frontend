@@ -8,7 +8,7 @@ import { setProfileImgStorage } from '../../repository/ProfileimgRepository';
 import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 import { useProfileState } from '../../context/UserProfile';
 import { subscribeUser } from '../../webpush/main';
-import { ISocial } from '../../../types/SocialType';
+import { ISocial } from '../../../types/social/SocialType';
 import { useSocialQuery } from '../../hooks/useSocialQuery';
 import { useSocialMutation } from '../../hooks/useSocialMutation';
 

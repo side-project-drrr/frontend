@@ -1,14 +1,16 @@
-export interface IAuthProps {
+export interface IAuthParents {
+    providerId: string;
+}
+
+export interface IAuthProps extends IAuthParents {
     email: string;
     categoryIds: number[];
     nickName: string;
     provider: string | undefined;
-    providerId: string;
     profileImageUrl: string | null;
 }
 
-export interface IAuthEmailProps {
-    providerId: string;
+export interface IAuthEmailProps extends IAuthParents {
     email: {
         email: string;
         nickname?: string;
@@ -16,7 +18,6 @@ export interface IAuthEmailProps {
     isRegistered: boolean;
 }
 
-export interface IAuthEmailVaildationProps {
-    providerId: string;
+export interface IAuthEmailVaildationProps extends IAuthParents {
     verificationCode: string;
 }
