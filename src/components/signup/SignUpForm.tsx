@@ -9,16 +9,16 @@ import {
     nickNameValidation,
 } from '../../service/auth/SocialService';
 import { providerIdState } from '../../recoil/atom/providerIdState';
-import { ValueProps, ISignFormProps } from '../../../types/SignUpType';
+import { ISignProfileValueProps, ISignFormProps } from '../../../types/signin/SignUpType';
 import SignUpInputForm from './SignUpInputForm';
 import ModalTitle from '../../stories/modalTitle/ModalTitle';
 import { msg } from '../../constants/message';
 
 export default function SignUpForm({ onSignupNext, onHandleClose }: ISignFormProps) {
     const [profileValue, setProfileValue] = useRecoilState(userInformationState);
-    const [emailCodeValue, setEmailCodeValue] = useState('');
-    const [emailCodeVerified, setEmailCodeVerified] = useState(false);
-    const [errorMsg, setErrorMsg] = useState({
+    const [emailCodeValue, setEmailCodeValue] = useState<string>('');
+    const [emailCodeVerified, setEmailCodeVerified] = useState<boolean>(false);
+    const [errorMsg, setErrorMsg] = useState<ISignProfileValueProps>({
         nickName: '',
         email: '',
     });
@@ -31,8 +31,8 @@ export default function SignUpForm({ onSignupNext, onHandleClose }: ISignFormPro
     const onlyDigitsRegex = new RegExp(/^[0-9]+$/);
 
     async function nickNameValidationRender() {
-        if (profileValue.nickname.length !== 0) {
-            const data = await nickNameValidation(profileValue.nickname);
+        if (profileValue.nickName.length !== 0) {
+            const data = await nickNameValidation(profileValue.nickName);
             if (data.isDuplicate === true) {
                 setErrorMsg(prevErrorMsg => ({
                     ...prevErrorMsg,
@@ -43,8 +43,8 @@ export default function SignUpForm({ onSignupNext, onHandleClose }: ISignFormPro
                 return;
             } else {
                 if (
-                    !regex.test(profileValue.nickname) ||
-                    onlyDigitsRegex.test(profileValue.nickname)
+                    !regex.test(profileValue.nickName) ||
+                    onlyDigitsRegex.test(profileValue.nickName)
                 ) {
                     setErrorMsg(prevErrorMsg => ({
                         ...prevErrorMsg,
@@ -133,7 +133,7 @@ export default function SignUpForm({ onSignupNext, onHandleClose }: ISignFormPro
         setEmailCodeValue(value);
     };
 
-    const handleSignup = (profileValue: ValueProps) => {
+    const handleSignup = (profileValue: ISignProfileValueProps) => {
         if (errorMsg.email === msg.emailFailed || profileValue.email === '') {
             setErrorMsg(prevErrorMsg => ({
                 ...prevErrorMsg,
@@ -142,10 +142,10 @@ export default function SignUpForm({ onSignupNext, onHandleClose }: ISignFormPro
             setEmailCodeVerified(false);
             return;
         }
-        if (profileValue.nickname === '') {
+        if (profileValue.nickName === '') {
             setErrorMsg(prevErrorMsg => ({
                 ...prevErrorMsg,
-                nickname: msg.nickName,
+                nickName: msg.nickName,
             }));
             setEmailCodeVerified(false);
             return;

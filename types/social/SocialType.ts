@@ -1,5 +1,5 @@
-export interface IProps {
-    state: string;
+export interface ISocialStateProps {
+    state: 'kakao' | 'github';
 }
 
 export interface ISocial {

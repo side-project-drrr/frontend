@@ -2,10 +2,10 @@ import { useSetRecoilState } from 'recoil';
 import github from '../../assets/github.webp';
 import kakao from '../../assets/kakao.webp';
 import { setProvider } from '../../repository/ProviderRepository';
-import { IProps } from '../../../types/social/SocialType';
+import { ISocialStateProps } from '../../../types/social/SocialType';
 import { isLoggedInState } from '../../recoil/atom/isLoggedInState';
 
-export default function SocialLogin({ state }: IProps) {
+export default function SocialLogin({ state }: ISocialStateProps) {
     const GITHUB_CLIENT_ID = import.meta.env.VITE_APP_GITGUB_CLIENT_ID; //REST API KEY
     const GITHUB_REDIRECT_URL = import.meta.env.VITE_APP_GITHUB_REDIRECT_URL; //REDIRECT_URL
     const KAKAO_REST_API_KEY = import.meta.env.VITE_APP_KAKAO_REST_API_KEY; //REST API KEY

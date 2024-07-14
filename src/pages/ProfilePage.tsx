@@ -15,6 +15,7 @@ import { SignUpEmail, SignUpEmailValidation } from '../service/auth/SocialServic
 import { snackbarOpenState } from '../recoil/atom/snackbarOpenState';
 import UserSnackbar from '../components/snackbar/UserSnackbar';
 import { unSubscribeUser } from '../webpush/main';
+import { ISignProfileValueProps } from '../../types/signin/SignUpType';
 
 const ProfilePage = () => {
     const [profileValue, setProfileValue] = useState({
@@ -22,7 +23,7 @@ const ProfilePage = () => {
         nickname: '',
         emailChecked: '',
     });
-    const [errorMsg, setErrorMsg] = useState({
+    const [errorMsg, setErrorMsg] = useState<ISignProfileValueProps>({
         email: '',
         nickName: '',
     });

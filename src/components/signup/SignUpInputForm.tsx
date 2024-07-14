@@ -1,7 +1,7 @@
 import IconButton from '@mui/material/IconButton';
 import { InputTextField } from '../../style/inputText';
 import { useEffect } from 'react';
-import { IEmailProps } from '../../../types/SignUpType';
+import { IEmailProps } from '../../../types/signin/SignUpType';
 import { ChangeEvent } from 'react';
 import { BsSend } from 'react-icons/bs';
 
