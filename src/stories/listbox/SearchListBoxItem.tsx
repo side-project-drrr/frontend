@@ -1,5 +1,5 @@
 import { Box, Chip, Link } from '@mui/material';
-import { ItemProps } from '../../../types/ListBoxType';
+import { ItemProps } from '../../../types/listbox/ListBoxType';
 import darkLogo from '../../assets/darkLogo.webp';
 import { useProfileState } from '../../context/UserProfile';
 import { loginModalState } from '../../recoil/atom/loginModalState';
@@ -35,7 +35,7 @@ export default function SearchListBoxItem({ item, index }: ItemProps) {
             liked.mutate(id);
             setTechBlogData(prev => {
                 return prev.map(item => {
-                    if (item.techBlogPostBasicInfoDto.id === id) {
+                    if (item.techBlogPostBasicInfoDto.id === String(id)) {
                         return {
                             ...item,
                             techBlogPostBasicInfoDto: {
@@ -52,7 +52,7 @@ export default function SearchListBoxItem({ item, index }: ItemProps) {
             likedCancel.mutate(id);
             setTechBlogData(prev => {
                 return prev.map(item => {
-                    if (item.techBlogPostBasicInfoDto.id === id) {
+                    if (item.techBlogPostBasicInfoDto.id === String(id)) {
                         return {
                             ...item,
                             techBlogPostBasicInfoDto: {
