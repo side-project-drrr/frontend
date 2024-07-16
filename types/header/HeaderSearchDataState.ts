@@ -1,4 +1,4 @@
-export interface HeaderSearch {
+export interface IHeaderSearch {
     techBlogPostBasicInfoDto: {
         id: string;
         title: string;

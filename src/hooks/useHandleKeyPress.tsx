@@ -1,4 +1,4 @@
-import { IHandleProps } from '../../types/HandleKeyPressType';
+import { IHandleKeyPressProps } from '../../types/header/HandleKeyPressType';
 
 export default function useHandleKeyPress({
     key,
@@ -7,7 +7,7 @@ export default function useHandleKeyPress({
     setSearchValue,
     selectedSearchIndex,
     setSelectedSearchIndex,
-}: IHandleProps) {
+}: IHandleKeyPressProps) {
     switch (key) {
         case 'ArrowDown':
             e.preventDefault();

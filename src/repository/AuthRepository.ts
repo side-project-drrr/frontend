@@ -2,11 +2,11 @@ export function getAuthStorage(key: string) {
     return localStorage.getItem(key);
 }
 
-export function setAccessTokenStorage(accessToken_key: string, accessTokenValue: string) {
+export function setAccessTokenStorage(accessToken_key: 'accessToken', accessTokenValue: string) {
     localStorage.setItem(accessToken_key, accessTokenValue);
 }
 
-export function setRefreshTokenStorage(refreshToken_key: string, refreshValue: string) {
+export function setRefreshTokenStorage(refreshToken_key: 'refreshToken', refreshValue: string) {
     localStorage.setItem(refreshToken_key, refreshValue);
 }
 
