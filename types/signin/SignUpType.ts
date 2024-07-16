@@ -1,8 +1,8 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 
-export interface ValueProps {
+export interface ISignProfileValueProps {
     email: string;
-    nickname: string;
+    nickName: string;
 }
 
 export interface ISignModalProps {
@@ -12,11 +12,6 @@ export interface ISignModalProps {
 export interface ISignFormProps {
     onSignupNext: () => void;
     onHandleClose: () => void;
-}
-
-export interface ISingupFormProps {
-    onSignupNext: () => void;
-    handleClose: () => void;
 }
 
 export interface IEmailProps {
