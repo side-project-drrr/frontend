@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
-import { HeaderSearch } from '../../../types/HeaderSearchDataState';
+import { IHeaderSearch } from '../../../types/header/HeaderSearchDataState';
 
-export const HeaderSearchDataState = atom<HeaderSearch[]>({
+export const HeaderSearchDataState = atom<IHeaderSearch[]>({
     key: 'HeaderSearchDataState',
     default: [],
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export interface ISearchProps {
+export interface IHeaderSearchSearchProps {
     onSetSearchValue: React.Dispatch<React.SetStateAction<string>>;
     onSelectedSearchIndex: number;
 }

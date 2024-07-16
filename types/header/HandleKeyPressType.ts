@@ -1,9 +1,9 @@
 import React, { SetStateAction } from 'react';
 
-export interface IHandleProps {
+export interface IHandleKeyPressProps {
     key: string;
     e: React.KeyboardEvent<HTMLDivElement>;
-    getSearchLocalResult: any[];
+    getSearchLocalResult: string[];
     setSearchValue: React.Dispatch<SetStateAction<string>>;
     selectedSearchIndex: number;
     setSelectedSearchIndex: React.Dispatch<SetStateAction<number>>;

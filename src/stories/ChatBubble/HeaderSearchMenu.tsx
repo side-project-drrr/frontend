@@ -7,14 +7,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import { getSearchListStorage, saveSearchListStorage } from '../../repository/SearchListRepository';
-import { ISearchProps } from '../../../types/HeaderSearchType';
+import { IHeaderSearchSearchProps } from '../../../types/header/HeaderSearchType';
 
 export default function HeaderSearchMenu({
     onSelectedSearchIndex,
     onSetSearchValue,
-}: ISearchProps) {
+}: IHeaderSearchSearchProps) {
     const setIsSearchClicked = useSetRecoilState(isSearchFocusedState);
-    const searchBoxRef = useRef<HTMLDivElement>(null);
+    const searchBoxRef = useRef<HTMLDivElement | null>(null);
     const KEY = 'search';
     const navigate = useNavigate();
     const [recentSearches, setRecentSearches] = useState<string[]>([]);

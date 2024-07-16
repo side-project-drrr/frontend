@@ -64,11 +64,13 @@ function AuthHeader({ onLogout }: IHandleProps) {
     const img = getProfileImgStorage(KEY);
 
     const navigate = useNavigate();
+
     let imgUrl;
+
     if (img !== null) {
         imgUrl = img;
     }
-    const handleToggleOpen = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleToggleOpen = (e: React.MouseEvent<HTMLInputElement>) => {
         //e.stopPropagation을 통해  button에서 클릭했을때 profileDiv 영역을 관리 할 수 있게 됬다.
         //위 코드가 없을 경우 header 영역 밖을 클릭할 경우의 코드를 넣으면 profilediv 영역이 나타나지 않는다.
         e.stopPropagation();
@@ -79,7 +81,11 @@ function AuthHeader({ onLogout }: IHandleProps) {
     return (
         <div className="relative">
             {img ? (
-                <Avatar alt="Avatar" src={imgUrl} onClick={(e: any) => handleToggleOpen(e)} />
+                <Avatar
+                    alt="Avatar"
+                    src={imgUrl}
+                    onClick={(e: React.MouseEvent<HTMLInputElement>) => handleToggleOpen(e)}
+                />
             ) : (
                 <Login />
             )}
@@ -107,7 +113,7 @@ function AuthHeader({ onLogout }: IHandleProps) {
 export default function Header() {
     const [isSearchFocused, setIsSearchfouced] = useRecoilState(isSearchFocusedState);
     const [searchValue, setSearchValue] = useState<string>('');
-    const [getSearchLocalResult, setGetSearchLocalResult] = useState<any[]>([]);
+    const [getSearchLocalResult, setGetSearchLocalResult] = useState<string[]>([]);
     const [selectedSearchIndex, setSelectedSearchIndex] = useState<number>(-1);
     const setTechBlogSearchData = useSetRecoilState(HeaderSearchDataState);
     const [loggedIn, setLoggedIn] = useRecoilState(isLoggedInState);
