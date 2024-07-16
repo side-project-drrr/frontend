@@ -35,7 +35,7 @@
         "types/SignUpType.ts",
         "types/social/SocialType.ts",
         "types/IndexIngType.ts",
-        "types/ListBoxType.ts",
+        "types/listbox/ListBoxType.ts",
         "types/SocialServiceType.ts"
     ],
     "types": ["vite/client"]
